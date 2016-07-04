@@ -39,7 +39,7 @@ public class DataFormTool extends AbstractComponentTool {
      * @return objeto extendido
      */
     public final ExtendedObject getObject() {
-        String name;
+        String name, nsreference;
         InputComponent input;
         ExtendedObject object;
         DataForm df;
@@ -47,9 +47,15 @@ public class DataFormTool extends AbstractComponentTool {
         
         if (dfdata.custommodel == null)
             return null;
-        
-        object = new ExtendedObject(dfdata.custommodel);
+
         df = getElement();
+        object = new ExtendedObject(dfdata.custommodel);
+        nsreference = df.getNSReference();
+        if (nsreference != null) {
+            input = getElement(nsreference);
+            object.setNS(input.get());
+        }
+        
         for (Element element: df.getElements()) {
             if (!element.isDataStorable())
                 continue;
@@ -93,42 +99,44 @@ public class DataFormTool extends AbstractComponentTool {
         String htmlname;
         DataFormToolItem item;
         DataItem input;
-        DataForm dataform;
+        DataForm df;
         ComponentEntry nsentry;
         DataFormToolData data = getComponentData();
         Container container = getElement(data.name);
         
         htmlname = new StringBuilder(data.name).
                 append("_").append(data.type.toString()).toString();
-        dataform = new DataForm(container, htmlname);
-        setHtmlName(dataform.getHtmlName());
+        df = new DataForm(container, htmlname);
+        setHtmlName(df.getHtmlName());
         if (data.custommodel != null)
-            dataform.importModel(data.custommodel);
-        if (data.model != null) {
-            dataform.importModel(data.model, data.context.function);
-            data.custommodel = dataform.getModel();
-        }
+            DataForm.importModel(df, data.custommodel);
+        if (data.model != null)
+            data.custommodel = DataForm.importModel(
+                    df, data.model, data.context.function);
+        else
+            data.model = (data.custommodel != null)?
+                    data.custommodel.getName() : null;
         if (data.style != null)
-            dataform.setStyleClass(data.style);
+            df.setStyleClass(data.style);
         
-        dataform.setEnabled(!data.disabled);
+        df.setEnabled(!data.disabled);
         if (data.nsitem != null)
-            for (Element element : dataform.getElements())
-                if (dataform.isNSReference(element.getName())) {
+            for (Element element : df.getElements())
+                if (df.isNSReference(element.getName())) {
                     setItem(data, (DataItem)element, data.nsitem);
                     break;
                 }
         if (data.nsdata != null) {
             nsentry = data.context.getView().getComponents().entries.
                     get(data.nsdata.name);
-            dataform.setNSReference(nsentry.component.getNSField());
+            df.setNSReference(nsentry.component.getNSField());
         }
         
         for (String name : data.get().keySet()) {
             item = data.get(name);
-            input = dataform.get(name);
+            input = df.get(name);
             if ((data.custommodel == null) && (input == null)) {
-                input = new DataItem(dataform, (item.componenttype == null)?
+                input = new DataItem(df, (item.componenttype == null)?
                         Const.TEXT_FIELD : item.componenttype, name);
                 input.setDataElement(item.element);
             }
@@ -137,11 +145,11 @@ public class DataFormTool extends AbstractComponentTool {
             setItem(data, input, item);
             input.setVisible(!item.invisible);
             if (item.ns)
-                dataform.setNSReference(input.getHtmlName());
+                df.setNSReference(input.getHtmlName());
         }
 
         if (data.internallabel)
-            for (Element element : dataform.getElements())
+            for (Element element : df.getElements())
                 ((DataItem)element).setPlaceHolder(true);
     }
     
@@ -186,6 +194,7 @@ public class DataFormTool extends AbstractComponentTool {
             item.set(object.getNS(), object.get(name));
         }
         
-        form.setNS(object.getNS());
+        if (form.getNSReference() != null)
+            form.setNS(object.getNS());
     }
 }

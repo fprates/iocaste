@@ -24,7 +24,7 @@ public class SelectEntryConfig extends AbstractViewConfig {
         model = new Documents(context.function).getModel(extcontext.model);
         
         dataform = getElement("selection");
-        dataform.importModel(model);
+        DataForm.importModel(dataform, model);
         
         for (Element element : dataform.getElements()) {
             input = (InputComponent)element;

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.dataformtool.DataFormTool;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
@@ -161,8 +162,8 @@ public abstract class AbstractActionHandler {
     }
     
     private final InputComponent getdfinputkey(String dataform) {
-        DataForm df = dfget(dataform);
-        for (DocumentModelKey key : df.getModel().getKeys())
+        DataFormToolData data = components.getComponentData(dataform);
+        for (DocumentModelKey key : data.custommodel.getKeys())
             return getdfinput(dataform, key.getModelItemName());
 
         throw new RuntimeException(dataform.concat(" isn't a valid key."));

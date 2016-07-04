@@ -34,7 +34,7 @@ public class Response {
         
         criteria = new DataForm(container, "criteria");
         criteria.setStyleClass("shcriteria");
-        criteria.importModel(context.model);
+        DataForm.importModel(criteria, context.model);
         
         for (Element element : criteria.getElements()) {
             if (!element.isDataStorable())

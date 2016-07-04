@@ -42,7 +42,6 @@ public class DataForm extends AbstractContainer {
     private boolean keyrequired;
     private int columns;
     private List<String[]> lines;
-    private DocumentModel model;
     private String nsreference;
     
     /**
@@ -84,7 +83,7 @@ public class DataForm extends AbstractContainer {
         lines.add(entries);
     }
     
-    private final void append(DocumentModelItem item) {
+    private static final void append(DataForm df, DocumentModelItem item) {
         String name;
         DataElement dataelement;
         DataItem dataitem;
@@ -95,10 +94,10 @@ public class DataForm extends AbstractContainer {
         
         switch (dataelement.getType()) {
         case DataType.BOOLEAN:
-            dataitem = new DataItem(this, Const.CHECKBOX, name);
+            dataitem = new DataItem(df, Const.CHECKBOX, name);
             break;
         default:
-            dataitem = new DataItem(this, Const.TEXT_FIELD, name);
+            dataitem = new DataItem(df, Const.TEXT_FIELD, name);
             break;
         }
         dataitem.setModelItem(item);
@@ -106,7 +105,7 @@ public class DataForm extends AbstractContainer {
         dataitem.setLength(length);
         dataitem.setVisibleLength(length);
         dataitem.setDataElement(dataelement);
-        dataitem.setNSReference(nsreference);
+        dataitem.setNSReference(df.getNSReference());
     }
     
     /**
@@ -148,39 +147,37 @@ public class DataForm extends AbstractContainer {
     public final List<String[]> getLines() {
         return lines;
     }
-    
-    /**
-     * 
-     * @return
-     */
-    public final DocumentModel getModel() {
-        return model;
+
+    public final String getNSReference() {
+        return nsreference;
     }
     
-    public final void importModel(String name, Function function) {
+    public static final DocumentModel importModel(DataForm df,
+            String name, Function function) {
         DocumentModel model = new Documents(function).getModel(name);
-        importModel(model);
+        return importModel(df, model);
     }
     
-    public final void importModel(DocumentModel model) {
+    public static final DocumentModel importModel(DataForm df,
+            DocumentModel model) {
         DocumentModelItem namespace;
         InputComponent nsfield;
         
-        clear();
+        df.clear();
         namespace = model.getNamespace();
         if (namespace != null) {
-            append(namespace);
-            nsfield = get(namespace.getName());
-            nsreference = nsfield.getHtmlName();
+            append(df, namespace);
+            nsfield = df.get(namespace.getName());
+            df.setNSReference(nsfield.getHtmlName());
             nsfield.setObligatory(true);
         }
         
         for (DocumentModelItem item : model.getItens())
-            append(item);
+            append(df, item);
         
-        this.model = model;
+        return model;
     }
-
+    
     /**
      * 
      */
