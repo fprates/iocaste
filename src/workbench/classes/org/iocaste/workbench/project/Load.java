@@ -3,19 +3,19 @@ package org.iocaste.workbench.project;
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.workbench.Context;
 
 public class Load extends AbstractActionHandler {
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        ProjectList projectlist;
         ComplexDocument[] projects;
         int i;
         Context extcontext = getExtendedContext();
         
-        projectlist = context.getView("main").getActionHandler("project-list");
-        projects = (ComplexDocument[])projectlist.call(context);
+        projects = getProjects();
         i = (projects == null)? 1 : projects.length + 1;
         extcontext.projects = new ProjectInfo[i];
         extcontext.projects[0] = new ProjectInfo();
@@ -30,4 +30,23 @@ public class Load extends AbstractActionHandler {
         }
     }
 
+    private final ComplexDocument[] getProjects() {
+        String projectname;
+        Query query;
+        ExtendedObject[] objects;
+        ComplexDocument[] projects;
+        
+        query = new Query();
+        query.setModel("WB_PROJECT_HEAD");
+        objects = select(query);
+        if (objects == null)
+            return null;
+        projects = new ComplexDocument[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            projectname = objects[i].getst("PROJECT_NAME");
+            projects[i] = getDocument("WB_PROJECT", null, projectname);
+        }
+        
+        return projects;
+    }
 }

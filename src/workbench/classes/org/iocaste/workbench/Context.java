@@ -8,7 +8,6 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.workbench.project.ProjectAdd;
 import org.iocaste.workbench.project.ProjectInfo;
-import org.iocaste.workbench.project.ProjectList;
 import org.iocaste.workbench.project.ProjectUse;
 import org.iocaste.workbench.project.compile.Compile;
 import org.iocaste.workbench.project.datadict.DataElementAdd;
@@ -65,7 +64,6 @@ public class Context extends AbstractExtendedContext {
         new ModelRemove(this);
         new PackageAdd(this);
         new ProjectAdd(this);
-        new ProjectList(this);
         new ProjectUse(this);
         new ViewAdd(this);
         new ViewRemove(this);
