@@ -5,7 +5,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.TableColumn;
 
 public class TableToolColumn extends AbstractComponentDataItem {
-    public String action, text;
+    public String text;
     public boolean nolock;
     public TableColumn tcolumn;
     
