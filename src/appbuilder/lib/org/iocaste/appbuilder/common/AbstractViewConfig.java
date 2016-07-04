@@ -135,8 +135,10 @@ public abstract class AbstractViewConfig implements ViewConfig {
     }
     
     protected final void show(AbstractComponentData data, String... fields) {
-        DocumentModel model = new Documents(context.function).
-                getModel(data.model);
+        DocumentModel model;
+        
+        model = (data.custommodel != null)? data.custommodel :
+            new Documents(context.function).getModel(data.model);
         for (DocumentModelItem item : model.getItens())
             data.instance(item.getName()).invisible = true;
         for (String name : fields)

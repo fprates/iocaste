@@ -375,7 +375,7 @@ public class TableTool extends AbstractComponentTool {
             model = new Documents(
                     entry.data.context.function).getModel(data.model);
         else
-            model = data.refmodel;
+            model = data.custommodel;
 
         ctxitems = getTable().getContextItems();
         for (String key : actions.keySet())

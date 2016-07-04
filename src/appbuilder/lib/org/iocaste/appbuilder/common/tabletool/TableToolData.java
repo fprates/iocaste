@@ -7,14 +7,12 @@ import java.util.List;
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentDataItem;
 import org.iocaste.appbuilder.common.ViewSpecItem;
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class TableToolData extends AbstractComponentData {
     private List<TableToolItem> items;
     public String borderstyle, highlightstyle;
     public String itemcolumn, nsfield;
-    public DocumentModel refmodel;
     public boolean mark, noheader;
     public int vlines, step, last, increment, topline;
     public byte mode;

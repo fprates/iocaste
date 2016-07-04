@@ -3,13 +3,11 @@ package org.iocaste.appbuilder.common.dataformtool;
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentDataItem;
 import org.iocaste.appbuilder.common.ViewSpecItem.TYPES;
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class DataFormToolData extends AbstractComponentData {
     public DataFormToolItem nsitem;
     public ExtendedObject object;
-    public DocumentModel custommodel;
     public String sh;
     public boolean internallabel;
     public int columns;

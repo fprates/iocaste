@@ -3,9 +3,12 @@ package org.iocaste.appbuilder.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.documents.common.DocumentModel;
+
 public abstract class AbstractComponentData {
     public boolean disabled;
     public String name, model, style;
+    public DocumentModel custommodel;
     public PageBuilderContext context;
     public ViewSpecItem.TYPES type;
     public AbstractComponentData nsdata;

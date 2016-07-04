@@ -81,7 +81,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
             ttdata.model = rtdata.output.model;
             rtdata.output.tooldata = ttdata;
             if (rtdata.output.items.size() > 0) {
-                ttdata.refmodel = ReportTool.buildModel(rtdata);
+                ttdata.custommodel = ReportTool.buildModel(rtdata);
                 for (String key : rtdata.output.items.keySet()) {
                     item = rtdata.output.items.get(key);
                     ttcol = ttdata.instance(key);
