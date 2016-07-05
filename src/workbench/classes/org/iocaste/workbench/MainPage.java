@@ -18,7 +18,6 @@ public class MainPage extends AbstractPanelPage {
         set(new MainStyle());
         put("load", new Load());
         put("project", new ProjectSelect());
-        submit("execute", new ExecuteCommand());
         for (String key : extcontext.commands.keySet())
             put(key, extcontext.commands.get(key));
         

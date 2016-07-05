@@ -120,7 +120,7 @@ public class Compile extends AbstractCommand {
         String error;
 
         data.extcontext = getExtendedContext();
-        data.project = parameters.get("project");
+        data.project = data.extcontext.project.getstKey();
         if ((data.project == null) && (data.extcontext.project == null)) {
             message(Const.ERROR, "undefined.project");
             return null;

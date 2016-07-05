@@ -6,6 +6,7 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.StandardViewInput;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.workbench.project.ParameterTransport;
+import org.iocaste.workbench.project.compile.Compile;
 import org.iocaste.workbench.project.datadict.ModelItemLoader;
 import org.iocaste.workbench.project.view.ViewItemLoader;
 
@@ -34,6 +35,7 @@ public class ProjectViewer extends AbstractPanelPage {
         set(new ProjectViewerConfig());
         set(new StandardViewInput());
         set(new ProjectViewerStyle());
+        action("compile", new Compile(getExtendedContext()));
         put("data_elements_add", new ParameterTransport(
                 "data-element-add", "data_elements_detail"));
         put("models_add", new ParameterTransport(
