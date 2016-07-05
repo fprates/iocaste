@@ -9,7 +9,7 @@ import org.iocaste.workbench.project.ParameterTransport;
 import org.iocaste.workbench.project.view.SpecConfigLoader;
 
 public class ProjectItemEditor extends AbstractPanelPage {
-    private String view;
+    private String view, extension;
     private static final Map<String, String> commands;
     private static final Map<String, ViewerItemPickData> pickdata;
     
@@ -20,6 +20,7 @@ public class ProjectItemEditor extends AbstractPanelPage {
         commands.put("model_item", "model-item-add");
         commands.put("view_item", "viewspec-add");
         commands.put("spec_config", "viewconfig");
+        commands.put("actions", "action-add");
         commands.put("package_item", "class-add");
 
         pickdata = new HashMap<>();
@@ -30,17 +31,24 @@ public class ProjectItemEditor extends AbstractPanelPage {
         data.loader = new SpecConfigLoader();
     }
     
-    public ProjectItemEditor(String view) {
+    public ProjectItemEditor(String view, String extension) {
         this.view = view;
+        this.extension = extension;
+    }
+    
+    private void action(String name) {
+        put(name.concat("_add"), new ParameterTransport(
+                commands.get(name), name.concat("_detail")));
     }
     
     @Override
     public void execute() throws Exception {
-        set(new ProjectViewerSpec(view));
+        set(new ProjectViewerSpec(view, extension));
         set(new ProjectViewerConfig());
         set(new StandardViewInput());
-        put(view.concat("_add"), new ParameterTransport(
-                commands.get(view), view.concat("_detail")));
+        action(view);
+        if (extension != null)
+            action(extension);
         for (String action : pickdata.keySet())
             put(action, new ViewerItemPick(pickdata.get(action)));
     }

@@ -1,48 +1,46 @@
 package org.iocaste.workbench.project.view.action;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
 
 public class ActionAdd extends AbstractCommand {
-    private Map<String, Integer> types;
     
     public ActionAdd(Context extcontext) {
         super("action-add", extcontext);
+        ActionContext actionctx;
+        
         required("name", "NAME");
         required("class", "CLASS");
         optional("type", "TYPE");
         checkview = true;
-        types = new HashMap<>();
-        types.put("action", 0);
-        types.put("submit", 1);
-        types.put("put", 2);
+        
+        actionctx = getActionContext();
+        actionctx.updateviewer = new ActionItemUpdate(extcontext);
     }
     
     @Override
     protected Object entry(PageBuilderContext context) {
         ComplexDocument classes;
-        String name, classname, typename;
+        String name, classname;
         String[] tokens;
         ExtendedObject object;
         StringBuilder packagename;
         int type;
         Context extcontext = getExtendedContext();
         
-        name = parameters.get("name");
+        name = getst("name");
         object = extcontext.view.getItemsMap("action").get(name);
         if (object != null) {
             message(Const.ERROR, "action.already.exists");
             return null;
         }
         
-        classname = parameters.get("class");
+        classname = getst("class");
         packagename = null;
         tokens = classname.split("\\.");
         for (int i = 0; i < tokens.length - 1; i++)
@@ -63,13 +61,8 @@ public class ActionAdd extends AbstractCommand {
             return null;
         }
         
-        if (parameters.containsKey("type")) {
-            typename = parameters.get("type");
-            if (!types.containsKey(typename)) {
-                message(Const.ERROR, "invalid.type");
-                return null;
-            }
-            type = types.get(typename);
+        if (contains("type")) {
+            type = geti("type");
         } else {
             type = 0;
         }

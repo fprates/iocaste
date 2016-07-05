@@ -4,14 +4,13 @@ import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 
 public class ProjectViewerSpec extends AbstractViewSpec {
-    private String view;
+    private String view, extension;
     
-    public ProjectViewerSpec() {
-        this(null);
-    }
+    public ProjectViewerSpec() { }
     
-    public ProjectViewerSpec(String view) {
+    public ProjectViewerSpec(String view, String extension) {
         this.view = view;
+        this.extension = extension;
     }
     
     @Override
@@ -19,6 +18,8 @@ public class ProjectViewerSpec extends AbstractViewSpec {
         
         if (view != null) {
             module(view);
+            if (extension != null)
+                module(parent, extension);
             return;
         }
 
@@ -31,15 +32,17 @@ public class ProjectViewerSpec extends AbstractViewSpec {
     }
     
     private void module(String name) {
-        String buttonbar, parent;
-        
         if (view == null) {
             tabbedpaneitem("objects", name);
-            parent = name;
+            module(name, name);
         } else {
-            parent = this.parent;
+            module(this.parent, name);
         }
-
+    }
+    
+    private void module(String parent, String name) {
+        String buttonbar;
+        
         buttonbar = name.concat("_btbar");
         standardcontainer(parent, buttonbar);
         button(buttonbar, name.concat("_add"));
