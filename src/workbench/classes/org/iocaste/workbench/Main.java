@@ -35,6 +35,8 @@ public class Main extends AbstractPageBuilder {
                 new ProjectItemEditor("model_item"), extcontext);
         panel.instance("view_item_editor",
                 new ProjectItemEditor("view_item"), extcontext);
+        panel.instance("spec_config_editor",
+                new ProjectItemEditor("spec_config"), extcontext);
         panel.instance("class-editor",
                 new ClassEditorPage(), extcontext);
     }

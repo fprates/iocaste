@@ -111,7 +111,7 @@ public class ProjectViewerConfig extends AbstractViewConfig {
                         {"PROJECT", true, null, null, 0, true},
                         {"SCREEN", true, null, null, 0, true},
                         {"PARENT", false, null, null, 0, true},
-                        {"NAME", false, null, null, 0, true},
+                        {"NAME", false, Const.LINK, "spec_pick", 0, false},
                         {"TYPE", false, null, null, 0, true}
                     }
                 });
@@ -124,6 +124,30 @@ public class ProjectViewerConfig extends AbstractViewConfig {
                         {"PARENT", false, null, null, 0, false},
                         {"NAME", false, null, null, 0, false},
                         {"TYPE", false, null, null, 0, false}
+                    }
+                });
+        config.put("spec_config_items", new Object[] {
+                "tt", "WB_SCREEN_CONFIG",
+                new Object[][] {
+                        {"CONFIG_ID", true, null, null, 0, true},
+                        {"PROJECT", true, null, null, 0, true},
+                        {"SCREEN", true, null, null, 0, true},
+                        {"SPEC", true, null, null, 0, true},
+                        {"NAME", false, null, null, 0, true},
+                        {"VALUE", false, null, null, 40, true},
+                        {"TYPE", true, null, null, 0, true}
+                    }
+                });
+        config.put("spec_config_detail", new Object[] {
+                "dt", "WB_SCREEN_CONFIG",
+                new Object[][] {
+                        {"CONFIG_ID", true, null, null, 0, true},
+                        {"PROJECT", true, null, null, 0, true},
+                        {"SCREEN", true, null, null, 0, true},
+                        {"SPEC", true, null, null, 0, true},
+                        {"NAME", false, null, null, 0, false},
+                        {"VALUE", false, null, null, 40, false},
+                        {"TYPE", true, null, null, 0, true}
                     }
                 });
     }

@@ -21,11 +21,11 @@ public class ViewInstall extends AbstractInstallObject {
         DataElement screenspecitemname, screenitemtype, screenname;
         DocumentModelItem screen, speckey;
         
-        screenname = elementchar("WB_SCREEN_NAME", 16, true);
-        screenspecitemid = elementchar("WB_SCREEN_SPEC_ITEM", 19, true);
-        screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, true);
+        screenname = elementchar("WB_SCREEN_NAME", 16, false);
+        screenspecitemid = elementchar("WB_SCREEN_SPEC_ITEM", 19, false);
+        screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, false);
         screenitemtype = elementchar("WB_SCREEN_ITEM_TYPE", 24, false);
-        screenconfigitemid = elementchar("WB_SCREEN_CFG_ID", 20, true);
+        screenconfigitemid = elementchar("WB_SCREEN_CFG_ID", 20, false);
         screenconfigname = elementchar("WB_SCREEN_CFG_NAME", 24, false);
         screenconfigvalue = elementchar("WB_SCREEN_CFG_VALUE", 255, false);
         screenconfigtype = elementnumc("WB_SCREEN_CFG_TYPE", 1);

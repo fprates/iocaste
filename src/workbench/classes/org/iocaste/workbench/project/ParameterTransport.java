@@ -22,25 +22,28 @@ public class ParameterTransport extends AbstractActionHandler {
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
+        Object value;
         AbstractActionHandler handler;
         AbstractCommand command;
         CommandArgument argument;
         ViewContext mainctx;
         Context extcontext = getExtendedContext();
         ActionContext actionctx = extcontext.actions.get(action);
-        Map<String, CommandArgument> arguments = actionctx.arguments;
         Map<String, String> parameters = new HashMap<>();
         ExtendedObject object = getdf(form);
         
-        for (String key : arguments.keySet()) {
-            argument = arguments.get(key);
+        if (actionctx.updateviewer != null)
+            actionctx.updateviewer.preexecute(actionctx, object);
+        
+        for (String key : actionctx.arguments.keySet()) {
+            argument = actionctx.arguments.get(key);
             parameters.put(key, object.get(argument.field));
         }
         
         mainctx = context.getView("main");
         command = mainctx.getActionHandler(action);
         command.set(parameters);
-        command.call(context);
+        value = command.call(context);
         if (actionctx.mainrestart) {
             handler = mainctx.getActionHandler("load");
             handler.run(context);
@@ -51,6 +54,6 @@ public class ParameterTransport extends AbstractActionHandler {
             back();
         
         if (actionctx.updateviewer != null)
-            actionctx.updateviewer.execute(extcontext, extcontext.callreturn);
+            actionctx.updateviewer.postexecute(value);
     }
 }

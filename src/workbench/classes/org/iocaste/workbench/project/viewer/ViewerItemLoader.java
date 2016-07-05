@@ -4,5 +4,6 @@ import org.iocaste.workbench.Context;
 
 public interface ViewerItemLoader {
     
-    public abstract void execute(Context excontext);
+    public abstract void execute(
+            ViewerItemPickData pickdata, Context excontext);
 }

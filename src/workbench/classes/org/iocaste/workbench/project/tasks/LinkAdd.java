@@ -19,7 +19,8 @@ public class LinkAdd extends AbstractCommand {
         optional("group", "GROUP");
         
         actionctx = getActionContext();
-        actionctx.updateviewer = new ViewerItemUpdate("links_items");
+        actionctx.updateviewer =
+                new ViewerItemUpdate(extcontext, "links_items");
     }
     
     @Override

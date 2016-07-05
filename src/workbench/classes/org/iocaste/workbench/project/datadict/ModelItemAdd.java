@@ -22,7 +22,8 @@ public class ModelItemAdd extends AbstractCommand {
         checkmodel = true;
         
         actionctx = getActionContext();
-        actionctx.updateviewer = new ViewerItemUpdate("model_item_items");
+        actionctx.updateviewer =
+                new ViewerItemUpdate(extcontext, "model_item_items");
     }
     
     @Override

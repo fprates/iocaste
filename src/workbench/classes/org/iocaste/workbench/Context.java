@@ -6,6 +6,7 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.workbench.project.ProjectAdd;
 import org.iocaste.workbench.project.ProjectInfo;
 import org.iocaste.workbench.project.ProjectUse;
@@ -35,6 +36,7 @@ import org.iocaste.workbench.project.view.config.ViewConfigContext;
 
 public class Context extends AbstractExtendedContext {
     public Map<String, AbstractCommand> commands;
+    public ExtendedObject specitem;
     public ComplexDocument project, model, view;
     public ViewConfigContext viewconfig;
     public ClassEditorContext classeditor;

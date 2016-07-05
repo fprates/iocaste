@@ -19,7 +19,8 @@ public class ModelAdd extends AbstractCommand {
         optional("table", "TABLE");
         
         actionctx = getActionContext();
-        actionctx.updateviewer = new ViewerItemUpdate("models_items");
+        actionctx.updateviewer =
+                new ViewerItemUpdate(extcontext, "models_items");
     }
     
     @Override

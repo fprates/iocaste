@@ -3,25 +3,29 @@ package org.iocaste.workbench.project.view;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
-import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.workbench.Context;
 import org.iocaste.workbench.project.viewer.ViewerItemLoader;
 import org.iocaste.workbench.project.viewer.ViewerItemPickData;
 
-public class ViewItemLoader implements ViewerItemLoader {
+public class SpecConfigLoader implements ViewerItemLoader {
 
     @Override
     public final void execute(ViewerItemPickData pickdata, Context extcontext) {
         TableToolContextEntry entry;
-        ComplexDocument document = (ComplexDocument)extcontext.callreturn;
-        Map<Object, ExtendedObject> items = document.getItemsMap("spec");
-        
-        entry = extcontext.tableInstance("view_item_editor", "view_item_items");
+        Map<Object, ExtendedObject> items;
+
+        extcontext.specitem = extcontext.view.getItemsMap("spec").
+                get(pickdata.value);
+        entry = extcontext.tableInstance(
+                "spec_config_editor", "spec_config_items");
         entry.items.clear();
+        items = extcontext.view.getItemsMap("config");
+        if ((items == null) || (items.size() == 0))
+            return;
         for (Object key : items.keySet())
             extcontext.add(
-                    "view_item_editor", "view_item_items", items.get(key));
+                    "spec_config_editor", "spec_config_items", items.get(key));
     }
     
 }

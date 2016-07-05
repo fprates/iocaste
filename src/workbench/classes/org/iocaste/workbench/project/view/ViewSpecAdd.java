@@ -22,7 +22,8 @@ public class ViewSpecAdd extends AbstractCommand {
         checkview = true;
         
         actionctx = getActionContext();
-        actionctx.updateviewer = new ViewerItemUpdate("view_item_items");
+        actionctx.updateviewer =
+                new ViewerItemUpdate(extcontext, "view_item_items");
     }
     
     @Override

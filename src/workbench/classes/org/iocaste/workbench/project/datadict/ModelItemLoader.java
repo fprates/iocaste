@@ -7,11 +7,12 @@ import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.workbench.Context;
 import org.iocaste.workbench.project.viewer.ViewerItemLoader;
+import org.iocaste.workbench.project.viewer.ViewerItemPickData;
 
 public class ModelItemLoader implements ViewerItemLoader {
 
     @Override
-    public final void execute(Context extcontext) {
+    public final void execute(ViewerItemPickData pickdata, Context extcontext) {
         TableToolContextEntry entry;
         ComplexDocument document = (ComplexDocument)extcontext.callreturn;
         Map<Object, ExtendedObject> items = document.getItemsMap("item");

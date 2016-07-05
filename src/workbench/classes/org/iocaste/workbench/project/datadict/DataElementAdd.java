@@ -38,7 +38,8 @@ public class DataElementAdd extends AbstractCommand {
         types.put("short", DataType.SHORT);
         
         actionctx = getActionContext();
-        actionctx.updateviewer = new ViewerItemUpdate("data_elements_items");
+        actionctx.updateviewer =
+                new ViewerItemUpdate(extcontext, "data_elements_items");
     }
     
     @Override
