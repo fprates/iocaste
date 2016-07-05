@@ -7,8 +7,7 @@ import org.iocaste.appbuilder.common.StandardViewInput;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.workbench.project.ParameterTransport;
 import org.iocaste.workbench.project.compile.Compile;
-import org.iocaste.workbench.project.datadict.ModelItemLoader;
-import org.iocaste.workbench.project.view.ViewItemLoader;
+import org.iocaste.workbench.project.java.PackageItemLoader;
 
 public class ProjectViewer extends AbstractPanelPage {
     private static final Map<String, ViewerItemPickData> pickdata;
@@ -19,14 +18,21 @@ public class ProjectViewer extends AbstractPanelPage {
         pickdata = new HashMap<>();
         data = new ViewerItemPickData("model_pick", pickdata);
         data.redirect = "model_item_editor";
-        data.items = "models_items";
+        data.pickname = "models_items.NAME";
         data.command = "model-use";
-        data.loader = new ModelItemLoader();
+        data.loader = new ViewerItemLoader("model_item_items", "item");
+        
         data = new ViewerItemPickData("view_pick", pickdata);
         data.redirect = "view_item_editor";
-        data.items = "views_items";
+        data.pickname = "views_items.NAME";
         data.command = "view-use";
-        data.loader = new ViewItemLoader();
+        data.loader = new ViewerItemLoader("view_item_items", "spec");
+        
+        data = new ViewerItemPickData("package_pick", pickdata);
+        data.redirect = "package_item_editor";
+        data.pickname = "packages_items.PACKAGE";
+        data.command = null;
+        data.loader = new PackageItemLoader();
     }
     
     @Override
@@ -44,6 +50,8 @@ public class ProjectViewer extends AbstractPanelPage {
                 "view-add", "views_detail"));
         put("links_add", new ParameterTransport(
                 "link-add", "links_detail"));
+        put("packages_add", new ParameterTransport(
+                "package-add", "packages_detail"));
         for (String action : pickdata.keySet())
             put(action, new ViewerItemPick(pickdata.get(action)));
     }

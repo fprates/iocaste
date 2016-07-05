@@ -5,13 +5,20 @@ import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.project.viewer.ViewerItemUpdate;
 
 public class PackageAdd extends AbstractCommand {
 
     public PackageAdd(Context extcontext) {
         super("package-add", extcontext);
+        ActionContext actionctx;
+        
         required("name", "PACKAGE");
+        actionctx = getActionContext();
+        actionctx.updateviewer =
+                new ViewerItemUpdate(extcontext, "packages_items");
     }
     
     @Override
@@ -35,7 +42,7 @@ public class PackageAdd extends AbstractCommand {
         autoset(object);
         save(_package);
         message(Const.STATUS, "added.package");
-        return _package;
+        return object;
     }
 
 }

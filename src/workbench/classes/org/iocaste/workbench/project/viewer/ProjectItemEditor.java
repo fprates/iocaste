@@ -20,11 +20,12 @@ public class ProjectItemEditor extends AbstractPanelPage {
         commands.put("model_item", "model-item-add");
         commands.put("view_item", "viewspec-add");
         commands.put("spec_config", "viewconfig");
+        commands.put("package_item", "class-add");
 
         pickdata = new HashMap<>();
         data = new ViewerItemPickData("spec_pick", pickdata);
         data.redirect = "spec_config_editor";
-        data.items = "view_item_items";
+        data.pickname = "view_item_items.NAME";
         data.command = null;
         data.loader = new SpecConfigLoader();
     }

@@ -21,9 +21,7 @@ public class ViewerItemPick extends AbstractActionHandler {
         Map<String, String> parameters;
         Context extcontext = getExtendedContext();
 
-        pickdata.pickname = pickdata.items.concat(".NAME");
         pickdata.value = getinputst(pickdata.pickname);
-        
         if (pickdata.command != null) {
             handler = context.getView("main").
                     getActionHandler(pickdata.command);

@@ -18,19 +18,19 @@ public class ProjectViewerSpec extends AbstractViewSpec {
     protected void execute(PageBuilderContext context) {
         
         if (view != null) {
-            module(view, true);
+            module(view);
             return;
         }
 
         tabbedpane(parent, "objects");
-        module("data_elements", true);
-        module("models", true);
-        module("views", true);
-        module("links", true);
-        module("source", false);
+        module("data_elements");
+        module("models");
+        module("views");
+        module("links");
+        module("packages");
     }
     
-    private void module(String name, boolean detail) {
+    private void module(String name) {
         String buttonbar, parent;
         
         if (view == null) {
@@ -45,8 +45,7 @@ public class ProjectViewerSpec extends AbstractViewSpec {
         button(buttonbar, name.concat("_add"));
         button(buttonbar, name.concat("_remove"));
         tabletool(parent, name.concat("_items"));
-        if (detail)
-            dataform(parent, name.concat("_detail"));
+        dataform(parent, name.concat("_detail"));
     }
 }
 

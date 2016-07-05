@@ -1,17 +1,16 @@
-package org.iocaste.workbench.project.viewer;
+package org.iocaste.workbench.project.java;
 
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.workbench.AbstractCommand;
 import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.CommandArgument;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.project.viewer.ViewerUpdate;
 
-public class ViewerItemUpdate implements ViewerUpdate {
-    private String items;
+public class ClassItemUpdate implements ViewerUpdate {
     private Context extcontext;
     
-    public ViewerItemUpdate(Context extcontext, String items) {
-        this.items = items;
+    public ClassItemUpdate(Context extcontext) {
         this.extcontext = extcontext;
     }
 
@@ -21,16 +20,15 @@ public class ViewerItemUpdate implements ViewerUpdate {
     
     @Override
     public void postexecute(Object object) {
-        extcontext.add(items, (ExtendedObject)object);
+        extcontext.getContext().function.dontPushPage();
     }
 
     @Override
     public void preexecute(ActionContext actionctx, ExtendedObject object) {
-        object.set("SPEC", extcontext.specitem.getst("NAME"));
+        object.set("PACKAGE", extcontext.pkgitem.getstKey());
         actionctx.arguments.clear();
-        actionctx.arguments.put(object.getst("NAME"), argument("VALUE"));
-        actionctx.arguments.put("element", argument("SPEC"));
-        
+        actionctx.arguments.put("package", argument("PACKAGE"));
+        actionctx.arguments.put("class", argument("NAME"));
     }
     
 }

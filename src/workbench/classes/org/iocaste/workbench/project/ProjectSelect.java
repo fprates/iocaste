@@ -48,9 +48,10 @@ public class ProjectSelect extends AbstractActionHandler {
         command.call(context);
         
         dataelementsLoad(extcontext, project);
-        modelsLoad(extcontext);
-        viewsLoad(extcontext);
+        documentsLoad("models_items", "model", extcontext);
+        documentsLoad("views_items", "screen", extcontext);
         linksLoad(extcontext);
+        documentsLoad("packages_items", "class", extcontext);
         
         init("project_viewer", extcontext);
         redirect("project_viewer");
@@ -69,32 +70,17 @@ public class ProjectSelect extends AbstractActionHandler {
             extcontext.add("project_viewer", "links_items", items.get(key));
     }
     
-    private final void modelsLoad(Context extcontext) {
+    private final void documentsLoad(
+            String table, String item, Context extcontext) {
         Map<Object, ComplexDocument> models;
 
-        extcontext.tableInstance(
-                "project_viewer", "models_items").items.clear();
-        models = extcontext.project.getDocumentsMap("model");
+        extcontext.tableInstance("project_viewer", table).items.clear();
+        models = extcontext.project.getDocumentsMap(item);
         if ((models == null) || (models.size() == 0))
             return;
         
         for (Object key : models.keySet())
-            extcontext.add("project_viewer",
-                    "models_items", models.get(key).getHeader());
+            extcontext.add(
+                    "project_viewer", table, models.get(key).getHeader());
     }
-    
-    private final void viewsLoad(Context extcontext) {
-        Map<Object, ComplexDocument> views;
-
-        extcontext.tableInstance(
-                "project_viewer", "views_items").items.clear();
-        views = extcontext.project.getDocumentsMap("screen");
-        if ((views == null) || (views.size() == 0))
-            return;
-
-        for (Object key : views.keySet())
-            extcontext.add("project_viewer",
-                    "views_items", views.get(key).getHeader());
-    }
-    
 }

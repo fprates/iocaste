@@ -3,6 +3,7 @@ package org.iocaste.workbench.project.java;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
 import org.iocaste.workbench.project.java.editor.handler.ClassHandler;
 
@@ -10,9 +11,13 @@ public class ClassEditorCall extends AbstractCommand {
     private String op;
     public ClassEditorCall(String op, Context extcontext) {
         super(op, extcontext);
+        ActionContext actionctx;
+        
         required("package", null);
         required("class", null);
         this.op = op;
+        actionctx = getActionContext();
+        actionctx.updateviewer = new ClassItemUpdate(extcontext);
     }
     
     @Override

@@ -3,8 +3,8 @@ package org.iocaste.workbench.project.viewer;
 import java.util.Map;
 
 public class ViewerItemPickData {
-    public String items, command, redirect, pickname, value;
-    public ViewerItemLoader loader;
+    public String command, redirect, pickname, value;
+    public ItemLoader loader;
     
     public ViewerItemPickData(
             String name, Map<String, ViewerItemPickData> pickdata) {

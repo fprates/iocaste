@@ -37,7 +37,7 @@ import org.iocaste.workbench.project.view.config.ViewConfigContext;
 public class Context extends AbstractExtendedContext {
     public Map<String, AbstractCommand> commands;
     public ExtendedObject specitem;
-    public ComplexDocument project, model, view;
+    public ComplexDocument project, model, view, pkgitem;
     public ViewConfigContext viewconfig;
     public ClassEditorContext classeditor;
     public ProjectInfo[] projects;
