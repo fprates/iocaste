@@ -16,7 +16,7 @@ public abstract class AbstractCommand extends AbstractActionHandler {
     public static final byte OPTIONAL = 1;
     private Map<String, Object> parameters;
     protected Map<String, CommandArgument> arguments;
-    protected Map<String, Set<String>> values;
+    protected Map<String, Set<Object>> values;
     protected boolean checkproject, checkmodel, checkview, checkparameters;
     private ActionContext actionctx;
     
@@ -128,9 +128,9 @@ public abstract class AbstractCommand extends AbstractActionHandler {
         return null;
     }
     
-    protected final void optional(String name, String field, String... options)
+    protected final void optional(String name, String field, Object... options)
     {
-        Set<String> test;
+        Set<Object> test;
         
         arguments.put(name, new CommandArgument(OPTIONAL, field));
         if ((options == null) || (options.length == 0))
@@ -138,12 +138,12 @@ public abstract class AbstractCommand extends AbstractActionHandler {
         
         test = new HashSet<>();
         values.put(name, test);
-        for (String option : options)
+        for (Object option : options)
             test.add(option);
     }
     
     protected final void optionalbl(String name, String field) {
-        optional(name, field, "true", "false");
+        optional(name, field, true, false);
         arguments.get(name).bool = true;
     }
     
