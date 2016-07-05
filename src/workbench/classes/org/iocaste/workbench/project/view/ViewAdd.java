@@ -38,6 +38,6 @@ public class ViewAdd extends AbstractCommand {
         autoset(view);
         save(view);
         message(Const.STATUS, "view.created.");
-        return view;
+        return view.getHeader();
     }
 }
