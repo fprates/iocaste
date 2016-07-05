@@ -52,8 +52,9 @@ public class ModelsInstall extends AbstractInstallObject {
                 "NAME", "ITMNM", modelitemname);
         model.item(
                 "FIELD", "FLDNM", tableitemname);
-        model.reference(
-                "DATA_ELEMENT", "DTELM", getItem("dataelementkey"));
+        searchhelp(model.reference(
+                "DATA_ELEMENT", "DTELM", getItem("dataelementkey")),
+                "SH_WB_DATA_ELEMENT");
         model.item(
                 "KEY", "MDKEY", modelkey);
         

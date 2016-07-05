@@ -68,6 +68,11 @@ public class DataElementsInstall extends AbstractInstallObject {
         model.item(
                 "UPCASE", "DEUPC", deupcase);
         
+        shd = searchHelpInstance("SH_WB_DATA_ELEMENT", "WB_DATA_ELEMENTS");
+        shd.setExport("NAME");
+        shd.add("NAME");
+        shd.add("TYPE");
+        shd.add("SIZE");
     }
     
 }
