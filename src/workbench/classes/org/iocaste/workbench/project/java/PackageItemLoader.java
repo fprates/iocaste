@@ -27,5 +27,11 @@ public class PackageItemLoader implements ItemLoader {
             extcontext.add(
                     pickdata.redirect, "package_item_items", items.get(key));
     }
+
+    @Override
+    public void init(Context excontext,
+            ViewerItemPickData pickdata, Map<String, Object> parameters) {
+        parameters.put("name", pickdata.value);
+    }
     
 }

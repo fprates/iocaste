@@ -27,5 +27,11 @@ public class SpecConfigLoader implements ItemLoader {
             extcontext.add(
                     "spec_config_editor", "spec_config_items", items.get(key));
     }
+
+    @Override
+    public void init(Context excontext,
+            ViewerItemPickData pickdata, Map<String, Object> parameters) {
+        parameters.put("name", pickdata.value);
+    }
     
 }

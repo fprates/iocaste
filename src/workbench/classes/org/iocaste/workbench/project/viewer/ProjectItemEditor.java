@@ -6,6 +6,7 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.StandardViewInput;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.workbench.project.ParameterTransport;
+import org.iocaste.workbench.project.java.SourceConfigLoader;
 import org.iocaste.workbench.project.view.SpecConfigLoader;
 
 public class ProjectItemEditor extends AbstractPanelPage {
@@ -29,6 +30,12 @@ public class ProjectItemEditor extends AbstractPanelPage {
         data.pickname = "view_item_items.NAME";
         data.command = null;
         data.loader = new SpecConfigLoader();
+        
+        data = new ViewerItemPickData("source_pick", pickdata);
+        data.redirect = "class-editor";
+        data.pickname = "package_item_items.NAME";
+        data.command = "class-edit";
+        data.loader = new SourceConfigLoader();
     }
     
     public ProjectItemEditor(String view, String extension) {
@@ -46,6 +53,7 @@ public class ProjectItemEditor extends AbstractPanelPage {
         set(new ProjectViewerSpec(view, extension));
         set(new ProjectViewerConfig());
         set(new StandardViewInput());
+        set(new ProjectViewerStyle());
         action(view);
         if (extension != null)
             action(extension);
@@ -54,4 +62,3 @@ public class ProjectItemEditor extends AbstractPanelPage {
     }
     
 }
-

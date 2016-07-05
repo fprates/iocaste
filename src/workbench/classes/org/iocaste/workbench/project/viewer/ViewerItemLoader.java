@@ -29,4 +29,10 @@ public class ViewerItemLoader implements ItemLoader {
             extcontext.add(pickdata.redirect, table, items.get(key));
     }
     
+    @Override
+    public final void init(Context excontext,
+            ViewerItemPickData pickdata, Map<String, Object> parameters) {
+        parameters.put("name", pickdata.value);
+    }
+    
 }
