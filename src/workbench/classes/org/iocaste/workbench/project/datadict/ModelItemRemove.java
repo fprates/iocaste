@@ -20,7 +20,7 @@ public class ModelItemRemove extends AbstractCommand {
         ExtendedObject object;
         Context extcontext = getExtendedContext();
         
-        name = parameters.get("name");
+        name = getst("name");
         object = extcontext.model.getItemsMap("item").get(name);
         if (object == null) {
             message(Const.ERROR, "invalid.model.item");

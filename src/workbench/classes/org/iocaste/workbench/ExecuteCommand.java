@@ -21,7 +21,7 @@ public class ExecuteCommand extends AbstractActionHandler {
         AbstractCommand command;
         StringBuilder sb;
         byte type;
-        Map<String, String> parameters;
+        Map<String, Object> parameters;
         String message, value, name;
         Context extcontext = getExtendedContext();
         String function = getinputst("command");

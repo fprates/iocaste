@@ -30,7 +30,7 @@ public class ModelAdd extends AbstractCommand {
         ExtendedObject object;
         Context extcontext;
         
-        name = parameters.get("name");
+        name = getst("name");
         document = getDocument("WB_MODELS", name);
         if (document != null) {
             message(Const.ERROR, "model.exists");

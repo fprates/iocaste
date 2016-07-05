@@ -48,7 +48,7 @@ public class DataElementAdd extends AbstractCommand {
         ExtendedObject object;
         Context extcontext = getExtendedContext();
         
-        name = parameters.get("name");
+        name = getst("name");
         object = getObject("WB_DATA_ELEMENTS", name);
         if (object != null) {
             message(Const.ERROR, "data.element.exists");

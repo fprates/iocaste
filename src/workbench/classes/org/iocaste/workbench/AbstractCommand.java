@@ -1,5 +1,6 @@
 package org.iocaste.workbench;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -13,7 +14,7 @@ import org.iocaste.documents.common.ExtendedObject;
 public abstract class AbstractCommand extends AbstractActionHandler {
     public static final byte REQUIRED = 0;
     public static final byte OPTIONAL = 1;
-    protected Map<String, String> parameters;
+    private Map<String, Object> parameters;
     protected Map<String, CommandArgument> arguments;
     protected Map<String, Set<String>> values;
     protected boolean checkproject, checkmodel, checkview, checkparameters;
@@ -30,7 +31,7 @@ public abstract class AbstractCommand extends AbstractActionHandler {
         checkproject = checkparameters = true;
     }
     
-    public final String areParametersValid(Map<String, String> parameters) {
+    public final String areParametersValid(Map<String, Object> parameters) {
         for (String key : arguments.keySet())
             if ((arguments.get(key).type == REQUIRED) &&
                     !parameters.containsKey(key))
@@ -73,6 +74,10 @@ public abstract class AbstractCommand extends AbstractActionHandler {
         return extcontext.callreturn;
     }
     
+    protected final boolean contains(String name) {
+        return parameters.containsKey(name);
+    }
+    
     protected abstract Object entry(PageBuilderContext context)
             throws Exception;
     
@@ -80,6 +85,10 @@ public abstract class AbstractCommand extends AbstractActionHandler {
     protected final void execute(PageBuilderContext context) throws Exception {
         Context extcontext = context.getView().getExtendedContext();
         extcontext.callreturn = entry(context);
+    }
+    
+    protected final Object get(String name) {
+        return parameters.get(name);
     }
     
     protected final ActionContext getActionContext() {
@@ -93,6 +102,20 @@ public abstract class AbstractCommand extends AbstractActionHandler {
         if (value instanceof String)
             return Boolean.parseBoolean((String)value);
         return (boolean)value;
+    }
+    
+    protected final int geti(String name) {
+        Object value = parameters.get(name);
+        return (value instanceof BigDecimal)?
+                ((BigDecimal)value).intValue() : (int)value;
+    }
+    
+    protected final Set<String> getKeys() {
+        return parameters.keySet();
+    }
+    
+    protected final String getst(String name) {
+        return (String)parameters.get(name);
     }
     
     public final String isValidContext(Context extcontext) {
@@ -128,7 +151,7 @@ public abstract class AbstractCommand extends AbstractActionHandler {
         arguments.put(name, new CommandArgument(REQUIRED, field));
     }
     
-    public final void set(Map<String, String> parameters) {
+    public final void set(Map<String, Object> parameters) {
         this.parameters = parameters;
     }
 }

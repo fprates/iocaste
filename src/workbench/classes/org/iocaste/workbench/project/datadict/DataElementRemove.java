@@ -20,7 +20,7 @@ public class DataElementRemove extends AbstractCommand {
         ExtendedObject object;
         Query query;
         
-        name = parameters.get("name");
+        name = getst("name");
         object = getObject("WB_DATA_ELEMENTS", name);
         if (object == null) {
             message(Const.ERROR, "undefined.data.element", name);

@@ -8,8 +8,8 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
 import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.project.view.config.ViewConfigItemUpdate;
 import org.iocaste.workbench.project.view.config.ViewElementAttribute;
-import org.iocaste.workbench.project.viewer.ViewerItemUpdate;
 
 public class ViewConfigEdit extends AbstractCommand {
     
@@ -22,8 +22,7 @@ public class ViewConfigEdit extends AbstractCommand {
         checkview = true;
         
         actionctx = getActionContext();
-        actionctx.updateviewer =
-                new ViewerItemUpdate(extcontext, "spec_config_items");
+        actionctx.updateviewer = new ViewConfigItemUpdate(extcontext);
     }
     
     @Override
@@ -34,7 +33,7 @@ public class ViewConfigEdit extends AbstractCommand {
         Map<String, ViewElementAttribute> attributes;
         Context extcontext = getExtendedContext();
         
-        element = parameters.get("element");
+        element = getst("element");
         object = extcontext.view.getItemsMap("spec").get(element);
         if (object == null) {
             message(Const.ERROR, "invalid.view.element");
@@ -44,7 +43,7 @@ public class ViewConfigEdit extends AbstractCommand {
         result = null;
         type = object.getst("TYPE");
         attributes = extcontext.viewconfig.attribs.get(type);
-        for (String key : parameters.keySet()) {
+        for (String key : getKeys()) {
             if (key.equals("element"))
                 continue;
             attribute = attributes.get(key);
@@ -52,7 +51,7 @@ public class ViewConfigEdit extends AbstractCommand {
                 message(Const.ERROR, "invalid.view.element.attribute");
                 return null;
             }
-            result = attribute.instance(object, parameters.get(key));
+            result = attribute.instance(object, getst(key));
         }
         save(extcontext.view);
         message(Const.STATUS, "viewconfig.added");

@@ -26,7 +26,7 @@ public class ClassEditorCall extends AbstractCommand {
         Context extcontext;
         ClassHandler handler;
         
-        packagename = parameters.get("package");
+        packagename = getst("package");
         extcontext = getExtendedContext();
         extcontext.classeditor.document = extcontext.project.
                 getDocumentsMap("class").get(packagename);
@@ -35,7 +35,7 @@ public class ClassEditorCall extends AbstractCommand {
             return null;
         }
 
-        classname = parameters.get("class");
+        classname = getst("class");
         handler = extcontext.classeditor.handlers.get(op);
         handler.setPackage(packagename);
         handler.setClassName(classname);

@@ -19,7 +19,7 @@ public class LinkRemove extends AbstractCommand {
         ExtendedObject object;
         Context extcontext = getExtendedContext();
 
-        name = parameters.get("name");
+        name = getst("name");
         object = extcontext.project.getItemsMap("link").get(name);
         if (object == null) {
             message(Const.ERROR, "invalid.link");

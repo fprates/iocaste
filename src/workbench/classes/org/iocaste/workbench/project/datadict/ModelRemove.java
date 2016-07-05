@@ -19,7 +19,7 @@ public class ModelRemove extends AbstractCommand {
         ComplexDocument document;
         Context extcontext;
         
-        name = parameters.get("name");
+        name = getst("name");
         extcontext = getExtendedContext();
         document = extcontext.project.getDocumentsMap("model").get(name);
         if (document == null) {

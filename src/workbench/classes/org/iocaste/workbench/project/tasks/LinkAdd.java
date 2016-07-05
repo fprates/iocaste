@@ -30,7 +30,7 @@ public class LinkAdd extends AbstractCommand {
         ExtendedObject[] objects;
         Context extcontext = getExtendedContext();
 
-        name = parameters.get("name");
+        name = getst("name");
         objects = extcontext.project.getItems("link");
         object = readobjects(objects, "NAME", name);
         if (object != null) {

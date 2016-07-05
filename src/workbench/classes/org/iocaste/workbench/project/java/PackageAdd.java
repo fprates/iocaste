@@ -28,7 +28,7 @@ public class PackageAdd extends AbstractCommand {
         ComplexDocument _package;
         Context extcontext;
         
-        name = parameters.get("name");
+        name = getst("name");
         extcontext = getExtendedContext();
         _package = extcontext.project.getDocumentsMap("class").get(name);
         if (_package != null) {

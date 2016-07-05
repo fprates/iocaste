@@ -18,7 +18,7 @@ public class ViewerItemPick extends AbstractActionHandler {
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
         AbstractCommand handler;
-        Map<String, String> parameters;
+        Map<String, Object> parameters;
         Context extcontext = getExtendedContext();
 
         pickdata.value = getinputst(pickdata.pickname);

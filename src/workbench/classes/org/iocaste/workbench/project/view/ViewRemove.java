@@ -19,7 +19,7 @@ public class ViewRemove extends AbstractCommand {
         String name;
         Context extcontext = getExtendedContext();
         
-        name = parameters.get("name");
+        name = getst("name");
         view = extcontext.project.getDocumentsMap("screen").get(name);
         if (view == null) {
             message(Const.ERROR, "invalid.view");

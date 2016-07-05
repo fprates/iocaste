@@ -24,7 +24,7 @@ public class ViewSpecRemove extends AbstractCommand {
         Context extcontext = getExtendedContext();
         
         specitems = extcontext.view.getItemsMap("spec");
-        name = parameters.get("name");
+        name = getst("name");
         specitem = specitems.get(name);
         if (specitem == null) {
             message(Const.ERROR, "invalid.view.element");

@@ -19,7 +19,7 @@ public class ProjectUse extends AbstractCommand {
         Context extcontext = getExtendedContext();
         ComplexDocument project;
         
-        project = getDocument("WB_PROJECT", parameters.get("name"));
+        project = getDocument("WB_PROJECT", getst("name"));
         if (project == null) {
             message(Const.ERROR, "invalid.project");
             return null;

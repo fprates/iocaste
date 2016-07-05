@@ -34,14 +34,14 @@ public class ViewSpecAdd extends AbstractCommand {
         Map<Object, ExtendedObject> specitems =
                 extcontext.view.getItemsMap("spec");
         
-        parent = parameters.get("parent");
+        parent = getst("parent");
         object = specitems.get(parent);
         if ((parent != null) && (object == null)) {
             message(Const.ERROR, "invalid.parent");
             return null;
         }
         
-        name = parameters.get("name");
+        name = getst("name");
         object = specitems.get(name);
         if (object != null) {
             message(Const.ERROR, "view.element.exists");

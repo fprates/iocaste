@@ -33,7 +33,7 @@ public class ModelItemAdd extends AbstractCommand {
         ExtendedObject[] objects;
         Context extcontext = getExtendedContext();
         
-        name = parameters.get("name");
+        name = getst("name");
         objects = extcontext.model.getItems("item");
         object = readobjects(objects, "NAME", name);
         if (object != null) {
@@ -41,7 +41,7 @@ public class ModelItemAdd extends AbstractCommand {
             return null;
         }
         
-        dtel = parameters.get("data-element");
+        dtel = getst("data-element");
         if (dtel != null) {
             object = getObject("WB_DATA_ELEMENTS", dtel);
             if (object == null) {
@@ -50,7 +50,7 @@ public class ModelItemAdd extends AbstractCommand {
             }
         }
         
-        field = parameters.get("field");
+        field = getst("field");
         table = extcontext.model.getHeader().getst("TABLE");
         if ((field == null) && (table != null)) {
             message(Const.ERROR, "field.name.required");

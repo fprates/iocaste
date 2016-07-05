@@ -7,6 +7,7 @@ import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
 import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.CommandArgument;
@@ -23,13 +24,14 @@ public class ParameterTransport extends AbstractActionHandler {
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
         Object value;
+        String message;
         AbstractActionHandler handler;
         AbstractCommand command;
         CommandArgument argument;
         ViewContext mainctx;
         Context extcontext = getExtendedContext();
         ActionContext actionctx = extcontext.actions.get(action);
-        Map<String, String> parameters = new HashMap<>();
+        Map<String, Object> parameters = new HashMap<>();
         ExtendedObject object = getdf(form);
         
         if (actionctx.updateviewer != null)
@@ -37,11 +39,25 @@ public class ParameterTransport extends AbstractActionHandler {
         
         for (String key : actionctx.arguments.keySet()) {
             argument = actionctx.arguments.get(key);
-            parameters.put(key, object.get(argument.field));
+            value = object.get(argument.field);
+            if (value != null)
+                parameters.put(key, value);
         }
         
         mainctx = context.getView("main");
         command = mainctx.getActionHandler(action);
+        message = command.areParametersValid(parameters);
+        if (message != null) {
+            message(Const.ERROR, message);
+            return;
+        }
+
+        message = command.isValidContext(extcontext);
+        if (message != null) {
+            message(Const.ERROR, message);
+            return;
+        }
+        
         command.set(parameters);
         value = command.call(context);
         if (actionctx.mainrestart) {

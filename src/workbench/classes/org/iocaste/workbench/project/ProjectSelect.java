@@ -12,7 +12,7 @@ import org.iocaste.workbench.AbstractCommand;
 import org.iocaste.workbench.Context;
 
 public class ProjectSelect extends AbstractActionHandler {
-    private Map<String, String> parameters;
+    private Map<String, Object> parameters;
     
     public ProjectSelect() {
         parameters = new HashMap<>();

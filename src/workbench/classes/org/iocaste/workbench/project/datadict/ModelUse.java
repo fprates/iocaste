@@ -19,7 +19,7 @@ public class ModelUse extends AbstractCommand {
         ComplexDocument document;
         Context extcontext = getExtendedContext();
 
-        name = parameters.get("name");
+        name = getst("name");
         document = extcontext.project.getDocumentsMap("model").get(name);
         if (document == null) {
             message(Const.ERROR, "undefined.model");
