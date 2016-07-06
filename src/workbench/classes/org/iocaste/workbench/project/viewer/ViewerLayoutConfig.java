@@ -183,7 +183,9 @@ public class ViewerLayoutConfig {
                     {"ACTION_ID", true, null, null, 0, true},
                     {"PROJECT", true, null, null, 0, true},
                     {"SCREEN", true, null, null, 0, true},
-                    {"CLASS", false, null, null, 40, false},
+                    {"NAME", false, null, null, 0, true},
+                    {"CLASS", false, null, null, 40, true},
+                    {"TYPE", false, null, null, 0, true}
                 }
             });
         config.put("actions_detail", new Object[] {
@@ -192,7 +194,7 @@ public class ViewerLayoutConfig {
                     {"ACTION_ID", true, null, null, 0, true},
                     {"PROJECT", true, null, null, 0, true},
                     {"SCREEN", true, null, null, 0, true},
-                    {"CLASS", false, null, null, 40, false},
+                    {"CLASS", false, null, null, 40, false}
                 }
             });
     }

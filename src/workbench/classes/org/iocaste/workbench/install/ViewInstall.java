@@ -7,9 +7,10 @@ import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.packagetool.common.SearchHelpData;
 
 public class ViewInstall extends AbstractInstallObject {
-
+        
     @Override
     protected void execute(StandardInstallContext context) {
         ModelInstall model;
@@ -19,17 +20,21 @@ public class ViewInstall extends AbstractInstallObject {
         DataElement screenconfigtype, screenactionname, screenactionclass;
         DataElement screenactionid, screenactiontype, screenspecitemid;
         DataElement screenspecitemname, screenitemtype, screenname;
-        DocumentModelItem screen, speckey;
+        DataElement screenitemtext, screenactiontypetext;
+        DocumentModelItem screen, speckey, spectypekey, actiontypekey;
+        SearchHelpData shd;
         
         screenname = elementchar("WB_SCREEN_NAME", 16, false);
         screenspecitemid = elementchar("WB_SCREEN_SPEC_ITEM", 19, false);
         screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, false);
         screenitemtype = elementchar("WB_SCREEN_ITEM_TYPE", 24, false);
+        screenitemtext = elementchar("WB_SCREEN_ITEM_TEXT", 40, false);
         screenconfigitemid = elementchar("WB_SCREEN_CFG_ID", 20, false);
         screenconfigname = elementchar("WB_SCREEN_CFG_NAME", 24, false);
         screenconfigvalue = elementchar("WB_SCREEN_CFG_VALUE", 255, false);
         screenconfigtype = elementnumc("WB_SCREEN_CFG_TYPE", 1);
         screenactionid = elementchar("WB_SCREEN_ACTION_ID", 19, false);
+        screenactiontypetext = elementchar("WB_SCREEN_ACTION_TEXT", 10, false);
         screenactionname = elementchar("WB_SCREEN_ACTION_NAME", 40, false);
         screenactionclass = elementchar("WB_SCREEN_ACTION_CLASS", 255, false);
         screenactiontype = elementnumc("WB_SCREEN_ACTION_TYPE", 1);
@@ -43,6 +48,47 @@ public class ViewInstall extends AbstractInstallObject {
                 "NAME", "SCRNM", screenname);
         model.reference(
                 "PROJECT", "PRJNM", getItem("projectkey"));
+        
+        /*
+         * screen item types
+         */
+        model = modelInstance(
+                "WB_SCREEN_SPEC_TYPE", "WBSCRSPECTYP");
+        spectypekey = model.key(
+                "TYPE", "SPCTY", screenitemtype);
+        model.item(
+                "TEXT", "SPCTX", screenitemtext);
+
+        model.values("button", "Botão");
+        model.values("dataform", "Formulário digitação");
+        model.values("expandbar", "Área expansível");
+        model.values("form", "Formulário HTML");
+        model.values("fileupload", "Upload de arquivo");
+        model.values("link", "Link html");
+        model.values("listbox", "Campo de lista");
+        model.values("nodelist", "Lista hierárquica");
+        model.values("nodelistitem", "Item de lista hierárquica");
+        model.values("navcontrol", "Controle de navegação");
+        model.values("printarea", "Área de impressão");
+        model.values("radiobutton", "Botão rádio");
+        model.values("radiogroup", "Grupo de botão rádio");
+        model.values("reporttool", "Ferramenta de relatório");
+        model.values("standardcontainer", "Conteiner padrão");
+        model.values("tabbedpane", "Conteiner de abas");
+        model.values("tabbedpaneitem", "Aba");
+        model.values("tabletool", "Ferramenta de tabela");
+        model.values("text", "Texto de saída");
+        model.values("texteditor", "Área de texto");
+        model.values("textfield", "Campo de texto de extrada");
+        model.values("tiles", "Tiles");
+        model.values("parameter", "Parâmetros html");
+        model.values("view", "Visão");
+        
+        shd = searchHelpInstance(
+                "SH_WB_SCREEN_SPEC_TYPE", "WB_SCREEN_SPEC_TYPE");
+        shd.setExport("TYPE");
+        shd.add("TYPE");
+        shd.add("TEXT");
         
         /*
          * project screen spec items
@@ -59,8 +105,8 @@ public class ViewInstall extends AbstractInstallObject {
                 "PARENT", "SITPA", screenspecitemname);
         model.item(
                 "NAME", "SITNM", screenspecitemname);
-        model.item(
-                "TYPE", "ITTYP", screenitemtype);
+        searchhelp(model.reference(
+                "TYPE", "ITTYP", spectypekey), "SH_WB_SCREEN_SPEC_TYPE");
         
         /*
          * project screen config items
@@ -83,6 +129,24 @@ public class ViewInstall extends AbstractInstallObject {
                 "TYPE", "CFGTY", screenconfigtype);
         
         /*
+         * project screen action
+         */
+        model = modelInstance(
+                "WB_SCR_ACTION_TYPE", "WBSCRACTTYP");
+        actiontypekey = model.key(
+                "TYPE", "ACTTY", screenactiontype);
+        model.item(
+                "TEXT", "ACTTX", screenactiontypetext);
+        model.values(0, "Action");
+        model.values(1, "Submit");
+        model.values(2, "S/exibir");
+        
+        shd = searchHelpInstance("SH_WB_SCR_ACTION_TYPE", "WB_SCR_ACTION_TYPE");
+        shd.setExport("TYPE");
+        shd.add("TYPE");
+        shd.add("TEXT");
+        
+        /*
          * project screen actions
          */
         model = tag("screen_action", modelInstance(
@@ -97,8 +161,8 @@ public class ViewInstall extends AbstractInstallObject {
                 "NAME", "ACTNM", screenactionname);
         model.item(
                 "CLASS", "CLASS", screenactionclass);
-        model.item(
-                "TYPE", "ACTTY", screenactiontype);
+        searchhelp(model.reference(
+                "TYPE", "ACTTY", actiontypekey), "SH_WB_SCR_ACTION_TYPE");
         
         cmodel = tag("screens", cmodelInstance("WB_SCREENS"));
         cmodel.header("screen_head");
