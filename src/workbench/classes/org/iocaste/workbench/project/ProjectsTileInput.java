@@ -13,6 +13,7 @@ public class ProjectsTileInput extends AbstractTileInput {
         ProjectInfo project = get();
         textset("item", "");
         textset("name", project.name);
+        textset("title", project.title);
         linkadd("item", "PROJECT", project.name);
     }
     

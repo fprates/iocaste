@@ -10,5 +10,6 @@ public class ProjectsTileSpec extends AbstractViewSpec {
         link(parent, "item");
         standardcontainer("item", "frame");
         text("frame", "name");
+        text("frame", "title");
     }
 }

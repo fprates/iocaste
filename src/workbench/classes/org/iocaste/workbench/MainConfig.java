@@ -16,6 +16,7 @@ public class MainConfig extends AbstractViewConfig {
         getNavControl().setTitle("iocaste.workbench");
         
         tiles = getTool("projects");
+        tiles.style = "wb_projects";
         tiles.spec = new ProjectsTileSpec();
         tiles.config = new ProjectsTileConfig();
         tiles.input = new ProjectsTileInput();

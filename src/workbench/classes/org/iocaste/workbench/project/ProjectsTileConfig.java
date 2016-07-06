@@ -14,6 +14,7 @@ public class ProjectsTileConfig extends AbstractViewConfig {
         link.setAction("project");
         getElement("frame").setStyleClass("wb_project_frame");
         getElement("name").setStyleClass("wb_project_name");
+        getElement("title").setStyleClass("wb_project_title");
     }
     
 }

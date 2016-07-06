@@ -20,12 +20,14 @@ public class Load extends AbstractActionHandler {
         extcontext.projects = new ProjectInfo[i];
         extcontext.projects[0] = new ProjectInfo();
         extcontext.projects[0].name = "project_add";
+        extcontext.projects[0].title = "&nbsp;";
         if (projects == null)
             return;
         i = 1;
         for (ComplexDocument project : projects) {
             extcontext.projects[i] = new ProjectInfo();
             extcontext.projects[i].name = project.getstKey();
+            extcontext.projects[i].title = project.getHeader().getst("TEXT");
             i++;
         }
     }

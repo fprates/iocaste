@@ -7,11 +7,11 @@ public class ProjectViewerStyle extends AbstractViewConfigStyle {
     @Override
     public void execute() {
         instance(".wb_tt_viewer");
-        put("display", "inline-block");
+        put("display", "block");
         put("vertical-align", "top");
         
         instance(".wb_dt_viewer");
-        put("display", "inline-block");
+        put("display", "block");
     }
     
 }
