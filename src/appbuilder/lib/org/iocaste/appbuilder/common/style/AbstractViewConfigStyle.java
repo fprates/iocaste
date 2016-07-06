@@ -23,6 +23,10 @@ public abstract class AbstractViewConfigStyle implements ViewConfigStyle {
         style = stylesheet.clone(media, to, from);
     }
     
+    protected final String constant(int code) {
+        return stylesheet.getConstants().get(code);
+    }
+    
     @Override
     public final void execute(String media) {
         this.media = media;
