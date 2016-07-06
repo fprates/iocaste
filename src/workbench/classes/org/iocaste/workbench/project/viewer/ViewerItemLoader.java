@@ -27,6 +27,7 @@ public class ViewerItemLoader implements ItemLoader {
         entry.items.clear();
         for (Object key : items.keySet())
             extcontext.add(pickdata.redirect, table, items.get(key));
+        extcontext.titlearg = extcontext.model.getstKey();
     }
     
     @Override

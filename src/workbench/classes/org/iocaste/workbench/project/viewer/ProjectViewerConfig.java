@@ -6,6 +6,7 @@ import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.shell.common.Const;
+import org.iocaste.workbench.Context;
 
 public class ProjectViewerConfig extends AbstractViewConfig {
     
@@ -48,6 +49,9 @@ public class ProjectViewerConfig extends AbstractViewConfig {
     
     @Override
     protected void execute(PageBuilderContext context) {
+        Context extcontext = getExtendedContext();
+        
+        getNavControl().setTitle("viewer.title", extcontext.titlearg);
         for (String name : ViewerLayoutConfig.config.keySet())
             itemconfig(name, ViewerLayoutConfig.config.get(name));
     }

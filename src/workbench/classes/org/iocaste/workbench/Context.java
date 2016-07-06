@@ -42,6 +42,7 @@ public class Context extends AbstractExtendedContext {
     public ClassEditorContext classeditor;
     public ProjectInfo[] projects;
     public Object callreturn;
+    public String titlearg;
     public Map<String, ActionContext> actions;
     
     public Context(PageBuilderContext context) {

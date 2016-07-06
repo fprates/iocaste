@@ -26,6 +26,7 @@ public class PackageItemLoader implements ItemLoader {
         for (Object key : items.keySet())
             extcontext.add(
                     pickdata.redirect, "package_item_items", items.get(key));
+        extcontext.titlearg = extcontext.pkgitem.getstKey();
     }
 
     @Override

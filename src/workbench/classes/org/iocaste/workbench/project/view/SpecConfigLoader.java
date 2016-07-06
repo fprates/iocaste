@@ -26,6 +26,7 @@ public class SpecConfigLoader implements ItemLoader {
         for (Object key : items.keySet())
             extcontext.add(
                     "spec_config_editor", "spec_config_items", items.get(key));
+        extcontext.titlearg = pickdata.value;
     }
 
     @Override

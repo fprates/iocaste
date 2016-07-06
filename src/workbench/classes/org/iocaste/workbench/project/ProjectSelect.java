@@ -53,6 +53,7 @@ public class ProjectSelect extends AbstractActionHandler {
         linksLoad(extcontext);
         documentsLoad("packages_items", "class", extcontext);
         
+        extcontext.titlearg = project;
         init("project_viewer", extcontext);
         redirect("project_viewer");
     }
