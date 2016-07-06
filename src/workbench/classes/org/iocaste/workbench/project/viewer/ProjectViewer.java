@@ -8,6 +8,7 @@ import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.workbench.project.ParameterTransport;
 import org.iocaste.workbench.project.compile.Compile;
 import org.iocaste.workbench.project.java.PackageItemLoader;
+import org.iocaste.workbench.project.view.ViewItemLoader;
 
 public class ProjectViewer extends AbstractPanelPage {
     private static final Map<String, ViewerItemPickData> pickdata;
@@ -26,7 +27,7 @@ public class ProjectViewer extends AbstractPanelPage {
         data.redirect = "view_item_editor";
         data.pickname = "views_items.NAME";
         data.command = "view-use";
-        data.loader = new ViewerItemLoader("view_item_items", "spec");
+        data.loader = new ViewItemLoader();
         
         data = new ViewerItemPickData("package_pick", pickdata);
         data.redirect = "package_item_editor";
