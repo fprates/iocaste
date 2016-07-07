@@ -5,13 +5,20 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.project.viewer.ViewerItemUpdate;
 
 public class DataElementRemove extends AbstractCommand {
     
     public DataElementRemove(Context extcontext) {
         super("data-element-remove", extcontext);
-        required("name", "DATA_ELEMENT");
+        ActionContext actionctx;
+        
+        required("name", "NAME");
+        actionctx = getActionContext();
+        actionctx.updateviewer =
+                new ViewerItemUpdate(extcontext, "data_elements_items");
     }
     
     @Override
@@ -23,7 +30,7 @@ public class DataElementRemove extends AbstractCommand {
         name = getst("name");
         object = getObject("WB_DATA_ELEMENTS", name);
         if (object == null) {
-            message(Const.ERROR, "undefined.data.element", name);
+            message(Const.ERROR, "invalid.dataelement", name);
             return null;
         }
         
@@ -36,7 +43,7 @@ public class DataElementRemove extends AbstractCommand {
             return null;
         }
         delete(object);
-        message(Const.STATUS, "dataelement.removed.");
+        message(Const.STATUS, "dataelement.removed");
         return null;
     }
 
