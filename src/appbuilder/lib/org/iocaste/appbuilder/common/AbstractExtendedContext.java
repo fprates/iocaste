@@ -117,6 +117,33 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     }
     
     @Override
+    public final void remove(String ttname, ExtendedObject object) {
+        remove(context.view.getPageName(), ttname, object);
+    }
+    
+    @Override
+    public final void remove(String page, String ttname, ExtendedObject object)
+    {
+        TableToolContextEntry entry;
+        int index;
+        
+        entry = pages.get(page).tabletools.get(ttname);
+        if ((entry.handler != null) && entry.handler.isInitialized()) {
+            entry.handler.remove(ttname, object);
+        } else {
+            index = -1;
+            for (int i : entry.items.keySet()) {
+                if (!entry.items.get(i).equals(object))
+                    continue;
+                index = i;
+                break;
+            }
+            if (index > -1)
+                entry.items.remove(index);
+        }
+    }
+    
+    @Override
     public final void set(Tile tile) {
         this.tile = tile;
     }

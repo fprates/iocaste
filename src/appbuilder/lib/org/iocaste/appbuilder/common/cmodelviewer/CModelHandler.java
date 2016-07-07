@@ -49,6 +49,12 @@ public class CModelHandler extends AbstractTableToolHandler {
     }
     
     @Override
+    public final void remove(String ttname, ExtendedObject object) {
+        Context cmodelctx = (Context)extcontext;
+        cmodelctx.document.remove(object);
+    }
+    
+    @Override
     public final void set(String dfname, ExtendedObject object) {
         Context cmodelctx = (Context)extcontext;
         cmodelctx.document.setHeader(object);

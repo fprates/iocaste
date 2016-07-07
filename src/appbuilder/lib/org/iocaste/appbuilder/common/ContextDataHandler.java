@@ -14,5 +14,7 @@ public interface ContextDataHandler {
     
     public abstract boolean isInitialized();
     
+    public abstract void remove(String ttname, ExtendedObject items);
+    
     public abstract void set(String dfname, ExtendedObject object);
 }

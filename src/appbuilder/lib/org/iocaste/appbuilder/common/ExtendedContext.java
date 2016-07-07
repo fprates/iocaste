@@ -37,6 +37,11 @@ public interface ExtendedContext {
     
     public abstract void pageInstance(String page);
 
+    public abstract void remove(String ttname, ExtendedObject object);
+    
+    public abstract void remove(
+            String pane, String ttname, ExtendedObject object);
+    
     public abstract void set(Tile tile);
     
     public abstract void set(String dfname, ExtendedObject object);
