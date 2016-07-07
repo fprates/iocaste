@@ -5,24 +5,38 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.StandardViewInput;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
-import org.iocaste.workbench.project.ParameterTransport;
 import org.iocaste.workbench.project.java.SourceConfigLoader;
 import org.iocaste.workbench.project.view.SpecConfigLoader;
 
 public class ProjectItemEditor extends AbstractPanelPage {
     private String view, extension;
-    private static final Map<String, String> commands;
+    private static final Map<String, String[]> commands;
     private static final Map<String, ViewerItemPickData> pickdata;
     
     static {
         ViewerItemPickData data;
         
         commands = new HashMap<>();
-        commands.put("model_item", "model-item-add");
-        commands.put("view_item", "viewspec-add");
-        commands.put("spec_config", "viewconfig");
-        commands.put("actions", "action-add");
-        commands.put("package_item", "class-add");
+        commands.put("model_item", new String[] {
+                "model-item-add",
+                "model-item-remove"
+        });
+        commands.put("view_item", new String[] {
+                "viewspec-add",
+                "viewspec-remove"
+        });
+        commands.put("spec_config", new String[] {
+                "viewconfig",
+                "viewconfig-remove"
+        });
+        commands.put("actions", new String[] {
+                "action-add",
+                "action-remove"
+        });
+        commands.put("package_item", new String[] {
+                "class-add",
+                "class-remove"
+        });
 
         pickdata = new HashMap<>();
         data = new ViewerItemPickData("spec_pick", pickdata);
@@ -44,8 +58,10 @@ public class ProjectItemEditor extends AbstractPanelPage {
     }
     
     private void action(String name) {
-        put(name.concat("_add"), new ParameterTransport(
-                commands.get(name), name.concat("_detail")));
+        put(name.concat("_add"), new AddParameterTransport(
+                commands.get(name)[0], name.concat("_detail")));
+        put(name.concat("_remove"), new RemoveParameterTransport(
+                commands.get(name)[1], name.concat("_items")));
     }
     
     @Override

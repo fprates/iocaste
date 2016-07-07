@@ -13,14 +13,14 @@ public class ViewConfigItemUpdate implements ViewerUpdate {
     public ViewConfigItemUpdate(Context extcontext) {
         this.extcontext = extcontext;
     }
+    
+    @Override
+    public void add(Object object) {
+        extcontext.add("spec_config_items", (ExtendedObject)object);
+    }
 
     private CommandArgument argument(String name) {
         return new CommandArgument(AbstractCommand.OPTIONAL, name);
-    }
-    
-    @Override
-    public void postexecute(Object object) {
-        extcontext.add("spec_config_items", (ExtendedObject)object);
     }
 
     @Override
@@ -30,5 +30,8 @@ public class ViewConfigItemUpdate implements ViewerUpdate {
         actionctx.arguments.put(object.getst("NAME"), argument("VALUE"));
         actionctx.arguments.put("element", argument("SPEC"));
     }
+    
+    @Override
+    public void remove(Object object) { }
     
 }

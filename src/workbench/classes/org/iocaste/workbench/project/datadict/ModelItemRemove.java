@@ -4,14 +4,21 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.project.viewer.ViewerItemUpdate;
 
 public class ModelItemRemove extends AbstractCommand {
     
     public ModelItemRemove(Context extcontext) {
         super("model-item-remove", extcontext);
-        required("name", null);
+        ActionContext actionctx;
+        
+        required("name", "NAME");
         checkmodel = true;
+        actionctx = getActionContext();
+        actionctx.updateviewer =
+                new ViewerItemUpdate(extcontext, "model_item_items");
     }
     
     @Override
@@ -30,7 +37,7 @@ public class ModelItemRemove extends AbstractCommand {
         extcontext.model.remove(object);
         save(extcontext.model);
         message(Const.STATUS, "model.item.removed.");
-        return null;
+        return object;
     }
 
 }

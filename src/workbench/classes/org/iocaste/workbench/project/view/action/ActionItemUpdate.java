@@ -13,14 +13,14 @@ public class ActionItemUpdate implements ViewerUpdate {
     public ActionItemUpdate(Context extcontext) {
         this.extcontext = extcontext;
     }
+    
+    @Override
+    public void add(Object object) {
+        extcontext.add("actions_items", (ExtendedObject)object);
+    }
 
     private CommandArgument argument(String name) {
         return new CommandArgument(AbstractCommand.OPTIONAL, name);
-    }
-    
-    @Override
-    public void postexecute(Object object) {
-        extcontext.add("actions_items", (ExtendedObject)object);
     }
 
     @Override
@@ -30,5 +30,8 @@ public class ActionItemUpdate implements ViewerUpdate {
         actionctx.arguments.put("class", argument("CLASS"));
         actionctx.arguments.put("type", argument("TYPE"));
     }
+    
+    @Override
+    public void remove(Object object) { }
     
 }

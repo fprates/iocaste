@@ -1,4 +1,4 @@
-package org.iocaste.workbench.project;
+package org.iocaste.workbench.project.viewer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,16 +13,16 @@ import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.CommandArgument;
 import org.iocaste.workbench.Context;
 
-public class ParameterTransport extends AbstractActionHandler {
-    private String action, form;
+public abstract class AbstractParameterTransport extends AbstractActionHandler {
+    protected String action, tool;
     
-    public ParameterTransport(String action, String form) {
+    public AbstractParameterTransport(String action, String tool) {
         this.action = action;
-        this.form = form;
+        this.tool = tool;
     }
 
-    @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected ViewerUpdate execute(
+            PageBuilderContext context, ExtendedObject object) throws Exception {
         Object value;
         String message;
         AbstractActionHandler handler;
@@ -32,7 +32,6 @@ public class ParameterTransport extends AbstractActionHandler {
         Context extcontext = getExtendedContext();
         ActionContext actionctx = extcontext.actions.get(action);
         Map<String, Object> parameters = new HashMap<>();
-        ExtendedObject object = getdf(form);
         
         if (actionctx.updateviewer != null)
             actionctx.updateviewer.preexecute(actionctx, object);
@@ -49,13 +48,13 @@ public class ParameterTransport extends AbstractActionHandler {
         message = command.areParametersValid(parameters);
         if (message != null) {
             message(Const.ERROR, message);
-            return;
+            return null;
         }
 
         message = command.isValidContext(extcontext);
         if (message != null) {
             message(Const.ERROR, message);
-            return;
+            return null;
         }
         
         command.set(parameters);
@@ -69,7 +68,7 @@ public class ParameterTransport extends AbstractActionHandler {
         if (actionctx.back)
             back();
         
-        if (actionctx.updateviewer != null)
-            actionctx.updateviewer.postexecute(value);
+        return actionctx.updateviewer;
     }
+
 }

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.StandardViewInput;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
-import org.iocaste.workbench.project.ParameterTransport;
 import org.iocaste.workbench.project.compile.Compile;
 import org.iocaste.workbench.project.java.PackageItemLoader;
 import org.iocaste.workbench.project.view.ViewItemLoader;
@@ -43,15 +42,15 @@ public class ProjectViewer extends AbstractPanelPage {
         set(new StandardViewInput());
         set(new ProjectViewerStyle());
         action("compile", new Compile(getExtendedContext()));
-        put("data_elements_add", new ParameterTransport(
+        put("data_elements_add", new AddParameterTransport(
                 "data-element-add", "data_elements_detail"));
-        put("models_add", new ParameterTransport(
+        put("models_add", new AddParameterTransport(
                 "model-add", "models_detail"));
-        put("views_add", new ParameterTransport(
+        put("views_add", new AddParameterTransport(
                 "view-add", "views_detail"));
-        put("links_add", new ParameterTransport(
+        put("links_add", new AddParameterTransport(
                 "link-add", "links_detail"));
-        put("packages_add", new ParameterTransport(
+        put("packages_add", new AddParameterTransport(
                 "package-add", "packages_detail"));
         for (String action : pickdata.keySet())
             put(action, new ViewerItemPick(pickdata.get(action)));

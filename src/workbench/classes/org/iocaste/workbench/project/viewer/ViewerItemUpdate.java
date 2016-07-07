@@ -15,11 +15,16 @@ public class ViewerItemUpdate implements ViewerUpdate {
     }
     
     @Override
-    public void postexecute(Object object) {
+    public void add(Object object) {
         extcontext.add(items, (ExtendedObject)object);
     }
 
     @Override
     public void preexecute(ActionContext actionctx, ExtendedObject object) { }
+    
+    @Override
+    public void remove(Object object) {
+        extcontext.remove(items, (ExtendedObject)object);
+    }
     
 }
