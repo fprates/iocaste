@@ -10,10 +10,33 @@ import org.iocaste.workbench.project.java.PackageItemLoader;
 import org.iocaste.workbench.project.view.ViewItemLoader;
 
 public class ProjectViewer extends AbstractPanelPage {
+    private static final Map<String, String[]> commands;
     private static final Map<String, ViewerItemPickData> pickdata;
     
     static {
         ViewerItemPickData data;
+        
+        commands = new HashMap<>();
+        commands.put("models", new String[] {
+                "model-add",
+                "model-remove"
+        });
+        commands.put("views", new String[] {
+                "view-add",
+                "view-remove"
+        });
+        commands.put("data_elements", new String[] {
+                "data-element-add",
+                "data-element-remove"
+        });
+        commands.put("links", new String[] {
+                "link-add",
+                "link-remove"
+        });
+        commands.put("packages", new String[] {
+                "package-add",
+                "package-remove"
+        });
         
         pickdata = new HashMap<>();
         data = new ViewerItemPickData("model_pick", pickdata);
@@ -35,6 +58,13 @@ public class ProjectViewer extends AbstractPanelPage {
         data.loader = new PackageItemLoader();
     }
     
+    private void action(String name) {
+        put(name.concat("_add"), new AddParameterTransport(
+                commands.get(name)[0], name.concat("_detail")));
+        put(name.concat("_remove"), new RemoveParameterTransport(
+                commands.get(name)[1], name.concat("_items")));
+    }
+    
     @Override
     public void execute() throws Exception {
         set(new ProjectViewerSpec());
@@ -42,16 +72,8 @@ public class ProjectViewer extends AbstractPanelPage {
         set(new StandardViewInput());
         set(new ProjectViewerStyle());
         action("compile", new Compile(getExtendedContext()));
-        put("data_elements_add", new AddParameterTransport(
-                "data-element-add", "data_elements_detail"));
-        put("models_add", new AddParameterTransport(
-                "model-add", "models_detail"));
-        put("views_add", new AddParameterTransport(
-                "view-add", "views_detail"));
-        put("links_add", new AddParameterTransport(
-                "link-add", "links_detail"));
-        put("packages_add", new AddParameterTransport(
-                "package-add", "packages_detail"));
+        for (String name : commands.keySet())
+            action(name);
         for (String action : pickdata.keySet())
             put(action, new ViewerItemPick(pickdata.get(action)));
     }
