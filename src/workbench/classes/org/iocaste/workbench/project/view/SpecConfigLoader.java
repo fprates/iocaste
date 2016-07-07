@@ -14,7 +14,9 @@ public class SpecConfigLoader implements ItemLoader {
     public final void execute(ViewerItemPickData pickdata, Context extcontext) {
         TableToolContextEntry entry;
         Map<Object, ExtendedObject> items;
-
+        ExtendedObject object;
+        String spec;
+        
         extcontext.specitem = extcontext.view.getItemsMap("spec").
                 get(pickdata.value);
         entry = extcontext.tableInstance(
@@ -23,9 +25,13 @@ public class SpecConfigLoader implements ItemLoader {
         items = extcontext.view.getItemsMap("config");
         if ((items == null) || (items.size() == 0))
             return;
-        for (Object key : items.keySet())
-            extcontext.add(
-                    "spec_config_editor", "spec_config_items", items.get(key));
+        spec = extcontext.specitem.getst("ITEM_ID");
+        for (Object key : items.keySet()) {
+            object = items.get(key);
+            if (!object.getst("SPEC").equals(spec))
+                continue;
+            extcontext.add("spec_config_editor", "spec_config_items", object);
+        }
         extcontext.titlearg = pickdata.value;
     }
 
