@@ -3,10 +3,10 @@ package org.iocaste.workbench.common.engine.handlers;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.workbench.common.engine.Context;
 
-public class DataFormConfigHandler extends AbstractConfigHandler {
+public class TableToolConfigHandler extends AbstractConfigHandler {
 
-    public DataFormConfigHandler(Context context) {
-        super(context, ViewSpecItem.TYPES.DATA_FORM);
+    public TableToolConfigHandler(Context context) {
+        super(context, ViewSpecItem.TYPES.TABLE_TOOL);
     }
     
     @Override

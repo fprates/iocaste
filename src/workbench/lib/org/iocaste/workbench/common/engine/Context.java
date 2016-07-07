@@ -9,6 +9,7 @@ import org.iocaste.protocol.utils.ConversionResult;
 import org.iocaste.workbench.common.engine.handlers.ConfigContext;
 import org.iocaste.workbench.common.engine.handlers.DataFormConfigHandler;
 import org.iocaste.workbench.common.engine.handlers.SpecContext;
+import org.iocaste.workbench.common.engine.handlers.TableToolConfigHandler;
 
 public class Context extends AbstractExtendedContext {
     public ConfigContext config;
@@ -21,5 +22,6 @@ public class Context extends AbstractExtendedContext {
         config = new ConfigContext();
         views = new HashMap<>();
         new DataFormConfigHandler(this);
+        new TableToolConfigHandler(this);
     }
 }
