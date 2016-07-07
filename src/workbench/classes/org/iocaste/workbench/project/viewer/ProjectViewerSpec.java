@@ -17,22 +17,26 @@ public class ProjectViewerSpec extends AbstractViewSpec {
     protected void execute(PageBuilderContext context) {
         
         if (view != null) {
-            module(view);
-            if (extension != null)
-                module(parent, extension);
+            if (extension != null) {
+                tabbedpane(parent, "objects");
+                module(view, true);
+                module(extension, true);
+            } else {
+                module(view, false);
+            }
             return;
         }
 
         tabbedpane(parent, "objects");
-        module("data_elements");
-        module("models");
-        module("views");
-        module("links");
-        module("packages");
+        module("data_elements", true);
+        module("models", true);
+        module("views", true);
+        module("links", true);
+        module("packages", true);
     }
     
-    private void module(String name) {
-        if (view == null) {
+    private void module(String name, boolean tab) {
+        if (tab) {
             tabbedpaneitem("objects", name);
             module(name, name);
         } else {

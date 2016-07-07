@@ -27,6 +27,8 @@ public class MainStyle extends AbstractViewConfigStyle {
         
         instance("body");
         put("background-color", "#e0e0e0");
+        put("margin", "0px");
+        put("padding", "0px");
     }
 
 }
