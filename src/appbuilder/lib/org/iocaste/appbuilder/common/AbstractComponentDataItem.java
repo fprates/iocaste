@@ -5,7 +5,7 @@ import java.util.Map;
 import org.iocaste.shell.common.Const;
 
 public class AbstractComponentDataItem {
-    public boolean ns, invisible, required, disabled;
+    public boolean ns, invisible, required, disabled, focus;
     public String name, sh, validator, label, action;
     public int length, vlength;
     public Map<String, Object> values;
