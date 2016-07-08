@@ -7,6 +7,7 @@ import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.packagetool.common.SearchHelpData;
 
 public class ClassesPackageInstall extends AbstractInstallObject {
 
@@ -17,7 +18,7 @@ public class ClassesPackageInstall extends AbstractInstallObject {
         ModelInstall model;
         DocumentModelItem packagekey;
         DataElement classid, classname, classfullname, packagename;
-        
+        SearchHelpData shd;
         
         packagename = elementchar("WB_JAVA_PACKAGE_NAME", 120, false);
         classid = elementchar("WB_JAVA_CLASS_ID", 125, false);
@@ -49,6 +50,10 @@ public class ClassesPackageInstall extends AbstractInstallObject {
                 "NAME", "CLSNM", classname);
         model.item(
                 "FULL_NAME", "FLLNM", classfullname);
+        
+        shd = searchHelpInstance("SH_WB_JAVA_CLASS", "WB_JAVA_CLASS");
+        shd.setExport("FULL_NAME");
+        shd.add("FULL_NAME");
         
         cmodel = tag("classes", cmodelInstance("WB_JAVA_PACKAGES"));
         cmodel.header("packages");

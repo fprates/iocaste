@@ -98,10 +98,15 @@ public class ViewInstall extends AbstractInstallObject {
                 "PROJECT", "PRJNM", getItem("projectkey"));
         model.reference(
                 "SCREEN", "SCRID", screen);
-        model.item(
-                "PARENT", "SITPA", screenspecitemname);
+        searchhelp(model.item(
+                "PARENT", "SITPA", screenspecitemname), "SH_WB_SCREEN_SPEC");
         searchhelp(model.reference(
                 "TYPE", "ITTYP", spectypekey), "SH_WB_SCREEN_SPEC_TYPE");
+        
+        shd = searchHelpInstance("SH_WB_SCREEN_SPEC", "WB_SCREEN_SPEC");
+        shd.setExport("NAME");
+        shd.add("NAME");
+        shd.add("SCREEN");
         
         /*
          * project screen config items
@@ -154,8 +159,8 @@ public class ViewInstall extends AbstractInstallObject {
                 "SCREEN", "SCRID", screen);
         model.item(
                 "NAME", "ACTNM", screenactionname);
-        model.item(
-                "CLASS", "CLASS", screenactionclass);
+        searchhelp(model.item(
+                "CLASS", "CLASS", screenactionclass), "SH_WB_JAVA_CLASS");
         searchhelp(model.reference(
                 "TYPE", "ACTTY", actiontypekey), "SH_WB_SCR_ACTION_TYPE");
         
