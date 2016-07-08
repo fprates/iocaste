@@ -8,6 +8,8 @@ public class Messages {
         messages.instance("pt_BR");
         messages.put("actions", "Ações");
         messages.put("actions_add", "Adicionar");
+        messages.put("actions_detail_frame", "Detalhe");
+        messages.put("actions_items_frame", "Itens");
         messages.put("actions_remove", "Remover");
         messages.put("CLASS", "Classe");
         messages.put("class.removed", "Classe removida.");
@@ -16,6 +18,8 @@ public class Messages {
         messages.put("DATA_ELEMENT", "Elemento de dados");
         messages.put("data_elements", "Elementos de dados");
         messages.put("data_elements_add", "Adicionar");
+        messages.put("data_elements_detail_frame", "Detalhe");
+        messages.put("data_elements_items_frame", "Itens");
         messages.put("data_elements_remove", "Remover");
         messages.put("dataelement.exists", "elemeno de dados já existe.");
         messages.put("dataelement.updated", "elemento de dados atualizado.");
@@ -46,6 +50,8 @@ public class Messages {
         messages.put("link.removed", "Link removido.");
         messages.put("links", "Links");
         messages.put("links_add", "Adicionar");
+        messages.put("links_detail_frame", "Detalhe");
+        messages.put("links_items_frame", "Itens");
         messages.put("links_remove", "Remover");
         messages.put("NAME", "Nome");
         messages.put("model.item.exists", "Item de modelo existe.");
@@ -54,9 +60,13 @@ public class Messages {
         messages.put("model.not.empty", "Modelo ainda possui itens.");
         messages.put("model.removed", "Modelo removido.");
         messages.put("model_item_add", "Adicionar");
+        messages.put("model_item_detail_frame", "Detalhe");
+        messages.put("model_item_items_frame", "Itens");
         messages.put("model_item_remove", "Remover");
         messages.put("models", "Modelos");
         messages.put("models_add", "Adicionar");
+        messages.put("models_detail_frame", "Detalhe");
+        messages.put("models_items_frame", "Itens");
         messages.put("models_remove", "Remover");
         messages.put("PACKAGE", "Pacote");
         messages.put("package.added", "Pacote adicionado.");
@@ -67,6 +77,8 @@ public class Messages {
         messages.put("package_item_remove", "Remover");
         messages.put("packages", "Código Java");
         messages.put("packages_add", "Adicionar");
+        messages.put("packages_detail_frame", "Detalhe");
+        messages.put("packages_items_frame", "Itens");
         messages.put("packages_remove", "Remover");
         messages.put("parameter.required", "Parâmetro obrigatório.");
         messages.put("PARENT", "Item pai");
@@ -80,6 +92,8 @@ public class Messages {
         messages.put("SIZE", "Tamanho");
         messages.put("spec_config", "Configuração");
         messages.put("spec_config_add", "Adicionar");
+        messages.put("spec_config_detail_frame", "Detalhe");
+        messages.put("spec_config_items_frame", "Itens");
         messages.put("spec_config_remove", "Remover");
         messages.put("TABLE", "Tabela");
         messages.put("TEXT", "Descrição");
@@ -87,6 +101,8 @@ public class Messages {
         messages.put("tool.item.removed", "Sub-item removido.");
         messages.put("tool_item", "Sub-itens");
         messages.put("tool_item_add", "Adicionar");
+        messages.put("tool_item_detail_frame", "Detalhe");
+        messages.put("tool_item_items_frame", "Itens");
         messages.put("tool_item_remove", "Remover");
         messages.put("TYPE", "Tipo");
         messages.put("undefined.viewconfig", "Propriedade indefinida.");
@@ -101,12 +117,16 @@ public class Messages {
         messages.put("view.removed", "Visão removida.");
         messages.put("view_item", "Itens da visão");
         messages.put("view_item_add", "Adicionar");
+        messages.put("view_item_detail_frame", "Detalhe");
+        messages.put("view_item_items_frame", "Itens");
         messages.put("view_item_remove", "Remover");
         messages.put("viewconfig.added", "Propriedade adicionada.");
         messages.put("viewconfig.removed", "Propriedade removida.");
         messages.put("viewer.title", "%s");
         messages.put("views", "Visões");
         messages.put("views_add", "Adicionar");
+        messages.put("views_detail_frame", "Detalhe");
+        messages.put("views_items_frame", "Itens");
         messages.put("views_remove", "Remover");
         messages.put("VLENGTH", "Comprimento visível");
         messages.put("WBDSPTCHR", "Workbench");

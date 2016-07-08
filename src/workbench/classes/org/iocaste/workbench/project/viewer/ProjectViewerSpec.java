@@ -45,14 +45,17 @@ public class ProjectViewerSpec extends AbstractViewSpec {
     }
     
     private void module(String parent, String name) {
-        String buttonbar;
+        String itemsframe, detailframe;
         
-        buttonbar = name.concat("_btbar");
-        standardcontainer(parent, buttonbar);
-        button(buttonbar, name.concat("_add"));
-        button(buttonbar, name.concat("_remove"));
-        tabletool(parent, name.concat("_items"));
-        dataform(parent, name.concat("_detail"));
+        itemsframe = name.concat("_items_frame");
+        frame(parent, itemsframe);
+        button(itemsframe, name.concat("_remove"));
+        tabletool(itemsframe, name.concat("_items"));
+        
+        detailframe = name.concat("_detail_frame");
+        frame(parent, detailframe);
+        button(detailframe, name.concat("_add"));
+        dataform(detailframe, name.concat("_detail"));
     }
 }
 

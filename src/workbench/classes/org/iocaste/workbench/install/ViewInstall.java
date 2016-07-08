@@ -63,6 +63,7 @@ public class ViewInstall extends AbstractInstallObject {
         model.values("expandbar", "Área expansível");
         model.values("form", "Formulário HTML");
         model.values("fileupload", "Upload de arquivo");
+        model.values("frame", "Quadro");
         model.values("link", "Link html");
         model.values("listbox", "Campo de lista");
         model.values("nodelist", "Lista hierárquica");
