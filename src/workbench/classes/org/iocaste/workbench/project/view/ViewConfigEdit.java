@@ -3,6 +3,7 @@ package org.iocaste.workbench.project.view;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
@@ -28,32 +29,33 @@ public class ViewConfigEdit extends AbstractCommand {
     @Override
     protected Object entry(PageBuilderContext context) {
         String element, type;
-        ExtendedObject object, result;
+        ExtendedObject result;
+        ComplexDocument spec;
         ViewElementAttribute attribute;
         Map<String, ViewElementAttribute> attributes;
         Context extcontext = getExtendedContext();
         
         element = getst("element");
-        object = extcontext.view.getItemsMap("spec").get(element);
-        if (object == null) {
+        spec = extcontext.view.getDocumentsMap("spec").get(element);
+        if (spec == null) {
             message(Const.ERROR, "invalid.view.element");
             return null;
         }
         
         result = null;
-        type = object.getst("TYPE");
+        type = spec.getHeader().getst("TYPE");
         attributes = extcontext.viewconfig.attribs.get(type);
         for (String key : getKeys()) {
             if (key.equals("element"))
                 continue;
             attribute = attributes.get(key);
             if (attribute == null) {
-                message(Const.ERROR, "invalid.view.element.attribute");
+                message(Const.ERROR, "invalid.viewconfig");
                 return null;
             }
-            result = attribute.instance(object, getst(key));
+            result = attribute.instance(spec, getst(key));
         }
-        save(extcontext.view);
+        save(spec);
         message(Const.STATUS, "viewconfig.added");
         return result;
     }

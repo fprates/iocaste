@@ -25,13 +25,15 @@ public class ViewConfigItemUpdate implements ViewerUpdate {
 
     @Override
     public void preexecute(ActionContext actionctx, ExtendedObject object) {
-        object.set("SPEC", extcontext.specitem.getst("NAME"));
+        object.set("SPEC", extcontext.spec.getstKey());
         actionctx.arguments.clear();
         actionctx.arguments.put(object.getst("NAME"), argument("VALUE"));
         actionctx.arguments.put("element", argument("SPEC"));
     }
     
     @Override
-    public void remove(Object object) { }
+    public void remove(Object object) {
+        extcontext.remove("spec_config_items", (ExtendedObject)object);
+    }
     
 }

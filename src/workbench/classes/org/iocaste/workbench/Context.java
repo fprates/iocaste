@@ -6,7 +6,6 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexDocument;
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.workbench.project.ProjectAdd;
 import org.iocaste.workbench.project.ProjectInfo;
 import org.iocaste.workbench.project.ProjectUse;
@@ -25,6 +24,7 @@ import org.iocaste.workbench.project.tasks.LinkAdd;
 import org.iocaste.workbench.project.tasks.LinkRemove;
 import org.iocaste.workbench.project.view.ViewAdd;
 import org.iocaste.workbench.project.view.ViewConfigEdit;
+import org.iocaste.workbench.project.view.ViewConfigRemove;
 import org.iocaste.workbench.project.view.ViewRemove;
 import org.iocaste.workbench.project.view.ViewSpecAdd;
 import org.iocaste.workbench.project.view.ViewSpecRemove;
@@ -36,8 +36,7 @@ import org.iocaste.workbench.project.view.config.ViewConfigContext;
 
 public class Context extends AbstractExtendedContext {
     public Map<String, AbstractCommand> commands;
-    public ExtendedObject specitem;
-    public ComplexDocument project, model, view, pkgitem;
+    public ComplexDocument project, model, view, pkgitem, spec;
     public ViewConfigContext viewconfig;
     public ClassEditorContext classeditor;
     public ProjectInfo[] projects;
@@ -72,6 +71,7 @@ public class Context extends AbstractExtendedContext {
         new ViewRemove(this);
         new ViewUse(this);
         new ViewConfigEdit(this);
+        new ViewConfigRemove(this);
         new ViewSpecRemove(this);
         new ViewSpecAdd(this);
         

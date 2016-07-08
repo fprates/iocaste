@@ -15,8 +15,8 @@ public class ViewItemLoader implements ItemLoader {
     public final void execute(ViewerItemPickData pickdata, Context extcontext) {
         ComplexDocument document = (ComplexDocument)extcontext.callreturn;
         
-        load(document, extcontext, pickdata, "view_item_items", "spec");
-        load(document, extcontext, pickdata, "actions_items", "action");
+        loaddoc(document, extcontext, pickdata, "view_item_items", "spec");
+        loaditem(document, extcontext, pickdata, "actions_items", "action");
     }
     
     @Override
@@ -25,17 +25,37 @@ public class ViewItemLoader implements ItemLoader {
         parameters.put("name", pickdata.value);
     }
     
-    private final void load(ComplexDocument document, Context extcontext,
+    private final void loaddoc(ComplexDocument document, Context extcontext,
+            ViewerItemPickData pickdata, String table, String item) {
+        TableToolContextEntry entry;
+        Map<Object, ComplexDocument> documents;
+        
+        entry = extcontext.tableInstance(pickdata.redirect, table);
+        entry.items.clear();
+        extcontext.titlearg = extcontext.view.getstKey();
+        
+        documents = document.getDocumentsMap(item);
+        if (documents == null)
+            return;
+        for (Object key : documents.keySet())
+            extcontext.add(
+                    pickdata.redirect, table, documents.get(key).getHeader());
+    }
+
+    private final void loaditem(ComplexDocument document, Context extcontext,
             ViewerItemPickData pickdata, String table, String item) {
         TableToolContextEntry entry;
         Map<Object, ExtendedObject> items;
         
-        items = document.getItemsMap(item);
         entry = extcontext.tableInstance(pickdata.redirect, table);
         entry.items.clear();
+        extcontext.titlearg = extcontext.view.getstKey();
+        
+        items = document.getItemsMap(item);
+        if (items == null)
+            return;
         for (Object key : items.keySet())
             extcontext.add(pickdata.redirect, table, items.get(key));
-        extcontext.titlearg = extcontext.view.getstKey();
     }
-    
+
 }

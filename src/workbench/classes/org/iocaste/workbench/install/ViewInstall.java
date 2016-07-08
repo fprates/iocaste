@@ -4,7 +4,6 @@ import org.iocaste.appbuilder.common.AbstractInstallObject;
 import org.iocaste.appbuilder.common.ComplexModelInstall;
 import org.iocaste.appbuilder.common.ModelInstall;
 import org.iocaste.appbuilder.common.StandardInstallContext;
-import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.packagetool.common.SearchHelpData;
@@ -14,22 +13,20 @@ public class ViewInstall extends AbstractInstallObject {
     @Override
     protected void execute(StandardInstallContext context) {
         ModelInstall model;
-        ComplexModelInstall cmodel;
-        ComplexModelItem cmodelitem;
+        ComplexModelInstall screenitem, cmodel;
         DataElement screenconfigitemid, screenconfigname, screenconfigvalue;
         DataElement screenconfigtype, screenactionname, screenactionclass;
-        DataElement screenactionid, screenactiontype, screenspecitemid;
-        DataElement screenspecitemname, screenitemtype, screenname;
-        DataElement screenitemtext, screenactiontypetext;
+        DataElement screenactionid, screenactiontype, screenspecitemname;
+        DataElement screenitemtype, screenname, screenitemtext;
+        DataElement screenactiontypetext;
         DocumentModelItem screen, speckey, spectypekey, actiontypekey;
         SearchHelpData shd;
         
         screenname = elementchar("WB_SCREEN_NAME", 16, false);
-        screenspecitemid = elementchar("WB_SCREEN_SPEC_ITEM", 19, false);
         screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, false);
         screenitemtype = elementchar("WB_SCREEN_ITEM_TYPE", 24, false);
         screenitemtext = elementchar("WB_SCREEN_ITEM_TEXT", 40, false);
-        screenconfigitemid = elementchar("WB_SCREEN_CFG_ID", 20, false);
+        screenconfigitemid = elementchar("WB_SCREEN_CFG_ID", 33, false);
         screenconfigname = elementchar("WB_SCREEN_CFG_NAME", 24, false);
         screenconfigvalue = elementchar("WB_SCREEN_CFG_VALUE", 255, false);
         screenconfigtype = elementnumc("WB_SCREEN_CFG_TYPE", 1);
@@ -96,15 +93,13 @@ public class ViewInstall extends AbstractInstallObject {
         model = tag("screen_spec", modelInstance(
                 "WB_SCREEN_SPEC", "WBSCRSPEC"));
         speckey = model.key(
-                "ITEM_ID", "ITMID", screenspecitemid);
+                "NAME", "SITNM", screenspecitemname);
         model.reference(
                 "PROJECT", "PRJNM", getItem("projectkey"));
         model.reference(
                 "SCREEN", "SCRID", screen);
         model.item(
                 "PARENT", "SITPA", screenspecitemname);
-        model.item(
-                "NAME", "SITNM", screenspecitemname);
         searchhelp(model.reference(
                 "TYPE", "ITTYP", spectypekey), "SH_WB_SCREEN_SPEC_TYPE");
         
@@ -164,12 +159,13 @@ public class ViewInstall extends AbstractInstallObject {
         searchhelp(model.reference(
                 "TYPE", "ACTTY", actiontypekey), "SH_WB_SCR_ACTION_TYPE");
         
+        screenitem = cmodelInstance("WB_SCREEN_ITEM");
+        screenitem.header("screen_spec");
+        screenitem.item("config", "screen_config").index = "NAME";
+        
         cmodel = tag("screens", cmodelInstance("WB_SCREENS"));
         cmodel.header("screen_head");
-        cmodelitem = cmodel.item("spec", "screen_spec");
-        cmodelitem.index = "NAME";
-        cmodelitem.keyformat = "%03d";
-        cmodel.item("config", "screen_config").keyformat = "%04d";
+        cmodel.document("spec", screenitem);
         cmodel.item("action", "screen_action").keyformat = "%03d";
     }
     

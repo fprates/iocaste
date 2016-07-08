@@ -19,15 +19,19 @@ public class ViewerItemLoader implements ItemLoader {
     @Override
     public final void execute(ViewerItemPickData pickdata, Context extcontext) {
         TableToolContextEntry entry;
+        Map<Object, ExtendedObject> items;
         ComplexDocument document = (ComplexDocument)extcontext.callreturn;
-        Map<Object, ExtendedObject> items = document.getItemsMap(item);
         
         entry = extcontext.
                 tableInstance(pickdata.redirect, table);
         entry.items.clear();
+        extcontext.titlearg = extcontext.model.getstKey();
+        
+        items = document.getItemsMap(item);
+        if (items == null)
+            return;
         for (Object key : items.keySet())
             extcontext.add(pickdata.redirect, table, items.get(key));
-        extcontext.titlearg = extcontext.model.getstKey();
     }
     
     @Override
