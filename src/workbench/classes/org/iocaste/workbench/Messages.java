@@ -34,6 +34,8 @@ public class Messages {
         messages.put("iocaste.workbench", "Workbench Iocaste");
         messages.put("iocaste-workbench", "Workbench Iocaste");
         messages.put("KEY", "Chave");
+        messages.put("link.updated", "Link atualizado.");
+        messages.put("link.removed", "Link removido.");
         messages.put("links", "Links");
         messages.put("links_add", "Adicionar");
         messages.put("links_remove", "Remover");
