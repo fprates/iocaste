@@ -36,8 +36,8 @@ public class ModelItemRemove extends AbstractCommand {
         
         extcontext.model.remove(object);
         save(extcontext.model);
-        message(Const.STATUS, "model.item.removed.");
-        return object;
+        message(Const.STATUS, "model.item.removed");
+        return null;
     }
 
 }

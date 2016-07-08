@@ -37,7 +37,7 @@ public class ModelItemAdd extends AbstractCommand {
         objects = extcontext.model.getItems("item");
         object = readobjects(objects, "NAME", name);
         if (object != null) {
-            message(Const.ERROR, "model.item.exists.");
+            message(Const.ERROR, "model.item.exists");
             return null;
         }
         
