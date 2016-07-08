@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.workbench.project.ProjectAdd;
 import org.iocaste.workbench.project.ProjectInfo;
@@ -33,6 +34,7 @@ import org.iocaste.workbench.project.view.ViewSpecRemove;
 import org.iocaste.workbench.project.view.ViewUse;
 import org.iocaste.workbench.project.view.action.ActionAdd;
 import org.iocaste.workbench.project.view.config.DataFormConfig;
+import org.iocaste.workbench.project.view.config.InputComponentConfig;
 import org.iocaste.workbench.project.view.config.TableToolConfig;
 import org.iocaste.workbench.project.view.config.ViewConfigContext;
 import org.iocaste.workbench.project.view.toolitem.ToolItemAdd;
@@ -85,6 +87,7 @@ public class Context extends AbstractExtendedContext {
         
         viewconfig = new ViewConfigContext();
         viewconfig.extcontext = this;
+        new InputComponentConfig(viewconfig, ViewSpecItem.TYPES.TEXT_FIELD);
         new DataFormConfig(viewconfig);
         new TableToolConfig(viewconfig);
     }

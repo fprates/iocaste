@@ -13,6 +13,10 @@ public abstract class AbstractConfigHandler implements ElementConfigHandler {
         this.extcontext = extcontext;
     }
     
+    protected <T extends Element> T getElement(String name) {
+        return extcontext.getContext().view.getElement(name);
+    }
+    
     protected <T extends AbstractComponentData> T getTool(String name) {
         return extcontext.getContext().getView().getComponents().
                 getComponentData(name);
@@ -20,7 +24,7 @@ public abstract class AbstractConfigHandler implements ElementConfigHandler {
     
     @Override
     public void set(String elementname, String name, Object value) {
-        Element element = extcontext.getContext().view.getElement(elementname);
+        Element element = getElement(elementname);
         switch (name) {
         case "disabled":
             element.setEnabled(!(boolean)value);
