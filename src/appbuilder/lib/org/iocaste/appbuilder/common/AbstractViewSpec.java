@@ -43,6 +43,10 @@ public abstract class AbstractViewSpec implements ViewSpec {
         items.put(name, item);
     }
     
+    protected final void frame(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.FRAME, name);
+    }
+    
     public final ViewSpecItem get(String name) {
         return items.get(name);
     }

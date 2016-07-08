@@ -5,6 +5,7 @@ import org.iocaste.appbuilder.common.factories.DataFormFactory;
 import org.iocaste.appbuilder.common.factories.ExpandBarFactory;
 import org.iocaste.appbuilder.common.factories.FileUploadFactory;
 import org.iocaste.appbuilder.common.factories.FormFactory;
+import org.iocaste.appbuilder.common.factories.FrameFactory;
 import org.iocaste.appbuilder.common.factories.LinkFactory;
 import org.iocaste.appbuilder.common.factories.ListBoxFactory;
 import org.iocaste.appbuilder.common.factories.NavControlFactory;
@@ -32,7 +33,8 @@ public class ViewSpecItem {
         DATA_FORM("dataform", new DataFormFactory()),
         EXPAND_BAR("expandbar", new ExpandBarFactory()),
         FORM("form", new FormFactory()),
-        FILE_UPLOAD("fileupload",new FileUploadFactory()),
+        FILE_UPLOAD("fileupload", new FileUploadFactory()),
+        FRAME("frame", new FrameFactory()),
         LINK("link", new LinkFactory()),
         LISTBOX("listbox", new ListBoxFactory()),
         NODE_LIST("nodelist", new NodeListFactory()),
