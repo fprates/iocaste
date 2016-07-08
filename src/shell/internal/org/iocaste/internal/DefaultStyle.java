@@ -174,10 +174,10 @@ public class DefaultStyle {
         stylesheet.newElement(".form_content").put("height", "100%");
         
         style = stylesheet.newElement(".frame");
-        style.put("background-color", "transparent");
-        style.put("font-size", "11pt");
-        style.put("font-weight", "normal");
-        style.put("margin-bottom", "5px");
+        style.put("border-color", FRAME_COLOR);
+        style.put("border-width", "1px");
+        style.put("border-style", "solid");
+        style.put("margin", "0px");
         
         style = stylesheet.newElement(".item_form_name");
         style.put("vertical-align", "middle");

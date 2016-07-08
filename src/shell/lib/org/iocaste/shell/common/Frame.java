@@ -8,7 +8,7 @@ package org.iocaste.shell.common;
  */
 public class Frame extends AbstractContainer {
     private static final long serialVersionUID = 819231435339310268L;
-    private String text;
+    private String text, legendstyle;
     
     public Frame(View view, String name) {
         super(view, Const.FRAME, name);
@@ -22,7 +22,16 @@ public class Frame extends AbstractContainer {
     
     private final void init(String name) {
         text = name;
+        legendstyle = "text";
         setStyleClass("frame");
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getLegendStyle() {
+        return legendstyle;
     }
     
     /**
@@ -34,10 +43,27 @@ public class Frame extends AbstractContainer {
     }
     
     /**
+     * 
+     * @param legendstyle
+     */
+    public final void setLegendStyle(String legendstyle) {
+        this.legendstyle = legendstyle;
+    }
+    
+    /**
      * Ajusta texto do frame.
      * @param text texto
      */
     public final void setText(String text) {
         this.text = text;
+    }
+    
+    @Override
+    public final void translate(MessageSource messages) {
+        String message;
+        
+        message = messages.get((this.text != null)? this.text : getName());
+        if (message != null)
+            text = message;
     }
 }

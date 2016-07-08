@@ -15,13 +15,12 @@ public class FrameRenderer extends Renderer {
         XMLElement frametag = new XMLElement("fieldset");
         XMLElement legendtag = new XMLElement("legend");
         String text = frame.getText();
-        String styleclass = frame.getStyleClass();
 
-        legendtag.add("class", styleclass);
+        legendtag.add("class", frame.getLegendStyle());
         legendtag.addInner(text);
         
         frametag.add("id", frame.getName());
-        frametag.add("class", styleclass);
+        frametag.add("class", frame.getStyleClass());
         frametag.addChild(legendtag);
         frametag.addChildren(renderElements(frame.getElements(), config));
         
