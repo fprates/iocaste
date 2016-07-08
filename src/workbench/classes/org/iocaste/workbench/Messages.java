@@ -28,6 +28,7 @@ public class Messages {
         messages.put("invalid.dataelement", "Elemento de dados inválido.");
         messages.put("invalid.model", "Modelo inválido.");
         messages.put("invalid.model.item", "Item de modelo inválido.");
+        messages.put("invalid.view", "Visão inválida.");
         messages.put("invalid.view.element", "Elemento de visão inválido.");
         messages.put("invalid.viewconfig", "Propriedade inválida.");
         messages.put("iocaste.workbench", "Workbench Iocaste");
@@ -70,6 +71,11 @@ public class Messages {
         messages.put("UPCASE", "Convert.maiúscula");
         messages.put("VALUE", "Valor");
         messages.put("view.element.added", "%s adicionado.");
+        messages.put("view.element.is.not.empty",
+                "Elemento de visão não está vazio.");
+        messages.put("view.element.removed", "Elemento de visão removido.");
+        messages.put("view.is.not.empty", "Visão não está vazia.");
+        messages.put("view.removed", "Visão removida.");
         messages.put("view_item", "Itens da visão");
         messages.put("view_item_add", "Adicionar");
         messages.put("view_item_remove", "Remover");

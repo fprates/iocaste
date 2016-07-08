@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.shell.common.Const;
 
 public class RemoveParameterTransport extends AbstractParameterTransport {
     
@@ -20,6 +21,8 @@ public class RemoveParameterTransport extends AbstractParameterTransport {
             return;
         for (ExtendedObject object : objects) {
             updateviewer = execute(context, object);
+            if (context.function.getMessageType() == Const.ERROR)
+                return;
             if (updateviewer != null)
                 updateviewer.remove(object);
             break;

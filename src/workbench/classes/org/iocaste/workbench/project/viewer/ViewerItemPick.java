@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
 import org.iocaste.workbench.Context;
 
@@ -29,6 +30,9 @@ public class ViewerItemPick extends AbstractActionHandler {
             pickdata.loader.init(extcontext, pickdata, parameters);
             handler.set(parameters);
             handler.call(context);
+
+            if (context.function.getMessageType() == Const.ERROR)
+                return;
         }
         
         if (pickdata.loader != null)

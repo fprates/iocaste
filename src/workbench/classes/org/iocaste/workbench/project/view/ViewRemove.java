@@ -4,13 +4,20 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.project.viewer.ViewerItemUpdate;
 
 public class ViewRemove extends AbstractCommand {
 
     public ViewRemove(Context extcontext) {
         super("view-remove", extcontext);
-        required("name", null);
+        ActionContext actionctx;
+        
+        required("name", "NAME");
+        actionctx = getActionContext();
+        actionctx.updateviewer =
+                new ViewerItemUpdate(extcontext, "views_items");
     }
     
     @Override
@@ -26,8 +33,8 @@ public class ViewRemove extends AbstractCommand {
             return null;
         }
 
-        if (view.getItemsMap("spec").size() > 0) {
-            message(Const.ERROR, "view.not.empty");
+        if (view.getDocumentsMap("spec").size() > 0) {
+            message(Const.ERROR, "view.is.not.empty");
             return null;
         }
         
