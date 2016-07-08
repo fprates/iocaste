@@ -35,6 +35,8 @@ import org.iocaste.workbench.project.view.action.ActionAdd;
 import org.iocaste.workbench.project.view.config.DataFormConfig;
 import org.iocaste.workbench.project.view.config.TableToolConfig;
 import org.iocaste.workbench.project.view.config.ViewConfigContext;
+import org.iocaste.workbench.project.view.toolitem.ToolItemAdd;
+import org.iocaste.workbench.project.view.toolitem.ToolItemRemove;
 
 public class Context extends AbstractExtendedContext {
     public Map<String, AbstractCommand> commands;
@@ -71,6 +73,8 @@ public class Context extends AbstractExtendedContext {
         new PackageRemove(this);
         new ProjectAdd(this);
         new ProjectUse(this);
+        new ToolItemAdd(this);
+        new ToolItemRemove(this);
         new ViewAdd(this);
         new ViewRemove(this);
         new ViewUse(this);

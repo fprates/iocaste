@@ -18,7 +18,7 @@ public class ViewInstall extends AbstractInstallObject {
         DataElement screenconfigtype, screenactionname, screenactionclass;
         DataElement screenactionid, screenactiontype, screenspecitemname;
         DataElement screenitemtype, screenname, screenitemtext;
-        DataElement screenactiontypetext;
+        DataElement screenactiontypetext, screenbool, screenlength;
         DocumentModelItem screen, speckey, spectypekey, actiontypekey;
         SearchHelpData shd;
         
@@ -35,6 +35,8 @@ public class ViewInstall extends AbstractInstallObject {
         screenactionname = elementchar("WB_SCREEN_ACTION_NAME", 40, false);
         screenactionclass = elementchar("WB_SCREEN_ACTION_CLASS", 255, false);
         screenactiontype = elementnumc("WB_SCREEN_ACTION_TYPE", 1);
+        screenbool = elementbool("WB_SCREEN_BOOLEAN");
+        screenlength = elementnumc("WB_SCREEN_LENGTH", 3);
         
         /*
          * project screens
@@ -129,6 +131,34 @@ public class ViewInstall extends AbstractInstallObject {
                 "TYPE", "CFGTY", screenconfigtype);
         
         /*
+         * project screen tool items
+         */
+        model = tag("tool_item", modelInstance(
+                "WB_SCR_TOOL_ITEM", "WBSCRTOOLIT"));
+        model.key(
+                "ITEM_ID", "ITMID", screenconfigitemid);
+        model.reference(
+                "PROJECT", "PRJNM", getItem("projectkey"));
+        model.reference(
+                "SCREEN", "SCRID", screen);
+        model.reference(
+                "SPEC", "SPCID", speckey);
+        model.item(
+                "NAME", "ITMNM", screenconfigname);
+        model.item(
+                "DISABLED", "DSBLD", screenbool);
+        model.item(
+                "INVISIBLE", "INVSB", screenbool);
+        model.item(
+                "VLENGTH", "VLNGT", screenlength);
+        model.item(
+                "LENGTH", "LNGTH", screenlength);
+        model.item(
+                "REQUIRED", "VLNGTH", screenbool);
+        model.item(
+                "FOCUS", "CFGTY", screenbool);
+        
+        /*
          * project screen action
          */
         model = modelInstance(
@@ -167,6 +197,7 @@ public class ViewInstall extends AbstractInstallObject {
         screenitem = cmodelInstance("WB_SCREEN_ITEM");
         screenitem.header("screen_spec");
         screenitem.item("config", "screen_config").index = "NAME";
+        screenitem.item("tool_item", "tool_item").index = "NAME";
         
         cmodel = tag("screens", cmodelInstance("WB_SCREENS"));
         cmodel.header("screen_head");

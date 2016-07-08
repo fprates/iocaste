@@ -29,6 +29,10 @@ public class ProjectItemEditor extends AbstractPanelPage {
                 "viewconfig",
                 "viewconfig-remove"
         });
+        commands.put("tool_item", new String[] {
+                "tool-item-add",
+                "tool-item-remove"
+        });
         commands.put("actions", new String[] {
                 "action-add",
                 "action-remove"

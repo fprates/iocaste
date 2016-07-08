@@ -195,6 +195,38 @@ public class ViewerLayoutConfig {
                     {"CLASS", false, null, null, 40, false}
                 }
             });
+        config.put("tool_item_items", new Object[] {
+                "tt", "WB_SCR_TOOL_ITEM",
+                new Object[][] {
+                    {"ITEM_ID", true, null, null, 0, true},
+                    {"PROJECT", true, null, null, 0, true},
+                    {"SCREEN", true, null, null, 0, true},
+                    {"SPEC", true, null, null, 0, true},
+                    {"NAME", false, null, null, 0, true},
+                    {"DISABLED", false, null, null, 0, true},
+                    {"INVISIBLE", false, null, null, 0, true},
+                    {"VLENGTH", false, null, null, 0, true},
+                    {"LENGTH", false, null, null, 0, true},
+                    {"REQUIRED", false, null, null, 40, true},
+                    {"FOCUS", false, null, null, 0, true}
+                }
+            });
+        config.put("tool_item_detail", new Object[] {
+                "dt", "WB_SCR_TOOL_ITEM",
+                new Object[][] {
+                    {"ITEM_ID", true, null, null, 0, true},
+                    {"PROJECT", true, null, null, 0, true},
+                    {"SCREEN", true, null, null, 0, true},
+                    {"SPEC", true, null, null, 0, true},
+                    {"NAME", false, null, null, 0, false},
+                    {"DISABLED", false, null, null, 0, false},
+                    {"INVISIBLE", false, null, null, 0, false},
+                    {"VLENGTH", false, null, null, 0, false},
+                    {"LENGTH", false, null, null, 0, false},
+                    {"REQUIRED", false, null, null, 40, false},
+                    {"FOCUS", false, null, null, 0, false}
+                }
+            });
     }
 
 }
