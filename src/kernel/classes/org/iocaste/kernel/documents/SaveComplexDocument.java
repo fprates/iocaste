@@ -10,7 +10,6 @@ import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Message;
 
@@ -118,9 +117,9 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         ModifyDocument modify;
         GetComplexDocument getcdoc;
         Map<String, ComplexModelItem> models;
-        ExtendedObject[] nobjects, oobjects;
+        ExtendedObject[] nobjects;
         ComplexDocument original;
-        Map<String, Object> keys;
+        Map<Object, ExtendedObject> items;
         ComplexModelItem cmodelitem;
         ComplexModel cmodel = document.getModel();
         CDocumentData data = new CDocumentData();
@@ -133,8 +132,6 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         data.connection = data.documents.database.
                 getDBConnection(data.sessionid);
         
-        getcdoc = data.documents.get("get_complex_document");
-        original = getcdoc.run(data);
         modify = data.documents.get("modify");
         modify.run(data.documents, data.connection, document.getHeader());
         models = cmodel.getItems();
@@ -146,38 +143,23 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
             for (ExtendedObject item : nobjects)
                 modify.run(data.documents, data.connection, item);
         }
-        
+
+        getcdoc = data.documents.get("get_complex_document");
+        original = getcdoc.run(data);
         if (original == null)
             return;
         
         delete = data.documents.get("delete_document");
-        keys = null;
         for (String name : models.keySet()) {
             cmodelitem = models.get(name);
             if (cmodelitem.model == null)
                 continue;
-            oobjects = original.getItems(name);
-            nobjects = document.getItems(name);
-            if (keys != null)
-                keys.clear();
-            for (ExtendedObject object : oobjects) {
-                if (keys == null) {
-                    keys = new HashMap<>();
-                    for (DocumentModelKey key : object.getModel().getKeys()) {
-                        name = key.getModelItemName();
-                        keys.put(name, null);
-                    }
-                }
-                
-                for (String key : keys.keySet())
-                    keys.put(key, object.get(key));
-                
-                if ((nobjects.length == 0) ||
-                        (org.iocaste.documents.common.Documents.
-                        readobjects(nobjects, keys) == null))
-                    delete.run(data.documents, data.connection, object);
-            }
+            items = original.getItemsMap(name);
+            if (items == null)
+                continue;
+            for (Object key : items.keySet())
+                if (!document.getItemsMap(name).containsKey(key))
+                    delete.run(data.documents, data.connection, items.get(key));
         }
     }
-
 }
