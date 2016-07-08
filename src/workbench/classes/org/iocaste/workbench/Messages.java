@@ -23,8 +23,10 @@ public class Messages {
         messages.put("dataelement.still.assigned",
                 "Elemento de dados ainda associado.");
         messages.put("DECIMALS", "Casas decimais");
+        messages.put("DISABLED", "Desabilitado");
         messages.put("FIELD", "Campo tabela");
         messages.put("field.name.required", "Nome de campo obrigatório.");
+        messages.put("FOCUS", "Foco");
         messages.put("GROUP", "Grupo");
         messages.put("invalid.class", "Classe inválida.");
         messages.put("invalid.dataelement", "Elemento de dados inválido.");
@@ -34,10 +36,12 @@ public class Messages {
         messages.put("invalid.view", "Visão inválida.");
         messages.put("invalid.view.element", "Elemento de visão inválido.");
         messages.put("invalid.viewconfig", "Propriedade inválida.");
+        messages.put("INVISIBLE", "Invisível");
         messages.put("iocaste.workbench", "Workbench Iocaste");
         messages.put("iocaste-workbench", "Workbench Iocaste");
         messages.put("java.class.saved", "Classe salva.");
         messages.put("KEY", "Chave");
+        messages.put("LENGTH", "Comprimento entrada");
         messages.put("link.updated", "Link atualizado.");
         messages.put("link.removed", "Link removido.");
         messages.put("links", "Links");
@@ -67,19 +71,28 @@ public class Messages {
         messages.put("parameter.required", "Parâmetro obrigatório.");
         messages.put("PARENT", "Item pai");
         messages.put("PROFILE", "Perfil de autorização");
+        messages.put("project.created", "Projeto criado.");
         messages.put("project-add", "Adicionar");
         messages.put("project_add", "Criar projeto");
         messages.put("PROJECT_NAME", "Projeto");
+        messages.put("REQUIRED", "Obrigatório");
         messages.put("save", "Salvar");
         messages.put("SIZE", "Tamanho");
+        messages.put("spec_config", "Configuração");
         messages.put("spec_config_add", "Adicionar");
         messages.put("spec_config_remove", "Remover");
         messages.put("TABLE", "Tabela");
         messages.put("TEXT", "Descrição");
+        messages.put("tool.item.added", "Sub-item adicionado.");
+        messages.put("tool.item.removed", "Sub-item removido.");
+        messages.put("tool_item", "Sub-itens");
+        messages.put("tool_item_add", "Adicionar");
+        messages.put("tool_item_remove", "Remover");
         messages.put("TYPE", "Tipo");
         messages.put("undefined.viewconfig", "Propriedade indefinida.");
         messages.put("UPCASE", "Convert.maiúscula");
         messages.put("VALUE", "Valor");
+        messages.put("view.created", "Visão criada.");
         messages.put("view.element.added", "%s adicionado.");
         messages.put("view.element.is.not.empty",
                 "Elemento de visão não está vazio.");
@@ -95,6 +108,7 @@ public class Messages {
         messages.put("views", "Visões");
         messages.put("views_add", "Adicionar");
         messages.put("views_remove", "Remover");
+        messages.put("VLENGTH", "Comprimento visível");
         messages.put("WBDSPTCHR", "Workbench");
     }
 }

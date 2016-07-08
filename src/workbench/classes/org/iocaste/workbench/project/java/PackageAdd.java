@@ -41,7 +41,7 @@ public class PackageAdd extends AbstractCommand {
         object.set("PROJECT", extcontext.project.getstKey());
         autoset(object);
         save(_package);
-        message(Const.STATUS, "added.package");
+        message(Const.STATUS, "package.added");
         return object;
     }
 
