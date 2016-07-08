@@ -31,11 +31,23 @@ public class ApplicationEngine extends AbstractPageBuilder {
         mapping = new ConversionRules();
         mapping.add("views", "view");
         mapping.add("views.view.spec", "item");
-        mapping.add("views.view.config", "item");
+        mapping.add("views.view.spec.item.config", "item");
+        mapping.add("views.view.spec.item.subitems", "item");
         mapping.add("views.view.input", "item");
-        mapping.add("views.view.config", "item");
         mapping.add("views.view.action", "item");
-        mapping.setType("views.view.config.item.type", int.class);
+        mapping.setType("views.view.spec.item.config.item.type", int.class);
+        mapping.setType(
+                "views.view.spec.item.subitems.item.disabled", boolean.class);
+        mapping.setType(
+                "views.view.spec.item.subitems.item.invisible", boolean.class);
+        mapping.setType(
+                "views.view.spec.item.subitems.item.required", boolean.class);
+        mapping.setType(
+                "views.view.spec.item.subitems.item.focus", boolean.class);
+        mapping.setType(
+                "views.view.spec.item.subitems.item.vlength", int.class);
+        mapping.setType(
+                "views.view.spec.item.subitems.item.length", int.class);
         mapping.setType("views.view.action.item.type", int.class);
         
         extcontext = new Context(context);

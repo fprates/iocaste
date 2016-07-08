@@ -88,7 +88,7 @@ public class ViewConfigFile extends AbstractConfigFile {
                     }
                 }
                 
-                subitems = new XMLElement("sub-items");
+                subitems = new XMLElement("subitems");
                 specitem.addChild(subitems);
                 for (ExtendedObject subitem : specdoc.getItems("tool_item")) {
                     item = new XMLElement("item");
