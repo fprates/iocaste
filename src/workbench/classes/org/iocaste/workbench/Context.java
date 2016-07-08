@@ -19,6 +19,7 @@ import org.iocaste.workbench.project.datadict.ModelRemove;
 import org.iocaste.workbench.project.datadict.ModelUse;
 import org.iocaste.workbench.project.java.ClassEditorCall;
 import org.iocaste.workbench.project.java.PackageAdd;
+import org.iocaste.workbench.project.java.PackageRemove;
 import org.iocaste.workbench.project.java.editor.ClassEditorContext;
 import org.iocaste.workbench.project.tasks.LinkAdd;
 import org.iocaste.workbench.project.tasks.LinkRemove;
@@ -65,6 +66,7 @@ public class Context extends AbstractExtendedContext {
         new ModelUse(this);
         new ModelRemove(this);
         new PackageAdd(this);
+        new PackageRemove(this);
         new ProjectAdd(this);
         new ProjectUse(this);
         new ViewAdd(this);

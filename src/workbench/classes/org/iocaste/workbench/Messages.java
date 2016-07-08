@@ -28,6 +28,7 @@ public class Messages {
         messages.put("invalid.dataelement", "Elemento de dados inválido.");
         messages.put("invalid.model", "Modelo inválido.");
         messages.put("invalid.model.item", "Item de modelo inválido.");
+        messages.put("invalid.package", "Pacote inválido.");
         messages.put("invalid.view", "Visão inválida.");
         messages.put("invalid.view.element", "Elemento de visão inválido.");
         messages.put("invalid.viewconfig", "Propriedade inválida.");
@@ -51,6 +52,10 @@ public class Messages {
         messages.put("models_add", "Adicionar");
         messages.put("models_remove", "Remover");
         messages.put("PACKAGE", "Pacote");
+        messages.put("package.added", "Pacote adicionado.");
+        messages.put("package.exists", "Pacote já existe.");
+        messages.put("package.removed", "Pacote removido.");
+        messages.put("package.is.not.empty", "Pacote não está vazio.");
         messages.put("package_item_add", "Adicionar");
         messages.put("package_item_remove", "Remover");
         messages.put("packages", "Código Java");
