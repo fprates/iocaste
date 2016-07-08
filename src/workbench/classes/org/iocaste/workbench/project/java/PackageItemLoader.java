@@ -20,13 +20,14 @@ public class PackageItemLoader implements ItemLoader {
         entry.items.clear();
         extcontext.pkgitem = extcontext.project.getDocumentsMap("class").
                 get(pickdata.value);
+        extcontext.titlearg = extcontext.pkgitem.getstKey();
+        
         items = extcontext.pkgitem.getItemsMap("class");
         if ((items == null) || items.size() == 0)
             return;
         for (Object key : items.keySet())
             extcontext.add(
                     pickdata.redirect, "package_item_items", items.get(key));
-        extcontext.titlearg = extcontext.pkgitem.getstKey();
     }
 
     @Override
