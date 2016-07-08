@@ -20,18 +20,25 @@ public class ClassItemUpdate implements ViewerUpdate {
     }
 
     private CommandArgument argument(String name) {
-        return new CommandArgument(AbstractCommand.OPTIONAL, name);
+        return argument(AbstractCommand.OPTIONAL, name);
     }
 
+    private CommandArgument argument(byte op, String name) {
+        return new CommandArgument(op, name);
+    }
+    
     @Override
     public void preexecute(ActionContext actionctx, ExtendedObject object) {
         object.set("PACKAGE", extcontext.pkgitem.getstKey());
         actionctx.arguments.clear();
         actionctx.arguments.put("package", argument("PACKAGE"));
-        actionctx.arguments.put("class", argument("NAME"));
+        actionctx.arguments.put("class",
+                argument(AbstractCommand.REQUIRED, "NAME"));
     }
     
     @Override
-    public void remove(Object object) { }
+    public void remove(Object object) {
+        extcontext.remove("package_item_items", (ExtendedObject)object);
+    }
     
 }

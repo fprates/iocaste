@@ -21,8 +21,8 @@ public abstract class AbstractParameterTransport extends AbstractActionHandler {
         this.tool = tool;
     }
 
-    protected ViewerUpdate execute(
-            PageBuilderContext context, ExtendedObject object) throws Exception {
+    protected ViewerUpdate execute(PageBuilderContext context,
+            ExtendedObject object) throws Exception {
         Object value;
         String message;
         AbstractActionHandler handler;

@@ -10,6 +10,7 @@ public class Messages {
         messages.put("actions_add", "Adicionar");
         messages.put("actions_remove", "Remover");
         messages.put("CLASS", "Classe");
+        messages.put("class.removed", "Classe removida.");
         messages.put("COMMAND", "Parâmetros");
         messages.put("compile", "Compilar");
         messages.put("DATA_ELEMENT", "Elemento de dados");
@@ -25,6 +26,7 @@ public class Messages {
         messages.put("FIELD", "Campo tabela");
         messages.put("field.name.required", "Nome de campo obrigatório.");
         messages.put("GROUP", "Grupo");
+        messages.put("invalid.class", "Classe inválida.");
         messages.put("invalid.dataelement", "Elemento de dados inválido.");
         messages.put("invalid.model", "Modelo inválido.");
         messages.put("invalid.model.item", "Item de modelo inválido.");
@@ -34,6 +36,7 @@ public class Messages {
         messages.put("invalid.viewconfig", "Propriedade inválida.");
         messages.put("iocaste.workbench", "Workbench Iocaste");
         messages.put("iocaste-workbench", "Workbench Iocaste");
+        messages.put("java.class.saved", "Classe salva.");
         messages.put("KEY", "Chave");
         messages.put("link.updated", "Link atualizado.");
         messages.put("link.removed", "Link removido.");

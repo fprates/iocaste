@@ -1,31 +1,29 @@
 package org.iocaste.workbench.project.java;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
 import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
-import org.iocaste.workbench.project.java.editor.handler.ClassHandler;
 
-public class ClassEditorCall extends AbstractCommand {
-    private String op;
+public class ClassRemove extends AbstractCommand {
     
-    public ClassEditorCall(String op, Context extcontext) {
-        super(op, extcontext);
+    public ClassRemove(Context extcontext) {
+        super("class-remove", extcontext);
         ActionContext actionctx;
         
         required("package", "PACKAGE");
-        required("class", "NAME");
-        this.op = op;
+        required("class", "CLASS");
         actionctx = getActionContext();
         actionctx.updateviewer = new ClassItemUpdate(extcontext);
     }
     
     @Override
     protected Object entry(PageBuilderContext context) {
-        String packagename, classname;
+        ExtendedObject object;
+        String packagename, classname, project, classid;
         Context extcontext;
-        ClassHandler handler;
         
         packagename = getst("package");
         extcontext = getExtendedContext();
@@ -36,18 +34,23 @@ public class ClassEditorCall extends AbstractCommand {
             return null;
         }
 
-        classname = getst("class");
-        handler = extcontext.classeditor.handlers.get(op);
-        handler.setPackage(packagename);
-        handler.setClassName(classname);
-        handler.execute();
-        if (extcontext.classeditor.classobject == null) {
+        classname = new StringBuilder(packagename).append(".").
+                append(getst("class")).toString();
+        object = extcontext.classeditor.document.getItemsMap("class").
+                get(classname);
+        if (object == null) {
             message(Const.ERROR, "invalid.class");
             return null;
         }
         
-        init("class-editor", extcontext);
-        redirect("class-editor");
+        extcontext.classeditor.document.remove(object);
+        save(extcontext.classeditor.document);
+        
+        project = extcontext.project.getstKey();
+        classid = object.getst("CLASS_ID");
+        textremove(project, classid);
+        
+        message(Const.STATUS, "class.removed");
         return null;
     }
 
