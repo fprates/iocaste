@@ -8,6 +8,7 @@ public class Services extends AbstractFunction {
     public Services() {
         export("load", new TextLoad());
         export("register", new TextRegister());
+        export("remove_text", new TextRemove());
         export("update", new EditorUpdate());
         export("update_text", new TextUpdate());
         export("unregister", new TextUnregister());

@@ -89,6 +89,13 @@ public class TextEditorTool extends AbstractServiceInterface {
         new PackageTool(context.function).install(data, app);
     }
     
+    public final void remove(String textobj, String page) {
+        Message message = new Message("remove_text");
+        message.add("textobj", textobj);
+        message.add("id", page);
+        call(message);
+    }
+    
     public final void set(TextEditor editor, String id, String text) {
         TextArea textarea = context.view.getElement(editor.getName());
         textarea.set(text);

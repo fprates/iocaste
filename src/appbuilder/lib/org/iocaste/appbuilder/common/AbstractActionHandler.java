@@ -548,11 +548,16 @@ public abstract class AbstractActionHandler {
         return new TextEditorTool(context).get(name, id);
     }
     
+    protected final void textremove(String id, String page) {
+        TextEditorTool editortool = new TextEditorTool(context);
+        editortool.remove(id, page);
+    }
+    
     protected final void textsave(String id, String page, String text) {
         TextEditorTool editortool = new TextEditorTool(context);
-        
         editortool.update(id, page, text);
     }
+    
     protected final int update(Query query) {
         return documents.update(query);
     }
