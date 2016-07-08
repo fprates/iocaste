@@ -1,9 +1,6 @@
 package org.iocaste.workbench.project.view.toolitem;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;

@@ -1,8 +1,5 @@
 package org.iocaste.workbench.project.compile;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
@@ -13,15 +10,25 @@ public class ViewConfigFile extends AbstractConfigFile {
             {"name", "NAME"}
     };
     private static final String[][] SPEC_ITEM = {
-        {"name", "NAME"},
-        {"parent", "PARENT"},
-        {"type", "TYPE"}
+            {"name", "NAME"},
+            {"parent", "PARENT"},
+            {"type", "TYPE"}
     };
     
     private static final String[][] CONFIG_ITEM = {
             {"name", "NAME"},
             {"value", "VALUE"},
             {"type", "TYPE"},
+    };
+    
+    private static final String[][] TOOL_ITEM = {
+            {"name", "NAME"},
+            {"disabled", "DISABLED"},
+            {"invisible", "INVISIBLE"},
+            {"vlength", "VLENGTH"},
+            {"length", "LENGTH"},
+            {"required", "REQUIRED"},
+            {"focus", "FOCUS"}
     };
     
     private static final String[][] ACTION_ITEM = {
@@ -38,13 +45,12 @@ public class ViewConfigFile extends AbstractConfigFile {
 
     @Override
     public void run(CompileData data) {
-        ExtendedObject viewhead;
+        ExtendedObject viewhead, spechd;
         String value;
-        XMLElement view, viewattrib, spec, item, itemattrib, config, action;
+        XMLElement view, viewattrib, spec, specitem, itemattrib, config, action;
+        XMLElement item, subitems;
         ComplexDocument[] documents;
-        Map<String, String> specitems;
         
-        specitems = new HashMap<>();
         documents = data.extcontext.project.getDocuments("screen");
         for (ComplexDocument document : documents) {
             view = new XMLElement("view");
@@ -58,48 +64,56 @@ public class ViewConfigFile extends AbstractConfigFile {
             
             spec = new XMLElement("spec");
             view.addChild(spec);
-            for (ExtendedObject object : document.getItems("spec")) {
-                specitems.put(object.getst("ITEM_ID"), object.getst("NAME"));
-                item = new XMLElement("item");
-                spec.addChild(item);
-                
+            for (ComplexDocument specdoc : document.getDocuments("spec")) {
+                spechd = specdoc.getHeader();
+                specitem = new XMLElement("item");
+                spec.addChild(specitem);
                 for (int i = 0; i < SPEC_ITEM.length; i++) {
-                    value = object.getst(SPEC_ITEM[i][1]);
+                    value = spechd.getst(SPEC_ITEM[i][1]);
                     itemattrib = new XMLElement(SPEC_ITEM[i][0]);
                     itemattrib.addInner((value == null)? "" : value);
-                    item.addChild(itemattrib);
+                    specitem.addChild(itemattrib);
                 }
-            }
-            
-            config = new XMLElement("config");
-            view.addChild(config);
-            for (ExtendedObject object : document.getItems("config")) {
-                item = new XMLElement("item");
-                config.addChild(item);
-                itemattrib = new XMLElement("element");
-                itemattrib.addInner(specitems.get(object.getst("SPEC")));
-                item.addChild(itemattrib);
-                for (int i = 0; i < CONFIG_ITEM.length; i++) {
-                    itemattrib = new XMLElement(CONFIG_ITEM[i][0]);
-                    itemattrib.addInner(
-                            object.get(CONFIG_ITEM[i][1]).toString());
-                    item.addChild(itemattrib);
+                
+                config = new XMLElement("config");
+                specitem.addChild(config);
+                for (ExtendedObject configobj : specdoc.getItems("config")) {
+                    item = new XMLElement("item");
+                    config.addChild(item);
+                    for (int i = 0; i < CONFIG_ITEM.length; i++) {
+                        itemattrib = new XMLElement(CONFIG_ITEM[i][0]);
+                        itemattrib.addInner(
+                                configobj.get(CONFIG_ITEM[i][1]).toString());
+                        item.addChild(itemattrib);
+                    }
+                }
+                
+                subitems = new XMLElement("sub-items");
+                specitem.addChild(subitems);
+                for (ExtendedObject subitem : specdoc.getItems("tool_item")) {
+                    item = new XMLElement("item");
+                    subitems.addChild(item);
+                    for (int i = 0; i < TOOL_ITEM.length; i++) {
+                        itemattrib = new XMLElement(TOOL_ITEM[i][0]);
+                        itemattrib.addInner(
+                                subitem.get(TOOL_ITEM[i][1]).toString());
+                        item.addChild(itemattrib);
+                    }
                 }
             }
             
             action = new XMLElement("action");
             view.addChild(action);
-            for (ExtendedObject object : document.getItems("action")) {
+            for (ExtendedObject actionobj : document.getItems("action")) {
                 item = new XMLElement("item");
                 action.addChild(item);
                 for (int i = 0; i < ACTION_ITEM.length; i++) {
                     itemattrib = new XMLElement(ACTION_ITEM[i][0]);
                     itemattrib.addInner(
-                            object.get(ACTION_ITEM[i][1]).toString());
+                            actionobj.get(ACTION_ITEM[i][1]).toString());
                     item.addChild(itemattrib);
                 }
             }
-            specitems.clear();
         }
     }
 }
