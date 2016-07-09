@@ -19,19 +19,22 @@ public class ViewInstall extends AbstractInstallObject {
         DataElement screenactionid, screenactiontype, screenspecitemname;
         DataElement screenitemtype, screenname, screenitemtext, screenid;
         DataElement screenactiontypetext, screenbool, screenlength;
+        DataElement screenspecitemid;
         DocumentModelItem speckey, spectypekey, actiontypekey, screenkey;
         SearchHelpData shd;
         
         screenid = elementchar("WB_SCREEN_ID", 50, false);
+        screenspecitemid = elementchar("WB_SCREEN_ITEM_ID", 68, false);
+        screenconfigitemid = elementchar("WB_SCREEN_CFG_ID", 71, false);
+        screenactionid = elementchar("WB_SCREEN_ACTION_ID", 53, false);
+        
         screenname = elementchar("WB_SCREEN_NAME", 16, false);
         screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, false);
         screenitemtype = elementchar("WB_SCREEN_ITEM_TYPE", 24, false);
         screenitemtext = elementchar("WB_SCREEN_ITEM_TEXT", 40, false);
-        screenconfigitemid = elementchar("WB_SCREEN_CFG_ID", 33, false);
         screenconfigname = elementchar("WB_SCREEN_CFG_NAME", 24, false);
         screenconfigvalue = elementchar("WB_SCREEN_CFG_VALUE", 255, false);
         screenconfigtype = elementnumc("WB_SCREEN_CFG_TYPE", 1);
-        screenactionid = elementchar("WB_SCREEN_ACTION_ID", 19, false);
         screenactiontypetext = elementchar("WB_SCREEN_ACTION_TEXT", 10, false);
         screenactionname = elementchar("WB_SCREEN_ACTION_NAME", 40, false);
         screenactionclass = elementchar("WB_SCREEN_ACTION_CLASS", 255, false);
@@ -46,10 +49,10 @@ public class ViewInstall extends AbstractInstallObject {
                 "WB_SCREEN_HEADER", "WBSCRHD"));
         screenkey = model.key(
                 "ID", "SCRID", screenid);
-        model.item(
-                "NAME", "SCRNM", screenname);
         model.reference(
                 "PROJECT", "PRJNM", getItem("projectkey"));
+        model.item(
+                "NAME", "SCRNM", screenname);
         
         /*
          * screen item types
@@ -99,11 +102,13 @@ public class ViewInstall extends AbstractInstallObject {
         model = tag("screen_spec", modelInstance(
                 "WB_SCREEN_SPEC", "WBSCRSPEC"));
         speckey = model.key(
-                "NAME", "SITNM", screenspecitemname);
+                "ID", "SITID", screenspecitemid);
         model.reference(
                 "PROJECT", "PRJNM", getItem("projectkey"));
         model.reference(
                 "SCREEN", "SCRID", screenkey);
+        model.item(
+                "NAME", "SITNM", screenspecitemname);
         searchhelp(model.item(
                 "PARENT", "SITPA", screenspecitemname), "SH_WB_SCREEN_SPEC");
         searchhelp(model.reference(
@@ -205,7 +210,7 @@ public class ViewInstall extends AbstractInstallObject {
         
         cmodel = tag("screens", cmodelInstance("WB_SCREENS"));
         cmodel.header("screen_head");
-        cmodel.document("spec", screenitem);
+        cmodel.document("spec", screenitem).index = "NAME";
         cmodel.item("action", "screen_action").keyformat = "%03d";
     }
     

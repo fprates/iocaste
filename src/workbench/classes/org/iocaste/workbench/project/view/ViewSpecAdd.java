@@ -31,7 +31,7 @@ public class ViewSpecAdd extends AbstractCommand {
     protected Object entry(PageBuilderContext context) {
         ComplexDocument spec;
         ExtendedObject object;
-        String name, parent;
+        String name, parent, id, screen;
         Context extcontext = getExtendedContext();
         Map<Object, ComplexDocument> specs =
                 extcontext.view.getDocumentsMap("spec");
@@ -49,11 +49,14 @@ public class ViewSpecAdd extends AbstractCommand {
             message(Const.ERROR, "view.element.exists");
             return null;
         }
-        
+
+        screen = extcontext.view.getstKey();
+        id = new StringBuilder(screen).append(specs.size()).toString();
         spec = extcontext.view.instance("spec", name);
         object = spec.getHeader();
+        object.set("ID", id);
         object.set("PROJECT", extcontext.project.getstKey());
-        object.set("SCREEN", extcontext.view.getstKey());
+        object.set("SCREEN", screen);
         autoset(object);
         save(spec);
         message(Const.STATUS, "view.element.added", object.getst("TYPE"));

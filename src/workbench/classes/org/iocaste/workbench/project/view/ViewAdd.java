@@ -34,8 +34,8 @@ public class ViewAdd extends AbstractCommand {
         }
 
         project = extcontext.project.getstKey();
-        id = new StringBuilder(name).append("_").append(project).toString();
         view = extcontext.project.instance("screen", name);
+        id = new StringBuilder(name).append("_").append(project).toString();
         view.set("ID", id);
         view.set("PROJECT", project);
         autoset(view);

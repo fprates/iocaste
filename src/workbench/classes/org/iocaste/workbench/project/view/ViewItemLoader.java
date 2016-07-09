@@ -32,7 +32,7 @@ public class ViewItemLoader implements ItemLoader {
         
         entry = extcontext.tableInstance(pickdata.redirect, table);
         entry.items.clear();
-        extcontext.titlearg = extcontext.view.getstKey();
+        extcontext.titlearg = pickdata.value;
         
         documents = document.getDocumentsMap(item);
         if (documents == null)

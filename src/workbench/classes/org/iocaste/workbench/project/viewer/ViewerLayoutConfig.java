@@ -136,6 +136,7 @@ public class ViewerLayoutConfig {
         config.put("view_item_items", new Object[] {
                 "tt", "WB_SCREEN_SPEC",
                 new Object[][] {
+                    {"ID", true, null, null, 0, true},
                     {"PROJECT", true, null, null, 0, true},
                     {"SCREEN", true, null, null, 0, true},
                     {"PARENT", false, null, null, 0, true},
@@ -146,6 +147,7 @@ public class ViewerLayoutConfig {
         config.put("view_item_detail", new Object[] {
                 "dt", "WB_SCREEN_SPEC",
                 new Object[][] {
+                    {"ID", true, null, null, 0, true},
                     {"PROJECT", true, null, null, 0, true},
                     {"SCREEN", true, null, null, 0, true},
                     {"PARENT", false, null, null, 0, false},

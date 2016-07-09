@@ -43,12 +43,27 @@ public class ViewConfigFile extends AbstractConfigFile {
         file = "views.xml";
     }
 
-    @Override
-    public void run(CompileData data) {
-        ExtendedObject viewhead, spechd;
+    private final XMLElement add(
+            XMLElement parent, String[][] items, ExtendedObject object) {
+        XMLElement item, attrib;
         String value;
-        XMLElement view, viewattrib, spec, specitem, itemattrib, config, action;
-        XMLElement item, subitems;
+        
+        item = new XMLElement("item");
+        parent.addChild(item);
+        for (int i = 0; i < items.length; i++) {
+            value = object.getst(items[i][1]);
+            attrib = new XMLElement(items[i][0]);
+            attrib.addInner((value == null)? "" : value);
+            item.addChild(attrib);
+        }
+        
+        return item;
+    }
+    
+    @Override
+    public final void run(CompileData data) {
+        ExtendedObject viewhead, spechd;
+        XMLElement view, viewattrib, spec, specitem, config, action, subitems;
         ComplexDocument[] documents;
         
         documents = data.extcontext.project.getDocuments("screen");
@@ -66,54 +81,23 @@ public class ViewConfigFile extends AbstractConfigFile {
             view.addChild(spec);
             for (ComplexDocument specdoc : document.getDocuments("spec")) {
                 spechd = specdoc.getHeader();
-                specitem = new XMLElement("item");
-                spec.addChild(specitem);
-                for (int i = 0; i < SPEC_ITEM.length; i++) {
-                    value = spechd.getst(SPEC_ITEM[i][1]);
-                    itemattrib = new XMLElement(SPEC_ITEM[i][0]);
-                    itemattrib.addInner((value == null)? "" : value);
-                    specitem.addChild(itemattrib);
-                }
+                specitem = add(spec, SPEC_ITEM, spechd);
                 
                 config = new XMLElement("config");
                 specitem.addChild(config);
-                for (ExtendedObject configobj : specdoc.getItems("config")) {
-                    item = new XMLElement("item");
-                    config.addChild(item);
-                    for (int i = 0; i < CONFIG_ITEM.length; i++) {
-                        itemattrib = new XMLElement(CONFIG_ITEM[i][0]);
-                        itemattrib.addInner(
-                                configobj.get(CONFIG_ITEM[i][1]).toString());
-                        item.addChild(itemattrib);
-                    }
-                }
+                for (ExtendedObject configobj : specdoc.getItems("config"))
+                    add(config, CONFIG_ITEM, configobj);
                 
                 subitems = new XMLElement("subitems");
                 specitem.addChild(subitems);
-                for (ExtendedObject subitem : specdoc.getItems("tool_item")) {
-                    item = new XMLElement("item");
-                    subitems.addChild(item);
-                    for (int i = 0; i < TOOL_ITEM.length; i++) {
-                        itemattrib = new XMLElement(TOOL_ITEM[i][0]);
-                        itemattrib.addInner(
-                                subitem.get(TOOL_ITEM[i][1]).toString());
-                        item.addChild(itemattrib);
-                    }
-                }
+                for (ExtendedObject subitem : specdoc.getItems("tool_item"))
+                    add(subitems, TOOL_ITEM, subitem);
             }
             
             action = new XMLElement("action");
             view.addChild(action);
-            for (ExtendedObject actionobj : document.getItems("action")) {
-                item = new XMLElement("item");
-                action.addChild(item);
-                for (int i = 0; i < ACTION_ITEM.length; i++) {
-                    itemattrib = new XMLElement(ACTION_ITEM[i][0]);
-                    itemattrib.addInner(
-                            actionobj.get(ACTION_ITEM[i][1]).toString());
-                    item.addChild(itemattrib);
-                }
-            }
+            for (ExtendedObject actionobj : document.getItems("action"))
+                add(action, ACTION_ITEM, actionobj);
         }
     }
 }
