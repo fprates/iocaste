@@ -13,8 +13,8 @@ public class ComplexModelInstall {
         context.getInstallData().add(cmodel);
     }
     
-    public final void document(String name, String cmodeltag) {
-        document(name, context.getCModel(cmodeltag));
+    public final ComplexModelItem document(String name, String cmodeltag) {
+        return document(name, context.getCModel(cmodeltag));
     }
     
     public final ComplexModelItem document(
