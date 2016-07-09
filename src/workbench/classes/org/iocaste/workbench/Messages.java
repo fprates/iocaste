@@ -83,6 +83,7 @@ public class Messages {
         messages.put("parameter.required", "Parâmetro obrigatório.");
         messages.put("PARENT", "Item pai");
         messages.put("PROFILE", "Perfil de autorização");
+        messages.put("project.compiled", "Projeto compilado.");
         messages.put("project.created", "Projeto criado.");
         messages.put("project-add", "Adicionar");
         messages.put("project_add", "Criar projeto");

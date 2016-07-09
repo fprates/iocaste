@@ -23,7 +23,7 @@ public class ViewAdd extends AbstractCommand {
     @Override
     protected Object entry(PageBuilderContext context) {
         ComplexDocument view;
-        String name;
+        String name, id, project;
         Context extcontext = getExtendedContext();
         
         name = getst("name");
@@ -33,8 +33,11 @@ public class ViewAdd extends AbstractCommand {
             return null;
         }
 
+        project = extcontext.project.getstKey();
+        id = new StringBuilder(name).append("_").append(project).toString();
         view = extcontext.project.instance("screen", name);
-        view.set("PROJECT", extcontext.project.getstKey());
+        view.set("ID", id);
+        view.set("PROJECT", project);
         autoset(view);
         save(view);
         message(Const.STATUS, "view.created");

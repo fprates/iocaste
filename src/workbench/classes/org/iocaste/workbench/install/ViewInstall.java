@@ -17,11 +17,12 @@ public class ViewInstall extends AbstractInstallObject {
         DataElement screenconfigitemid, screenconfigname, screenconfigvalue;
         DataElement screenconfigtype, screenactionname, screenactionclass;
         DataElement screenactionid, screenactiontype, screenspecitemname;
-        DataElement screenitemtype, screenname, screenitemtext;
+        DataElement screenitemtype, screenname, screenitemtext, screenid;
         DataElement screenactiontypetext, screenbool, screenlength;
-        DocumentModelItem screen, speckey, spectypekey, actiontypekey;
+        DocumentModelItem speckey, spectypekey, actiontypekey, screenkey;
         SearchHelpData shd;
         
+        screenid = elementchar("WB_SCREEN_ID", 50, false);
         screenname = elementchar("WB_SCREEN_NAME", 16, false);
         screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, false);
         screenitemtype = elementchar("WB_SCREEN_ITEM_TYPE", 24, false);
@@ -43,7 +44,9 @@ public class ViewInstall extends AbstractInstallObject {
          */
         model = tag("screen_head", modelInstance(
                 "WB_SCREEN_HEADER", "WBSCRHD"));
-        screen = model.key(
+        screenkey = model.key(
+                "ID", "SCRID", screenid);
+        model.item(
                 "NAME", "SCRNM", screenname);
         model.reference(
                 "PROJECT", "PRJNM", getItem("projectkey"));
@@ -100,7 +103,7 @@ public class ViewInstall extends AbstractInstallObject {
         model.reference(
                 "PROJECT", "PRJNM", getItem("projectkey"));
         model.reference(
-                "SCREEN", "SCRID", screen);
+                "SCREEN", "SCRID", screenkey);
         searchhelp(model.item(
                 "PARENT", "SITPA", screenspecitemname), "SH_WB_SCREEN_SPEC");
         searchhelp(model.reference(
@@ -121,7 +124,7 @@ public class ViewInstall extends AbstractInstallObject {
         model.reference(
                 "PROJECT", "PRJNM", getItem("projectkey"));
         model.reference(
-                "SCREEN", "SCRID", screen);
+                "SCREEN", "SCRID", screenkey);
         model.reference(
                 "SPEC", "ITMID", speckey);
         model.item(
@@ -141,7 +144,7 @@ public class ViewInstall extends AbstractInstallObject {
         model.reference(
                 "PROJECT", "PRJNM", getItem("projectkey"));
         model.reference(
-                "SCREEN", "SCRID", screen);
+                "SCREEN", "SCRID", screenkey);
         model.reference(
                 "SPEC", "SPCID", speckey);
         model.item(
@@ -187,7 +190,7 @@ public class ViewInstall extends AbstractInstallObject {
         model.reference(
                 "PROJECT", "PRJNM", getItem("projectkey"));
         model.reference(
-                "SCREEN", "SCRID", screen);
+                "SCREEN", "SCRID", screenkey);
         model.item(
                 "NAME", "ACTNM", screenactionname);
         searchhelp(model.item(

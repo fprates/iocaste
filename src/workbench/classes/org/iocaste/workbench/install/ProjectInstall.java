@@ -15,7 +15,7 @@ public class ProjectInstall extends AbstractInstallObject {
          */
         cmodel = cmodelInstance("WB_PROJECT");
         cmodel.header("header");
-        cmodel.document("screen", "screens");
+        cmodel.document("screen", "screens").index = "NAME";
         cmodel.item("link", "links").index = "NAME";
         cmodel.document("model", "models");
         cmodel.document("class", "classes");

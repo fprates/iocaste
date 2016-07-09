@@ -49,6 +49,7 @@ public class ViewerLayoutConfig {
         config.put("views_items", new Object[] {
                 "tt", "WB_SCREEN_HEADER",
                 new Object[][] {
+                    {"ID", true, null, null, 0, true},
                     {"PROJECT", true, null, null, 0, true},
                     {"NAME", false, Const.LINK, "view_pick", 0, false}
                 }
@@ -56,6 +57,7 @@ public class ViewerLayoutConfig {
         config.put("views_detail", new Object[] {
                 "dt", "WB_SCREEN_HEADER",
                 new Object[][] {
+                    {"ID", true, null, null, 0, true},
                     {"PROJECT", true, null, null, 0, true}
                 }
             });
