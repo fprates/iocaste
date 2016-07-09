@@ -34,6 +34,7 @@ public class Response {
         
         criteria = new DataForm(container, "criteria");
         criteria.setStyleClass("shcriteria");
+        criteria.addEvent("style", "display:none");
         DataForm.importModel(criteria, context.model);
         
         for (Element element : criteria.getElements()) {
@@ -112,9 +113,11 @@ public class Response {
     public static final void main(Context context) {
         View view;
         String name, searchjs, action, form, searchbt, master, nsreference;
+        String criteriajs;
         ExtendedObject[] result;
         Container stdcnt, datacnt;
         SearchHelp sh;
+        Button select, criteria;
         Object ns;
         Map<String, String> style;
         Documents documents = new Documents(context.function);
@@ -161,10 +164,18 @@ public class Response {
                 append(searchbt).append("');").toString();
         
         searchbt = "bt_".concat(searchbt);
-        new Button(stdcnt, searchbt).addEvent("onClick", searchjs);
+        select = new Button(stdcnt, searchbt);
+        select.addEvent("style", "display:none");
+        select.addEvent("onclick", searchjs);
         context.messages.instance("pt_BR");
         context.messages.put(searchbt, "Selecionar");
         
+        criteriajs = new StringBuilder("setElementDisplay('").append(searchbt).
+                append("', 'inline');setElementDisplay('criteria','block');"
+                        + "setElementDisplay('bt_criteria','none');").
+                toString();
+        criteria = new Button(stdcnt, "bt_criteria");
+        criteria.addEvent("onclick", criteriajs);
         sh = context.control;
         master = sh.getMaster();
         view = context.control.getView();

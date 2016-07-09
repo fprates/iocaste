@@ -24,6 +24,8 @@ public class DataFormRenderer extends Renderer {
         
         formtag = new XMLElement("table");
         formtag.add("class", form.getStyleClass());
+        formtag.add("id", form.getHtmlName());
+        addEvents(formtag, form);
         
         columns = form.getColumns();
         if (columns == 0)

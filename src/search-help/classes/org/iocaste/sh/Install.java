@@ -13,6 +13,7 @@ public class Install {
         
         messages = new HashMap<>();
         messages.put("cancel", "Cancelar");
+        messages.put("bt_criteria", "Nova seleção...");
         messages.put("iocaste-search-help", "Ajuda de pesquisa");
         messages.put("no.results.found", "Sem resultados para esse critério.");
         data.setMessages("pt_BR", messages);
