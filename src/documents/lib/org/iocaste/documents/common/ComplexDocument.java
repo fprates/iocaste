@@ -257,10 +257,14 @@ public class ComplexDocument implements Serializable,
         }
         
         document = new ComplexDocument(cmodelitem.cmodel);
-        for (DocumentModelKey key : cmodelitem.cmodel.getHeader().getKeys()) {
-            document.getHeader().set(key.getModelItemName(), index);
-            break;
-        }
+        if (cmodelitem.index != null) {
+            document.set(cmodelitem.index, index);
+        } else
+            for (DocumentModelKey key : cmodelitem.cmodel.getHeader().getKeys())
+            {
+                document.set(key.getModelItemName(), index);
+                break;
+            }
         add(document);
         return (T)document;
     }
