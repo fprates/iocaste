@@ -24,7 +24,7 @@ public class FormRenderer extends Renderer {
         String htmlname = container.getHtmlName();
         
         config.setCurrentAction(currentaction);
-        config.addAction(currentaction);
+        config.addAction(currentaction, currentaction);
         config.form = container;
         
         formtag.add("method", "post");

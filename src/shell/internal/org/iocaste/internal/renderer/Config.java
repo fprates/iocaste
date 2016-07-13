@@ -1,9 +1,9 @@
 package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import org.iocaste.internal.PageContext;
 import org.iocaste.internal.TrackingData;
@@ -16,17 +16,16 @@ public class Config {
     public Function function;
     public Form form;
     public PageContext pagectx;
-    private String currentaction, currentform, pagetrack;
-    private String username;
+    private String currentaction, currentform, pagetrack, username;
     private int logid;
-    private Set<String> actions;
+    private Map<String, String> actions;
     private List<String> onload;
     private View view;
     private PopupControl popupcontrol;
     private TrackingData tracking;
     
     public Config() {
-        actions = new HashSet<>();
+        actions = new HashMap<>();
         onload = new ArrayList<>();
     }
     
@@ -34,8 +33,8 @@ public class Config {
      * 
      * @param action
      */
-    public final void addAction(String action) {
-        actions.add(action);
+    public final void addAction(String action, String name) {
+        actions.put(action, name);
     }
     
     /**
@@ -50,7 +49,7 @@ public class Config {
      * 
      * @return
      */
-    public final Set<String> getActions() {
+    public final Map<String, String> getActions() {
         return actions;
     }
     

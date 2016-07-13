@@ -598,6 +598,11 @@ public class Controller {
         
         message(config, Const.NONE, null);
         element = config.state.view.getElement(controlname);
+        if ((element == null) && config.pagectx.isAction(controlname)) {
+            controlname = config.pagectx.getControlName(controlname);
+            element = config.state.view.getElement(controlname);
+        }
+        
         if (element != null)
             processInputsStage(element, config, status);
         else

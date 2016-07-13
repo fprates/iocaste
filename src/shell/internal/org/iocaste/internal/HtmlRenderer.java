@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.iocaste.internal.renderer.Config;
 import org.iocaste.internal.renderer.Renderer;
@@ -25,7 +24,7 @@ import org.iocaste.shell.common.ViewTitle;
 public class HtmlRenderer {
     private String username;
     private List<String> script;
-    private Set<String> actions;
+    private Map<String, String> actions;
     private Function function;
     private PageContext pagectx;
     
@@ -63,7 +62,7 @@ public class HtmlRenderer {
      * 
      * @return
      */
-    public final Set<String> getActions() {
+    public final Map<String, String> getActions() {
         return actions;
     }
     

@@ -36,6 +36,7 @@ public class LinkRenderer extends Renderer {
             return tags;
         }
         
+        config.addAction(link.getAction(), link.getHtmlName());
         htmlname = link.getHtmlName();
         atag = new XMLElement("a");
         atag.add("id", htmlname);

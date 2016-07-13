@@ -18,7 +18,7 @@ public class PageContext {
     private String name, username, contexturl, contenttype, contentencoding;
     private boolean reloadable, initialize, keepview;
     private List<FileItem> files;
-    private Set<String> actions;
+    private Map<String, String> actions;
     private int logid;
     private byte error;
     private long sequence;
@@ -37,10 +37,8 @@ public class PageContext {
         inputs = new ArrayList<>();
         mpelements = new ArrayList<>();
         reloadable = true;
-        actions = null;
         logid = 0;
         sequence = 0;
-        
         this.name = name;
     }
     
@@ -58,6 +56,10 @@ public class PageContext {
      */
     public final String getContentEncoding() {
         return contentencoding;
+    }
+    
+    public final String getControlName(String action) {
+        return actions.get(action);
     }
     
     /**
@@ -146,7 +148,7 @@ public class PageContext {
      * @return
      */
     public final boolean isAction(String action) {
-        return (actions == null)?  false : actions.contains(action);
+        return (actions == null)? false : actions.containsKey(action);
     }
     
     /**
@@ -183,7 +185,7 @@ public class PageContext {
      * 
      * @param actions
      */
-    public final void setActions(Set<String> actions) {
+    public final void setActions(Map<String, String> actions) {
         this.actions = actions;
     }
     
