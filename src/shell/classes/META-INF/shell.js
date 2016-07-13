@@ -127,7 +127,7 @@ window.onclick = function(event) {
   setElementDisplayOfClass('.button_ctxmenu_close','none');
   setElementDisplayOfClass('.button_ctxmenu_open','inline');
   setElementDisplayOfClass('.ctxmenu', 'none');
-  setElementDisplay('login_options', 'none');
+  setElementDisplay('nc_login_options', 'none');
 }
 
 history.pushState(null, null, "#");

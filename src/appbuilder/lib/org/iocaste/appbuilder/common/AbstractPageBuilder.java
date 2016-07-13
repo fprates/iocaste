@@ -46,6 +46,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         Message message;
         AbstractExtendedValidator validator;
         StyleSheet stylesheet;
+        Object[] objects;
         Documents documents = null;
         
         context = new PageBuilderContext();
@@ -63,11 +64,13 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         reassignCustomActions(context);
         
         stylesheet = context.view.styleSheetInstance();
-        message = new Message("stylesheet_get");
+        message = new Message("nc_data_get");
         message.add("style_constants", stylesheet.getConstants());
         service = new GenericService(context.function, SERVICE);
-        context.appbuildersheet = service.invoke(message);
-        
+        objects = service.invoke(message);
+        context.appbuildersheet = (Object[][])objects[0];
+        context.ncspec = (Object[][])objects[1];
+        context.ncconfig = (Object[][])objects[2];
         return context;
     }
     

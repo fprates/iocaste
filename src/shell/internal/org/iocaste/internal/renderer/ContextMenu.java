@@ -82,7 +82,7 @@ public class ContextMenu {
                         ".button_ctxmenu_close", "none")).
                 append(setElementDisplayOfClass(
                         ".button_ctxmenu_open", "inline")).
-                append(setElementDisplay("login_options", "none")).
+                append(setElementDisplay("nc_login_options", "none")).
                 append(setElementDisplay(menu, "inline-block")).
                 append(setElementDisplay(open, "none")).
                 append(setElementDisplay(close, "inline")).toString());

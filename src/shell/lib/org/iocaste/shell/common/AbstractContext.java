@@ -4,7 +4,7 @@ public abstract class AbstractContext {
     public View view;
     public AbstractPage function;
     public String action, control;
-    public Object[][] appbuildersheet;
+    public Object[][] appbuildersheet, ncspec, ncconfig;
     public MessageSource messages;
     
     public AbstractContext() {

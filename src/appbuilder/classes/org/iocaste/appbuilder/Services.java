@@ -3,8 +3,11 @@ package org.iocaste.appbuilder;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.ViewSpecItem;
+import org.iocaste.appbuilder.common.ViewSpecItem.TYPES;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.AbstractHandler;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Media;
 import org.iocaste.shell.common.Shell;
@@ -14,7 +17,7 @@ import org.iocaste.shell.common.View;
 public class Services extends AbstractFunction {
     
     public Services() {
-        export("stylesheet_get", new GetStyleSheet());
+        export("nc_data_get", new GetStyleSheet());
     }
 }
 
@@ -42,14 +45,58 @@ class GetStyleSheet extends AbstractHandler {
                 "1540px", "22pt", "1140px", "inline-block"});
     }
     
-    @Override
-    public Object run(Message message) throws Exception {
+    private final Object[][] getNavbarConfig() {
+        Object[][] config = new Object[10][2];
+        
+        config[0] = ncconfig("navcontrol_cntnr", "nc_container");
+        config[1] = ncconfig("nc_inner", "nc_inner_container");
+        config[2] = ncconfig("nc_logo", "nc_main_logo");
+        config[3] = ncconfig("this", "nc_title");
+        config[4] = ncconfig("actionbar", "nc_hide");
+        config[5] = ncconfig("nc_login", "nc_login");
+        config[6] = ncconfig("nc_login_user", "nc_login_item");
+        config[7] = ncconfig("nc_username", "nc_usertext");
+        config[8] = ncconfig("nc_login_options", "nc_login_item");
+        config[9] = ncconfig("nc_options", "nc_login_menu");
+        
+        return config;
+    }
+    
+    private final Object[][] getNavbarSpec() {
+        Iocaste iocaste;
+        Object[][] spec;
+        
+        iocaste = new Iocaste(getFunction());
+        spec = (!iocaste.isConnected())? new Object[5][3] : new Object[13][3];
+        
+        spec[0] = ncspec(TYPES.NODE_LIST, "navcontrol_cntnr", "nc_inner");
+        spec[1] = ncspec(TYPES.NODE_LIST_ITEM, "nc_inner", "nc_inner_logo");
+        spec[2] = ncspec(TYPES.STANDARD_CONTAINER, "nc_inner_logo", "nc_logo");
+        spec[3] = ncspec(TYPES.NODE_LIST_ITEM, "nc_inner", "nc_inner_title");
+        spec[4] = ncspec(TYPES.TEXT, "nc_inner_title", "this");
+        
+        iocaste = new Iocaste(getFunction());
+        if (spec.length == 5)
+            return spec;
+        
+        spec[5] = ncspec(TYPES.NODE_LIST_ITEM, "nc_inner", "nc_inner_login");
+        spec[6] = ncspec(TYPES.NODE_LIST, "nc_inner_login", "nc_login");
+        spec[7] = ncspec(TYPES.NODE_LIST_ITEM, "nc_login", "nc_login_user");
+        spec[8] = ncspec(TYPES.LINK, "nc_login_user", "nc_user");
+        spec[9] = ncspec(TYPES.TEXT, "nc_user", "nc_username");
+        spec[10] = ncspec(TYPES.NODE_LIST_ITEM, "nc_login", "nc_login_options");
+        spec[11] = ncspec(
+                TYPES.STANDARD_CONTAINER, "nc_login_options", "nc_options");
+        spec[12] = ncspec(TYPES.LINK, "nc_options", "nc_logout");
+        return spec;
+    }
+    
+    private Object[][] getStyleSheet(Map<Integer, String> constants) {
         Map<String, String> style;
         String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
         String FRAME_COLOR, SHADOW;
         Media media;
         String[] width;
-        Map<Integer, String> constants = message.get("style_constants");
         StyleSheet stylesheet = new StyleSheet();
         
         FONT_COLOR = constants.get(Shell.FONT_COLOR);
@@ -111,7 +158,7 @@ class GetStyleSheet extends AbstractHandler {
         style.put("padding-top", "20px");
         style.put("padding-bottom", "20px");
         
-        style = stylesheet.newElement(".main_logo");
+        style = stylesheet.newElement(".nc_main_logo");
         style.put("background-image",
                 "url(\"/iocaste-shell/images/quantic_logo.png\")");
         style.put("background-repeat", "no-repeat");
@@ -188,4 +235,32 @@ class GetStyleSheet extends AbstractHandler {
         return View.convertStyleSheet(stylesheet);
     }
     
+    private final Object[] ncconfig(String name, String style) {
+        Object[] config = new Object[2];
+        
+        config[0] = name;
+        config[1] = style;
+        return config;
+    }
+    
+    private final Object[] ncspec(
+            ViewSpecItem.TYPES type, String parent, String name) {
+        Object[] spec = new Object[3];
+        
+        spec[0] = type;
+        spec[1] = parent;
+        spec[2] = name;
+        return spec;
+    }
+    
+    @Override
+    public Object run(Message message) throws Exception {
+        Map<Integer, String> constants = message.get("style_constants");
+        Object[] objects = new Object[3];
+        
+        objects[0] = getStyleSheet(constants);
+        objects[1] = getNavbarSpec();
+        objects[2] = getNavbarConfig();
+        return objects;
+    }
 }

@@ -9,7 +9,6 @@ import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.Link;
-import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.NodeListItem;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.StandardContainer;
@@ -35,60 +34,40 @@ public class StandardNavControlDesign implements NavControlDesign {
         String name, page;
         ViewTitle title;
         Iocaste iocaste;
-        Container logo, options;
         ViewContext viewctx;
-        NodeList inner, login;
         NodeListItem loginitem;
         AbstractPageBuilder function;
         User user;
         
         context.view.add(new HeaderLink(
                 "shortcut icon", "/iocaste-shell/images/favicon.ico"));
-        
-        container.setStyleClass("nc_container");
-        inner = new NodeList(container, "nc_inner");
-        inner.setStyleClass("nc_inner_container");
-        
-        logo = new StandardContainer(
-                new NodeListItem(inner, "nc_inner_logo"), "logo");
-        logo.setStyleClass("main_logo");
 
         title = context.view.getTitle();
         name = (title.text != null)? title.text : context.view.getAppName();
-        text = new Text(
-                new NodeListItem(inner, "nc_inner_title"), "this");
-        text.setStyleClass("nc_title");
+        text = context.view.getElement("this");
         text.setText(name, title.args);
         
         buttonbar = context.view.getElement("actionbar");
-        buttonbar.setStyleClass("nc_hide");
         
         iocaste = new Iocaste(context.function);
         if (!iocaste.isConnected())
             return;
         
-        user = iocaste.getUserData(iocaste.getUsername());
-        login = new NodeList(
-                new NodeListItem(inner, "nc_inner_login"), "login");
-        login.setStyleClass("nc_login");
-        
-        loginitem = new NodeListItem(login, "login_user");
-        loginitem.setStyleClass("nc_login_item");
-        link = new Link(loginitem, "user", "user");
+        link = context.view.getElement("nc_user");
+        link.setAction("user");
         link.setText("");
-        link.setAction(setElementDisplay("login_options", "inline"));
+        link.setAction(setElementDisplay("nc_login_options", "inline"));
         link.setAbsolute(true);
-        text = new Text(link, "username");
+
+        user = iocaste.getUserData(iocaste.getUsername());
+        text = context.view.getElement("nc_username");
         text.setTag("span");
         text.setText(user.getFirstname());
-        text.setStyleClass("nc_usertext");
-        
-        loginitem = new NodeListItem(login, "login_options");
-        loginitem.setStyleClass("nc_login_item");
+
+        loginitem = context.view.getElement("nc_login_options");
         loginitem.addEvent("style", "display:none");
-        options = new StandardContainer(loginitem, "options");
-        options.setStyleClass("nc_login_menu");
-        link = new Link(options, "logout", "logout");
+        link = context.view.getElement("nc_logout");
+        link.setAction("logout");
         link.setCancellable(true);
         
         new VirtualControl(container, "back").setCancellable(true);
@@ -100,6 +79,9 @@ public class StandardNavControlDesign implements NavControlDesign {
         function = (AbstractPageBuilder)context.function;
         function.register(page, "logout", viewctx);
         function.register(page, "back", viewctx);
+        
+        context.messages.instance("pt_BR");
+        context.messages.put("pt_BR", "nc_logout", "Log out");
     }
     
     /*
