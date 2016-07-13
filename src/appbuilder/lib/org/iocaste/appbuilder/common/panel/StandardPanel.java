@@ -28,6 +28,7 @@ public class StandardPanel {
         page.setViewContext(view);
         try {
             page.execute();
+            view.set(page.getDesign());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

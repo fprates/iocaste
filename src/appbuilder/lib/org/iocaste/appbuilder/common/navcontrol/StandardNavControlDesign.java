@@ -49,16 +49,16 @@ public class StandardNavControlDesign implements NavControlDesign {
         
         buttonbar = context.view.getElement("actionbar");
         
+        link = context.view.getElement("nc_user");
+        if (link == null)
+            return;
+        link.setText("");
+        link.setAbsolute(true);
+        
         iocaste = new Iocaste(context.function);
         if (!iocaste.isConnected())
             return;
         
-        link = context.view.getElement("nc_user");
-        link.setAction("user");
-        link.setText("");
-        link.setAction(setElementDisplay("nc_login_options", "inline"));
-        link.setAbsolute(true);
-
         user = iocaste.getUserData(iocaste.getUsername());
         text = context.view.getElement("nc_username");
         text.setTag("span");
@@ -66,11 +66,8 @@ public class StandardNavControlDesign implements NavControlDesign {
 
         loginitem = context.view.getElement("nc_login_options");
         loginitem.addEvent("style", "display:none");
-        link = context.view.getElement("nc_logout");
-        link.setAction("logout");
-        link.setCancellable(true);
         
-        new VirtualControl(container, "back").setCancellable(true);
+        new VirtualControl(container, "back");
         
         page = context.view.getPageName();
         viewctx = context.getView();
@@ -107,13 +104,5 @@ public class StandardNavControlDesign implements NavControlDesign {
         return new StringBuilder(position.getApp()).
                 append(".").
                 append(position.getPage()).toString();
-    }
-    
-    private final String setElementDisplay(String id, String display) {
-        StringBuilder sb;
-        
-        sb = new StringBuilder("javascript:setElementDisplay('").
-                append(id).append("', '").append(display).append("');");
-        return sb.toString();
     }
 }

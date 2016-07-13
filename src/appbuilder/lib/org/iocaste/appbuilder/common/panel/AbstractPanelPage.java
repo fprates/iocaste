@@ -10,6 +10,7 @@ import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.ViewInput;
 import org.iocaste.appbuilder.common.ViewSpec;
+import org.iocaste.appbuilder.common.navcontrol.NavControlDesign;
 import org.iocaste.appbuilder.common.style.ViewConfigStyle;
 
 public abstract class AbstractPanelPage {
@@ -20,6 +21,7 @@ public abstract class AbstractPanelPage {
     private Set<String> actions;
     private String submit;
     private ViewConfigStyle style;
+    private NavControlDesign ncdesign;
     
     public AbstractPanelPage() {
         actions = new HashSet<>();
@@ -38,6 +40,10 @@ public abstract class AbstractPanelPage {
     
     public final ViewConfig getConfig() {
         return config;
+    }
+    
+    public final NavControlDesign getDesign() {
+        return ncdesign;
     }
     
     protected final <T extends ExtendedContext> T getExtendedContext() {
@@ -78,6 +84,10 @@ public abstract class AbstractPanelPage {
     
     protected final void set(ViewConfigStyle style) {
         this.style = style;
+    }
+    
+    protected final void set(NavControlDesign ncdesign) {
+        this.ncdesign = ncdesign;
     }
     
     public final void setViewContext(ViewContext view) {

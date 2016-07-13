@@ -21,12 +21,13 @@ public class StandardPanelSpec extends AbstractViewSpec {
         
         form("main");
         navcontrol("main");
-        for (int i = 0; i < context.ncspec.length; i++) {
-            type = (TYPES)context.ncspec[i][0];
-            parent = (String)context.ncspec[i][1];
-            name = (String)context.ncspec[i][2];
-            component(type, parent, name);
-        }
+        if (context.getView().getDesign() == null)
+            for (int i = 0; i < context.ncspec.length; i++) {
+                type = (TYPES)context.ncspec[i][0];
+                parent = (String)context.ncspec[i][1];
+                name = (String)context.ncspec[i][2];
+                component(type, parent, name);
+            }
 
         standardcontainer("main", "outercontent");
         standardcontainer("outercontent", "actionbar");

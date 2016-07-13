@@ -22,7 +22,6 @@ public abstract class AbstractReportConfig extends AbstractViewConfig {
         String page;
         
         navcontrol = getNavControl();
-        navcontrol.setDesign(data.ncdesign);
         navcontrol.setTitle(data.titletext, data.titleargs);
         
         page = context.view.getPageName();

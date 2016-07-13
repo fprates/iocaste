@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.appbuilder.common.navcontrol.NavControlDesign;
+
 
 public class ViewContext {
     private AbstractViewSpec spec;
@@ -12,6 +14,7 @@ public class ViewContext {
     private ViewComponents components;
     private Map<String, AbstractActionHandler> actionhandlers;
     private ExtendedContext extcontext;
+    private NavControlDesign ncdesign;
     private boolean updateview;
     
     public ViewContext(String name) {
@@ -52,6 +55,14 @@ public class ViewContext {
      */
     public final ViewConfig getConfig() {
         return config;
+    } 
+    
+    /**
+     * 
+     * @return
+     */
+    public final NavControlDesign getDesign() {
+        return ncdesign;
     }
     
     /**
@@ -135,6 +146,14 @@ public class ViewContext {
      */
     public final void set(AbstractViewInput input) {
         this.input = input;
+    }
+    
+    /**
+     * 
+     * @param ncdesign
+     */
+    public final void set(NavControlDesign ncdesign) {
+        this.ncdesign = ncdesign;
     }
     
     /**

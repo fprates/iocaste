@@ -45,19 +45,23 @@ class GetStyleSheet extends AbstractHandler {
                 "1540px", "22pt", "1140px", "inline-block"});
     }
     
-    private final Object[][] getNavbarConfig() {
-        Object[][] config = new Object[10][2];
+    private final Object[] getNavbarConfig() {
+        Object[][] config = new Object[13][4];
         
-        config[0] = ncconfig("navcontrol_cntnr", "nc_container");
-        config[1] = ncconfig("nc_inner", "nc_inner_container");
-        config[2] = ncconfig("nc_logo", "nc_main_logo");
-        config[3] = ncconfig("this", "nc_title");
-        config[4] = ncconfig("actionbar", "nc_hide");
-        config[5] = ncconfig("nc_login", "nc_login");
-        config[6] = ncconfig("nc_login_user", "nc_login_item");
-        config[7] = ncconfig("nc_username", "nc_usertext");
-        config[8] = ncconfig("nc_login_options", "nc_login_item");
-        config[9] = ncconfig("nc_options", "nc_login_menu");
+        config[0] = ncconfig("navcontrol_cntnr", "nc_container", null, false);
+        config[1] = ncconfig("nc_inner", "nc_inner_container", null, false);
+        config[2] = ncconfig("nc_logo", "nc_main_logo", null, false);
+        config[3] = ncconfig("this", "nc_title", null, false);
+        config[4] = ncconfig("actionbar", "nc_hide", null, false);
+        config[5] = ncconfig("nc_login", "nc_login", null, false);
+        config[6] = ncconfig("nc_login_user", "nc_login_item", null, false);
+        config[7] = ncconfig("nc_username", "nc_usertext", null, false);
+        config[8] = ncconfig("nc_login_options", "nc_login_item", null, false);
+        config[9] = ncconfig("nc_options", "nc_login_menu", null, false);
+        config[10] = ncconfig("nc_logout", null, "logout", true);
+        config[11] = ncconfig("nc_user", null,
+                setElementDisplay("nc_login_options", "inline"), true);
+        config[12] = ncconfig("back", null, "back", true);
         
         return config;
     }
@@ -235,11 +239,14 @@ class GetStyleSheet extends AbstractHandler {
         return View.convertStyleSheet(stylesheet);
     }
     
-    private final Object[] ncconfig(String name, String style) {
-        Object[] config = new Object[2];
+    private final Object[] ncconfig(String name, String style, String action,
+            boolean cancellable) {
+        Object[] config = new Object[4];
         
         config[0] = name;
         config[1] = style;
+        config[2] = action;
+        config[3] = cancellable;
         return config;
     }
     
@@ -262,5 +269,13 @@ class GetStyleSheet extends AbstractHandler {
         objects[1] = getNavbarSpec();
         objects[2] = getNavbarConfig();
         return objects;
+    }
+    
+    private final String setElementDisplay(String id, String display) {
+        StringBuilder sb;
+        
+        sb = new StringBuilder("javascript:setElementDisplay('").
+                append(id).append("', '").append(display).append("');");
+        return sb.toString();
     }
 }
