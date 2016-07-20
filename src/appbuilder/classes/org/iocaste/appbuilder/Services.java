@@ -46,7 +46,7 @@ class GetStyleSheet extends AbstractHandler {
     }
     
     private final Object[] getNavbarConfig() {
-        Object[][] config = new Object[13][4];
+        Object[][] config = new Object[12][4];
         
         config[0] = ncconfig("navcontrol_cntnr", "nc_container", null, false);
         config[1] = ncconfig("nc_inner", "nc_inner_container", null, false);
@@ -61,7 +61,6 @@ class GetStyleSheet extends AbstractHandler {
         config[10] = ncconfig("nc_logout", null, "logout", true);
         config[11] = ncconfig("nc_user", null,
                 setElementDisplay("nc_login_options", "inline"), true);
-        config[12] = ncconfig("back", null, "back", true);
         
         return config;
     }

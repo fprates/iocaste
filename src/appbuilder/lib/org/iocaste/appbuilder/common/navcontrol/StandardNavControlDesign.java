@@ -67,7 +67,7 @@ public class StandardNavControlDesign implements NavControlDesign {
         loginitem = context.view.getElement("nc_login_options");
         loginitem.addEvent("style", "display:none");
         
-        new VirtualControl(container, "back");
+        new VirtualControl(container, "back").setCancellable(true);
         
         page = context.view.getPageName();
         viewctx = context.getView();
