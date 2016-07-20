@@ -26,53 +26,49 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.View;
 
-public class TextFieldRenderer extends Renderer {
+public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
+    
+    public TextFieldRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.TEXT_FIELD);
+    }
 
-    private static final boolean allowContextMenu(InputComponent input) {
+    private final boolean allowContextMenu(InputComponent input) {
         boolean required = input.isObligatory();
         boolean calendar = (input.isEnabled() && (input.getCalendar() != null));
         boolean tftext = (input.getText() != null);
         boolean search = (input.getSearchHelp() != null);
         
         return (required || tftext || search || calendar);
-        
     }
     
-    public static final XMLElement render(DataItem dataitem, String tbstyle,
-            Config config) {
-        return _render(dataitem,
-                TextField.STYLE, tbstyle, config, dataitem.getLabel());
-    }
-    
-    public static final XMLElement render(TextField textfield, String tbstyle,
-            Config config) {
-        return _render(textfield, textfield.getStyleClass(),
-                tbstyle, config, textfield.getName());
-    }
-    
-    /**
-     * 
-     * @param textfield
-     * @param config
-     * @return
-     */
-    private static final XMLElement _render(InputComponent input,
-            String style, String cellstyle, Config config, String label) {
+    @Override
+    protected final XMLElement execute(InputComponent input, Config config) {
         Container container;
         PopupControl popupcontrol;
         StringBuilder sb;
-        String tftext, calname, shname, name, value;
+        String tftext, calname, shname, name, value, label, style, cellstyle;
         Text text;
         SearchHelp search;
         Calendar calendar;
         XMLElement tagt, inputtag, tag;
-        boolean required;
         DataElement dataelement;
-        int length;
         ContextMenu ctxmenu;
+        boolean required;
+        int length;
         
         if (!input.isVisible())
-            return ParameterRenderer.render(input);
+            return get(Const.PARAMETER).run(input, config);
+        
+        switch (input.getType()) {
+        case DATA_ITEM:
+            style = TextField.STYLE;
+            label = ((DataItem)input).getLabel();
+            break;
+        default:
+            style = input.getStyleClass();
+            label = input.getName();
+            break;
+        }
         
         dataelement = Shell.getDataElement(input);
         length = (dataelement == null)? input.getLength() :
@@ -184,14 +180,14 @@ public class TextFieldRenderer extends Renderer {
             text.setTag("li");
             text.setStyleClass("tftext");
             text.setText(tftext);
-            tag = TextRenderer.render(text, config);
+            tag = get(Const.TEXT).run(text, config);
             tagt.addChild(tag);
         }
         
         return tagt;
     }
     
-    private static final List<XMLElement> renderPopup(Config config) {
+    private final List<XMLElement> renderPopup(Config config) {
         Map<String, Object> parameters;
         Object[] viewreturn;
         PopupControl control;
@@ -229,7 +225,7 @@ public class TextFieldRenderer extends Renderer {
         
         tags = new ArrayList<>();
         for (Container container : view.getContainers())
-            Renderer.renderContainer(tags, container, config);
+            get(container.getType()).run(tags, container, config);
         
         return tags;
     }

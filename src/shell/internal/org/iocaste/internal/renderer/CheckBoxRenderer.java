@@ -1,27 +1,23 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.CheckBox;
-import org.iocaste.shell.common.DataItem;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
 
-public class CheckBoxRenderer extends Renderer {
-
-    public static final XMLElement render(DataItem dataitem) {
-        return _render(dataitem);
-    }
+public class CheckBoxRenderer extends AbstractElementRenderer<InputComponent> {
     
-
-    public static final XMLElement render(CheckBox checkbox) {
-        return _render(checkbox);
+    public CheckBoxRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.CHECKBOX);
     }
-    
+
     /**
      * 
      * @param checkbox
      * @return
      */
-    private static final XMLElement _render(InputComponent input) {
+    protected final XMLElement execute(InputComponent input, Config config) {
         XMLElement cboxtag = new XMLElement("input");
         String name = input.getHtmlName();
         

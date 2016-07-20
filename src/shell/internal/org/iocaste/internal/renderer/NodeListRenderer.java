@@ -1,11 +1,19 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.NodeList;
 
-public class NodeListRenderer extends Renderer {
+public class NodeListRenderer extends AbstractElementRenderer<NodeList> {
 
-    public static final XMLElement render(NodeList nodelist, Config config) {
+    public NodeListRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.NODE_LIST);
+    }
+
+    @Override
+    protected final XMLElement execute(NodeList nodelist, Config config) {
         XMLElement nltag, itemnltag;
         byte type = nodelist.getListType();
         

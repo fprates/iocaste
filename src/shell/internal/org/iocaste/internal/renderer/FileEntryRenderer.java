@@ -1,26 +1,19 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.DataItem;
-import org.iocaste.shell.common.FileEntry;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
 
-public class FileEntryRenderer extends Renderer {
+public class FileEntryRenderer extends AbstractElementRenderer<InputComponent> {
 
-    public static final XMLElement render(DataItem item) {
-        return _render(item);
-    }
-
-    public static final XMLElement render(FileEntry file) {
-        return _render(file);
+    public FileEntryRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.FILE_ENTRY);
     }
     
-    /**
-     * 
-     * @param file
-     * @return
-     */
-    private static final XMLElement _render(InputComponent input) {
+    @Override
+    protected final XMLElement execute(InputComponent input, Config config) {
         XMLElement filetag = new XMLElement("input");
         String name = input.getHtmlName();
         String style = input.getStyleClass();

@@ -10,9 +10,38 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.internal.renderer.Config;
+import org.iocaste.internal.renderer.DataFormRenderer;
+import org.iocaste.internal.renderer.DataItemRenderer;
+import org.iocaste.internal.renderer.DummyRenderer;
+import org.iocaste.internal.renderer.ExpandBarRenderer;
+import org.iocaste.internal.renderer.FileEntryRenderer;
+import org.iocaste.internal.renderer.FormRenderer;
+import org.iocaste.internal.renderer.FrameRenderer;
+import org.iocaste.internal.renderer.HtmlTagRenderer;
+import org.iocaste.internal.renderer.LinkRenderer;
+import org.iocaste.internal.renderer.ListBoxRenderer;
+import org.iocaste.internal.renderer.MessageRenderer;
+import org.iocaste.internal.renderer.NodeListItemRenderer;
+import org.iocaste.internal.renderer.NodeListRenderer;
+import org.iocaste.internal.renderer.ParameterRenderer;
+import org.iocaste.internal.renderer.PrintAreaRenderer;
+import org.iocaste.internal.renderer.RadioButtonRenderer;
+import org.iocaste.internal.renderer.RangeFieldRenderer;
 import org.iocaste.internal.renderer.Renderer;
+import org.iocaste.internal.renderer.StandardContainerRenderer;
+import org.iocaste.internal.renderer.TabbedPaneRenderer;
+import org.iocaste.internal.renderer.TableItemRenderer;
+import org.iocaste.internal.renderer.TableRenderer;
+import org.iocaste.internal.renderer.TextAreaRenderer;
+import org.iocaste.internal.renderer.TextFieldRenderer;
+import org.iocaste.internal.renderer.TextRenderer;
+import org.iocaste.internal.renderer.VirtualControlRenderer;
+import org.iocaste.internal.renderer.ButtonRenderer;
+import org.iocaste.internal.renderer.CanvasRenderer;
+import org.iocaste.internal.renderer.CheckBoxRenderer;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.HeaderLink;
@@ -27,12 +56,45 @@ public class HtmlRenderer {
     private Map<String, String> actions;
     private Function function;
     private PageContext pagectx;
+    private Map<Const, Renderer<?>> renderers;
     
     public HtmlRenderer() {
         String line;
         BufferedReader reader;
-        InputStream is = getClass().getResourceAsStream("/META-INF/shell.js");
+        InputStream is;
         
+        renderers = new HashMap<>();
+        new ButtonRenderer(renderers);
+        new CanvasRenderer(renderers);
+        new CheckBoxRenderer(renderers);
+        new DataFormRenderer(renderers);
+        new DataItemRenderer(renderers);
+        new DummyRenderer(renderers);
+        new ExpandBarRenderer(renderers);
+        new FileEntryRenderer(renderers);
+        new FormRenderer(renderers);
+        new FrameRenderer(renderers);
+        new HtmlTagRenderer(renderers);
+        new LinkRenderer(renderers);
+        new ListBoxRenderer(renderers);
+        new MessageRenderer(renderers);
+        new NodeListItemRenderer(renderers);
+        new NodeListRenderer(renderers);
+        new ParameterRenderer(renderers);
+        new PrintAreaRenderer(renderers);
+        new RadioButtonRenderer(renderers);
+        new RangeFieldRenderer(renderers);
+        new StandardContainerRenderer(renderers);
+        new StandardContainerRenderer(renderers, Const.TABBED_PANE_ITEM);
+        new TabbedPaneRenderer(renderers);
+        new TableItemRenderer(renderers);
+        new TableRenderer(renderers);
+        new TextAreaRenderer(renderers);
+        new TextFieldRenderer(renderers);
+        new TextRenderer(renderers);
+        new VirtualControlRenderer(renderers);
+        
+        is = getClass().getResourceAsStream("/META-INF/shell.js");
         if (is == null)
             return;
         
@@ -212,6 +274,7 @@ public class HtmlRenderer {
      */
     public final List<String> run(View view, TrackingData tracking) {
         Config config;
+        MessageRenderer messagerenderer;
         List<String> html = new ArrayList<>();
         List<XMLElement> tags = new ArrayList<>();
         List<XMLElement> bodycontent = new ArrayList<>();
@@ -230,10 +293,13 @@ public class HtmlRenderer {
         html.add("<!DOCTYPE html>");
         bodytag.add("onLoad", "initialize()");
         for (Container container : view.getContainers())
-            Renderer.renderContainer(bodycontent, container, config);
+            renderers.get(container.getType()).run(
+                    bodycontent, container, config);
         
+        messagerenderer = (MessageRenderer)renderers.get(Const.MESSAGE);
+        messagerenderer.pagectx = pagectx;
         bodytag.addChildren(bodycontent);
-        bodytag.addChild(MessageRenderer.render(pagectx, config));
+        bodytag.addChild(messagerenderer.run(null, config));
         bodytag.addChild(ScreenLock.render());
         tags.add(renderHeader(view, config));
         tags.add(bodytag);

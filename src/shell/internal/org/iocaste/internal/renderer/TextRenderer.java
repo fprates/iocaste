@@ -1,17 +1,19 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Text;
 
-public class TextRenderer extends Renderer {
+public class TextRenderer extends AbstractElementRenderer<Text> {
     
-    /**
-     * 
-     * @param text
-     * @param config
-     * @return
-     */
-    public static final XMLElement render(Text text, Config config) {
+    public TextRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.TEXT);
+    }
+
+    @Override
+    protected final XMLElement execute(Text text, Config config) {
         String text_;
         XMLElement ptag;
         

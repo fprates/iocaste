@@ -1,11 +1,18 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.TextArea;
 
-public class TextAreaRenderer extends Renderer {
+public class TextAreaRenderer extends AbstractElementRenderer<TextArea> {
 
-    public static final XMLElement render(TextArea area, Config config) {
+    public TextAreaRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.TEXT_AREA);
+    }
+
+    protected final XMLElement execute(TextArea area, Config config) {
         XMLElement areatag = new XMLElement("textarea");
         String name = area.getHtmlName();
         String value = area.get();

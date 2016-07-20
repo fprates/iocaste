@@ -1,17 +1,19 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.RadioButton;
 
-public class RadioButtonRenderer extends Renderer {
+public class RadioButtonRenderer extends AbstractElementRenderer<RadioButton> {
 
-    /**
-     * 
-     * @param radiobutton
-     * @return
-     */
-    public static final XMLElement render(RadioButton radiobutton,
-            Config config) {
+    public RadioButtonRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.RADIO_BUTTON);
+    }
+
+    @Override
+    protected final XMLElement execute(RadioButton radiobutton, Config config) {
         XMLElement labeltag, rbtag, rbtexttag;
         String text;
         

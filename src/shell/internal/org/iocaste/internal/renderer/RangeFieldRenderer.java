@@ -1,5 +1,7 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
@@ -15,10 +17,13 @@ import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.View;
 
-public class RangeFieldRenderer extends Renderer {
+public class RangeFieldRenderer extends AbstractElementRenderer<RangeInputComponent> {
 
-    private static final void copyCalendar(
-            View view, Calendar to, Calendar from) {
+    public RangeFieldRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.RANGE_FIELD);
+    }
+
+    private final void copyCalendar(View view, Calendar to, Calendar from) {
         switch (from.getMode()) {
         case Calendar.EARLY:
             ((Calendar)view.getElement(to.getEarly())).setDate(from.getDate());
@@ -32,11 +37,12 @@ public class RangeFieldRenderer extends Renderer {
         }
     }
     
-    public static final XMLElement render(
+    @Override
+    protected final XMLElement execute(
             RangeInputComponent rangeinput, Config config) {
         View view;
         PopupControl popupcontrol;
-        String style, low, high;
+        String low, high;
         DataElement dataelement;
         ValueRange range;
         ValueRangeItem value;
@@ -45,6 +51,7 @@ public class RangeFieldRenderer extends Renderer {
         XMLElement to, tabletag, trtag, tdtag;
         InputComponent input;
         Calendar calendar, fromcal;
+        TextFieldRenderer textfieldrenderer;
         int length;
         
         low = rangeinput.getLowHtmlName();
@@ -67,6 +74,7 @@ public class RangeFieldRenderer extends Renderer {
         tabletag.addChild(trtag);
 
         calendar = input.getCalendar();
+        textfieldrenderer = get(Const.TEXT_FIELD);
         for (Element element : elements) {
             tdtag = new XMLElement("td");
             trtag.addChild(tdtag);
@@ -111,8 +119,7 @@ public class RangeFieldRenderer extends Renderer {
             else
                 tfield.set((value == null)? null : value.getHigh());
             
-            style = "display: inline;";
-            tdtag.addChild(TextFieldRenderer.render(tfield, style, config));
+            tdtag.addChild(textfieldrenderer.run(tfield, config));
             popupcontrol = config.getPopupControl();
             if ((calendar == null) || (popupcontrol == null) ||
                     (popupcontrol.getType() != Const.CALENDAR))

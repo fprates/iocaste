@@ -2,6 +2,7 @@ package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.protocol.utils.XMLElement;
@@ -14,22 +15,22 @@ import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
 import org.iocaste.shell.common.View;
 
-public class TabbedPaneRenderer extends Renderer {
+public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
     
-    /**
-     * 
-     * @param tabbedpane
-     * @param config
-     * @return
-     */
-    public static final XMLElement render(TabbedPane tabbedpane,
-            Config config) {
+    public TabbedPaneRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.TABBED_PANE);
+    }
+
+    @Override
+    protected final XMLElement execute(TabbedPane tabbedpane, Config config) {
         View view;
         Button button;
         String classname, name, text, current;
         TabbedPaneItem item;
         List<XMLElement> tags;
         Set<Element> elements;
+        ButtonRenderer buttonrenderer;
+        StandardContainerRenderer itemrenderer;
         XMLElement tabbedtag = new XMLElement("div");
         
         tabbedtag.add("id", tabbedpane.getName());
@@ -38,6 +39,7 @@ public class TabbedPaneRenderer extends Renderer {
         elements = tabbedpane.getElements();
         current = tabbedpane.getCurrentPage();
         view = config.getView();
+        buttonrenderer = get(Const.BUTTON);
         for (Element element : elements) {
             if (element.getType() != Const.TABBED_PANE_ITEM)
                 continue;
@@ -54,34 +56,36 @@ public class TabbedPaneRenderer extends Renderer {
             button.setStyleClass(classname);
             button.setEventHandler(tabbedpane.getEventHandler());
             button.setEnabled(element.isEnabled());
-            tabbedtag.addChild(ButtonRenderer.render(button, config));
+            tabbedtag.addChild(buttonrenderer.run(button, config));
         }
 
         tags = new ArrayList<>();
+        itemrenderer = get(Const.TABBED_PANE_ITEM);
         for (Element element : elements) {
             if (element.getType() != Const.TABBED_PANE_ITEM)
                 continue;
 
             item = (TabbedPaneItem)element;
             if (!item.getName().equals(current)) {
-                renderHiddenInputs(tags, item);
+                renderHiddenInputs(tags, item, config);
                 continue;
             }
             
-            renderContainer(tags, item, config);
+            itemrenderer.run(tags, item, config);
         }
 
         tabbedtag.addChildren(tags);
         return tabbedtag;
     }
     
-    private static final void renderHiddenInputs(
-            List<XMLElement> tags, Container container) {
+    private final void renderHiddenInputs(
+            List<XMLElement> tags, Container container, Config config) {
         InputComponent input;
+        ParameterRenderer renderer = get(Const.PARAMETER);
         
         for (Element element : container.getElements()) {
             if (element.isContainable()) {
-                renderHiddenInputs(tags, (Container)element);
+                renderHiddenInputs(tags, (Container)element, config);
                 continue;
             }
             
@@ -89,7 +93,7 @@ public class TabbedPaneRenderer extends Renderer {
                 continue;
 
             input = (InputComponent)element;
-            tags.add(ParameterRenderer.render(input));
+            tags.add(renderer.execute(input, config));
         }
     }
 }

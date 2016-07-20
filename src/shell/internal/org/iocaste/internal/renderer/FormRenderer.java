@@ -1,28 +1,37 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.View;
 
-public class FormRenderer extends Renderer {
+public class FormRenderer extends AbstractElementRenderer<Form> {
     
+    public FormRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.FORM);
+    }
+
     /**
      * 
      * @param container
      * @param config
      * @return
      */
-    public static final XMLElement render(Form container, Config config) {
+    protected final XMLElement execute(Form container, Config config) {
         String[] printlines;
         Parameter parameter;
         View view;
         XMLElement hiddentag, content;
+        ParameterRenderer parameterrenderer;
         XMLElement formtag = new XMLElement("form");
         String enctype = container.getEnctype();
         String currentaction = container.getAction();
         String htmlname = container.getHtmlName();
-        
+
+        config.setCurrentForm(container.getHtmlName());
         config.setCurrentAction(currentaction);
         config.addAction(currentaction, currentaction);
         config.form = container;
@@ -36,9 +45,10 @@ public class FormRenderer extends Renderer {
         if (enctype != null)
             formtag.add("enctype", enctype);
         
+        parameterrenderer = get(Const.PARAMETER);
         parameter = new Parameter(config.getView(), "pagetrack");
         parameter.set(config.getPageTrack());
-        hiddentag = ParameterRenderer.render(parameter);
+        hiddentag = parameterrenderer.run(parameter, config);
         formtag.addChild(hiddentag);
 
         content = new XMLElement("div");
@@ -62,7 +72,7 @@ public class FormRenderer extends Renderer {
      * @param line
      * @return
      */
-    private static final XMLElement renderPrintLines(String[] lines) {
+    private final XMLElement renderPrintLines(String[] lines) {
         XMLElement pretag = new XMLElement("pre");
         
         pretag.add("class", "output_list");
@@ -77,7 +87,7 @@ public class FormRenderer extends Renderer {
         return pretag;
     }
     
-    private static final String setGlobalContext(Config config) {
+    private final String setGlobalContext(Config config) {
         StringBuilder sb;
         
         sb = new StringBuilder("setGlobalContext(\"").

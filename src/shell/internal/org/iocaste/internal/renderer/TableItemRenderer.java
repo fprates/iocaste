@@ -2,39 +2,39 @@ package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Component;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 
-public class TableItemRenderer extends Renderer {
-    private static List<InputComponent> hidden;
+public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
+    private List<InputComponent> hidden;
     
-    /**
-     * 
-     * @return
-     */
-    public static final List<InputComponent> getHidden() {
-        return hidden;
+    public TableItemRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.TABLE_ITEM);
     }
     
     /**
      * 
-     * @param table
-     * @param item
-     * @param config
      * @return
      */
-    public static final XMLElement render(Table table, TableItem item,
-            Config config) {
+    public final List<InputComponent> getHidden() {
+        return hidden;
+    }
+    
+    @Override
+    protected final XMLElement execute(TableItem item, Config config) {
         boolean mark, savemark;
         Component component;
         TableColumn column;
         String text, style;
+        Table table = (Table)item.getContainer();
         TableColumn[] columns = table.getColumns();
         int i = 0;
         XMLElement tdtag, trtag = new XMLElement("tr");
@@ -80,7 +80,8 @@ public class TableItemRenderer extends Renderer {
                         savemark = table.isEnabled();
                         table.setEnabled(true);
                     }
-                    renderElement(tags, element, config);
+                    
+                    tags.add(get(element.getType()).run(element, config));
                     if (mark)
                         table.setEnabled(savemark);
                     tdtag.addChildren(tags);

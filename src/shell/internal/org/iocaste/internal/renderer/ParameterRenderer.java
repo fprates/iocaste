@@ -1,16 +1,19 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
 
-public class ParameterRenderer extends Renderer {
+public class ParameterRenderer extends AbstractElementRenderer<InputComponent> {
     
-    /**
-     * 
-     * @param parameter
-     * @return
-     */
-    public static final XMLElement render(InputComponent input) {
+    public ParameterRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.PARAMETER);
+    }
+
+    @Override
+    protected final XMLElement execute(InputComponent input, Config config) {
         XMLElement hiddentag = new XMLElement("input");
         String value, name = input.getHtmlName();
         

@@ -6,27 +6,28 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableContextItem;
 import org.iocaste.shell.common.TableItem;
 
-public class TableRenderer extends Renderer {
+public class TableRenderer extends AbstractElementRenderer<Table> {
     
-    /**
-     * 
-     * @param table
-     * @param config
-     * @return
-     */
-    public static final XMLElement render(Table table, Config config) {
+    public TableRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.TABLE);
+    }
+
+    @Override
+    protected final XMLElement execute(Table table, Config config) {
         String title, name, text;
         Set<TableItem> items;
         ContextMenu ctxmenu;
         TableContextItem ctxitem;
         Map<String, TableContextItem> ctxitems;
         XMLElement tag, trtag, thtag, divtag;
+        TableItemRenderer itemrenderer;
         XMLElement tabletag = new XMLElement("table");
         List<InputComponent> hidden = new ArrayList<>();
         List<XMLElement> tags = new ArrayList<>();
@@ -84,13 +85,14 @@ public class TableRenderer extends Renderer {
         if (items.size() == 0) {
             tabletag.addInner("");
         } else {
+            itemrenderer = get(Const.TABLE_ITEM);
             tag = new XMLElement("tbody");
             for (TableItem item : items) {
                 if (!item.isVisible())
                     continue;
                 tags.clear();
-                tags.add(TableItemRenderer.render(table, item, config));
-                hidden.addAll(TableItemRenderer.getHidden());
+                tags.add(itemrenderer.run(item, config));
+                hidden.addAll(itemrenderer.getHidden());
                 tag.addChildren(tags);
             }
             

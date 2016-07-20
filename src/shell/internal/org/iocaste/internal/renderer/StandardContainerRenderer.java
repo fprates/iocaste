@@ -1,32 +1,27 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.StandardContainer;
-import org.iocaste.shell.common.TabbedPaneItem;
 
-public class StandardContainerRenderer extends Renderer {
+public class StandardContainerRenderer
+        extends AbstractElementRenderer<Container> {
     
-    public static final XMLElement render(TabbedPaneItem container,
-            Config config) {
-        return internal(container, config);
+    public StandardContainerRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.STANDARD_CONTAINER);
+    }
+
+    public StandardContainerRenderer(
+            Map<Const, Renderer<?>> renderers, Const type) {
+        super(renderers, type);
     }
     
-    /**
-     * 
-     * @param container
-     * @return
-     */
-    public static final XMLElement render(StandardContainer container,
-            Config config) {
-        return internal(container, config);
-    }
-    
-    private static final XMLElement internal(Container container, Config config)
-    {
+    @Override
+    protected final XMLElement execute(Container container, Config config) {
         Set<Element> elements;
         XMLElement divtag = new XMLElement("div");
         

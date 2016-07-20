@@ -1,17 +1,19 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 
-public class ButtonRenderer extends Renderer {
+public class ButtonRenderer extends AbstractElementRenderer<Button> {
     
-    /**
-     * 
-     * @param button
-     * @return
-     */
-    public static final XMLElement render(Button button, Config config) {
+    public ButtonRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.BUTTON);
+    }
+    
+    @Override
+    protected final XMLElement execute(Button button, Config config) {
         StringBuilder onclick;
         String text, name, htmlname;
         XMLElement buttontag;

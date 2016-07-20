@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.iocaste.protocol.utils.XMLElement;
 
-public class ContextMenuButtonRenderer extends Renderer {
+public class ContextMenuButtonRenderer {
     
     public static final XMLElement render(String htmlname, Config config,
             Map<String, String> messages, String text) {

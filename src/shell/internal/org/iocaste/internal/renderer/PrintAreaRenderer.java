@@ -1,11 +1,19 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.PrintArea;
 
-public class PrintAreaRenderer extends Renderer {
+public class PrintAreaRenderer extends AbstractElementRenderer<PrintArea> {
 
-    public static final XMLElement render(PrintArea printarea) {
+    public PrintAreaRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.PRINT_AREA);
+    }
+
+    @Override
+    protected final XMLElement execute(PrintArea printarea, Config config) {
         XMLElement pre;
         String value;
         

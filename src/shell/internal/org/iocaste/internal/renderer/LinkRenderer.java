@@ -1,24 +1,23 @@
 package org.iocaste.internal.renderer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.LinkEntry;
 import org.iocaste.shell.common.Parameter;
 
-public class LinkRenderer extends Renderer {
+public class LinkRenderer extends AbstractElementRenderer<Link> {
     
-    /**
-     * 
-     * @param link
-     * @return
-     */
-    public static final List<XMLElement> render(Link link, Config config) {
+    public LinkRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.LINK);
+    }
+
+    @Override
+    protected final XMLElement execute(Link link, Config config) {
         DataElement element;
         LinkEntry entry;
         XMLElement atag, imgtag;
@@ -26,14 +25,13 @@ public class LinkRenderer extends Renderer {
         StringBuilder onclick, hrefsb;
         Map<String, LinkEntry> parameters;
         Parameter parameter;
-        List<XMLElement> tags = new ArrayList<>();
+        ParameterRenderer parameterrenderer;
         
         if (!link.isEnabled()) {
             atag = new XMLElement("span");
             atag.addInner(link.getText());
             atag.add("class", link.getStyleClass());
-            tags.add(atag);
-            return tags;
+            return atag;
         }
         
         config.addAction(link.getAction(), link.getHtmlName());
@@ -41,7 +39,6 @@ public class LinkRenderer extends Renderer {
         atag = new XMLElement("a");
         atag.add("id", htmlname);
         atag.add("class", link.getStyleClass());
-        tags.add(atag);
 
         if (link.isAbsolute()) {
             href = link.getAction();
@@ -59,6 +56,7 @@ public class LinkRenderer extends Renderer {
             href = hrefsb.toString();
         }
         
+        parameterrenderer = get(Const.PARAMETER);
         parameters = link.getParametersMap();
         if (parameters.size() > 0) {
             onclick = new StringBuilder();
@@ -97,7 +95,7 @@ public class LinkRenderer extends Renderer {
                 }
                 
                 parameter.setDataElement(element);
-                tags.add(ParameterRenderer.render(parameter));
+                atag.addChild(parameterrenderer.run(parameter, config));
             }
             
             atag.add("onClick", onclick.toString());
@@ -124,7 +122,7 @@ public class LinkRenderer extends Renderer {
         if (link.size() > 0)
             atag.addChildren(renderElements(link.getElements(), config));
         
-        return tags;
+        return atag;
     }
 
 }

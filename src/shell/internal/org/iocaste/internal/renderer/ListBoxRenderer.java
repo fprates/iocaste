@@ -10,26 +10,30 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.Shell;
 
-public class ListBoxRenderer extends Renderer {
+public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
 
-    public static final XMLElement render(DataItem dataitem) {
-        return _render(dataitem, dataitem.getValues());
-    }
-
-    public static final XMLElement render(ListBox list) {
-        return _render(list, list.properties());
+    public ListBoxRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.LIST_BOX);
     }
     
-    /**
-     * 
-     * @param list
-     * @return
-     */
-    private static final XMLElement _render(InputComponent input,
-            Map<String, Object> values) {
+    @Override
+    protected final XMLElement execute(InputComponent input, Config config) {
         Container container;
+        Map<String, Object> values;
         XMLElement optiontag = null, selecttag= new XMLElement("select");
         String style, value, name = input.getHtmlName();
+        
+        switch (input.getType()) {
+        case DATA_ITEM:
+            values = ((DataItem)input).getValues();
+            break;
+        case LIST_BOX:
+            values = ((ListBox)input).properties();
+            break;
+        default:
+            values = null;
+            break;
+        }
         
         selecttag.add("name", name);
         selecttag.add("id", name);
@@ -49,23 +53,25 @@ public class ListBoxRenderer extends Renderer {
         
         addEvents(selecttag, input);
         
-        if (values.size() == 0)
+        if (values.size() == 0) {
             selecttag.addInner("");
-        else
-            for (String option : values.keySet()) {
-                optiontag = new XMLElement("option");
-                value = Shell.toString(values.get(option),
-                        Shell.getDataElement(input), input.getLocale(), false);
-                
-                optiontag.add("value", value);
-                
-                if (value.equals(toString(input)))
-                    optiontag.add("selected", "selected");
-                
-                optiontag.addInner(option);
-                
-                selecttag.addChild(optiontag);
-            }
+            return selecttag;
+        }
+        
+        for (String option : values.keySet()) {
+            optiontag = new XMLElement("option");
+            value = Shell.toString(values.get(option),
+                    Shell.getDataElement(input), input.getLocale(), false);
+            
+            optiontag.add("value", value);
+            
+            if (value.equals(toString(input)))
+                optiontag.add("selected", "selected");
+            
+            optiontag.addInner(option);
+            
+            selecttag.addChild(optiontag);
+        }
         
         return selecttag;
     }

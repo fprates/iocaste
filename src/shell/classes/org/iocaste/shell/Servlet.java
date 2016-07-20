@@ -12,7 +12,6 @@ public class Servlet extends AbstractIocasteServlet {
     @Override
     public void config() {
         register(new Services());
-        register(new RenderServices());
         
         authorize("update_view", null);
         authorize("process_inputs", null);

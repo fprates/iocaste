@@ -1,17 +1,24 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Frame;
 
-public class FrameRenderer extends Renderer {
+public class FrameRenderer extends AbstractElementRenderer<Frame> {
     
+    public FrameRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.FRAME);
+    }
+
     /**
      * 
      * @param frame
      * @param config
      * @return
      */
-    public static final XMLElement render(Frame frame, Config config) {
+    protected final XMLElement execute(Frame frame, Config config) {
         XMLElement frametag = new XMLElement("fieldset");
         XMLElement legendtag = new XMLElement("legend");
         String text = frame.getText();

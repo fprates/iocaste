@@ -2,6 +2,7 @@ package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
@@ -9,10 +10,14 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.ExpandBar;
 
-public class ExpandBarRenderer extends Renderer {
+public class ExpandBarRenderer extends AbstractElementRenderer<ExpandBar> {
 
-    public static final XMLElement render(ExpandBar container,
-            Config config) {
+    public ExpandBarRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.EXPAND_BAR);
+    }
+
+    @Override
+    protected final XMLElement execute(ExpandBar container, Config config) {
         XMLElement ebarea, ebtag;
         String name = container.getName();
         List<XMLElement> ebtags;
@@ -32,7 +37,7 @@ public class ExpandBarRenderer extends Renderer {
                 append(name).append("'); send ('").
                 append(edgename).append("', null, null);").toString());
         edge.setEnabled(container.isEnabled());
-        ebarea.addChild(ButtonRenderer.render(edge, config));
+        ebarea.addChild(get(Const.BUTTON).run(edge, config));
         
         ebtag = new XMLElement("div");
         ebtags = new ArrayList<>();
@@ -40,8 +45,7 @@ public class ExpandBarRenderer extends Renderer {
             if (element.getName().equals(edgename) &&
                     element.getType() == Const.BUTTON)
                 continue;
-            
-            Renderer.renderElement(ebtags, element, config);
+            ebtags.add(get(element.getType()).run(element, config));
         }
         
         ebtag.add("class", container.getInternalStyle());

@@ -1,16 +1,24 @@
-package org.iocaste.internal;
+package org.iocaste.internal.renderer;
 
-import org.iocaste.internal.renderer.Config;
-import org.iocaste.internal.renderer.TextRenderer;
+import java.util.Map;
+
+import org.iocaste.internal.PageContext;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Text;
 
-public class MessageRenderer {
+public class MessageRenderer extends AbstractElementRenderer<Component> {
+    public PageContext pagectx;
+    
+    public MessageRenderer(Map<Const, Renderer<?>> renderers) {
+        super(renderers, Const.MESSAGE);
+    }
 
-    public static final XMLElement render(PageContext pagectx, Config config) {
-        XMLElement xmlmsg = new XMLElement("div");
+    @Override
+    protected final XMLElement execute(Component component, Config config) {
         Text text;
+        XMLElement xmlmsg = new XMLElement("div");
         
         xmlmsg.add("class", "message_box");
         if (pagectx.messagetext == null) {
@@ -24,7 +32,7 @@ public class MessageRenderer {
                 pagectx.messagetext,
                 pagectx.messageargs,
                 config);
-        xmlmsg.addChild(TextRenderer.render(text, config));
+        xmlmsg.addChild(get(Const.TEXT).run(text, config));
         return xmlmsg;
     }
     
@@ -32,7 +40,7 @@ public class MessageRenderer {
      * 
      * @param text
      */
-    private static final void setMessage(Text message, Const msgtype,
+    private final void setMessage(Text message, Const msgtype,
             String text, Object[] args, Config config) {
         String formatted;
         
