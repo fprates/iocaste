@@ -13,10 +13,12 @@ public class CheckBox extends AbstractInputComponent {
     
     public CheckBox(View view, String name) {
         super(view, Const.CHECKBOX, null, name);
+        setStyleClass("checkbox");
     }
     
     public CheckBox(Container container, String name) {
         super(container, Const.CHECKBOX, null, name);
+        setStyleClass("checkbox");
     }
     
     /*

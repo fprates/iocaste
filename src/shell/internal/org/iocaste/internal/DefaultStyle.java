@@ -79,7 +79,7 @@ public class DefaultStyle {
         style.put("padding", "0px");
         style.put("width", "20px");
         style.put("height", "20px");
-        style.put("float", "left");
+        style.put("float", "right");
         style.put("color", CLICKABLE_COLOR);
         style.put("vertical-align", "middle");
         style.put("font-weight", "normal");
@@ -98,11 +98,17 @@ public class DefaultStyle {
         style.put("border-top-right-radius", "0px");
         style.put("border-bottom-right-radius", "0px");
         
+        style = stylesheet.newElement(".checkbox");
+        style.put("margin-top", "10px");
+        style.put("margin-bottom", "10px");
+        style.put("margin-left", "0px");
+        style.put("margin-right", "0px");
+        
         style = stylesheet.newElement(".ctxmenu");
         style.put("margin", "0px");
         style.put("padding", "1em");
         style.put("z-index", "1");
-        style.put("float", "left");
+        style.put("float", "right");
         style.put("list-style-type", "none");
         style.put("border-style", "none");
         style.put("background-color", FRAME_COLOR);
@@ -165,12 +171,18 @@ public class DefaultStyle {
         style = stylesheet.newElement(".form");
         style.put("border-width", "0px");
         style.put("border-style", "none");
+        style.put("margin", "0px");
         
         style = stylesheet.newElement(".form_cell");
         style.put("vertical-align", "middle");
+        style.put("max-height", "40px");
+        style.put("height", "40px");
         style.put("padding", "0px");
-        style.put("margin", "0px");
-
+        style.put("margin-top", "0px");
+        style.put("margin-bottom", "1px");
+        style.put("margin-right", "0px");
+        style.put("margin-left", "0px");
+        
         stylesheet.newElement(".form_content").put("height", "100%");
         
         style = stylesheet.newElement(".frame");
@@ -181,7 +193,12 @@ public class DefaultStyle {
         
         style = stylesheet.newElement(".item_form_name");
         style.put("vertical-align", "middle");
-        style.put("margin", "0px");
+        style.put("max-height", "40px");
+        style.put("height", "40px");
+        style.put("margin-top", "0px");
+        style.put("margin-bottom", "1px");
+        style.put("margin-right", "0px");
+        style.put("margin-left", "0px");
         style.put("padding", "0px");
         style.put("text-align", "right");
         style.put("color", FONT_COLOR);
@@ -318,6 +335,9 @@ public class DefaultStyle {
         style.put("border-top-width", "0px");
         style.put("border-left-width", "0px");
         style.put("border-right-width", "0px");
+        
+        style = stylesheet.newElement(".table_item_check");
+        style.put("margin", "0px");
         
         style = stylesheet.newElement(".text");
         style.put("margin", "0px");

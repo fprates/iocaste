@@ -38,7 +38,7 @@ public class TableItem extends AbstractContainer {
             break;
             
         case Table.MULTIPLE:
-            new CheckBox(this, "mark");
+            new CheckBox(this, "mark").setStyleClass("table_item_check");
             break;
         }
     }

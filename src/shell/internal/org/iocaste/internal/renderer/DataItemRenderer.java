@@ -22,15 +22,15 @@ public class DataItemRenderer extends AbstractElementRenderer<DataItem> {
         return null;
     }
     
-    public final XMLElement execute(
-            DataItem dataitem, XMLElement itemtag, Config config) {
+    public final XMLElement execute(DataItem dataitem, XMLElement labellist,
+            XMLElement valuelist, Config config) {
         View view;
         Text colname;
         DocumentModelItem modelitem;
+        XMLElement coltag, labeltag;
+        String inputname, text;
         DocumentModel model = null;
         DataForm form = (DataForm)dataitem.getContainer();
-        XMLElement coltag;
-        String inputname, text;
 
         inputname = dataitem.getName();
         text = dataitem.getLabel();
@@ -38,14 +38,18 @@ public class DataItemRenderer extends AbstractElementRenderer<DataItem> {
             text = inputname;
         
         view = config.getView();
-        if (!dataitem.hasPlaceHolder()) {
+        if (labellist != null) {
             colname = new Text(view, inputname.concat("_form_item_text"));
-            colname.setStyleClass("item_form_name");
             colname.setText(text);
+            colname.addEvent("style", "padding:10px");
             
-            coltag = new XMLElement("td");
-            coltag.add("class", dataitem.getStyleClass());
-            coltag.addChild(get(Const.TEXT).run(colname, config));
+            labeltag = new XMLElement("label");
+            labeltag.add("for", dataitem.getHtmlName());
+            labeltag.addChild(get(Const.TEXT).run(colname, config));
+            
+            coltag = new XMLElement("li");
+            coltag.add("class", "item_form_name");
+            coltag.addChild(labeltag);
             
             modelitem = dataitem.getModelItem();
             if (modelitem != null)
@@ -54,15 +58,13 @@ public class DataItemRenderer extends AbstractElementRenderer<DataItem> {
             if (model != null && form.isKeyRequired() &&
                     model.isKey(dataitem.getModelItem()))
                 dataitem.setObligatory(true);
-            
-            itemtag.addChild(coltag);
+            labellist.addChild(coltag);
         }
         
-        coltag = new XMLElement("td");
+        coltag = new XMLElement("li");
         coltag.add("class", dataitem.getStyleClass());
-        coltag.addChild(
-                get(dataitem.getComponentType()).run(dataitem, config));
-        itemtag.addChild(coltag);
+        coltag.addChild(get(dataitem.getComponentType()).run(dataitem, config));
+        valuelist.addChild(coltag);
         return null;
     }
 }
