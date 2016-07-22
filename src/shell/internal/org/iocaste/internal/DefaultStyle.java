@@ -79,7 +79,7 @@ public class DefaultStyle {
         style.put("padding", "0px");
         style.put("width", "20px");
         style.put("height", "20px");
-        style.put("float", "right");
+        style.put("float", "left");
         style.put("color", CLICKABLE_COLOR);
         style.put("vertical-align", "middle");
         style.put("font-weight", "normal");

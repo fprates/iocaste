@@ -131,7 +131,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
             return tagt;
         }
 
-        tag.add("style", "display:inline");
+        tag.add("style", "display:inline;float:left");
         inputtag.add("size", Integer.toString(input.getVisibleLength()));
         inputtag.add("class", sb.toString());
         

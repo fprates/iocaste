@@ -15,18 +15,18 @@ public class ContextMenu {
         
         tfcontext = name.concat("_menu");
         tag = new XMLElement("li");
-        tag.add("style", "padding:0px;margin:0px;float:right");
+        renderOpenMenuButton(tag, tfcontext, name);
+        tagt.addChild(tag);
+        tag = new XMLElement("li");
+        renderCloseMenuButton(tag, tfcontext, name);
+        tagt.addChild(tag);
+        tag = new XMLElement("li");
+        tag.add("style", "padding:0px;margin:0px;float:left");
         options = new XMLElement("ul");
         options.add("id", tfcontext);
         options.add("style", "display:none");
         options.add("class", "ctxmenu");
         tag.addChild(options);
-        tagt.addChild(tag);
-        tag = new XMLElement("li");
-        renderOpenMenuButton(tag, tfcontext, name);
-        tagt.addChild(tag);
-        tag = new XMLElement("li");
-        renderCloseMenuButton(tag, tfcontext, name);
         tagt.addChild(tag);
         itemstyle = "ctxmenu_item";
     }
