@@ -1,5 +1,10 @@
 package org.iocaste.appbuilder.common.dataformtool;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.ComponentEntry;
@@ -101,6 +106,7 @@ public class DataFormTool extends AbstractComponentTool {
         DataItem input;
         DataForm df;
         ComponentEntry nsentry;
+        Map<String, List<String>> groups;
         DataFormToolData data = getComponentData();
         Container container = getElement(data.name);
         
@@ -132,6 +138,14 @@ public class DataFormTool extends AbstractComponentTool {
             df.setNSReference(nsentry.component.getNSField());
         }
         
+        if (data.groups != null) {
+            groups = new LinkedHashMap<>();
+            for (String name : data.groups)
+                groups.put(name, new ArrayList<>());
+        } else {
+            groups = null;
+        }
+        
         for (String name : data.get().keySet()) {
             item = data.get(name);
             input = df.get(name);
@@ -146,11 +160,17 @@ public class DataFormTool extends AbstractComponentTool {
             input.setVisible(!item.invisible);
             if (item.ns)
                 df.setNSReference(input.getHtmlName());
+            if ((data.groups != null) && (item.group != null))
+                groups.get(item.group).add(item.name);
         }
 
         if (data.internallabel)
             for (Element element : df.getElements())
                 ((DataItem)element).setPlaceHolder(true);
+        
+        if (data.groups != null)
+            for (String name : groups.keySet())
+                df.addGroup(name, groups.get(name).toArray(new String[0]));
     }
     
     private void setItem(DataFormToolData data,

@@ -22,7 +22,9 @@
 package org.iocaste.shell.common;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
@@ -40,7 +42,7 @@ import org.iocaste.protocol.Function;
 public class DataForm extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
     private boolean keyrequired;
-    private int columns;
+    private Map<String, String[]> groups;
     private List<String[]> lines;
     private String nsreference;
     
@@ -72,15 +74,8 @@ public class DataForm extends AbstractContainer {
         super.add(item);
     }
     
-    /**
-     * Configura disposição das colunas em configuração de múltiplas colunas.
-     * @param columns
-     */
-    public final void addLine(String... entries) {
-        if (entries.length != columns)
-            throw new RuntimeException("Invalid number of columns.");
-        
-        lines.add(entries);
+    public final void addGroup(String group, String... fields) {
+        groups.put(group, fields);
     }
     
     private static final void append(DataForm df, DocumentModelItem item) {
@@ -132,12 +127,8 @@ public class DataForm extends AbstractContainer {
         return getElement(name);
     }
     
-    /**
-     * Retorna quantidade de colunas.
-     * @return quantidade
-     */
-    public final int getColumns() {
-        return columns;
+    public final Map<String, String[]> getGroups() {
+        return groups;
     }
     
     /**
@@ -184,8 +175,8 @@ public class DataForm extends AbstractContainer {
     private final void init() {
         keyrequired = false;
         setStyleClass("form");
-        columns = 0;
         lines = new ArrayList<>();
+        groups = new LinkedHashMap<>();
     }
     
     /**
@@ -202,14 +193,6 @@ public class DataForm extends AbstractContainer {
             return false;
         test = getView().getElement(nsreference).getName();
         return name.equals(test);
-    }
-    
-    /**
-     * Ajusta quantidade de colunas.
-     * @param columns quantidade
-     */
-    public final void setColumns(int columns) {
-        this.columns = columns;
     }
     
     /**

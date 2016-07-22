@@ -9,6 +9,7 @@ public class DataFormToolData extends AbstractComponentData {
     public DataFormToolItem nsitem;
     public ExtendedObject object;
     public String sh;
+    public String[] groups;
     public boolean internallabel;
     public int columns;
     

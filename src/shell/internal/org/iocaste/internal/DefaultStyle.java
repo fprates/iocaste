@@ -172,6 +172,7 @@ public class DefaultStyle {
         style.put("border-width", "0px");
         style.put("border-style", "none");
         style.put("margin", "0px");
+        style.put("padding", "0px");
         
         style = stylesheet.newElement(".form_cell");
         style.put("vertical-align", "middle");
