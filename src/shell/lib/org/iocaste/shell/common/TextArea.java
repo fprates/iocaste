@@ -15,8 +15,6 @@ public class TextArea extends AbstractInputComponent {
     
     public TextArea(Container container, String name) {
         super(container, Const.TEXT_AREA, null, name);
-        
-        setStyleClass("textarea");
         w = 20;
         h = 10;
     }

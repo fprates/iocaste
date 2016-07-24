@@ -16,11 +16,13 @@ import org.iocaste.shell.common.Shell;
 public abstract class AbstractElementRenderer<T extends Element>
         implements Renderer<T> {
     private Map<Const, Renderer<?>> renderers;
+    private Const type;
     
     public AbstractElementRenderer(
             Map<Const, Renderer<?>> renderers, Const type) {
         renderers.put(type, this);
         this.renderers = renderers;
+        this.type = type;
     }
     
     /**
@@ -38,6 +40,15 @@ public abstract class AbstractElementRenderer<T extends Element>
     @SuppressWarnings("unchecked")
     protected final <U extends Renderer<? extends Element>> U get(Const type) {
         return (U)renderers.get(type);
+    }
+    
+    protected final String getStyle(InputComponent input) {
+        switch (input.getType()) {
+        case DATA_ITEM:
+            return type.style();
+        default:
+            return input.getStyleClass();
+        }
     }
     
     @Override

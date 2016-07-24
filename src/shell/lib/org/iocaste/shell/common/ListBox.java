@@ -58,7 +58,6 @@ public class ListBox extends AbstractInputComponent {
     
     private final void init() {
         values = new LinkedHashMap<>();
-        setStyleClass("list_box");
     }
     
     /**

@@ -23,7 +23,6 @@ import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.View;
 
 public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
@@ -59,17 +58,9 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         if (!input.isVisible())
             return get(Const.PARAMETER).run(input, config);
         
-        switch (input.getType()) {
-        case DATA_ITEM:
-            style = TextField.STYLE;
-            label = ((DataItem)input).getLabel();
-            break;
-        default:
-            style = input.getStyleClass();
-            label = input.getName();
-            break;
-        }
-        
+        style = getStyle(input);
+        label = (input.getType() == Const.DATA_ITEM)?
+                ((DataItem)input).getLabel() : input.getName();
         dataelement = Shell.getDataElement(input);
         length = (dataelement == null)? input.getLength() :
             dataelement.getLength();

@@ -7,11 +7,55 @@ package org.iocaste.shell.common;
  *
  */
 public enum Const {
-    NONE, STATUS, ERROR, WARNING, BUTTON, CHECKBOX, DATA_FORM, DATA_ITEM,
-    DATA_VIEW, DETAILED, EXPAND_BAR, FILE_ENTRY, FORM, FRAME, HTML_TAG, LINK,
-    LIST_BOX, NODE_LIST, PARAMETER, PASSWORD, RADIO_BUTTON, RANGE_FIELD,
-    SEARCH_HELP, SINGLE, STANDARD_CONTAINER, TABBED_PANE, TABLE, TEXT,
-    TEXT_AREA, TEXT_FIELD, VIRTUAL, CANVAS, TABLE_ITEM, TABBED_PANE_ITEM,
-    RADIO_GROUP, CALENDAR, PRINT_AREA, DUMMY, NODE_LIST_ITEM, VIRTUAL_CONTROL,
-    MESSAGE
+    NONE(null),
+    STATUS(null),
+    ERROR(null),
+    WARNING(null),
+    BUTTON("button"),
+    CALENDAR(null),
+    CANVAS(null),
+    CHECKBOX("checkbox"),
+    DATA_FORM("form"),
+    DATA_ITEM(null),
+    DATA_VIEW(null),
+    DETAILED(null),
+    DUMMY(null),
+    EXPAND_BAR("eb_external"),
+    FILE_ENTRY("button"),
+    FORM("form_content"),
+    FRAME("frame"),
+    HTML_TAG(null),
+    LINK("link"),
+    LIST_BOX("list_box"),
+    MESSAGE(null),
+    NODE_LIST(null),
+    NODE_LIST_ITEM(null),
+    PARAMETER(null),
+    PASSWORD(null),
+    PRINT_AREA(null),
+    RADIO_BUTTON(null),
+    RADIO_GROUP(null),
+    RANGE_FIELD("text_field"),
+    SEARCH_HELP("sh_button"),
+    SINGLE(null),
+    STANDARD_CONTAINER(null),
+    TABBED_PANE(null),
+    TABBED_PANE_ITEM("tp_item"),
+    TABLE("table_area"),
+    TABLE_ITEM(null),
+    TEXT("text"),
+    TEXT_AREA("textarea"),
+    TEXT_FIELD("text_field"),
+    VIRTUAL(null),
+    VIRTUAL_CONTROL(null);
+    
+    private String style;
+    
+    public final String style() {
+        return style;
+    }
+    
+    Const(String style) {
+        this.style = style;
+    }
 }

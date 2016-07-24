@@ -57,7 +57,7 @@ public abstract class AbstractElement implements Element {
         this.type = type;
         this.name = name;
         htmlname = name;
-        style = "";
+        style = type.style();
         enabled = visible = translatable = true;
         events = new HashMap<>();
     }

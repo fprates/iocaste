@@ -174,7 +174,6 @@ public class Table extends AbstractContainer {
         group = new RadioGroup(this, getName().concat(".mark"));
         borderstyle = "width: 100%; overflow: auto;";
         
-        setStyleClass("table_area");
         column = new TableColumn(this, "");
         column.setMark(true);
         column.setVisible(true);

@@ -65,7 +65,6 @@ public class ExpandBar extends AbstractContainer {
         expanded = true;
         internalstyle = "eb_internal";
         edgestyle = "eb_edge";
-        setStyleClass("eb_external");
         setEventHandler(new ExpandBarHandler(this));
     }
     

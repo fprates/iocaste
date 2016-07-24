@@ -40,7 +40,6 @@ public class RangeField extends AbstractInputComponent
      */
     private final void init() {
         setLength(20);
-        setStyleClass("text_field");
     }
     
     /*

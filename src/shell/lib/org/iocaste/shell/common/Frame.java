@@ -23,7 +23,6 @@ public class Frame extends AbstractContainer {
     private final void init(String name) {
         text = name;
         legendstyle = "text";
-        setStyleClass("frame");
     }
     
     /**

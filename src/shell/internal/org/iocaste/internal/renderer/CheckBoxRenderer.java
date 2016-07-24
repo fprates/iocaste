@@ -24,7 +24,7 @@ public class CheckBoxRenderer extends AbstractElementRenderer<InputComponent> {
         cboxtag.add("type", "checkbox");
         cboxtag.add("name", name);
         cboxtag.add("id", name);
-        cboxtag.add("class", input.getStyleClass());
+        cboxtag.add("class", getStyle(input));
         
         if (!input.isEnabled())
             cboxtag.add("disabled", "disabled");

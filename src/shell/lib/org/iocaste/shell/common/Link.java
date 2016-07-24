@@ -96,7 +96,6 @@ public class Link extends AbstractControlComponent implements Container {
     private final void init(Container parent, String name, String action) {
         setText(name);
         setAction(action);
-        setStyleClass("link");
         absolute = false;
         values = new HashMap<>();
         container = name.concat("_cnt");

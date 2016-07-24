@@ -18,8 +18,7 @@ public class DataItem extends AbstractInputComponent
     public DataItem(DataForm form, Const type, String name) {
         super(form, Const.DATA_ITEM, type, name);
         
-        values = new LinkedHashMap<String, Object>();
-        setStyleClass("form_cell");
+        values = new LinkedHashMap<>();
         setLength(20);
         setHtmlName(new StringBuilder(form.getName()).
                 append(".").

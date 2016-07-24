@@ -35,20 +35,17 @@ public class Form extends AbstractContainer {
     
     public Form(View view, String name) {
         super(view, Const.FORM, name);
-        
         init(name);
     }
     
     public Form(Container container, String name) {
         super(container, Const.FORM, name);
-        
         init(name);
     }
 
     private final void init(String name) {
         action = new Parameter(this, "action");
         action.setHtmlName(name.concat(".action"));
-        setStyleClass("form_content");
     }
     
     /**

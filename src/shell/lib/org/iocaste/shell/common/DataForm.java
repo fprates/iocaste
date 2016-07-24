@@ -174,7 +174,6 @@ public class DataForm extends AbstractContainer {
      */
     private final void init() {
         keyrequired = false;
-        setStyleClass("form");
         lines = new ArrayList<>();
         groups = new LinkedHashMap<>();
     }

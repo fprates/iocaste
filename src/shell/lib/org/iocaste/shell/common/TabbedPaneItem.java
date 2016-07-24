@@ -12,7 +12,6 @@ public class TabbedPaneItem extends AbstractContainer {
     
     public TabbedPaneItem(TabbedPane pane, String name) {
         super(pane, Const.TABBED_PANE_ITEM, name);
-        setStyleClass("tp_item");
     }
     
     /**

@@ -34,7 +34,6 @@ public class Text extends AbstractComponent {
      * 
      */
     private final void init() {
-        setStyleClass("text");
         tag = "p";
     }
     

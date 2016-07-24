@@ -15,17 +15,12 @@ public class Button extends AbstractControlComponent {
     
     public Button(View view, String name) {
         super(view, Const.BUTTON, name);
-        init();
+        submit = false;
     }
     
     public Button(Container container, String name) {
         super(container, Const.BUTTON, name);
-        init();
-    }
-    
-    private final void init() {
         submit = false;
-        setStyleClass("button");
     }
     
     /**

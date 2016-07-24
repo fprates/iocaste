@@ -25,7 +25,6 @@ public class SearchHelp extends PopupControl {
         
         itemnames = new LinkedHashSet<>();
         setAllowStacking(true);
-        setStyleClass("sh_button");
         setApplication("iocaste-search-help");
     }
 
