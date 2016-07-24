@@ -26,6 +26,7 @@ public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
         switch (input.getType()) {
         case DATA_ITEM:
             values = ((DataItem)input).getValues();
+            selecttag.add("style", "display:block");
             break;
         case LIST_BOX:
             values = ((ListBox)input).properties();

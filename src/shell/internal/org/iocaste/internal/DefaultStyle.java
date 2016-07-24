@@ -99,10 +99,7 @@ public class DefaultStyle {
         style.put("border-bottom-right-radius", "0px");
         
         style = stylesheet.newElement(".checkbox");
-        style.put("margin-top", "10px");
-        style.put("margin-bottom", "10px");
-        style.put("margin-left", "0px");
-        style.put("margin-right", "0px");
+        style.put("margin", "0px");
         
         style = stylesheet.newElement(".ctxmenu");
         style.put("margin", "0px");
@@ -173,16 +170,17 @@ public class DefaultStyle {
         style.put("border-style", "none");
         style.put("margin", "0px");
         style.put("padding", "0px");
+        style.put("list-style-type", "none");
         
         style = stylesheet.newElement(".form_cell");
-        style.put("vertical-align", "middle");
-        style.put("max-height", "40px");
-        style.put("height", "40px");
         style.put("padding", "0px");
         style.put("margin-top", "0px");
-        style.put("margin-bottom", "1px");
+        style.put("margin-bottom", "10px");
         style.put("margin-right", "0px");
         style.put("margin-left", "0px");
+        style.put("width", "100%");
+        style.put("float", "left");
+        style.put("display", "block");
         
         stylesheet.newElement(".form_content").put("height", "100%");
         
@@ -191,20 +189,6 @@ public class DefaultStyle {
         style.put("border-width", "1px");
         style.put("border-style", "solid");
         style.put("margin", "0px");
-        
-        style = stylesheet.newElement(".item_form_name");
-        style.put("vertical-align", "middle");
-        style.put("max-height", "40px");
-        style.put("height", "40px");
-        style.put("margin-top", "0px");
-        style.put("margin-bottom", "1px");
-        style.put("margin-right", "0px");
-        style.put("margin-left", "0px");
-        style.put("padding", "0px");
-        style.put("text-align", "right");
-        style.put("color", FONT_COLOR);
-        style.put("font-family", FONT_FAMILY);
-        style.put("font-size", FONT_SIZE);
         
         style = stylesheet.newElement(".link:link");
         style.put("color", CLICKABLE_COLOR);

@@ -17,10 +17,8 @@ public class Style {
         style.put("max-width", "300px");
         style.put("margin", "auto");
         
-        style = stylesheet.newElement(".loginform");
+        style = stylesheet.clone(".loginform", ".form");
         style.put("width", "100%");
-        style.put("margin", "0px");
-        style.put("padding", "0px");
         
         style = stylesheet.clone(".loginsubmit", ".button");
         style.put("width", "100%");

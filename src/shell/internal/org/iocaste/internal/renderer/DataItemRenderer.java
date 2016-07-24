@@ -22,12 +22,12 @@ public class DataItemRenderer extends AbstractElementRenderer<DataItem> {
         return null;
     }
     
-    public final XMLElement execute(DataItem dataitem, XMLElement labellist,
-            XMLElement valuelist, Config config) {
+    public final void execute(
+            DataItem dataitem, XMLElement formtag, Config config) {
         View view;
         Text colname;
         DocumentModelItem modelitem;
-        XMLElement coltag, labeltag;
+        XMLElement labeltag, itemtag;
         String inputname, text;
         DocumentModel model = null;
         DataForm form = (DataForm)dataitem.getContainer();
@@ -36,35 +36,38 @@ public class DataItemRenderer extends AbstractElementRenderer<DataItem> {
         text = dataitem.getLabel();
         if (text == null)
             text = inputname;
-        
-        view = config.getView();
-        if (labellist != null) {
+
+        labeltag = new XMLElement("div");
+        /*
+         * that's a shame. for some reason, <label> messes with onclick
+         * events of elements inside it. need to put the context button
+         * out of <label>. while not reimplemented, replace <label> for
+         * <div> temporarily.
+         */
+//        labeltag = new XMLElement("label");
+//        labeltag.add("for", dataitem.getHtmlName());
+        if (!dataitem.hasPlaceHolder()) {
+            view = config.getView();
             colname = new Text(view, inputname.concat("_form_item_text"));
+            colname.setTag("span");
             colname.setText(text);
-            colname.addEvent("style", "padding:10px");
-            
-            labeltag = new XMLElement("label");
-            labeltag.add("for", dataitem.getHtmlName());
+            colname.addEvent("style", "font-weight:bold");
             labeltag.addChild(get(Const.TEXT).run(colname, config));
-            
-            coltag = new XMLElement("li");
-            coltag.add("class", "item_form_name");
-            coltag.addChild(labeltag);
-            
-            modelitem = dataitem.getModelItem();
-            if (modelitem != null)
-                model = modelitem.getDocumentModel();
-            
-            if (model != null && form.isKeyRequired() &&
-                    model.isKey(dataitem.getModelItem()))
-                dataitem.setObligatory(true);
-            labellist.addChild(coltag);
         }
         
-        coltag = new XMLElement("li");
-        coltag.add("class", dataitem.getStyleClass());
-        coltag.addChild(get(dataitem.getComponentType()).run(dataitem, config));
-        valuelist.addChild(coltag);
-        return null;
+        modelitem = dataitem.getModelItem();
+        if (modelitem != null)
+            model = modelitem.getDocumentModel();
+        
+        if (model != null && form.isKeyRequired() &&
+                model.isKey(dataitem.getModelItem()))
+            dataitem.setObligatory(true);
+        
+        labeltag.addChild(
+                get(dataitem.getComponentType()).run(dataitem, config));
+        itemtag = new XMLElement("li");
+        itemtag.add("class", "form_cell");
+        itemtag.addChild(labeltag);
+        formtag.addChild(itemtag);
     }
 }

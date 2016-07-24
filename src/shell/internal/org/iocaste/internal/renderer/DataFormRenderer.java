@@ -23,63 +23,38 @@ public class DataFormRenderer extends AbstractElementRenderer<DataForm> {
         Set<Element> elements;
         String htmlname = form.getHtmlName();
 
-        formtag = new XMLElement("ul");
-        formtag.add("class", form.getStyleClass());
-        formtag.add("id", htmlname);
-        addEvents(formtag, form);
-
         groups = form.getGroups();
-        if (groups.size() == 0) {
-            renderGroup(formtag, form.getElements(), htmlname, config);
-            return formtag;
-        }
+        if (groups.size() == 0)
+            return renderGroup(form, form.getElements(), htmlname, config);
         
         elements = new LinkedHashSet<>();
+        formtag = new XMLElement("div");
         for (String name : groups.keySet()) {
             for (String element : groups.get(name))
                 elements.add(form.get(element));
-            renderGroup(formtag, elements, name, config);
+            formtag.addChild(renderGroup(form, elements, name, config));
             elements.clear();
         }
         return formtag;
     }
     
-    private final void renderGroup(XMLElement formtag,
+    private final XMLElement renderGroup(DataForm form,
             Set<Element> elements, String groupname, Config config) {
         DataItem dataitem;
-        XMLElement labeltag, valuetag, labellist, valuelist;
         DataItemRenderer renderer = get(Const.DATA_ITEM);
+        XMLElement formtag = new XMLElement("ul");
         
-        labeltag = null;
-        labellist = null;        
-        valuetag = new XMLElement("li");
-        valuetag.add("id", groupname.concat("_cvalue"));
-        valuelist = new XMLElement("ul");
-        valuelist.add("style", "margin:0px;padding:0px;list-style-type:none");
-        valuetag.addChild(valuelist);
+        formtag.add("class", form.getStyleClass());
+        formtag.add("id", groupname);
+        addEvents(formtag, form);
+        
         for (Element element : elements) {
             if (!element.isDataStorable() || !element.isVisible())
                 continue;
-
             dataitem = (DataItem)element;
-            if ((labeltag == null) && !dataitem.hasPlaceHolder()) {
-                labeltag = new XMLElement("li");
-                labeltag.add("id", groupname.concat("_cname"));
-                labeltag.add("style", "display:inline;float:left");
-                labellist = new XMLElement("ul");
-                labellist.add(
-                        "style", "margin:0px;padding:0px;list-style-type:none");
-                labeltag.addChild(labellist);
-            }
-            
-            renderer.execute(dataitem, labellist, valuelist, config);
+            renderer.execute(dataitem, formtag, config);
         }
-        if (labeltag != null) {
-            formtag.addChild(labeltag);
-            valuetag.add("style", "display:inline;float:left");
-        } else {
-            valuetag.add("style", "display:inline;float:left;width:100%");
-        }
-        formtag.addChild(valuetag);
+        
+        return formtag;
     }
 }
