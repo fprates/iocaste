@@ -70,6 +70,7 @@ public class HtmlRenderer {
         new DataFormRenderer(renderers);
         new DataItemRenderer(renderers);
         new DummyRenderer(renderers);
+        new DummyRenderer(renderers, Const.RADIO_GROUP);
         new ExpandBarRenderer(renderers);
         new FileEntryRenderer(renderers);
         new FormRenderer(renderers);

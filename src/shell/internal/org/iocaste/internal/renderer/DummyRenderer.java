@@ -12,6 +12,10 @@ public class DummyRenderer extends AbstractElementRenderer<Element> {
         super(renderers, Const.DUMMY);
     }
 
+    public DummyRenderer(Map<Const, Renderer<?>> renderers, Const type) {
+        super(renderers, type);
+    }
+    
     @Override
     protected XMLElement execute(Element element, Config config) {
         return null;
