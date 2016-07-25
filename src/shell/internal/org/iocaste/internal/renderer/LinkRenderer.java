@@ -22,7 +22,7 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
         LinkEntry entry;
         XMLElement atag, imgtag;
         String text, href, image, htmlname;
-        StringBuilder onclick, hrefsb;
+        StringBuilder onclick;
         Map<String, LinkEntry> parameters;
         Parameter parameter;
         ParameterRenderer parameterrenderer;
@@ -40,26 +40,10 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
         atag.add("id", htmlname);
         atag.add("class", link.getStyleClass());
 
-        if (link.isAbsolute()) {
-            href = link.getAction();
-        } else {
-            if (link.isScreenLockable())
-                hrefsb = new StringBuilder("javascript:formSubmit('");
-            else
-                hrefsb = new StringBuilder("javascript:formSubmitNoLock('");
-            
-            hrefsb.append(config.getCurrentForm()).
-                   append("', '").append(config.getCurrentAction()).
-                   append("', '").append(link.getAction()).
-                   append("');");
-            
-            href = hrefsb.toString();
-        }
-        
+        onclick = new StringBuilder();
         parameterrenderer = get(Const.PARAMETER);
         parameters = link.getParametersMap();
         if (parameters.size() > 0) {
-            onclick = new StringBuilder();
             for (String name : parameters.keySet()) {
                 entry = parameters.get(name);
                 if (entry == null)
@@ -97,9 +81,25 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
                 parameter.setDataElement(element);
                 atag.addChild(parameterrenderer.run(parameter, config));
             }
-            
-            atag.add("onClick", onclick.toString());
         }
+        
+        if (link.isAbsolute()) {
+            href = link.getAction();
+        } else {
+            href = "#";
+            if (link.isScreenLockable())
+                onclick.append("formSubmit('");
+            else
+                onclick.append("formSubmitNoLock('");
+            
+            onclick.append(config.getCurrentForm()).
+                   append("', '").append(config.getCurrentAction()).
+                   append("', '").append(link.getAction()).
+                   append("');");
+        }
+        
+        if (onclick.length() > 0)
+            atag.add("onClick", onclick.toString());
         atag.add("href", href);
         
         image = link.getImage();
