@@ -1,7 +1,7 @@
 package org.quantic.template;
 
+import org.iocaste.appbuilder.common.AbstractExtendedContext;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
-import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
@@ -19,7 +19,7 @@ public class Main extends AbstractPageBuilder {
         Context extcontext;
         StandardPanel panel;
         
-        extcontext = new Context();
+        extcontext = new Context(context);
         panel = new StandardPanel(context);
         panel.instance("main", new MainPage(), extcontext);
     }
@@ -39,7 +39,11 @@ public class Main extends AbstractPageBuilder {
     }
 }
 
-class Context implements ExtendedContext {
+class Context extends AbstractExtendedContext {
+
+    public Context(PageBuilderContext context) {
+        super(context);
+    }
     
 }
 
