@@ -60,7 +60,7 @@ public abstract class AbstractViewConfigStyle implements ViewConfigStyle {
     }
     
     protected final void put(String property, String value, Object... args) {
-        if (args != null)
+        if ((args != null) && (args.length > 0))
             value = String.format(value, args);
         style.put(property, value);
     }
