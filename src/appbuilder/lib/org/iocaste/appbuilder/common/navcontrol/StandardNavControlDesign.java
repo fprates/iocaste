@@ -67,15 +67,17 @@ public class StandardNavControlDesign implements NavControlDesign {
         loginitem = context.view.getElement("nc_login_options");
         loginitem.addEvent("style", "display:none");
         
-        new VirtualControl(container, "back").setCancellable(true);
-        
         page = context.view.getPageName();
         viewctx = context.getView();
         viewctx.put("logout", new Logout());
-        viewctx.put("back", new Back());
-        function = (AbstractPageBuilder)context.function;
-        function.register(page, "logout", viewctx);
-        function.register(page, "back", viewctx);
+
+        new VirtualControl(container, "back").setCancellable(true);
+        if (viewctx.getActionHandler("back") == null) {
+            viewctx.put("back", new Back());
+            function = (AbstractPageBuilder)context.function;
+            function.register(page, "logout", viewctx);
+            function.register(page, "back", viewctx);
+        }
         
         context.messages.instance("pt_BR");
         context.messages.put("pt_BR", "nc_logout", "Log out");

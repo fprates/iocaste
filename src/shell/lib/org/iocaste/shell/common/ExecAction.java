@@ -34,14 +34,11 @@ public class ExecAction extends AbstractHandler {
         View view = message.get("view");
         AbstractPage page = getFunction();
         
-        if (context != null) {
-            context.view = view;
-            context.function = page;
-        }
-        
         state.view = view;
         state.rapp = state.rpage = null;
         state.initialize = false;
+        context.view = view;
+        context.function = page;
         context.action = context.control = message.getst("action");
         validables = context.function.getValidables();
         for (String name : validables.keySet()) {
