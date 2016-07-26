@@ -78,6 +78,10 @@ public abstract class AbstractInstallObject {
     protected abstract void execute(StandardInstallContext context)
             throws Exception ;
     
+    protected final ComplexModelInstall getCModel(String name) {
+        return context.getCModel(name);
+    }
+    
     protected final DocumentModelItem getItem(String name) {
         return context.getItem(name);
     }
