@@ -53,7 +53,7 @@ import org.iocaste.shell.common.ViewTitle;
 public class HtmlRenderer {
     private String username;
     private List<String> script;
-    private Map<String, String> actions;
+    private Map<String, List<EventHandler>> actions;
     private Function function;
     private PageContext pagectx;
     private Map<Const, Renderer<?>> renderers;
@@ -125,7 +125,7 @@ public class HtmlRenderer {
      * 
      * @return
      */
-    public final Map<String, String> getActions() {
+    public final Map<String, List<EventHandler>> getActions() {
         return actions;
     }
     
@@ -191,17 +191,63 @@ public class HtmlRenderer {
      */
     private final XMLElement renderJavaScript(List<String> script,
             Config config) {
+        StringBuilder sb;
+        List<EventHandler> handlers;
+        HandlerScript handlerscript;
+        Map<String, List<EventHandler>> actions;
+        Map<String, HandlerScript> handlerscripts;
         XMLElement scripttag = new XMLElement("script");
         
         scripttag.setLineBreak(true);
         scripttag.add("type", "text/javascript");
         scripttag.addInner("function initialize() {");
-        
         for (String line : config.getOnload())
             scripttag.addInner(line);
-
         scripttag.addInner("}");
         scripttag.addInner(script);
+
+        handlerscripts = new HashMap<>();
+        
+        actions = config.getActions();
+        for (String name : actions.keySet()) {
+            handlers = actions.get(name);
+            for (EventHandler handler : handlers) {
+                if (handler.event == null)
+                    continue;
+                
+                handlerscript = handlerscripts.get(handler.event);
+                if (handlerscript == null) {
+                    handlerscript = new HandlerScript();
+                    handlerscripts.put(handler.event, handlerscript);
+                }
+                
+                sb = new StringBuilder(handler.name).append(handler.event);
+                handlerscript.function = sb.toString();
+
+                sb = new StringBuilder("function ").
+                        append(handlerscript.function).append("(e) {");
+                handlerscript.script.add(sb.toString());
+                handlerscript.script.add(handler.call);
+                handlerscript.script.add("}");
+                
+                sb = new StringBuilder("document.getElementById('").
+                        append(handler.name).
+                        append("').addEventListener('").
+                        append(handler.event).
+                        append("', ").
+                        append(handlerscript.function).append(");");
+                handlerscript.handler.add(sb.toString());
+            }
+        }
+
+        for (String event : handlerscripts.keySet())
+            scripttag.addInner(handlerscripts.get(event).script);
+        
+        scripttag.addInner(
+                "document.addEventListener('DOMContentLoaded', function () {");
+        for (String event : handlerscripts.keySet())
+            scripttag.addInner(handlerscripts.get(event).handler);
+        scripttag.addInner("});");
         
         return scripttag;
     }
@@ -334,5 +380,16 @@ public class HtmlRenderer {
      */
     public final void setUsername(String username) {
         this.username = username;
+    }
+}
+
+class HandlerScript {
+    public List<String> script;
+    public List<String> handler;
+    public String function;
+    
+    public HandlerScript() {
+        script = new ArrayList<>();
+        handler = new ArrayList<>();
     }
 }

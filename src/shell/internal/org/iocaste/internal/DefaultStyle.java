@@ -190,23 +190,18 @@ public class DefaultStyle {
         style.put("border-style", "solid");
         style.put("margin", "0px");
         
-        style = stylesheet.newElement(".link:link");
+        style = stylesheet.newElement(".link");
         style.put("color", CLICKABLE_COLOR);
         style.put("font-family", FONT_FAMILY);
         style.put("font-size", FONT_SIZE);
         style.put("text-decoration", "none");
-        stylesheet.clone(".link:hover", ".link:link").put(
+        style.put("cursor", "pointer");
+        stylesheet.clone(".link:hover", ".link").put(
                 "text-decoration", "underline");
-        stylesheet.clone(".link:active", ".link:link");
-        stylesheet.clone(".link:visited", ".link:link");
         
-        stylesheet.clone(".ctxmenu_link:link", ".link:link").
+        stylesheet.clone(".ctxmenu_link", ".link").
                 put("text-align", "center");
         stylesheet.clone(".ctxmenu_link:hover", ".link:hover").
-                put("text-align", "center");
-        stylesheet.clone(".ctxmenu_link:active", ".link:active").
-                put("text-align", "center");
-        stylesheet.clone(".ctxmenu_link:visited", ".link:visited").
                 put("text-align", "center");
         
         style = stylesheet.newElement(".list_box");

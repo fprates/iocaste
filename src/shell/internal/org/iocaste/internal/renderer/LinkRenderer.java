@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.internal.EventHandler;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Link;
@@ -18,14 +19,16 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
 
     @Override
     protected final XMLElement execute(Link link, Config config) {
+        EventHandler handler;
         DataElement element;
         LinkEntry entry;
         XMLElement atag, imgtag;
-        String text, href, image, htmlname;
+        String text, image, htmlname;
         StringBuilder onclick;
         Map<String, LinkEntry> parameters;
         Parameter parameter;
         ParameterRenderer parameterrenderer;
+        boolean absolute = link.isAbsolute();
         
         if (!link.isEnabled()) {
             atag = new XMLElement("span");
@@ -34,9 +37,11 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
             return atag;
         }
         
-        config.addAction(link.getAction(), link.getHtmlName());
         htmlname = link.getHtmlName();
         atag = new XMLElement("a");
+        if (absolute)
+            atag.add("href", link.getAction());
+        
         atag.add("id", htmlname);
         atag.add("class", link.getStyleClass());
 
@@ -83,10 +88,8 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
             }
         }
         
-        if (link.isAbsolute()) {
-            href = link.getAction();
-        } else {
-            href = "#";
+        if (!absolute) {
+            atag.add("role", "button");
             if (link.isScreenLockable())
                 onclick.append("formSubmit('");
             else
@@ -98,9 +101,12 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
                    append("');");
         }
         
-        if (onclick.length() > 0)
-            atag.add("onClick", onclick.toString());
-        atag.add("href", href);
+        if (onclick.length() > 0) {
+            handler = config.actionInstance(link.getAction());
+            handler.name = link.getHtmlName();
+            handler.event = "click";
+            handler.call = onclick.toString();
+        }
         
         image = link.getImage();
         if (image != null) {

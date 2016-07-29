@@ -18,7 +18,7 @@ public class PageContext {
     private String name, username, contexturl, contenttype, contentencoding;
     private boolean reloadable, initialize, keepview;
     private List<FileItem> files;
-    private Map<String, String> actions;
+    private Map<String, List<EventHandler>> actions;
     private int logid;
     private byte error;
     private long sequence;
@@ -59,7 +59,9 @@ public class PageContext {
     }
     
     public final String getControlName(String action) {
-        return actions.get(action);
+        for (EventHandler handler : actions.get(action))
+            return handler.name;
+        return null;
     }
     
     /**
@@ -185,7 +187,7 @@ public class PageContext {
      * 
      * @param actions
      */
-    public final void setActions(Map<String, String> actions) {
+    public final void setActions(Map<String, List<EventHandler>> actions) {
         this.actions = actions;
     }
     

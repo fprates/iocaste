@@ -15,7 +15,7 @@ public class VirtualControlRenderer
 
     @Override
     protected XMLElement execute(VirtualControl control, Config config) {
-        config.addAction(control.getAction(), control.getHtmlName());
+        config.actionInstance(control.getAction()).name = control.getHtmlName();
         return null;
     }
 

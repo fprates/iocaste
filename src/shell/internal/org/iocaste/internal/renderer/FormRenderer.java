@@ -33,7 +33,7 @@ public class FormRenderer extends AbstractElementRenderer<Form> {
 
         config.setCurrentForm(container.getHtmlName());
         config.setCurrentAction(currentaction);
-        config.addAction(currentaction, currentaction);
+        config.actionInstance(currentaction).name = currentaction;
         config.form = container;
         
         formtag.add("method", "post");

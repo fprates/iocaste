@@ -36,5 +36,6 @@ public class Style {
         style.put("margin", "0px");
         style.put("padding", "0px");
         style.put("text-decoration", "none");
+        style.put("cursor", "pointer");
     }
 }

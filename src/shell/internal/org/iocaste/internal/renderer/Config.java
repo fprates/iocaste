@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.internal.EventHandler;
 import org.iocaste.internal.PageContext;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
@@ -18,7 +19,7 @@ public class Config {
     public PageContext pagectx;
     private String currentaction, currentform, pagetrack, username;
     private int logid;
-    private Map<String, String> actions;
+    private Map<String, List<EventHandler>> actions;
     private List<String> onload;
     private View view;
     private PopupControl popupcontrol;
@@ -33,8 +34,19 @@ public class Config {
      * 
      * @param action
      */
-    public final void addAction(String action, String name) {
-        actions.put(action, name);
+    public final EventHandler actionInstance(String action) {
+        EventHandler handler;
+        List<EventHandler> handlers;
+        
+        handlers = actions.get(action);
+        if (handlers == null) {
+            handlers = new ArrayList<>();
+            actions.put(action, handlers);
+        }
+
+        handler = new EventHandler();
+        handlers.add(handler);
+        return handler;
     }
     
     /**
@@ -49,7 +61,7 @@ public class Config {
      * 
      * @return
      */
-    public final Map<String, String> getActions() {
+    public final Map<String, List<EventHandler>> getActions() {
         return actions;
     }
     

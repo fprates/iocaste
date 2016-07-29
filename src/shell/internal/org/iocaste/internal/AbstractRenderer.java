@@ -588,6 +588,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
                 key = (String)parameternames.nextElement();
                 
                 if (pagectx.isAction(key)) {
+                    if (actionname != null)
+                        continue;
                     actionname = req.getParameterValues(key)[0];
                     parameters.put("action", req.getParameterValues(key));
                 } else {
