@@ -37,7 +37,7 @@ public class Response {
         control = context.control.getView().getElement(name);
         link = new Link(container, "link_".concat(name), null);
         link.setText(control.getText());
-        link.setStyleClass("month");
+        link.setStyleClass("calmonth");
         link.setEvent("click", onclick);
     }
     
@@ -71,29 +71,29 @@ public class Response {
         style.put("margin-top", "2em");
         style.put("box-shadow", constants.get(Shell.SHADOW));
         
-        style = stylesheet.clone(".calkey:link", ".link:link");
+        style = stylesheet.clone(".calkey", ".link");
         style.put("padding", "0px");
         style.put("margin", "0px");
         style.put("text-align", "middle");
         style.put("font-weight", "normal");
         style.put("display", "block");
-        style = stylesheet.clone(".calkey:hover", ".calkey:link");
-        style = stylesheet.clone(".calkey:visited", ".calkey:link");
-        style = stylesheet.clone(".calkey:active", ".calkey:link");
+        style = stylesheet.clone(".calkey:hover", ".calkey");
         
-        style = stylesheet.clone(".today:link", ".link:link");
+        style = stylesheet.clone(".caltoday", ".link");
         style.put("padding", "0px");
         style.put("margin", "0px");
         style.put("text-align", "middle");
         style.put("font-weight", "bold");
         style.put("display", "block");
-        style = stylesheet.clone(".today:hover", ".today:link");
-        style = stylesheet.clone(".today:visited", ".today:link");
-        style = stylesheet.clone(".today:active", ".today:link");
+        style = stylesheet.clone(".caltoday:hover", ".caltoday");
         
-        style = stylesheet.clone(".month", ".text");
+        style = stylesheet.clone(".caldate", ".text");
         style.put("display", "inline");
         style.put("text-decoration", "none");
+
+        style = stylesheet.clone(".calmonth", ".caldate");
+        style.put("color", constants.get(Shell.CLICKABLE_COLOR));
+        style.put("cursor", "pointer");
         
         context.calendardata.update(context.date);
         container = new StandardContainer(context.view, "calstdcnt");
@@ -107,7 +107,7 @@ public class Response {
         
         text = new Text(container, "calhead");
         text.setText(value);
-        text.setStyleClass("month");
+        text.setStyleClass("caldate");
 
         createCalendarLink(container, context, context.control.getLate());
         
@@ -141,17 +141,17 @@ public class Response {
                     append(day).toString());
             
             value = formatdest.format(date);
-            action = new StringBuilder("javascript:setFieldCal('").
+            action = new StringBuilder("setFieldCal('").
                     append(context.control.getInputName()).
                     append("','").
                     append(value).
                     append("')").toString();
             
-            link = new Link(item, compname, action);
+            link = new Link(item, compname, null);
             link.setText(Integer.toString(day));
-            link.setAbsolute(true);
+            link.setEvent("click", action);
             if (context.calendardata.today == day)
-                link.setStyleClass("today");
+                link.setStyleClass("caltoday");
             else
                 link.setStyleClass("calkey");
             
