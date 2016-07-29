@@ -91,11 +91,11 @@ public class Response {
                             append(sh.getInputName()).
                             append("','").
                             append(value).
-                            append("')").
+                            append("');").
                             toString();
-                    link = new Link(tableitem, "choose", action);
+                    link = new Link(tableitem, "choose", null);
                     link.setText(value.toString());
-                    link.setAbsolute(true);
+                    link.setEvent("click", action);
                 } else {
                     text = new Text(tableitem, name);
                     text.setText((value == null)? "" : value.toString());
@@ -149,7 +149,7 @@ public class Response {
         stdcnt = new StandardContainer(context.view, "shstdcnt");
         stdcnt.setStyleClass("shcnt");
         
-        new Button(stdcnt, "cancel").setEvent("click","closeSh()");
+        new Button(stdcnt, "cancel").setEvent("click", "closeSh();");
         
         action = context.function.getParameter("action");
         form = context.function.getParameter("form");

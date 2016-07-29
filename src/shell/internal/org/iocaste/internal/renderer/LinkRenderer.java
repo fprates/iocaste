@@ -23,8 +23,9 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
         DataElement element;
         LinkEntry entry;
         XMLElement atag, imgtag;
-        String text, image, htmlname;
+        String text, image, htmlname, action;
         StringBuilder onclick;
+        Map<String, String> events;
         Map<String, LinkEntry> parameters;
         Parameter parameter;
         ParameterRenderer parameterrenderer;
@@ -39,9 +40,6 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
         
         htmlname = link.getHtmlName();
         atag = new XMLElement("a");
-        if (absolute)
-            atag.add("href", link.getAction());
-        
         atag.add("id", htmlname);
         atag.add("class", link.getStyleClass());
 
@@ -88,26 +86,40 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
             }
         }
         
+        action = link.getAction();
         if (!absolute) {
-            atag.add("role", "button");
-            if (link.isScreenLockable())
-                onclick.append("formSubmit('");
-            else
-                onclick.append("formSubmitNoLock('");
-            
-            onclick.append(config.getCurrentForm()).
-                   append("', '").append(config.getCurrentAction()).
-                   append("', '").append(link.getAction()).
-                   append("');");
+            if (action != null) {
+                atag.add("role", "button");
+                if (link.isScreenLockable())
+                    onclick.append("formSubmit('");
+                else
+                    onclick.append("formSubmitNoLock('");
+                
+                onclick.append(config.getCurrentForm()).
+                       append("', '").append(config.getCurrentAction()).
+                       append("', '").append(action).
+                       append("');");
+                
+                handler = config.actionInstance(link.getAction());
+                handler.name = htmlname;
+                handler.event = "click";
+                handler.call = onclick.toString();
+            } else {
+                action = htmlname;
+            }
+        } else {
+            atag.add("href", action);
+            action = htmlname;
         }
         
-        if (onclick.length() > 0) {
-            handler = config.actionInstance(link.getAction());
+        events = link.getEvents();
+        for (String event : events.keySet()) {
+            handler = config.actionInstance(action);
             handler.name = link.getHtmlName();
-            handler.event = "click";
-            handler.call = onclick.toString();
+            handler.event = event;
+            handler.call = events.get(event);
         }
-        
+            
         image = link.getImage();
         if (image != null) {
             imgtag = new XMLElement("img");
