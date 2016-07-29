@@ -21,7 +21,7 @@ public class TextRenderer extends AbstractElementRenderer<Text> {
         ptag.add("id", text.getHtmlName());
         ptag.add("class", text.getStyleClass());
 
-        addEvents(ptag, text);
+        addAttributes(ptag, text);
         text_ = text.getText();
         ptag.addInner((text_ != null)? text_ : text.getName());
         

@@ -65,7 +65,7 @@ public class StandardNavControlDesign implements NavControlDesign {
         text.setText(user.getFirstname());
 
         loginitem = context.view.getElement("nc_login_options");
-        loginitem.addEvent("style", "display:none");
+        loginitem.addAttribute("style", "display:none");
         
         page = context.view.getPageName();
         viewctx = context.getView();

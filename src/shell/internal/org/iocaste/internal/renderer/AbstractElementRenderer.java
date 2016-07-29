@@ -30,9 +30,10 @@ public abstract class AbstractElementRenderer<T extends Element>
      * @param tag
      * @param element
      */
-    protected final void addEvents(XMLElement tag, Element element) {
-        for (String name : element.getEventNames())
-            tag.add(name, element.getEvent(name));
+    protected final void addAttributes(XMLElement tag, Element element) {
+        Map<String, String> attributes = element.getAttributes();
+        for (String name : attributes.keySet())
+            tag.add(name, attributes.get(name));
     }
     
     protected abstract XMLElement execute(T element, Config config);

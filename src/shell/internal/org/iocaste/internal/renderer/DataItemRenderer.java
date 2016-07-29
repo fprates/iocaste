@@ -51,7 +51,7 @@ public class DataItemRenderer extends AbstractElementRenderer<DataItem> {
             colname = new Text(view, inputname.concat("_form_item_text"));
             colname.setTag("span");
             colname.setText(text);
-            colname.addEvent("style", "font-weight:bold");
+            colname.addAttribute("style", "font-weight:bold");
             labeltag.addChild(get(Const.TEXT).run(colname, config));
         }
         

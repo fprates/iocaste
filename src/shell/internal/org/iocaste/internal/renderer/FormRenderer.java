@@ -2,6 +2,7 @@ package org.iocaste.internal.renderer;
 
 import java.util.Map;
 
+import org.iocaste.internal.EventHandler;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
@@ -26,6 +27,7 @@ public class FormRenderer extends AbstractElementRenderer<Form> {
         View view;
         XMLElement hiddentag, content;
         ParameterRenderer parameterrenderer;
+        EventHandler handler;
         XMLElement formtag = new XMLElement("form");
         String enctype = container.getEnctype();
         String currentaction = container.getAction();
@@ -33,7 +35,9 @@ public class FormRenderer extends AbstractElementRenderer<Form> {
 
         config.setCurrentForm(container.getHtmlName());
         config.setCurrentAction(currentaction);
-        config.actionInstance(currentaction).name = currentaction;
+        handler = config.actionInstance(currentaction);
+        handler.name = currentaction;
+        handler.submit = true;
         config.form = container;
         
         formtag.add("method", "post");
@@ -41,7 +45,7 @@ public class FormRenderer extends AbstractElementRenderer<Form> {
         formtag.add("id", htmlname);
         formtag.add("name", htmlname);
         
-        addEvents(formtag, container);
+        addAttributes(formtag, container);
         if (enctype != null)
             formtag.add("enctype", enctype);
         

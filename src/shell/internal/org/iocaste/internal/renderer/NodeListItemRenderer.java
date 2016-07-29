@@ -40,7 +40,7 @@ public class NodeListItemRenderer extends AbstractElementRenderer<NodeListItem> 
             style = nodelist.getItemsStyle();
         if (style != null)
             nltag.add("class", style);
-        addEvents(nltag, item);
+        addAttributes(nltag, item);
         
         nltag.addChildren(renderElements(item.getElements(), config));
         return nltag;

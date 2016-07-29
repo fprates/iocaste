@@ -46,7 +46,7 @@ public class DataFormRenderer extends AbstractElementRenderer<DataForm> {
         
         formtag.add("class", form.getStyleClass());
         formtag.add("id", groupname);
-        addEvents(formtag, form);
+        addAttributes(formtag, form);
         
         for (Element element : elements) {
             if (!element.isDataStorable() || !element.isVisible())

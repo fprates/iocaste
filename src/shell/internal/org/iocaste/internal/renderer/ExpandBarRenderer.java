@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.internal.EventHandler;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
@@ -19,8 +20,9 @@ public class ExpandBarRenderer extends AbstractElementRenderer<ExpandBar> {
     @Override
     protected final XMLElement execute(ExpandBar container, Config config) {
         XMLElement ebarea, ebtag;
-        String name = container.getName();
         List<XMLElement> ebtags;
+        EventHandler handler;
+        String name = container.getName();
         String edgename = new StringBuilder(name).append(".edge").toString();
         Button edge = new Button(container, edgename);
         String text = container.getText();
@@ -33,11 +35,15 @@ public class ExpandBarRenderer extends AbstractElementRenderer<ExpandBar> {
         edge.setSubmit(false);
         edge.setStyleClass(container.getEdgeStyle());
         edge.setEventHandler(container.getEventHandler());
-        edge.addEvent("onClick", new StringBuilder("revertElementDisplay('").
-                append(name).append("'); send ('").
-                append(edgename).append("', null, null);").toString());
         edge.setEnabled(container.isEnabled());
         ebarea.addChild(get(Const.BUTTON).run(edge, config));
+        
+        handler = config.actionInstance(edge.getAction());
+        handler.name = edge.getHtmlName();
+        handler.event = "click";
+        handler.call = new StringBuilder("revertElementDisplay('").
+                append(name).append("'); send ('").
+                append(edgename).append("', null, null);").toString();
         
         ebtag = new XMLElement("div");
         ebtags = new ArrayList<>();

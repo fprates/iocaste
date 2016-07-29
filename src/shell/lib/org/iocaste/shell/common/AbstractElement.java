@@ -41,7 +41,7 @@ public abstract class AbstractElement implements Element {
     private String name, htmlname, style;
     private boolean enabled, visible, translatable;
     private View view;
-    private Map<String, String> events;
+    private Map<String, String> events, attributes;
     private Locale locale;
     private EventHandler evhandler;
     
@@ -60,16 +60,17 @@ public abstract class AbstractElement implements Element {
         style = type.style();
         enabled = visible = translatable = true;
         events = new HashMap<>();
+        attributes = new HashMap<>();
     }
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#addEvent(
-     *     java.lang.String, java.lang.String)
+     * @see org.iocaste.shell.common.Element#addAttribute(
+     *    java.lang.String, java.lang.String)
      */
     @Override
-    public final void addEvent(String name, String value) {
-        events.put(name.toLowerCase(), value);
+    public final void addAttribute(String name, String value) {
+        attributes.put(name, value);
     }
     
     /*
@@ -107,11 +108,11 @@ public abstract class AbstractElement implements Element {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#getEvent(java.lang.String)
+     * @see org.iocaste.shell.common.Element#getAttributes()
      */
     @Override
-    public final String getEvent(String name) {
-        return events.get(name);
+    public final Map<String, String> getAttributes() {
+        return attributes;
     }
     
     /*
@@ -125,11 +126,11 @@ public abstract class AbstractElement implements Element {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#getEventNames()
+     * @see org.iocaste.shell.common.Element#getEvents()
      */
     @Override
-    public final String[] getEventNames() {
-        return events.keySet().toArray(new String[0]);
+    public final Map<String, String> getEvents() {
+        return events;
     }
     
     /*
@@ -250,6 +251,16 @@ public abstract class AbstractElement implements Element {
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#setEvent(
+     *    java.lang.String, java.lang.String)
+     */
+    @Override
+    public final void setEvent(String name, String js) {
+        events.put(name, js);
     }
     
     /*

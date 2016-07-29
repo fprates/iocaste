@@ -8,6 +8,7 @@ import java.util.Map;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.internal.Controller;
+import org.iocaste.internal.EventHandler;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
@@ -52,6 +53,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         XMLElement tagt, inputtag, tag;
         DataElement dataelement;
         ContextMenu ctxmenu;
+        EventHandler handler;
         boolean required;
         int length;
         
@@ -75,8 +77,12 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         inputtag.add("id", name);
         inputtag.add("maxlength", Integer.toString(length));
         inputtag.add("value", value);
-        inputtag.add("onfocus", new StringBuilder("_send('").append(name).
-                append("', '&event=onfocus', null)").toString());
+        
+        handler = config.actionInstance(name);
+        handler.name = name;
+        handler.event = "focus";
+        handler.call = new StringBuilder("_send('").append(name).
+                append("', '&event=onfocus', null);").toString();
         
         container = input.getContainer();
         if ((container != null) && (container.getType() == Const.TABLE_ITEM)) {
@@ -101,7 +107,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
                 break;
             }
         
-        addEvents(inputtag, input);
+        addAttributes(inputtag, input);
 
         tag = new XMLElement("li");
         tag.addChild(inputtag);

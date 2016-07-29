@@ -19,6 +19,7 @@ public class ButtonRenderer extends AbstractElementRenderer<Button> {
         String text, name, htmlname;
         XMLElement buttontag;
         EventHandler handler;
+        Map<String, String> events;
         
         if (!button.isVisible())
             return null;
@@ -27,8 +28,8 @@ public class ButtonRenderer extends AbstractElementRenderer<Button> {
         name = button.getName();
         htmlname = button.getHtmlName();
         buttontag = new XMLElement("button");
-        
-        if (button.getEvent("onclick") == null) {
+        events = button.getEvents();
+        if (!events.containsKey("click")) {
             if (button.isScreenLockable())
                 onclick = new StringBuilder("formSubmit('");
             else
@@ -43,6 +44,13 @@ public class ButtonRenderer extends AbstractElementRenderer<Button> {
             handler.call = onclick.toString();
         }
         
+        for (String event : events.keySet()) {
+            handler = config.actionInstance(button.getAction());
+            handler.name = htmlname;
+            handler.event = event;
+            handler.call = events.get(event);
+        }
+        
         if (button.getType() == Const.BUTTON)
             buttontag.add("type", (!button.isSubmit())? "button" : "submit");
         else
@@ -54,7 +62,7 @@ public class ButtonRenderer extends AbstractElementRenderer<Button> {
         if (!button.isEnabled())
             buttontag.add("disabled", "disabled");
         
-        addEvents(buttontag, button);
+        addAttributes(buttontag, button);
 
         buttontag.addInner((text == null)? name : text);
         return buttontag;

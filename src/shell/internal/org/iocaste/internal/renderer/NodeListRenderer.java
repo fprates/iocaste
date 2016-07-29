@@ -34,7 +34,7 @@ public class NodeListRenderer extends AbstractElementRenderer<NodeList> {
         nltag.add("id", nodelist.getName());
         nltag.add("class", nodelist.getStyleClass());
         
-        addEvents(nltag, nodelist);
+        addAttributes(nltag, nodelist);
 
         if (type == NodeList.DEFINITION) {
             itemnltag = new XMLElement("dt");

@@ -25,7 +25,7 @@ public class ParameterRenderer extends AbstractElementRenderer<InputComponent> {
         if (value != null)
             hiddentag.add("value", value);
         
-        addEvents(hiddentag, input);
+        addAttributes(hiddentag, input);
         
         return hiddentag;
     }

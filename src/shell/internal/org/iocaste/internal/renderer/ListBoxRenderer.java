@@ -52,7 +52,7 @@ public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
             selecttag.add("class", style);
         }
         
-        addEvents(selecttag, input);
+        addAttributes(selecttag, input);
         
         if (values.size() == 0) {
             selecttag.addInner("");

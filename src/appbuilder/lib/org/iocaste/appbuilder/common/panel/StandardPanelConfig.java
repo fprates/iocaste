@@ -48,7 +48,7 @@ public class StandardPanelConfig extends AbstractViewConfig {
 
         context.view.importStyle(stylesheet);
         getElement("outercontent").setStyleClass("content_area");
-        getElement("content").addEvent("style", "margin-top:3px");
+        getElement("content").addAttribute("style", "margin-top:3px");
         
         navcontrol = getNavControl();
         submit = page.getSubmit();

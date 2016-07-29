@@ -29,16 +29,16 @@ public class Response {
         
         form = context.function.getParameter("form");
         action = context.function.getParameter("action");
-        onclick = new StringBuilder("javascript:formSubmit('").
+        onclick = new StringBuilder("formSubmit('").
                 append(form).append("', '").
                 append(action).append("', '").
                 append(name).append("');").toString();
         
         control = context.control.getView().getElement(name);
-        link = new Link(container, "link_".concat(name), onclick);
-        link.setAbsolute(true);
+        link = new Link(container, "link_".concat(name), null);
         link.setText(control.getText());
         link.setStyleClass("month");
+        link.setEvent("click", onclick);
     }
     
     public static final void main(Context context) throws Exception {
@@ -166,6 +166,6 @@ public class Response {
         }
 
         new Button(container, "cancel").
-                addEvent("onClick","javascript:closeCal()");
+                setEvent("click","closeCal()");
     }
 }

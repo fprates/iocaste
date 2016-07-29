@@ -150,7 +150,13 @@ public class PageContext {
      * @return
      */
     public final boolean isAction(String action) {
-        return (actions == null)? false : actions.containsKey(action);
+        List<EventHandler> handlers = actions.get(action);
+        
+        if (handlers == null)
+            return false;
+        for (EventHandler handler : handlers)
+            return handler.submit;
+        return false;
     }
     
     /**

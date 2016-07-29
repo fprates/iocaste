@@ -23,6 +23,7 @@ package org.iocaste.shell.common;
 
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Interface fundamental para elementos.
@@ -39,14 +40,12 @@ public interface Element extends Comparable<Element>, Serializable {
      * @param name nome do evento
      * @param value ação para evento
      */
-    public abstract void addEvent(String name, String value);
+    public abstract void addAttribute(String name, String value);
     
     /**
-     * Retorna ação para evento html.
-     * @param name nome do evento
-     * @return ação
+     * 
      */
-    public abstract String getEvent(String name);
+    public abstract Map<String, String> getAttributes();
     
     /**
      * 
@@ -58,7 +57,7 @@ public interface Element extends Comparable<Element>, Serializable {
      * Retorna nomes dos eventos adicionados.
      * @return nomes
      */
-    public abstract String[] getEventNames();
+    public abstract Map<String, String> getEvents();
     
     /**
      * Retorna nome html equivalente.
@@ -150,6 +149,8 @@ public interface Element extends Comparable<Element>, Serializable {
      * @param enabled true, para habilitar elemento
      */
     public abstract void setEnabled(boolean enabled);
+    
+    public abstract void setEvent(String event, String js);
     
     /**
      * 

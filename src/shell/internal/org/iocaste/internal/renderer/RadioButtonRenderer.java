@@ -30,7 +30,7 @@ public class RadioButtonRenderer extends AbstractElementRenderer<RadioButton> {
         if (radiobutton.isSelected())
             rbtag.add("checked", "checked");
         
-        addEvents(rbtag, radiobutton);
+        addAttributes(rbtag, radiobutton);
         labeltag.addChild(rbtag);
         
         text = radiobutton.getText();

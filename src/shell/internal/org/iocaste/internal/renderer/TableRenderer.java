@@ -33,7 +33,7 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
         List<XMLElement> tags = new ArrayList<>();
 
         tabletag.add("class", table.getStyleClass());
-        addEvents(tabletag, table);
+        addAttributes(tabletag, table);
         
         title = table.getText();
         if (title != null) {

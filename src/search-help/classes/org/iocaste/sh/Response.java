@@ -34,7 +34,7 @@ public class Response {
         
         criteria = new DataForm(container, "criteria");
         criteria.setStyleClass("shcriteria");
-        criteria.addEvent("style", "display:none");
+        criteria.addAttribute("style", "display:none");
         DataForm.importModel(criteria, context.model);
         
         for (Element element : criteria.getElements()) {
@@ -87,8 +87,7 @@ public class Response {
                 
                 if (export != null && export.equals(name)) {
                     param.setModelItem(modelitem);
-                    action = new StringBuilder(
-                            "javascript:setFieldSh('").
+                    action = new StringBuilder("setFieldSh('").
                             append(sh.getInputName()).
                             append("','").
                             append(value).
@@ -150,7 +149,7 @@ public class Response {
         stdcnt = new StandardContainer(context.view, "shstdcnt");
         stdcnt.setStyleClass("shcnt");
         
-        new Button(stdcnt, "cancel").addEvent("onClick","javascript:closeSh()");
+        new Button(stdcnt, "cancel").setEvent("click","closeSh()");
         
         action = context.function.getParameter("action");
         form = context.function.getParameter("form");
@@ -159,15 +158,15 @@ public class Response {
         if (searchbt == null)
             searchbt = context.control.getHtmlName();
         
-        searchjs = new StringBuilder("javascript:formSubmit('").
+        searchjs = new StringBuilder("formSubmit('").
                 append(form).append("', '").
                 append(action).append("', '").
                 append(searchbt).append("');").toString();
         
         searchbt = "bt_".concat(searchbt);
         select = new Button(stdcnt, searchbt);
-        select.addEvent("style", "display:none");
-        select.addEvent("onclick", searchjs);
+        select.addAttribute("style", "display:none");
+        select.setEvent("click", searchjs);
         context.messages.instance("pt_BR");
         context.messages.put(searchbt, "Selecionar");
         
@@ -176,7 +175,7 @@ public class Response {
                         + "setElementDisplay('bt_criteria','none');").
                 toString();
         criteria = new Button(stdcnt, "bt_criteria");
-        criteria.addEvent("onclick", criteriajs);
+        criteria.setEvent("click", criteriajs);
         sh = context.control;
         master = sh.getMaster();
         view = context.control.getView();

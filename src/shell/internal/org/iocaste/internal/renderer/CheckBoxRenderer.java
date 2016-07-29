@@ -29,7 +29,7 @@ public class CheckBoxRenderer extends AbstractElementRenderer<InputComponent> {
         if (!input.isEnabled())
             cboxtag.add("disabled", "disabled");
         
-        addEvents(cboxtag, input);
+        addAttributes(cboxtag, input);
         
         if (input.isSelected())
             cboxtag.add("checked", "checked");

@@ -222,7 +222,7 @@ public class HtmlRenderer {
                 }
                 
                 sb = new StringBuilder(handler.name).append(handler.event);
-                handlerscript.function = sb.toString();
+                handlerscript.function = sb.toString().replace('.', '_');
 
                 sb = new StringBuilder("function ").
                         append(handlerscript.function).append("(e) {");

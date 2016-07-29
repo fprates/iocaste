@@ -28,7 +28,7 @@ public class StandardContainerRenderer
         divtag.add("id", container.getHtmlName());
         divtag.add("class", container.getStyleClass());
         
-        addEvents(divtag, container);
+        addAttributes(divtag, container);
         elements = container.getElements();
         if (elements.size() == 0)
             divtag.addInner("");
