@@ -234,6 +234,12 @@ class GetStyleSheet extends AbstractHandler {
         style.put("display", "inline-block");
         style.put("width", "100%");
         style.put("text-align", "center");
+            
+        style = stylesheet.newElement("._tiles_link");
+        style.put("margin", "0px");
+        style.put("padding", "0px");
+        style.put("text-decoration", "none");
+        style.put("cursor", "pointer");
         
         return View.convertStyleSheet(stylesheet);
     }

@@ -1,7 +1,5 @@
 package org.iocaste.appbuilder.common.tiles;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentTool;
@@ -13,7 +11,6 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.shell.common.Link;
-import org.iocaste.shell.common.StyleSheet;
 
 public class TilesTool extends AbstractComponentTool {
     
@@ -24,16 +21,6 @@ public class TilesTool extends AbstractComponentTool {
      */
     public TilesTool(ComponentEntry entry) {
         super(entry);
-    }
-    
-    private final void configStyleSheet(PageBuilderContext context) {
-        Map<String, String> style;
-        StyleSheet stylesheet = context.view.styleSheetInstance();
-        
-        style = stylesheet.newElement("._tiles_link");
-        style.put("margin", "0px");
-        style.put("padding", "0px");
-        style.put("text-decoration", "none");
     }
     
     @Override
@@ -81,7 +68,6 @@ public class TilesTool extends AbstractComponentTool {
         if (data.action) {
             itemspec = null;
             function = (AbstractPageBuilder)data.context.function;
-            configStyleSheet(data.context);
         } else {
             itemspec = tilesspec;
             function = null;
