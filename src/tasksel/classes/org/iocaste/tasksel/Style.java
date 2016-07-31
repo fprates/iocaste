@@ -31,11 +31,5 @@ public class Style {
         style.put("color", FONT_COLOR);
         style.put("font-style", "normal");
         style.put("padding", "1em");
-        
-        style = stylesheet.newElement(".tile_item");
-        style.put("margin", "0px");
-        style.put("padding", "0px");
-        style.put("text-decoration", "none");
-        style.put("cursor", "pointer");
     }
 }

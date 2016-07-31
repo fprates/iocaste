@@ -18,7 +18,7 @@ public class GroupsTileConfig extends AbstractViewConfig {
         
         tileitem = getElement("tileitem");
         tileitem.setAction("group");
-        tileitem.setStyleClass("tile_item");
+        tileitem.setStyleClass("nc_tiles_link");
     }
     
 }

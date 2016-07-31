@@ -235,7 +235,7 @@ class GetStyleSheet extends AbstractHandler {
         style.put("width", "100%");
         style.put("text-align", "center");
             
-        style = stylesheet.newElement("._tiles_link");
+        style = stylesheet.newElement(".nc_tiles_link");
         style.put("margin", "0px");
         style.put("padding", "0px");
         style.put("text-decoration", "none");

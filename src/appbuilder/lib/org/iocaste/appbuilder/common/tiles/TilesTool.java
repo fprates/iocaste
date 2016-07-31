@@ -90,7 +90,7 @@ public class TilesTool extends AbstractComponentTool {
             linkname = Tile.getLinkName(tile);
             link = data.context.view.getElement(linkname);
             link.setText("");
-            link.setStyleClass("_tiles_link");
+            link.setStyleClass("nc_tiles_link");
             view.put(linkname, new TilesAction(data.input.getAction()));
             function.register(pagename, linkname, view);
         }
