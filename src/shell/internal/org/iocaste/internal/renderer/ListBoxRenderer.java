@@ -40,10 +40,13 @@ public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
         selecttag.add("id", name);
 
         container = input.getContainer();
-        if ((container != null) && (container.getType() == Const.TABLE_ITEM))
+        if ((container != null) && (container.getType() == Const.TABLE_ITEM)) {
             style = "table_cell_content";
-        else
+        } else {
             style = input.getStyleClass();
+            if (style == null)
+                style = Const.LIST_BOX.style();
+        }
         
         if (!input.isEnabled()) {
             selecttag.add("class", style.concat("_disabled"));

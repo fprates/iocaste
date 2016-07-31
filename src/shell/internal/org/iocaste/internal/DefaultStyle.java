@@ -196,8 +196,9 @@ public class DefaultStyle {
         style.put("font-size", FONT_SIZE);
         style.put("text-decoration", "none");
         style.put("cursor", "pointer");
-        stylesheet.clone(".link:hover", ".link").put(
-                "text-decoration", "underline");
+        
+        stylesheet.clone(".link:hover", ".link").
+                put("text-decoration", "underline");
         
         stylesheet.clone(".ctxmenu_link", ".link").
                 put("text-align", "center");
@@ -207,16 +208,12 @@ public class DefaultStyle {
         style = stylesheet.newElement(".list_box");
         style.put("font-weight", "normal");
         style.put("font-size", FONT_SIZE);
-        style.put("padding", "3px");
-
-        style = stylesheet.newElement(".list_box_disabled");
-        style.put("background-color", BACKGROUND_COLOR);
-        style.put("border-style", "solid");
-        style.put("border-color", FRAME_COLOR);
-        style.put("border-width", "1px");
-        style.put("font-weight", "normal");
-        style.put("font-size", FONT_SIZE);
-        style.put("padding", "3px");
+        style.put("padding", "5px");
+        style.put("font-family", FONT_FAMILY);
+        style.put("color", FONT_COLOR);
+        
+        style = stylesheet.clone(".list_box_disabled", ".list_box");
+        style.put("color", DISABLED_FONT_COLOR);
         
         style = stylesheet.newElement(".message_box");
         style.put("position", "fixed");
