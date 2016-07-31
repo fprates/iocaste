@@ -128,12 +128,16 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
             return tagt;
         }
 
-        tag.add("style", "display:inline;float:left");
         inputtag.add("size", Integer.toString(input.getVisibleLength()));
         inputtag.add("class", sb.toString());
-        
-        if (!allowContextMenu(input))
+        if (!allowContextMenu(input)) {
+            tag.add("style", "display:inline;");
             return tagt;
+        } else {
+            tag.add("style", "display:inline;float:left;");
+            
+        }
+        
         
         ctxmenu = new ContextMenu(tagt, name);
         ctxmenu.setMessages(Controller.messages);
