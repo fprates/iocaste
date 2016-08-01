@@ -7,9 +7,4 @@ public class NodeListItem extends AbstractContainer {
     public NodeListItem(NodeList container, String name) {
         super(container, Const.NODE_LIST_ITEM, name);
     }
-    
-    public NodeListItem(NodeListItem container, String name) {
-        super(container, Const.NODE_LIST_ITEM, name);
-    }
-    
 }
