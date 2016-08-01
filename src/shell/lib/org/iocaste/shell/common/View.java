@@ -24,9 +24,11 @@ package org.iocaste.shell.common;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Implementação de camada de visão
@@ -41,7 +43,7 @@ public class View implements Serializable {
     private Element elementfocus;
     private String appname, pagename;
     private List<String> lines;
-    private List<Container> containers;
+    private Set<String> containers;
     private List<HeaderLink> links;
     private Object[][] sheet;
     private Map<String, Element> elements;
@@ -51,7 +53,7 @@ public class View implements Serializable {
     
     public View(String appname, String pagename) {
         lines = new ArrayList<>();
-        containers = new ArrayList<>();
+        containers = new LinkedHashSet<>();
         elements = new HashMap<>();
         title = new ViewTitle();
         this.appname = appname;
@@ -63,9 +65,10 @@ public class View implements Serializable {
      * @param container container
      */
     public final void add(Container container) {
+        String htmlname = container.getHtmlName();
         container.setView(this);
-        containers.add(container);
-        elements.put(container.getHtmlName(), container);
+        containers.add(htmlname);
+        elements.put(htmlname, container);
     }
     
     public final void add(HeaderLink link) {
@@ -141,7 +144,11 @@ public class View implements Serializable {
      * @return array de containers
      */
     public final Container[] getContainers() {
-        return containers.toArray(new Container[0]);
+        Container[] containers = new Container[this.containers.size()];
+        int i = 0;
+        for (String name : this.containers)
+            containers[i++] = (Container)elements.get(name);
+        return containers;
     }
     
     /**
@@ -258,7 +265,9 @@ public class View implements Serializable {
      * @param element
      */
     public final void remove(Element element) {
-        elements.remove(element.getHtmlName());
+        String htmlname = element.getHtmlName();
+        elements.remove(htmlname);
+        containers.remove(htmlname);
     }
     
     /**
