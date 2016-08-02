@@ -21,7 +21,7 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
 
     @Override
     protected final XMLElement execute(Table table, Config config) {
-        String title, name, text;
+        String title, name, text, style;
         Set<TableItem> items;
         ContextMenu ctxmenu;
         TableContextItem ctxitem;
@@ -45,19 +45,19 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
         
         if (table.hasHeader()) {
             tag = new XMLElement("thead");
-            tag.add("class", "table_head");
+            tag.add("class", table.getStyleClass(Table.HEAD));
             trtag = new XMLElement("tr");
-            trtag.add("class", "table_line");
+            trtag.add("class", table.getStyleClass(Table.LINE));
             tag.addChild(trtag);
             tabletag.addChild(tag);
-            
+            style = table.getStyleClass(Table.HEADER_CELL);
             for (TableColumn column: table.getColumns()) {
                 if ((column.isMark() && !table.hasMark()) ||
                         !column.isVisible())
                     continue;
                 
                 thtag = new XMLElement("th");
-                thtag.add("class", "table_header");
+                thtag.add("class", style);
                 if (column.isMark()) {
                     tag = new XMLElement("ul");
                     tag.add("style",
@@ -102,7 +102,9 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
         }
         
         divtag = new XMLElement("div");
-        divtag.add("class", table.getBorderStyle());
+        style = table.getStyleClass(Table.BORDER);
+        if (style != null)
+            divtag.add("class", style);
         divtag.addChild(tabletag);
         return divtag;
     }

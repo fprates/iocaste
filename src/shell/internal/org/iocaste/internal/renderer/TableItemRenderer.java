@@ -33,7 +33,7 @@ public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
         boolean mark, savemark;
         Component component;
         TableColumn column;
-        String text, style;
+        String text, style, tdstyle;
         Table table = (Table)item.getContainer();
         TableColumn[] columns = table.getColumns();
         int i = 0;
@@ -43,8 +43,9 @@ public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
         savemark = true;
         hidden = new ArrayList<>();
         style = item.getStyleClass();
-        trtag.add("class", (style == null)? "table_line" : style);
-        
+        trtag.add("class",
+                (style == null)? table.getStyleClass(Table.TABLE_LINE) : style);
+        tdstyle = table.getStyleClass(Table.TABLE_CELL);
         for (Element element : item.getElements()) {
             column = columns[i++];
             mark = column.isMark();
@@ -58,7 +59,7 @@ public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
             }
             
             tdtag = new XMLElement("td");
-            tdtag.add("class", "table_cell");
+            tdtag.add("class", tdstyle);
             
             if (element != null) {
                 tags.clear();

@@ -89,7 +89,7 @@ public class TableRender extends AbstractTableHandler {
         
         table = new Table(container, context.htmlname);
         table.setHeader(!context.data.noheader);
-        table.setBorderStyle(context.data.borderstyle);
+        table.setStyleClass(Table.BORDER, context.data.borderstyle);
         table.setEnabled(!context.data.disabled);
         context.data.last = 0;
 

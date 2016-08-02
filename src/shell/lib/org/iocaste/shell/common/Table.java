@@ -21,6 +21,7 @@
 
 package org.iocaste.shell.common;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -37,12 +38,20 @@ public class Table extends AbstractContainer {
     public static final byte SINGLE = 1;
     public static final byte ADD = 0;
     public static final byte REMOVE = 1;
+    public static final byte HEAD = 0;
+    public static final byte LINE = 1;
+    public static final byte HEADER_CELL = 2;
+    public static final byte TABLE_CELL = 3;
+    public static final byte TABLE_LINE = 4;
+    public static final byte BORDER = 5;
+    
     private boolean header, mark;
     private Map<String, TableColumn> columns;
     private Map<String, TableContextItem> context;
+    private Map<Byte, String> styles;
     private byte seltype;
     private RadioGroup group;
-    private String text, borderstyle;
+    private String text;
     
     public Table(View view, String name) {
         super(view, Const.TABLE, name);
@@ -82,14 +91,6 @@ public class Table extends AbstractContainer {
         TableContextItem ctxitem = new TableContextItem();
         context.put(action, ctxitem);
         return ctxitem;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final String getBorderStyle() {
-        return borderstyle;
     }
     
     /**
@@ -137,6 +138,10 @@ public class Table extends AbstractContainer {
         return seltype;
     }
     
+    public final String getStyleClass(byte classid) {
+        return styles.get(classid);
+    }
+    
     /**
      * Retorna título da tabela
      * @return título
@@ -170,9 +175,15 @@ public class Table extends AbstractContainer {
         header = true;
         columns = new LinkedHashMap<>();
         context = new LinkedHashMap<>();
+        styles = new HashMap<>();
+        styles.put(HEAD, "table_head");
+        styles.put(LINE, "table_line");
+        styles.put(HEADER_CELL, "table_header");
+        styles.put(TABLE_CELL, "table_cell");
+        styles.put(TABLE_LINE, "table_line");
+        styles.put(BORDER, null);
         seltype = MULTIPLE;
         group = new RadioGroup(this, getName().concat(".mark"));
-        borderstyle = "width: 100%; overflow: auto;";
         
         column = new TableColumn(this, "");
         column.setMark(true);
@@ -186,14 +197,6 @@ public class Table extends AbstractContainer {
     @Override
     public final boolean isMultiLine() {
         return true;
-    }
-    
-    /**
-     * 
-     * @param borderstyle
-     */
-    public final void setBorderStyle(String borderstyle) {
-        this.borderstyle = borderstyle;
     }
     
     /**
@@ -218,6 +221,10 @@ public class Table extends AbstractContainer {
      */
     public final void setSelectionType(byte seltype) {
         this.seltype = seltype;
+    }
+    
+    public final void setStyleClass(byte classid, String style) {
+        styles.put(classid, style);
     }
     
     /**
