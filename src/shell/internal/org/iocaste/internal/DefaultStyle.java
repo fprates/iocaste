@@ -39,7 +39,9 @@ public class DefaultStyle {
                     {"display", "block"},
                     {"float", "left"}},
                 new String[][] {
-                    {"float", "unset"}}
+                    {"float", "unset"}},
+                new String[][] {
+                    {"width", "100%"}}
             }
         });
         resolutions.put("screen768", new Object[][] {
@@ -58,7 +60,9 @@ public class DefaultStyle {
                     {"float", "unset"},
                     {"display", "table-cell"}},
                 new String[][] {
-                    {"float", "right"}}
+                    {"float", "right"}},
+                new String[][] {
+                    {"width", "unset"}}
             }
         });
         resolutions.put("screen1020", new Object[][] {
@@ -77,7 +81,9 @@ public class DefaultStyle {
                     {"float", "unset"},
                     {"display", "table-cell"}},
                 new String[][] {
-                    {"float", "right"}}
+                    {"float", "right"}},
+                new String[][] {
+                    {"width", "unset"}}
             }
         });
         resolutions.put("screen1230", new Object[][] {
@@ -96,7 +102,9 @@ public class DefaultStyle {
                     {"float", "unset"},
                     {"display", "table-cell"}},
                 new String[][] {
-                    {"float", "right"}}
+                    {"float", "right"}},
+                new String[][] {
+                    {"width", "unset"}}
             }
         });
         resolutions.put("screen1440", new Object[][] {
@@ -115,7 +123,9 @@ public class DefaultStyle {
                     {"float", "unset"},
                     {"display", "table-cell"}},
                 new String[][] {
-                    {"float", "right"}}
+                    {"float", "right"}},
+                new String[][] {
+                    {"width", "unset"}}
         }
         });
         resolutions.put("screen1600", new Object[][] {
@@ -134,7 +144,9 @@ public class DefaultStyle {
                     {"float", "unset"},
                     {"display", "table-cell"}},
                 new String[][] {
-                    {"float", "right"}}
+                    {"float", "right"}},
+                new String[][] {
+                    {"width", "unset"}}
             }
         });
     }
@@ -527,32 +539,6 @@ public class DefaultStyle {
         style.put("padding", "0px");
         style.put("margin", "0px");
 
-        style = stylesheet.newElement(".tp_button");
-        style.put("font-size", FONT_SIZE);
-        style.put("font-family", FONT_FAMILY);
-        style.put("font-weight", "bold");
-        style.put("text-align", "center");
-        style.put("border-top-style", "none");
-        style.put("border-top-width", "3px");
-        style.put("border-left-style", "none");
-        style.put("border-right-style", "none");
-        style.put("border-bottom-width", "3px");
-        style.put("padding-top", "0.3em");
-        style.put("padding-bottom", "0.3em");
-        style.put("padding-left", "1.5em");
-        style.put("padding-right", "1.5em");
-        style.put("margin", "0px");
-        style.put("color", FONT_COLOR);
-        
-        style = stylesheet.clone(".tp_button_focused", ".tp_button");
-        style.put("border-bottom-style", "solid");
-        style.put("border-bottom-color", CLICKABLE_COLOR);
-        style.put("background-color", FRAME_COLOR);
-
-        style = stylesheet.clone(".tp_button_unfocused", ".tp_button");
-        style.put("border-bottom-style", "none");
-        style.put("background-color", BACKGROUND_COLOR);
-
         style = stylesheet.newElement(".tp_item");
         style.put("margin", "0px");
         style.put("padding", STDPDDNG);
@@ -600,6 +586,35 @@ public class DefaultStyle {
             style.put("padding", "0px");
             style.put("list-style-type", "none");
             fillstyle(style, values[1][3]);
+
+            style = stylesheet.newElement(mediakey, ".tp_button");
+            style.put("font-size", FONT_SIZE);
+            style.put("font-family", FONT_FAMILY);
+            style.put("font-weight", "bold");
+            style.put("text-align", "center");
+            style.put("border-top-style", "none");
+            style.put("border-top-width", "3px");
+            style.put("border-left-style", "none");
+            style.put("border-right-style", "none");
+            style.put("border-bottom-width", "3px");
+            style.put("padding-top", "0.3em");
+            style.put("padding-bottom", "0.3em");
+            style.put("padding-left", "1.5em");
+            style.put("padding-right", "1.5em");
+            style.put("margin", "0px");
+            style.put("color", FONT_COLOR);
+            fillstyle(style, values[1][4]);
+            
+            style = stylesheet.clone(
+                    mediakey, ".tp_button_focused", ".tp_button");
+            style.put("border-bottom-style", "solid");
+            style.put("border-bottom-color", CLICKABLE_COLOR);
+            style.put("background-color", FRAME_COLOR);
+
+            style = stylesheet.clone(
+                    mediakey, ".tp_button_unfocused", ".tp_button");
+            style.put("border-bottom-style", "none");
+            style.put("background-color", BACKGROUND_COLOR);
         }
         
         return stylesheet;
