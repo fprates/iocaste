@@ -1,15 +1,14 @@
 package org.iocaste.appbuilder;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.ViewSpecItem.TYPES;
+import org.iocaste.internal.DefaultStyle;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.Media;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
@@ -22,28 +21,6 @@ public class Services extends AbstractFunction {
 }
 
 class GetStyleSheet extends AbstractHandler {
-    private Map<String, String[]> resolutions;
-
-    public GetStyleSheet() {
-        resolutions = new HashMap<>();
-        resolutions.put("default", new String[] {
-                null, "400px", "18pt", "200px", "none"});
-        resolutions.put("screen768", new String[] {
-                "screen and (min-width:768px) and (max-width:1019px)",
-                "708px", "22pt", "308px", "inline-block"});
-        resolutions.put("screen1020", new String[] {
-                "screen and (min-width:1020px) and (max-width:1229px)",
-                "960px", "22pt", "560px", "inline-block"});
-        resolutions.put("screen1230", new String[] {
-                "screen and (min-width:1230px) and (max-width:1439px)",
-                "1170px", "22pt", "770px", "inline-block"});
-        resolutions.put("screen1440", new String[] {
-                "screen and (min-width:1440px) and (max-width:1599px)",
-                "1380px", "22pt", "980px", "inline-block"});
-        resolutions.put("screen1600", new String[] {
-                "screen and (min-width:1600px)",
-                "1540px", "22pt", "1140px", "inline-block"});
-    }
     
     private final Object[] getNavbarConfig() {
         Object[][] config = new Object[12][4];
@@ -98,8 +75,7 @@ class GetStyleSheet extends AbstractHandler {
         Map<String, String> style;
         String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
         String FRAME_COLOR, SHADOW;
-        Media media;
-        String[] width;
+        Object[][] width;
         StyleSheet stylesheet = new StyleSheet();
         
         FONT_COLOR = constants.get(Shell.FONT_COLOR);
@@ -109,14 +85,12 @@ class GetStyleSheet extends AbstractHandler {
         FRAME_COLOR = constants.get(Shell.FRAME_COLOR);
         SHADOW = constants.get(Shell.SHADOW);
         
-        for (String mediakey : resolutions.keySet()) {
-            width = resolutions.get(mediakey);
-            
-            media = stylesheet.instanceMedia(mediakey);
-            media.setRule(width[0]);
+        for (String mediakey : DefaultStyle.resolutions.keySet()) {
+            width = DefaultStyle.resolutions.get(mediakey);
+            stylesheet.instanceMedia(mediakey).setRule((String)width[0][0]);
             
             style = stylesheet.newElement(mediakey, ".content_area");
-            style.put("max-width", width[1]);
+            style.put("max-width", (String)width[0][1]);
             style.put("margin-left", "auto");
             style.put("margin-right", "auto");
             style.put("margin-top", "60px");
@@ -130,17 +104,17 @@ class GetStyleSheet extends AbstractHandler {
             style.put("margin-left", "auto");
             style.put("margin-right", "auto");
             style.put("padding", "0px");
-            style.put("width", width[1]);
+            style.put("width", (String)width[0][1]);
             style.put("list-style-type", "none");
             
             style = stylesheet.newElement(mediakey, "#nc_inner_title");
-            style.put("display", width[4]);
-            style.put("width", width[3]);
+            style.put("display", (String)width[0][4]);
+            style.put("width", (String)width[0][3]);
             style.put("padding-top", "12px");
             style.put("padding-bottom", "12px");
             
             style = stylesheet.newElement(mediakey, ".nc_title");
-            style.put("font-size", width[2]);
+            style.put("font-size", (String)width[0][2]);
             style.put("font-weight", "300");
             style.put("display", "inline-block");
             style.put("color", BACKGROUND_COLOR);

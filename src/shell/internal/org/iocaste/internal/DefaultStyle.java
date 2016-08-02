@@ -9,21 +9,10 @@ import org.iocaste.shell.common.StyleSheet;
 public class DefaultStyle {
     private static final String STDPDDNG = "0.5em";
     private static final String ROUND = "3px";
-
-    public static StyleSheet instance() {
-        StyleSheet stylesheet;
-        Map<String, String> style;
-        Map<Integer, String> constants;
-        String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
-        String FRAME_COLOR, DISABLED_FONT_COLOR, FONT_SIZE, SHADOW;
-        
-        /*
-         * default style
-         */
-        stylesheet = new StyleSheet();
-        stylesheet.setLink("https://fonts.googleapis.com/css?family=Lato:400' "
-                + "rel='stylesheet' type='text/css");
-        
+    private static Map<Integer, String> constants;
+    public static Map<String, Object[][]> resolutions;
+    
+    static {
         constants = new HashMap<>();
         constants.put(Shell.FONT_COLOR, "#444");
         constants.put(Shell.FONT_FAMILY,
@@ -34,6 +23,142 @@ public class DefaultStyle {
         constants.put(Shell.DISABLED_FONT_COLOR, "rgb(150, 150, 150)");
         constants.put(Shell.FONT_SIZE, "11pt");
         constants.put(Shell.SHADOW, "1px 1px 2px #b0b0b0");
+        
+        resolutions = new HashMap<>();
+        resolutions.put("default", new Object[][] {
+            {null, "400px", "18pt", "200px", "none"},
+            {"none",
+                new String[][] {
+                    {"border-bottom-style", "solid"},
+                    {"border-bottom-width", "1px"},
+                    {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
+                    {"display", "table-row"}},
+                new String[][] {
+                    {"border-bottom-width", "0px"},
+                    {"width", "100%"},
+                    {"display", "block"},
+                    {"float", "left"}},
+                new String[][] {
+                    {"float", "unset"}}
+            }
+        });
+        resolutions.put("screen768", new Object[][] {
+            {"screen and (min-width:768px) and (max-width:1019px)",
+                "708px", "22pt", "308px", "inline-block"},
+            {"table-header-group",
+                new String[][] {
+                    {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
+                    {"border-bottom-style", "solid"},
+                    {"border-bottom-width", "1px"},
+                    {"display", "table-row"}},
+                new String[][] {
+                    {"border-bottom-style", "none"},
+                    {"border-bottom-width", "0px"},
+                    {"width", "inherit"},
+                    {"float", "unset"},
+                    {"display", "table-cell"}},
+                new String[][] {
+                    {"float", "right"}}
+            }
+        });
+        resolutions.put("screen1020", new Object[][] {
+            {"screen and (min-width:1020px) and (max-width:1229px)",
+                "960px", "22pt", "560px", "inline-block"},
+            {"table-header-group",
+                new String[][] {
+                    {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
+                    {"border-bottom-style", "solid"},
+                    {"border-bottom-width", "1px"},
+                    {"display", "table-row"}},
+                new String[][] {
+                    {"border-bottom-style", "none"},
+                    {"border-bottom-width", "0px"},
+                    {"width", "inherit"},
+                    {"float", "unset"},
+                    {"display", "table-cell"}},
+                new String[][] {
+                    {"float", "right"}}
+            }
+        });
+        resolutions.put("screen1230", new Object[][] {
+            {"screen and (min-width:1230px) and (max-width:1439px)",
+                "1170px", "22pt", "770px", "inline-block"},
+            {"table-header-group",
+                new String[][] {
+                    {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
+                    {"border-bottom-style", "solid"},
+                    {"border-bottom-width", "1px"},
+                    {"display", "table-row"}},
+                new String[][] {
+                    {"border-bottom-style", "none"},
+                    {"border-bottom-width", "0px"},
+                    {"width", "inherit"},
+                    {"float", "unset"},
+                    {"display", "table-cell"}},
+                new String[][] {
+                    {"float", "right"}}
+            }
+        });
+        resolutions.put("screen1440", new Object[][] {
+            {"screen and (min-width:1440px) and (max-width:1599px)",
+                "1380px", "22pt", "980px", "inline-block"},
+            {"table-header-group",
+                new String[][] {
+                    {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
+                    {"border-bottom-style", "solid"},
+                    {"border-bottom-width", "1px"},
+                    {"display", "table-row"}},
+                new String[][] {
+                    {"border-bottom-style", "none"},
+                    {"border-bottom-width", "0px"},
+                    {"width", "inherit"},
+                    {"float", "unset"},
+                    {"display", "table-cell"}},
+                new String[][] {
+                    {"float", "right"}}
+        }
+        });
+        resolutions.put("screen1600", new Object[][] {
+            {"screen and (min-width:1600px)",
+                "1540px", "22pt", "1140px", "inline-block"},
+            {"table-header-group",
+                new String[][] {
+                    {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
+                    {"border-bottom-style", "solid"},
+                    {"border-bottom-width", "1px"},
+                    {"display", "table-row"}},
+                new String[][] {
+                    {"border-bottom-style", "none"},
+                    {"border-bottom-width", "0px"},
+                    {"width", "inherit"},
+                    {"float", "unset"},
+                    {"display", "table-cell"}},
+                new String[][] {
+                    {"float", "right"}}
+            }
+        });
+    }
+
+    private static final void fillstyle(
+            Map<String, String> style, Object value) {
+        String[][] subvalues = (String[][])value;
+        for (int i = 0; i < subvalues.length; i++)
+            style.put(subvalues[i][0], subvalues[i][1]);
+    }
+    
+    public static final StyleSheet instance() {
+        StyleSheet stylesheet;
+        Map<String, String> style;
+        Object[][] values;
+        String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
+        String FRAME_COLOR, DISABLED_FONT_COLOR, FONT_SIZE, SHADOW;
+        
+        /*
+         * default style
+         */
+        stylesheet = new StyleSheet();
+        stylesheet.setLink("https://fonts.googleapis.com/css?family=Lato:400' "
+                + "rel='stylesheet' type='text/css");
         stylesheet.setConstants(constants);
 
         FONT_COLOR = constants.get(Shell.FONT_COLOR);
@@ -257,17 +382,14 @@ public class DefaultStyle {
         style.put("padding", "0px");
         style.put("border-collapse", "collapse");
         style.put("border-style", "none");
-
-        style = stylesheet.newElement(".table_cell");
-        style.put("padding", "0px");
+        
+        style = stylesheet.newElement(".text");
         style.put("margin", "0px");
-        style.put("border-color", FRAME_COLOR);
-        style.put("border-style", "solid");
-        style.put("border-bottom-width", "1px");
-        style.put("border-top-width", "0px");
-        style.put("border-right-width", "0px");
-        style.put("border-left-width", "0px");
-
+        style.put("padding", "0px");
+        style.put("color", FONT_COLOR);
+        style.put("font-family", FONT_FAMILY);
+        style.put("font-size", FONT_SIZE);
+        
         style = stylesheet.newElement(".table_cell_content");
         style.put("color", FONT_COLOR);
         style.put("padding", "0px");
@@ -315,13 +437,6 @@ public class DefaultStyle {
         
         style = stylesheet.newElement(".table_item_check");
         style.put("margin", "0px");
-        
-        style = stylesheet.newElement(".text");
-        style.put("margin", "0px");
-        style.put("padding", "0px");
-        style.put("color", FONT_COLOR);
-        style.put("font-family", FONT_FAMILY);
-        style.put("font-size", FONT_SIZE);
         
         // textfield base
         style = stylesheet.newElement(".text_field_base");
@@ -393,6 +508,11 @@ public class DefaultStyle {
         style = stylesheet.clone(".text_field_right_internallabel:focus",
                 ".text_field_right_internallabel");
         style.put("border-color", CLICKABLE_COLOR);
+
+        style = stylesheet.newElement(".text_field_regular");
+        style.put("margin", "0px");
+        style.put("padding", "0px");
+        style.put("list-style-type", "none");
         
         style = stylesheet.newElement(".textarea");
         style.put("width", "100%");
@@ -456,6 +576,31 @@ public class DefaultStyle {
         style.put("text-align", "center");
         style.put("font-weight", "bold");
         style.put("font-family", FONT_FAMILY);
+        
+        for (String mediakey : resolutions.keySet()) {
+            values = resolutions.get(mediakey);
+            stylesheet.instanceMedia(mediakey).setRule((String)values[0][0]);
+            
+            style = stylesheet.newElement(mediakey, ".table_head");
+            style.put("display", (String)values[1][0]);
+            
+            style = stylesheet.newElement(mediakey, ".table_line");
+            fillstyle(style, values[1][1]);
+            
+            style = stylesheet.newElement(mediakey, ".table_cell");
+            style.put("padding", "0px");
+            style.put("margin", "0px");
+            style.put("border-top-width", "0px");
+            style.put("border-right-width", "0px");
+            style.put("border-left-width", "0px");
+            fillstyle(style, values[1][2]);
+            
+            style = stylesheet.newElement(mediakey, ".text_field_cell");
+            style.put("margin", "0px");
+            style.put("padding", "0px");
+            style.put("list-style-type", "none");
+            fillstyle(style, values[1][3]);
+        }
         
         return stylesheet;
     }
