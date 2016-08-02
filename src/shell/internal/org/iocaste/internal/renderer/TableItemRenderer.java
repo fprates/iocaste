@@ -43,7 +43,7 @@ public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
         savemark = true;
         hidden = new ArrayList<>();
         style = item.getStyleClass();
-        trtag.add("class", style);
+        trtag.add("class", (style == null)? "table_line" : style);
         
         for (Element element : item.getElements()) {
             column = columns[i++];

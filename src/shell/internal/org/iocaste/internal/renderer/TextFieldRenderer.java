@@ -87,11 +87,10 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         container = input.getContainer();
         if ((container != null) && (container.getType() == Const.TABLE_ITEM)) {
             sb = new StringBuilder("table_cell_content");
-            cellstyle = "float:right;margin:0px;padding:0px;"
-                    + "list-style-type: none";
+            cellstyle = "text_field_cell";
         } else {
             sb = new StringBuilder(style);
-            cellstyle = "margin:0px;padding:0px;list-style-type:none";
+            cellstyle = "text_field_regular";
         }
         
         if (!input.isEnabled()) {
@@ -112,7 +111,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         tag = new XMLElement("li");
         tag.addChild(inputtag);
         tagt = new XMLElement("ul");
-        tagt.add("style", cellstyle);
+        tagt.add("class", cellstyle);
         tagt.addChild(tag);
 
         if (input.hasPlaceHolder()) {

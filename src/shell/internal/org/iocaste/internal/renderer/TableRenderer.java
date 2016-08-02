@@ -45,7 +45,9 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
         
         if (table.hasHeader()) {
             tag = new XMLElement("thead");
+            tag.add("class", "table_head");
             trtag = new XMLElement("tr");
+            trtag.add("class", "table_line");
             tag.addChild(trtag);
             tabletag.addChild(tag);
             
