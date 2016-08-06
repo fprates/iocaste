@@ -3,7 +3,6 @@ package org.iocaste.exhandler;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 
 public class Main extends AbstractPageBuilder {
@@ -38,15 +37,4 @@ public class Main extends AbstractPageBuilder {
         // TODO Auto-generated method stub
         
     }
-}
-
-class MainPage extends AbstractPanelPage {
-
-    @Override
-    public void execute() {
-        set(new MainSpec());
-        set(new MainConfig());
-        set(new MainInput());
-    }
-    
 }
