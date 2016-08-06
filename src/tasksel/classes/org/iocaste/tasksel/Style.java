@@ -1,35 +1,29 @@
 package org.iocaste.tasksel;
 
-import java.util.Map;
-
-import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.style.AbstractViewConfigStyle;
 import org.iocaste.shell.common.Shell;
-import org.iocaste.shell.common.StyleSheet;
 
-public class Style {
+public class Style extends AbstractViewConfigStyle {
 
-    public static final void set(PageBuilderContext context) {
-        Map<String, String> style;
-        StyleSheet stylesheet = context.view.styleSheetInstance();
-        Map<Integer, String> constants = stylesheet.getConstants();
-        String FRAME_COLOR = constants.get(Shell.FRAME_COLOR);
-        String FONT_FAMILY = constants.get(Shell.FONT_FAMILY);
-        String FONT_COLOR = constants.get(Shell.FONT_COLOR);
+    @Override
+    public void execute() {
+        instance(".tile_frame");
+        put("border-bottom-style", "solid");
+        put("border-bottom-width", "1px");
+        put("border-bottom-color", constant(Shell.FRAME_COLOR));
         
-        style = stylesheet.newElement(".tile_frame");
-        style.put("border-bottom-style", "solid");
-        style.put("border-bottom-width", "1px");
-        style.put("border-bottom-color", FRAME_COLOR);
+        clone(".tile_frame:hover", ".tile_frame");
+        put("background-color", constant(Shell.FRAME_COLOR));
         
-        style = stylesheet.clone(".tile_frame:hover", ".tile_frame");
-        style.put("background-color", FRAME_COLOR);
+        instance(".tile_text");
+        put("margin", "0px");
+        put("font-family", constant(Shell.FONT_FAMILY));
+        put("font-size", "12pt");
+        put("color", constant(Shell.FONT_COLOR));
+        put("font-style", "normal");
+        put("padding", "1em");
         
-        style = stylesheet.newElement(".tile_text");
-        style.put("margin", "0px");
-        style.put("font-family", FONT_FAMILY);
-        style.put("font-size", "12pt");
-        style.put("color", FONT_COLOR);
-        style.put("font-style", "normal");
-        style.put("padding", "1em");
+        instance(".tilestyle");
+        put("border-style", "solid");
     }
 }
