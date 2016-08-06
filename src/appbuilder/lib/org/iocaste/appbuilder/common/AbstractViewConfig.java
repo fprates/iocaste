@@ -5,7 +5,6 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
 
@@ -13,7 +12,6 @@ public abstract class AbstractViewConfig implements ViewConfig {
     private PageBuilderContext context;
     private NavControl navcontrol;
     private String prefix;
-    private StyleSheet stylesheet;
     
     /**
      * 
@@ -78,11 +76,6 @@ public abstract class AbstractViewConfig implements ViewConfig {
         return ((TabbedPane)getElement(tab)).getElement(name);
     }
     
-    @Override
-    public final StyleSheet getStyleSheet() {
-        return stylesheet;
-    }
-    
     /**
      * 
      * @return
@@ -109,7 +102,6 @@ public abstract class AbstractViewConfig implements ViewConfig {
     public final void run(PageBuilderContext context) {
         this.context = context;
         execute(context);
-        stylesheet = context.view.styleSheetInstance();
     }
     
     /*

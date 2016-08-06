@@ -7,7 +7,6 @@ import org.iocaste.shell.common.StyleSheet;
 
 public abstract class AbstractViewConfigStyle implements ViewConfigStyle {
     private PageBuilderContext context;
-    private StyleSheet stylesheet;
     private Map<String, String> style;
     private String media;
     
@@ -16,15 +15,15 @@ public abstract class AbstractViewConfigStyle implements ViewConfigStyle {
     }
     
     protected final void clone(String to, String from) {
-        style = stylesheet.clone(media, to, from);
+        style = context.stylesheet.clone(media, to, from);
     }
     
     protected final void clone(String media, String to, String from) {
-        style = stylesheet.clone(media, to, from);
+        style = context.stylesheet.clone(media, to, from);
     }
     
     protected final String constant(int code) {
-        return stylesheet.getConstants().get(code);
+        return context.stylesheet.getConstants().get(code);
     }
     
     @Override
@@ -35,7 +34,7 @@ public abstract class AbstractViewConfigStyle implements ViewConfigStyle {
     
     protected final void forEachMedia(ViewConfigStyle configstyle) {
         configstyle.setContext(context);
-        for (String mediakey : stylesheet.getMedias().keySet())
+        for (String mediakey : context.stylesheet.getMedias().keySet())
             configstyle.execute(mediakey);
     }
     
@@ -43,20 +42,24 @@ public abstract class AbstractViewConfigStyle implements ViewConfigStyle {
         return style.get(property);
     }
     
+    public final StyleSheet getStyleSheet() {
+        return context.stylesheet;
+    }
+    
     protected final void instance(String name) {
-        style = stylesheet.newElement(media, name);
+        style = context.stylesheet.newElement(media, name);
     }
     
     protected final void instance(String media, String name) {
-        style = stylesheet.newElement(media, name);
+        style = context.stylesheet.newElement(media, name);
     }
     
     protected final void load(String name) {
-        style = stylesheet.get(media, name);
+        style = context.stylesheet.get(media, name);
     }
     
     protected final void load(String media, String name) {
-        style = stylesheet.get(media, name);
+        style = context.stylesheet.get(media, name);
     }
     
     protected final void put(String property, String value, Object... args) {
@@ -65,10 +68,13 @@ public abstract class AbstractViewConfigStyle implements ViewConfigStyle {
         style.put(property, value);
     }
     
+    protected final void remove(String property) {
+        style.remove(property);
+    }
+    
     @Override
     public void setContext(PageBuilderContext context) {
         this.context = context;
-        stylesheet = context.view.styleSheetInstance();
     }
 
 }

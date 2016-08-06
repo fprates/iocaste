@@ -45,8 +45,6 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.HeaderLink;
-import org.iocaste.shell.common.Media;
-import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewTitle;
 
@@ -135,7 +133,7 @@ public class HtmlRenderer {
      * @return
      */
     private final XMLElement renderHeader(View view, Config config) {
-        StyleSheet stylesheet;
+        Object[][] stylesheet;
         XMLElement linktag;
         List<HeaderLink> links;
         Element focus = view.getFocus();
@@ -176,7 +174,7 @@ public class HtmlRenderer {
         
         if (script != null)
             headtag.addChild(renderJavaScript(script, config));
-        stylesheet = view.styleSheetInstance();
+        stylesheet = view.getStyleSheet();
         if (stylesheet != null)
             headtag.addChild(renderStyleSheet(stylesheet));
         
@@ -257,25 +255,23 @@ public class HtmlRenderer {
      * @param csselements
      * @return
      */
-    private final XMLElement renderStyleSheet(StyleSheet stylesheet) {
+    @SuppressWarnings("unchecked")
+    private final XMLElement renderStyleSheet(Object[][] stylesheet) {
         Map<String, String> properties;
-        Media media;
         boolean defaultmedia;
         XMLElement styletag;
         Map<String, Map<String, String>> csselements;
-        Map<String, Media> medias = stylesheet.getMedias();
 
         styletag = new XMLElement("style");
         styletag.add("type", "text/css");
         styletag.setLineBreak(true);
             
-        for (String mediakey : medias.keySet()) {
-            media = medias.get(mediakey);
-            defaultmedia = mediakey.equals("default");
-            csselements = stylesheet.getElements(mediakey);
+        for (int i = 0; i < stylesheet.length; i++) {
+            defaultmedia = stylesheet[i][0].equals("default");
+            csselements = (Map<String, Map<String, String>>)stylesheet[i][2];
             if (!defaultmedia) {
                 styletag.addInner(new StringBuilder("@media ").
-                        append(media.getRule()).append(" {").toString());
+                        append(stylesheet[i][1]).append(" {").toString());
             } else {
                 properties = csselements.get(".screen_locked");
                 if (properties == null) {

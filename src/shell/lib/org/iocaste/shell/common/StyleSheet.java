@@ -22,17 +22,49 @@ public class StyleSheet {
     
     public final Map<String, String> clone(String media, String to, String from)
     {
-        Map<String, String> clone;
+        Map<String, String> clone, source;
         Map<String, Map<String, String>> original;
         
         original = stylesheet.get(media);
-        clone = new HashMap<>(original.get(from));
+        source = original.get(from);
+        if (source == null)
+            source = stylesheet.get("default").get(from);
+        clone = new HashMap<>(source);
         original.put(to, clone);
         return clone;
     }
     
     public final Map<String, String> clone(String to, String from) {
         return clone("default", to, from);
+    }
+    
+    public static final Object[][] convertStyleSheet(StyleSheet stylesheet) {
+        Object[][] sheet;
+        int l;
+        Media media;
+        Map<String, Media> medias;
+        
+        l = 0;
+        medias = stylesheet.getMedias();
+        sheet = new Object[medias.size()][3];
+        for (String key : medias.keySet()) {
+            media = medias.get(key);
+            sheet[l][0] = key;
+            sheet[l][1] = media.getRule();
+            sheet[l++][2] = stylesheet.getElements(key);
+        }
+        return sheet;
+    }
+    
+    public final void export(View view) {
+        Object[][] styleconst = new Object[constants.size()][2];
+        for (Integer i : constants.keySet()) {
+            styleconst[i][0] = i;
+            styleconst[i][1] = constants.get(i);
+        }
+        
+        view.setStyleSheet(convertStyleSheet(this));
+        view.setStyleConst(styleconst);
     }
 
     public final Map<String, String> get(String media, String name) {
@@ -61,6 +93,41 @@ public class StyleSheet {
     
     public final Map<String, Media> getMedias() {
         return media;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static final StyleSheet instance(View view) {
+        String mediakey;
+        StyleSheet stylesheet;
+        Media media;
+        Map<Integer, String> constants;
+        Object[][] sheet, styleconst;
+        
+        if (view != null) {
+            sheet = view.getStyleSheet();
+            styleconst = view.getStyleConstants();
+        } else {
+            sheet = styleconst = null;
+        }
+        
+        stylesheet = new StyleSheet();
+        if (sheet != null)
+            for (int i = 0; i < sheet.length; i++) {
+                mediakey = (String)sheet[i][0];
+                media = stylesheet.instanceMedia(mediakey);
+                media.setRule((String)sheet[i][1]);
+                stylesheet.set(mediakey,
+                        (Map<String, Map<String, String>>)sheet[i][2]);
+            }
+        
+        if (styleconst != null) {
+            constants = new HashMap<>();
+            for (int i = 0; i < styleconst.length; i++)
+                constants.put((int)styleconst[i][0], (String)styleconst[i][1]);
+            stylesheet.setConstants(constants);
+        }
+        
+        return stylesheet;
     }
     
     public final Media instanceMedia(String name) {

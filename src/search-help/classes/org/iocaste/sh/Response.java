@@ -120,7 +120,7 @@ public class Response {
         Object ns;
         Map<String, String> style;
         Documents documents = new Documents(context.function);
-        StyleSheet stylesheet = context.view.styleSheetInstance();
+        StyleSheet stylesheet = StyleSheet.instance(context.view);
         Map<Integer, String> constants = stylesheet.getConstants();
         
         style = stylesheet.newElement(".shcnt");

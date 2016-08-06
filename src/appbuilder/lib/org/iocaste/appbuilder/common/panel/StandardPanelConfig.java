@@ -1,7 +1,5 @@
 package org.iocaste.appbuilder.common.panel;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
@@ -10,8 +8,6 @@ import org.iocaste.appbuilder.common.navcontrol.NavControlDesign;
 import org.iocaste.appbuilder.common.style.ViewConfigStyle;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.Media;
-import org.iocaste.shell.common.StyleSheet;
 
 public class StandardPanelConfig extends AbstractViewConfig {
     private AbstractPanelPage page;
@@ -20,33 +16,18 @@ public class StandardPanelConfig extends AbstractViewConfig {
         this.page = page;
     }
     
-    @SuppressWarnings("unchecked")
     @Override
     protected void execute(PageBuilderContext context) {
-        StyleSheet stylesheet;
-        Map<String, Map<String, String>> sheet;
         ViewConfig extconfig;
         NavControl navcontrol;
-        Media media;
-        String submit, mediakey;
+        String submit;
         ViewConfigStyle style;
         NavControlDesign design;
         
         design = context.getView().getDesign();
         if (design == null)
             setNavControlConfig(context);
-        
-        stylesheet = context.view.styleSheetInstance();
-        for (int i = 0; i < context.appbuildersheet.length; i++) {
-            mediakey = (String)context.appbuildersheet[i][0];
-            media = stylesheet.instanceMedia(mediakey);
-            media.setRule((String)context.appbuildersheet[i][1]);
-            sheet = (Map<String, Map<String, String>>)
-                    context.appbuildersheet[i][2];
-            stylesheet.add(mediakey, sheet);
-        }
 
-        context.view.importStyle(stylesheet);
         getElement("outercontent").setStyleClass("content_area");
         getElement("content").addAttribute("style", "margin-top:3px");
         
@@ -65,10 +46,10 @@ public class StandardPanelConfig extends AbstractViewConfig {
         if (style != null) {
             style.setContext(context);
             style.execute();
+            style.getStyleSheet().export(context.view);
         }
         
         config(extconfig);
-        context.view.importStyle(stylesheet);
     }
     
     private final void setNavControlConfig(PageBuilderContext context) {

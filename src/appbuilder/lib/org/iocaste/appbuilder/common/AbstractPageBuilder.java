@@ -10,6 +10,7 @@ import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Media;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
@@ -35,6 +36,22 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         validate(name, new DescriptionValidate(model, field));
     }
     
+    @SuppressWarnings("unchecked")
+    private final void extend(Object[] objects, StyleSheet stylesheet) {
+        Map<String, Map<String, String>> sheet;
+        String mediakey;
+        Media media;
+        Object[][] appbuildersheet = (Object[][])objects[0];
+        
+        for (int i = 0; i < appbuildersheet.length; i++) {
+            mediakey = (String)appbuildersheet[i][0];
+            media = stylesheet.instanceMedia(mediakey);
+            media.setRule((String)appbuildersheet[i][1]);
+            sheet = (Map<String, Map<String, String>>)appbuildersheet[i][2];
+            stylesheet.add(mediakey, sheet);
+        }
+    }
+    
     /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.AbstractPage#init(
@@ -45,7 +62,6 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         GenericService service;
         Message message;
         AbstractExtendedValidator validator;
-        StyleSheet stylesheet;
         Object[] objects;
         Documents documents = null;
         
@@ -63,12 +79,13 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         customaction = new BuilderCustomAction();
         reassignCustomActions(context);
         
-        stylesheet = context.view.styleSheetInstance();
         message = new Message("nc_data_get");
-        message.add("style_constants", stylesheet.getConstants());
+        message.add("style_constants", view.getStyleConstants());
         service = new GenericService(context.function, SERVICE);
         objects = service.invoke(message);
-        context.appbuildersheet = (Object[][])objects[0];
+        
+        context.stylesheet = StyleSheet.instance(context.view);
+        extend(objects, context.stylesheet);
         context.ncspec = (Object[][])objects[1];
         context.ncconfig = (Object[][])objects[2];
         return context;

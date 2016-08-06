@@ -45,11 +45,10 @@ public class View implements Serializable {
     private List<String> lines;
     private Set<String> containers;
     private List<HeaderLink> links;
-    private Object[][] sheet;
+    private Object[][] stylesheet, styleconst;
     private Map<String, Element> elements;
     private Locale locale;
     private ViewTitle title;
-    private Object[][] styleconst;
     
     public View(String appname, String pagename) {
         lines = new ArrayList<>();
@@ -90,24 +89,6 @@ public class View implements Serializable {
      */
     public final void clearPrintLines() {
         lines.clear();
-    }
-    
-    public static final Object[][] convertStyleSheet(StyleSheet stylesheet) {
-        Object[][] sheet;
-        int l;
-        Media media;
-        Map<String, Media> medias;
-        
-        l = 0;
-        medias = stylesheet.getMedias();
-        sheet = new Object[medias.size()][3];
-        for (String key : medias.keySet()) {
-            media = medias.get(key);
-            sheet[l][0] = key;
-            sheet[l][1] = media.getRule();
-            sheet[l++][2] = stylesheet.getElements(key);
-        }
-        return sheet;
     }
     
     /*
@@ -212,6 +193,14 @@ public class View implements Serializable {
     public final String[] getPrintLines() {
         return lines.toArray(new String[0]);
     }
+
+    public final Object[][] getStyleConstants() {
+        return styleconst;
+    }
+    
+    public final Object[][] getStyleSheet() {
+        return stylesheet;
+    }
     
     /**
      * Retorna título da página.
@@ -219,18 +208,6 @@ public class View implements Serializable {
      */
     public final ViewTitle getTitle() {
         return title;
-    }
-    
-    public final void importStyle(StyleSheet stylesheet) {
-        Map<Integer, String> constants = stylesheet.getConstants();
-        
-        styleconst = new Object[constants.size()][2];
-        for (Integer i : constants.keySet()) {
-            styleconst[i][0] = i;
-            styleconst[i][1] = constants.get(i);
-        }
-        
-        this.sheet = convertStyleSheet(stylesheet);
     }
     
     /**
@@ -294,6 +271,14 @@ public class View implements Serializable {
         this.locale = locale;
     }
     
+    public final void setStyleConst(Object[][] styleconst) {
+        this.styleconst = styleconst;
+    }
+    
+    public final void setStyleSheet(Object[][] stylesheet) {
+        this.stylesheet = stylesheet;
+    }
+    
     /**
      * Ajusta título da visão.
      * @param title título
@@ -301,32 +286,5 @@ public class View implements Serializable {
     public final void setTitle(String text, Object... args) {
         title.text = text;
         title.args = args;
-    }
-    
-    @SuppressWarnings("unchecked")
-    public final StyleSheet styleSheetInstance() {
-        String mediakey;
-        StyleSheet stylesheet;
-        Media media;
-        Map<Integer, String> constants;
-        
-        stylesheet = new StyleSheet();
-        if (sheet != null)
-            for (int i = 0; i < sheet.length; i++) {
-                mediakey = (String)sheet[i][0];
-                media = stylesheet.instanceMedia(mediakey);
-                media.setRule((String)sheet[i][1]);
-                stylesheet.set(mediakey,
-                        (Map<String, Map<String, String>>)sheet[i][2]);
-            }
-        
-        if (styleconst != null) {
-            constants = new HashMap<>();
-            for (int i = 0; i < styleconst.length; i++)
-                constants.put((int)styleconst[i][0], (String)styleconst[i][1]);
-            stylesheet.setConstants(constants);
-        }
-        
-        return stylesheet;
     }
 }

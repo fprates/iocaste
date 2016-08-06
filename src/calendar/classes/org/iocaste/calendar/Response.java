@@ -139,7 +139,7 @@ class Style {
         Map<String, String> style;
         Map<Integer, String> constants;
         
-        stylesheet = context.view.styleSheetInstance();
+        stylesheet = StyleSheet.instance(context.view);
         constants = stylesheet.getConstants();
         style = stylesheet.newElement(".calcnt");
         style.put("position", "absolute");

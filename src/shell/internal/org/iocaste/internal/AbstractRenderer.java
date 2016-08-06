@@ -158,8 +158,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         if (appname == null || pagename == null)
             throw new IocasteException("page not especified.");
 
-        stylesheet = DefaultStyle.instance();
-        view = pagectx.getViewData(); 
+        view = pagectx.getViewData();
+        stylesheet = DefaultStyle.instance(view); 
         if (!pagectx.keepView() || (view == null)) {
             view = new View(appname, pagename);
             csslink = stylesheet.getLink();
@@ -168,7 +168,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
                 view.add(link);
             }
         }
-        view.importStyle(stylesheet);
+        stylesheet.export(view);
         
         message = new Message("get_view_data");
         message.add("view", view);

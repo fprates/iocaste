@@ -149,9 +149,6 @@ public class BuilderCustomView extends AbstractCustomView
                     factory.generate(components);
             }
             return;
-        } else {
-            if (viewconfig != null)
-                context.view.importStyle(viewconfig.getStyleSheet());
         }
         
         if (viewinput != null) {

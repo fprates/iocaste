@@ -9,7 +9,6 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 
@@ -73,7 +72,6 @@ public class TableRender extends AbstractTableHandler {
     
     public static final void run(TableTool tabletool, Function function,
             Context context) {
-        StyleSheet stylesheet;
         Container container;
         Map<String, String> style;
         Table table;
@@ -81,8 +79,7 @@ public class TableRender extends AbstractTableHandler {
         container = context.data.context.view.getElement(context.data.name);
         container.setStyleClass(context.data.style);
         
-        stylesheet = context.data.context.view.styleSheetInstance();
-        style = stylesheet.newElement(".tt_skip");
+        style = context.data.context.stylesheet.newElement(".tt_skip");
         style.put("border-style", "none");
         style.put("padding", "0.2em");
         style.put("margin", "0px");

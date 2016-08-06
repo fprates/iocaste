@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
+import org.iocaste.shell.common.View;
 
 public class DefaultStyle {
     private static final String STDPDDNG = "0.5em";
@@ -158,7 +159,7 @@ public class DefaultStyle {
             style.put(subvalues[i][0], subvalues[i][1]);
     }
     
-    public static final StyleSheet instance() {
+    public static final StyleSheet instance(View view) {
         StyleSheet stylesheet;
         Map<String, String> style;
         Object[][] values;
@@ -168,7 +169,12 @@ public class DefaultStyle {
         /*
          * default style
          */
-        stylesheet = new StyleSheet();
+        
+        if (view != null) {
+            view.setStyleSheet(null);
+            view.setStyleConst(null);
+        }
+        stylesheet = StyleSheet.instance(view);
         stylesheet.setLink("https://fonts.googleapis.com/css?family=Lato:400' "
                 + "rel='stylesheet' type='text/css");
         stylesheet.setConstants(constants);

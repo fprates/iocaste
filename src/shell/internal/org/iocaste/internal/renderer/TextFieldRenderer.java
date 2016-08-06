@@ -201,9 +201,9 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         message = new Message("get_view_data");
 
         sourceview = config.getView();
-        stylesheet = sourceview.styleSheetInstance();
+        stylesheet = StyleSheet.instance(sourceview);
         view = new View(control.getApplication(), "main");
-        view.importStyle(stylesheet);
+        stylesheet.export(view);
         
         parameters = new HashMap<>();
         parameters.put("control", control);
@@ -218,7 +218,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         view = (View)viewreturn[0];
         
         control.update(view);
-        config.getView().importStyle(view.styleSheetInstance());
+        StyleSheet.instance(view).export(config.getView());
         
         tags = new ArrayList<>();
         for (Container container : view.getContainers())

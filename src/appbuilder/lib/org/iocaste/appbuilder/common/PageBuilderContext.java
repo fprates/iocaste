@@ -5,10 +5,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.shell.common.StyleSheet;
 
 public class PageBuilderContext extends AbstractContext {
     private Map<String, ViewContext> viewcontexts;
     public DownloadData downloaddata;
+    public Object[][] ncspec, ncconfig;
+    public StyleSheet stylesheet;
     
     public PageBuilderContext() {
         viewcontexts = new HashMap<>();
