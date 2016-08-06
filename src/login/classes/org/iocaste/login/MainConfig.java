@@ -1,14 +1,11 @@
 package org.iocaste.login;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.StyleSheet;
 
 public class MainConfig extends AbstractViewConfig {
 
@@ -18,24 +15,8 @@ public class MainConfig extends AbstractViewConfig {
         DataFormToolData form;
         DataFormToolItem item;
         Context extcontext;
-        Map<String, String> style;
-        StyleSheet stylesheet;
         
         getNavControl().setTitle("authentic");
-        Style.set(context);
-        
-        stylesheet = context.view.styleSheetInstance();
-        for (String mediakey : stylesheet.getMedias().keySet()) {
-            style = stylesheet.get(mediakey, ".nc_title");
-            style.put("text-align", "center");
-            style.put("margin-left", "auto");
-            style.put("margin-right", "auto");
-            style.put("margin-top", "0px");
-            style.put("margin-bottom", "0px");
-            style.put("width", "350px");
-            style.put("display", "block");
-            style.remove("margin");
-        }
         
         getElement("logincnt").setStyleClass("logincnt");
         

@@ -35,6 +35,7 @@ class MainPage extends AbstractPanelPage {
         set(new MainSpec());
         set(new MainConfig());
         set(new MainInput());
+        set(new Style());
         put("connect", new Connect());
     }
 }
@@ -45,6 +46,7 @@ class ChangeSecretPage extends AbstractPanelPage {
     public void execute() {
         set(new ChangeSecretSpec());
         set(new ChangeSecretConfig());
+        set(new Style());
         put("changesecret", new ChangeSecret());
     }
 }

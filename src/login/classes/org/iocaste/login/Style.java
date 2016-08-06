@@ -1,27 +1,39 @@
 package org.iocaste.login;
 
-import java.util.Map;
+import org.iocaste.appbuilder.common.style.AbstractViewConfigStyle;
 
-import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.shell.common.StyleSheet;
+public class Style extends AbstractViewConfigStyle {
 
-public class Style {
-
-    public static final void set(PageBuilderContext context) {
-        StyleSheet stylesheet;
-        Map<String, String> style;
+    @Override
+    public void execute() {
+        instance(".logincnt");
+        put("border-style", "none");
+        put("max-width", "300px");
+        put("margin", "auto");
         
-        stylesheet = context.view.styleSheetInstance();
-        style = stylesheet.newElement(".logincnt");
-        style.put("border-style", "none");
-        style.put("max-width", "300px");
-        style.put("margin", "auto");
+        clone(".loginform", ".form");
+        put("width", "100%");
         
-        style = stylesheet.clone(".loginform", ".form");
-        style.put("width", "100%");
+        clone(".loginsubmit", ".button");
+        put("width", "100%");
         
-        style = stylesheet.clone(".loginsubmit", ".button");
-        style.put("width", "100%");
-        
+        forEachMedia(new TitleStyle());
     }
+}
+
+class TitleStyle extends AbstractViewConfigStyle {
+
+    @Override
+    public void execute() {
+        load(".nc_title");
+        put("text-align", "center");
+        put("margin-left", "auto");
+        put("margin-right", "auto");
+        put("margin-top", "0px");
+        put("margin-bottom", "0px");
+        put("width", "350px");
+        put("display", "block");
+        remove("margin");
+    }
+    
 }

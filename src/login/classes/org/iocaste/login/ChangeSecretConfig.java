@@ -16,7 +16,6 @@ public class ChangeSecretConfig extends AbstractViewConfig {
         DataFormToolItem item;
 
         getNavControl().setTitle("password.change");
-        Style.set(context);
         
         getElement("chgscrtcnt").setStyleClass("logincnt");
         
