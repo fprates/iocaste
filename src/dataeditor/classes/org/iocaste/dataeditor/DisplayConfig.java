@@ -29,8 +29,6 @@ public class DisplayConfig extends AbstractViewConfig {
         Context extcontext;
         Documents documents;
         
-        StyleSettings.execute(config.context);
-        
         extcontext = getExtendedContext();
         getNavControl().setTitle(extcontext.model);
         

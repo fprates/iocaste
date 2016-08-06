@@ -93,6 +93,7 @@ class DisplayPage extends AbstractPanelPage {
         set(new OutputSpec());
         set(new DisplayConfig());
         set(new ItemsInput());
+        set(new StyleSettings());
         action("save", new Save());
         if (load != null)
             put("load", load);
@@ -112,7 +113,7 @@ class EditPage extends AbstractPanelPage {
         set(new OutputSpec());
         set(new EditConfig());
         set(new ItemsInput());
-        
+        set(new StyleSettings());
         action("new", new NewEntry());
         action("edit", new EditEntry());
         action("save", new Save());
