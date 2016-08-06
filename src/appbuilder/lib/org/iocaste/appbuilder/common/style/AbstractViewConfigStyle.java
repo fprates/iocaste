@@ -42,6 +42,10 @@ public abstract class AbstractViewConfigStyle implements ViewConfigStyle {
         return style.get(property);
     }
     
+    public final String getMediaKey() {
+        return media;
+    }
+    
     public final StyleSheet getStyleSheet() {
         return context.stylesheet;
     }
@@ -60,6 +64,10 @@ public abstract class AbstractViewConfigStyle implements ViewConfigStyle {
     
     protected final void load(String media, String name) {
         style = context.stylesheet.get(media, name);
+    }
+    
+    protected final void media(String name, String rule) {
+        context.stylesheet.instanceMedia(name).setRule(rule);
     }
     
     protected final void put(String property, String value, Object... args) {
