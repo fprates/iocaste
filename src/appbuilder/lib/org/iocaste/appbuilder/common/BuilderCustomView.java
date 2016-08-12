@@ -149,6 +149,8 @@ public class BuilderCustomView extends AbstractCustomView
                     factory.generate(components);
             }
             return;
+        } else {
+            _context.refreshStyle();
         }
         
         if (viewinput != null) {

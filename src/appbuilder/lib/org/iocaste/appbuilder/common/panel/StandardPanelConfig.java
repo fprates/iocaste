@@ -47,6 +47,7 @@ public class StandardPanelConfig extends AbstractViewConfig {
             style.setContext(context);
             style.execute();
             style.getStyleSheet().export(context.view);
+            context.storeStyle();
         }
         
         config(extconfig);

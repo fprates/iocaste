@@ -12,9 +12,11 @@ public class PageBuilderContext extends AbstractContext {
     public DownloadData downloaddata;
     public Object[][] ncspec, ncconfig;
     public StyleSheet stylesheet;
+    public Map<String, Object[]> styles;
     
     public PageBuilderContext() {
         viewcontexts = new HashMap<>();
+        styles = new HashMap<>();
     }
     
     /**
@@ -53,5 +55,22 @@ public class PageBuilderContext extends AbstractContext {
         context = new ViewContext(name);
         viewcontexts.put(name, context);
         return context;
+    }
+    
+    public final void refreshStyle() {
+        Object[] style = styles.get(view.getPageName());
+        view.setStyleConst((Object[][])style[0]);
+        view.setStyleSheet((Object[][])style[1]);
+    }
+    
+    public final void storeStyle() {
+        String name = view.getPageName();
+        Object[] style = styles.get(name);
+        if (style == null) {
+            style = new Object[2];
+            styles.put(name, style);
+        }
+        style[0] = view.getStyleConstants();
+        style[1] = view.getStyleSheet();
     }
 }
