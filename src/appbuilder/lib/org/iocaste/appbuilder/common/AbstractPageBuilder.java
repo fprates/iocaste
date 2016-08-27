@@ -10,8 +10,6 @@ import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.Media;
-import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
 public abstract class AbstractPageBuilder extends AbstractPage {
@@ -34,22 +32,6 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     
     protected final void description(String name, String model, String field) {
         validate(name, new DescriptionValidate(model, field));
-    }
-    
-    @SuppressWarnings("unchecked")
-    private final void extend(Object[] objects, StyleSheet stylesheet) {
-        Map<String, Map<String, String>> sheet;
-        String mediakey;
-        Media media;
-        Object[][] appbuildersheet = (Object[][])objects[0];
-        
-        for (int i = 0; i < appbuildersheet.length; i++) {
-            mediakey = (String)appbuildersheet[i][0];
-            media = stylesheet.instanceMedia(mediakey);
-            media.setRule((String)appbuildersheet[i][1]);
-            sheet = (Map<String, Map<String, String>>)appbuildersheet[i][2];
-            stylesheet.add(mediakey, sheet);
-        }
     }
     
     /*
@@ -84,8 +66,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         service = new GenericService(context.function, SERVICE);
         objects = service.invoke(message);
         
-        context.stylesheet = StyleSheet.instance(context.view);
-        extend(objects, context.stylesheet);
+        context.ncsheet = (Object[][])objects[0];
         context.ncspec = (Object[][])objects[1];
         context.ncconfig = (Object[][])objects[2];
         return context;

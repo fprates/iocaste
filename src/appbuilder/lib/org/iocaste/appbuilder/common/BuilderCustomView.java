@@ -6,6 +6,8 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.factories.SpecFactory;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.shell.common.Media;
+import org.iocaste.shell.common.StyleSheet;
 
 public class BuilderCustomView extends AbstractCustomView
         implements ExtendedCustomView {
@@ -122,6 +124,7 @@ public class BuilderCustomView extends AbstractCustomView
 
             navcontrol = factories.get(ViewSpecItem.TYPES.PAGE_CONTROL).get();
             if (viewconfig != null) {
+                extendStyleSheet(_context);
                 viewconfig.setNavControl(navcontrol);
                 viewconfig.run(_context);
             }
@@ -168,6 +171,22 @@ public class BuilderCustomView extends AbstractCustomView
                 if (factory != null)
                     factory.update(components);
             }
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    private final void extendStyleSheet(PageBuilderContext context) {
+        Map<String, Map<String, String>> sheet;
+        String mediakey;
+        Media media;
+
+        context.stylesheet = StyleSheet.instance(context.view);
+        for (int i = 0; i < context.ncsheet.length; i++) {
+            mediakey = (String)context.ncsheet[i][0];
+            media = context.stylesheet.instanceMedia(mediakey);
+            media.setRule((String)context.ncsheet[i][1]);
+            sheet = (Map<String, Map<String, String>>)context.ncsheet[i][2];
+            context.stylesheet.add(mediakey, sheet);
         }
     }
     

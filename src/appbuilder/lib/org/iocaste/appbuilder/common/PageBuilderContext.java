@@ -10,7 +10,7 @@ import org.iocaste.shell.common.StyleSheet;
 public class PageBuilderContext extends AbstractContext {
     private Map<String, ViewContext> viewcontexts;
     public DownloadData downloaddata;
-    public Object[][] ncspec, ncconfig;
+    public Object[][] ncsheet, ncspec, ncconfig;
     public StyleSheet stylesheet;
     public Map<String, Object[]> styles;
     
