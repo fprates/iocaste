@@ -8,11 +8,8 @@ import org.iocaste.appbuilder.common.GetFieldsProperties;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
-import org.iocaste.appbuilder.common.cmodelviewer.EntityCustomPage;
 import org.iocaste.appbuilder.common.cmodelviewer.Load;
-import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceInput;
 import org.iocaste.appbuilder.common.cmodelviewer.Save;
-import org.iocaste.appbuilder.common.cmodelviewer.SelectConfig;
 import org.iocaste.appbuilder.common.cmodelviewer.Validate;
 import org.iocaste.external.install.FunctionsInstall;
 import org.iocaste.external.install.PortsInstall;
@@ -40,16 +37,13 @@ public class Main extends AbstractModelViewer {
         link = getReceivedLink();
         switch (link.entity) {
         case "externalstruct":
-            link.maintenancespec = new ExternalMaintenanceSpec();
-            link.maintenanceconfig = new ExternalMaintenanceConfig();
-            link.maintenanceinput = new MaintenanceInput();
-            link.createselectconfig = new SelectConfig("XTRNL_STRUCTURE");
-            link.displayconfig = new ExternalDisplayConfig();
             link.validate = new Validate();
             link.save = new Save();
             link.updateload = new Load(link.edit1view);
             link.displayload = new Load(link.display1view);
             link.custompage = new ExternalCustomPage();
+            link.displaypage = new ExternalDisplayPage();
+            link.entitypage = new ExternalEntityPage();
             
             break;
         }
@@ -95,13 +89,4 @@ public class Main extends AbstractModelViewer {
         installObject("models", new PortsInstall());
     }
 
-}
-
-class ExternalCustomPage extends EntityCustomPage {
-    
-    @Override
-    public final void execute() {
-        super.execute();
-        put("importmodel", new ImportModel());
-    }
 }

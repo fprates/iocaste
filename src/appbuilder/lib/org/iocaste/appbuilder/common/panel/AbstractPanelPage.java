@@ -15,9 +15,9 @@ import org.iocaste.appbuilder.common.style.ViewConfigStyle;
 
 public abstract class AbstractPanelPage {
     private ViewContext view;
-    private ViewSpec spec;
-    private ViewConfig config;
-    private ViewInput input;
+    public ViewSpec spec;
+    public ViewConfig config;
+    public ViewInput input;
     private Set<String> actions;
     private String submit;
     private ViewConfigStyle style;

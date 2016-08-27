@@ -41,9 +41,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
     
     protected final void loadManagedModule(PageBuilderContext context,
             AppBuilderLink link) {
-        EntityPage entitypage;
-        EntityCustomPage custompage;
-        EntityDisplayPage displaypage;
         StandardPanel panel;
         ViewSpec selspec;
         String entityaction;
@@ -62,37 +59,30 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         
         for (String action : new String[] {CREATE, EDIT, DISPLAY}) {
             if ((link.number != null) && action.equals(CREATE) &&
-                    (link.createselectconfig == null))
+                    (link.entitypage.config == null))
                 continue;
             
-            entitypage = (link.entitypage == null)?
-                    new EntityPage() : link.entitypage;
-            entitypage.action = action;
-            entitypage.spec = selspec;
-            entitypage.link = link;
+            link.entitypage.action = action;
+            link.entitypage.spec = selspec;
+            link.entitypage.link = link;
             
             entityaction = link.entity.concat(action);
-            panel.instance(entityaction, entitypage, extcontext);
+            panel.instance(entityaction, link.entitypage, extcontext);
         }
         
-        custompage = (link.custompage == null)?
-                new EntityCustomPage() : link.custompage;
-        custompage.link = link;
+        link.custompage.link = link;
         
         for (String view : new String[] {
                 link.createview, link.create1view, link.edit1view}) {
             if (view.equals(link.createview) &&
-                    ((link.number == null) ||
-                            (link.createselectconfig != null)))
+                    ((link.number == null) || (link.custompage.config != null)))
                 continue;
             
-            panel.instance(view, custompage, extcontext);
+            panel.instance(view, link.custompage, extcontext);
         }
 
-        displaypage = (link.displaypage == null)?
-                new EntityDisplayPage() : link.displaypage;
-        displaypage.link = link;
-        panel.instance(link.display1view, displaypage, extcontext);
+        link.displaypage.link = link;
+        panel.instance(link.display1view, link.displaypage, extcontext);
     }
     
     /**

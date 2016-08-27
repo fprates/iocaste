@@ -5,10 +5,22 @@ import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.ViewSpec;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 
-public class EntityPage extends AbstractPanelPage {
+public class AbstractEntityPage extends AbstractPanelPage {
     public String action;
     public ViewSpec spec;
     public AppBuilderLink link;
+    private ViewConfig createselectconfig;
+    private ViewConfig updateselectconfig;
+    private ViewConfig displayselectconfig;
+    
+    public AbstractEntityPage(
+            ViewConfig createselectconfig,
+            ViewConfig updateselectconfig,
+            ViewConfig displayselectconfig) {
+        this.createselectconfig = createselectconfig;
+        this.updateselectconfig = updateselectconfig;
+        this.displayselectconfig = displayselectconfig;
+    }
     
     @Override
     public void execute() {
@@ -17,15 +29,15 @@ public class EntityPage extends AbstractPanelPage {
         
         switch (action) {
         case AbstractModelViewer.CREATE:
-            setSelectConfig(link.createselectconfig, link);
+            setSelectConfig(createselectconfig, link);
             action(action, link.validate);
             break;
         case AbstractModelViewer.EDIT:
-            setSelectConfig(link.updateselectconfig, link);
+            setSelectConfig(updateselectconfig, link);
             action(action, link.updateload);
             break;
         case AbstractModelViewer.DISPLAY:
-            setSelectConfig(link.displayselectconfig, link);
+            setSelectConfig(displayselectconfig, link);
             action(action, link.displayload);
             break;
         }

@@ -4,11 +4,9 @@ import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
-import org.iocaste.appbuilder.common.cmodelviewer.DisplayConfig;
+import org.iocaste.appbuilder.common.cmodelviewer.DisplayMaintenancePage;
 import org.iocaste.appbuilder.common.cmodelviewer.Load;
-import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceConfig;
-import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceInput;
-import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceSpec;
+import org.iocaste.appbuilder.common.cmodelviewer.MaintenancePage;
 import org.iocaste.appbuilder.common.cmodelviewer.Save;
 import org.iocaste.appbuilder.common.cmodelviewer.Validate;
 import org.iocaste.documents.common.ComplexModel;
@@ -28,14 +26,12 @@ public class Main extends AbstractModelViewer {
             setMessageSource(msgsource);
         
         new Messages(context.messages);
-        link.displayconfig = new DisplayConfig();
-        link.maintenancespec = new MaintenanceSpec();
-        link.maintenanceinput = new MaintenanceInput();
-        link.maintenanceconfig = new MaintenanceConfig();
         link.updateload = new Load(link.edit1view);
         link.displayload = new Load(link.display1view);
         link.validate = new Validate();
         link.save = new Save();
+        link.custompage = new MaintenancePage();
+        link.displaypage = new DisplayMaintenancePage();
 
         if (link.cmodel != null) {
             documents = new Documents(context.function);
