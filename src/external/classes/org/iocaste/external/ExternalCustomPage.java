@@ -13,7 +13,7 @@ public class ExternalCustomPage extends AbstractEntityCustomPage {
     @Override
     public final void execute() {
         super.execute();
+        set(new Style());
         put("importmodel", new ImportModel());
     }
 }
-

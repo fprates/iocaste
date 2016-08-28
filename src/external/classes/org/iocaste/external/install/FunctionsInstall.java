@@ -114,7 +114,7 @@ public class FunctionsInstall extends AbstractInstallObject {
         
         cmodel = cmodelInstance("XTRNL_FUNCTION");
         cmodel.header("functionhead");
-        cmodel.item("parameters", "functionitem");
+        cmodel.item("parameters", "functionitem").index = "NAME";
     }
 
 }

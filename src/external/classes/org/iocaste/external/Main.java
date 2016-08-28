@@ -86,7 +86,7 @@ public class Main extends AbstractModelViewer {
 
         installObject("texts", new TextsInstall());
         installObject("functions", new FunctionsInstall());
-        installObject("models", new PortsInstall());
+        installObject("ports", new PortsInstall());
     }
 
 }
