@@ -34,7 +34,7 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
         XMLElement tabbedtag = new XMLElement("div");
         
         tabbedtag.add("id", tabbedpane.getName());
-        tabbedtag.add("class", "tp_outer");
+        tabbedtag.add("class", tabbedpane.getStyleClass());
         
         elements = tabbedpane.getElements();
         current = tabbedpane.getCurrentPage();
