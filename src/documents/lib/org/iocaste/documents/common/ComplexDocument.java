@@ -42,6 +42,7 @@ public class ComplexDocument implements Serializable,
         Object key;
         DocumentModel model;
         ComplexModelItem citem;
+        ComplexDocumentItems cdocitems;
         
         if (object == null)
             return;
@@ -52,6 +53,9 @@ public class ComplexDocument implements Serializable,
         citem = cmodel.getItems().get(alias);
         key = (citem.index == null)?
                 getKey(cmodel, model, object, alias) : object.get(citem.index);
+        cdocitems = items.get(alias);
+        if (key == null)
+            key = cdocitems.objects.size();
         items.get(alias).objects.put(key, object);
     }
     
@@ -59,6 +63,7 @@ public class ComplexDocument implements Serializable,
         String alias;
         Object key;
         ComplexModelItem citem;
+        ComplexDocumentItems cdocitems;
         
         if (document == null)
             return;
@@ -68,7 +73,10 @@ public class ComplexDocument implements Serializable,
         citem = cmodel.getItems().get(alias);
         key = (citem.index == null)?
                 document.getKey() : document.getHeader().get(citem.index);
-        items.get(alias).documents.put(key, document);
+        cdocitems = items.get(alias);
+        if (key == null)
+            key = cdocitems.documents.size();
+        cdocitems.documents.put(key, document);
     }
     
     /**

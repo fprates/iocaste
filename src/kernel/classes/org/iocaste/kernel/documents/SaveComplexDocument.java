@@ -1,6 +1,9 @@
 package org.iocaste.kernel.documents;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
@@ -29,7 +32,9 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         ExtendedObject head;
         ComplexDocumentItems group;
         ExtendedObject item;
+        SaveCDocumentItem cdocitem;
         Map<String, ComplexModelItem> cmodelitems;
+        List<SaveCDocumentItem> cdocitems;
         ComplexDocument document = message.get("document");
         
         /*
@@ -76,11 +81,12 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         
         ns = document.getNS();
         cmodelitems = cmodel.getItems();
+        cdocitems = new ArrayList<>();
         for (String key : cmodelitems.keySet()) {
             group = document.get(key);
-            i = 0;
             if ((group == null) || (group.objects == null))
                 continue;
+            i = 0;
             cmodelitem = cmodelitems.get(key);
             for (Object groupitemkey : group.objects.keySet()) {
                 item = group.objects.get(groupitemkey);
@@ -105,9 +111,25 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
                 i++;
                 item.setNS(ns);
                 item.set(reference, id);
+                
+                if (cmodelitem.index != null)
+                    itemkey = cmodelitem.index;
+                if (groupitemkey.equals(item.get(itemkey)))
+                    continue;
+                cdocitem = new SaveCDocumentItem();
+                cdocitem.groupkey = key;
+                cdocitem.groupitemkey = groupitemkey;
+                cdocitem.item = item;
+                cdocitems.add(cdocitem);
             }
         }
-
+        
+        for (SaveCDocumentItem _cdocitem : cdocitems) {
+            group = document.get(_cdocitem.groupkey);
+            document.add(_cdocitem.item);
+            group.objects.remove(_cdocitem.groupitemkey);
+        }
+        
         save(document, message.getSessionid());
         return document;
     }
@@ -157,9 +179,18 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
             items = original.getItemsMap(name);
             if (items == null)
                 continue;
-            for (Object key : items.keySet())
+            for (Object key : items.keySet()) {
+                if (key instanceof BigDecimal)
+                    key = ((BigDecimal)key).longValue();
                 if (!document.getItemsMap(name).containsKey(key))
                     delete.run(data.documents, data.connection, items.get(key));
+            }
         }
     }
+}
+
+class SaveCDocumentItem {
+    public String groupkey;
+    public Object groupitemkey;
+    public ExtendedObject item;
 }
