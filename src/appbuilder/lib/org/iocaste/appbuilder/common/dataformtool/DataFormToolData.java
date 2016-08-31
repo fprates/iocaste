@@ -11,7 +11,6 @@ public class DataFormToolData extends AbstractComponentData {
     public String sh;
     public String[] groups;
     public boolean internallabel;
-    public int columns;
     
     public DataFormToolData() {
         super(TYPES.DATA_FORM);
