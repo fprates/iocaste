@@ -23,6 +23,7 @@ public class DataItem extends AbstractInputComponent
         setHtmlName(new StringBuilder(form.getName()).
                 append(".").
                 append(name).toString());
+        setStyleClass("form_cell");
     }
     
     /**

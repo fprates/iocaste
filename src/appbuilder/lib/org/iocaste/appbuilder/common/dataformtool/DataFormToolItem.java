@@ -6,7 +6,7 @@ import org.iocaste.documents.common.DataElement;
 public class DataFormToolItem extends AbstractComponentDataItem {
     public boolean secret;
     public DataElement element;
-    public String group;
+    public String group, style;
     
     public DataFormToolItem(DataFormToolData data, String name) {
         super(name);

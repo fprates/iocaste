@@ -66,7 +66,7 @@ public class DataItemRenderer extends AbstractElementRenderer<DataItem> {
         labeltag.addChild(
                 get(dataitem.getComponentType()).run(dataitem, config));
         itemtag = new XMLElement("li");
-        itemtag.add("class", "form_cell");
+        itemtag.add("class", dataitem.getStyleClass());
         itemtag.addChild(labeltag);
         formtag.addChild(itemtag);
     }

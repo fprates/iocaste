@@ -158,6 +158,8 @@ public class DataFormTool extends AbstractComponentTool {
                 data.custommodel.getModelItem(name).setSearchHelp(item.sh);
             setItem(data, input, item);
             input.setVisible(!item.invisible);
+            if (item.style != null)
+                input.setStyleClass(item.style);
             if (item.ns)
                 df.setNSReference(input.getHtmlName());
             if ((data.groups != null) && (item.group != null))
