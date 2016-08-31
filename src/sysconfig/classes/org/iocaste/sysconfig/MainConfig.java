@@ -16,7 +16,7 @@ public class MainConfig extends AbstractViewConfig {
             module = extcontext.modules.get(name);
             tabletool = getTool(name);
             tabletool.model = module.model;
-            tabletool.enableonly = module.enabled;
+            enable(tabletool, module.enabled);
             tabletool.mode = TableTool.DISPLAY;
             tabletool.mark = false;
         }

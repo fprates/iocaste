@@ -1,5 +1,8 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -12,6 +15,11 @@ public abstract class AbstractViewConfig implements ViewConfig {
     private PageBuilderContext context;
     private NavControl navcontrol;
     private String prefix;
+    private Map<String, DocumentModel> models;
+    
+    public AbstractViewConfig() {
+        models = new HashMap<>();
+    }
     
     /**
      * 
@@ -20,6 +28,14 @@ public abstract class AbstractViewConfig implements ViewConfig {
     protected final void config(ViewConfig viewconfig) {
         viewconfig.setNavControl(navcontrol);
         viewconfig.run(context);
+    }
+    
+    protected final void disable(AbstractComponentData data, String... fields) {
+        setEnable(data, false, fields);
+    }
+    
+    protected final void enable(AbstractComponentData data, String... fields) {
+        setEnable(data, true, fields);
     }
     
     /**
@@ -58,6 +74,19 @@ public abstract class AbstractViewConfig implements ViewConfig {
                 getExtendedContext();
     }
     
+    private final DocumentModel getModel(AbstractComponentData data) {
+        DocumentModel model;
+        
+        if (data.custommodel != null)
+            return data.custommodel;
+        model = models.get(data.model);
+        if (model != null)
+            return model;
+        model = new Documents(context.function).getModel(data.model);
+        models.put(data.model, model);
+        return model;
+    }
+    
     /**
      * 
      * @return
@@ -85,12 +114,7 @@ public abstract class AbstractViewConfig implements ViewConfig {
     }
     
     protected final void hide(AbstractComponentData data, String... fields) {
-        DocumentModel model = new Documents(context.function).
-                getModel(data.model);
-        for (DocumentModelItem item : model.getItens())
-            data.instance(item.getName()).invisible = false;
-        for (String name : fields)
-            data.get(name).invisible = true;
+        setVisible(data, false, fields);
     }
     
     /*
@@ -125,19 +149,38 @@ public abstract class AbstractViewConfig implements ViewConfig {
     public final void setNavControl(NavControl navcontrol) {
         this.navcontrol = navcontrol;
     }
-    
-    protected final void show(AbstractComponentData data, String... fields) {
+
+    private final void setEnable(AbstractComponentData data, boolean enable,
+            String... fields) {
         DocumentModel model;
         DocumentModelItem ns;
         
-        model = (data.custommodel != null)? data.custommodel :
-            new Documents(context.function).getModel(data.model);
+        model = getModel(data);
         ns = model.getNamespace();
         if (ns != null)
-            data.instance(ns.getName()).invisible = true;
+            data.instance(ns.getName()).disabled = enable;
         for (DocumentModelItem item : model.getItens())
-            data.instance(item.getName()).invisible = true;
+            data.instance(item.getName()).disabled = enable;
         for (String name : fields)
-            data.get(name).invisible = false;
+            data.get(name).disabled = !enable;
+    }
+    
+    private final void setVisible(AbstractComponentData data, boolean visible,
+            String... fields) {
+        DocumentModel model;
+        DocumentModelItem ns;
+        
+        model = getModel(data);
+        ns = model.getNamespace();
+        if (ns != null)
+            data.instance(ns.getName()).invisible = visible;
+        for (DocumentModelItem item : model.getItens())
+            data.instance(item.getName()).invisible = visible;
+        for (String name : fields)
+            data.get(name).invisible = !visible;
+    }
+    
+    protected final void show(AbstractComponentData data, String... fields) {
+        setVisible(data, true, fields);
     }
 }

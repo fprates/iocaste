@@ -207,15 +207,6 @@ public abstract class AbstractTableHandler {
             columns = context.data.get();
             for (String column : columns.keySet())
                 columns.get(column).disabled = true;
-            if (context.data.enableonly == null)
-                break;
-            
-            for (String name : context.data.enableonly)
-                if (!columns.containsKey(name))
-                    throw new RuntimeException(
-                            name.concat(" isn't a valid column."));
-                else
-                    columns.get(name).disabled = false;
             break;
         }
 
