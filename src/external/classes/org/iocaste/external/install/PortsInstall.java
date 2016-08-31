@@ -123,7 +123,7 @@ public class PortsInstall extends AbstractInstallObject {
         
         cmodel = cmodelInstance("XTRNL_CONNECTION");
         cmodel.header("porthead");
-        cmodel.item("functions", "portfunction").index = "FUNCTION";
+        cmodel.item("functions", "portfunction");
         
         /*
          * object model reference
