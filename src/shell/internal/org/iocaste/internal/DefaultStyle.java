@@ -318,7 +318,7 @@ public class DefaultStyle {
         style = stylesheet.newElement(".form_cell");
         style.put("padding", "0px");
         style.put("margin-top", "0px");
-        style.put("margin-bottom", "10px");
+        style.put("margin-bottom", "2px");
         style.put("margin-right", "0px");
         style.put("margin-left", "0px");
         style.put("width", "100%");
