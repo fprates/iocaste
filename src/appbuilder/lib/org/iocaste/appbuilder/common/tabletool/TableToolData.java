@@ -42,10 +42,10 @@ public class TableToolData extends AbstractComponentData {
     }
     
     public static final TableToolItem add(ExtendedContext extcontext,
-            String ttname, ExtendedObject object) {
-        TableToolData ttdata = extcontext.getContext().getView().
+            String page, String ttname, ExtendedObject object) {
+        TableToolData ttdata = extcontext.getContext().getView(page).
                 getComponents().getComponentData(ttname);
-        TableToolContextEntry entry = extcontext.tableInstance(ttname);
+        TableToolContextEntry entry = extcontext.tableInstance(page, ttname);
         return add(ttdata, entry.items, object);
     }
     

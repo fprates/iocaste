@@ -33,7 +33,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         if ((entry.handler != null) && entry.handler.isInitialized())
             entry.handler.add(ttname, object);
         else
-            TableToolData.add(this, ttname, object);
+            TableToolData.add(this, page, ttname, object);
     }
     
     @Override
@@ -166,8 +166,8 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         if ((entry.handler != null) && entry.handler.isInitialized())
             entry.handler.add(ttname, objects);
         else
-            for (int i = 0; i < objects.length; i++)
-                TableToolData.set(this, page, ttname, i, objects[i]);
+            for (ExtendedObject object : objects)
+                TableToolData.add(this, page, ttname, object);
     }
 
     @Override
