@@ -78,7 +78,8 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     @Override
     public final ExtendedObject get(String page, String ttname, int line) {
         PageContext pagectx = pages.get(page);
-        return pagectx.tabletools.get(ttname).items.get(line).object;
+        TableToolItem ttitem = pagectx.tabletools.get(ttname).items.get(line);
+        return (ttitem == null)? null : ttitem.object;
     }
     
     @Override
