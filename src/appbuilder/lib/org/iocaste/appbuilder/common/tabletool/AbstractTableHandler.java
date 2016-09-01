@@ -1,6 +1,5 @@
 package org.iocaste.appbuilder.common.tabletool;
 
-import java.util.List;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractComponentDataItem;
@@ -154,7 +153,7 @@ public abstract class AbstractTableHandler {
     }
     
     protected static final void additems(TableTool tabletool,
-            Context context, List<TableToolItem> items) {
+            Context context, Map<Integer, TableToolItem> items) {
         int l, lastline;
         int vlines = context.data.vlines;
         
@@ -169,13 +168,13 @@ public abstract class AbstractTableHandler {
             if (vlines == 0)
                 vlines = context.data.getItems().size();
             lastline = context.data.topline + vlines - 1;
-            for (TableToolItem item : items) {
+            for (int key : items.keySet()) {
                 l++;
                 if (l < context.data.topline)
                     continue;
                 if (l > lastline)
                     break;
-                additem(tabletool, context, item, -1);
+                additem(tabletool, context, items.get(key), -1);
             }
         }
     }
@@ -227,8 +226,9 @@ public abstract class AbstractTableHandler {
      * 
      * @param objects
      */
-    protected static final void setObjects(TableTool tabletool, Context context) {
-        List<TableToolItem> items = context.data.getItems();
+    protected static final void setObjects(TableTool tabletool, Context context)
+    {
+        Map<Integer, TableToolItem> items = context.data.getItems();
         Table table = tabletool.getElement();
         
         tabletool.setVisibleNavigation(context, items);

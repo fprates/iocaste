@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.ContextDataHandler;
+import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class TableToolContextEntry {
     private String name;
     private List<ExtendedObject> citems;
-    public Map<Integer, ExtendedObject> items;
+    public Map<Integer, TableToolItem> items;
     public ContextDataHandler handler;
     
     public TableToolContextEntry(String name) {
@@ -33,8 +34,13 @@ public class TableToolContextEntry {
     }
     
     public Collection<ExtendedObject> getItems() {
+        List<ExtendedObject> objects;
+        
         if ((handler != null) && handler.isInitialized())
             return getItems(name);
-        return items.values();
+        objects = new ArrayList<>();
+        for (int index : items.keySet())
+            objects.add(items.get(index).object);
+        return objects;
     }
 }

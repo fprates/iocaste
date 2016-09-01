@@ -39,7 +39,7 @@ public class ImportModel extends AbstractActionHandler {
         delete = new ArrayList<>();
         table = extcontext.tableInstance("items_table");
         for (int i : table.items.keySet()) {
-            object = table.items.get(i);
+            object = table.items.get(i).object;
             if (Documents.isInitial(object))
                 delete.add(i);
         }

@@ -1,16 +1,17 @@
 package org.iocaste.appbuilder.common.tabletool;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentDataItem;
+import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
+import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class TableToolData extends AbstractComponentData {
-    private List<TableToolItem> items;
     public String borderstyle, highlightstyle;
     public String itemcolumn, nsfield;
     public boolean mark, noheader;
@@ -23,17 +24,29 @@ public class TableToolData extends AbstractComponentData {
         vlines = 15;
         step = 1;
         increment = 1;
-        items = new ArrayList<>();
     }
     
     public final TableToolItem add(ExtendedObject object) {
+        return add(this, getItems(), object);
+    }
+    
+    public static final TableToolItem add(TableToolData ttdata,
+            Map<Integer, TableToolItem> items, ExtendedObject object) {
         TableToolItem item;
         
-        item = new TableToolItem(this);
+        item = new TableToolItem(ttdata);
         item.object = object;
         item.position += items.size();
-        items.add(item);
+        items.put(item.position, item);
         return item;
+    }
+    
+    public static final TableToolItem add(ExtendedContext extcontext,
+            String ttname, ExtendedObject object) {
+        TableToolData ttdata = extcontext.getContext().getView().
+                getComponents().getComponentData(ttname);
+        TableToolContextEntry entry = extcontext.tableInstance(ttname);
+        return add(ttdata, entry.items, object);
     }
     
     public final void add(Collection<ExtendedObject> objects) {
@@ -53,11 +66,11 @@ public class TableToolData extends AbstractComponentData {
     }
     
     public final void clear() {
-        items.clear();
+        getItems().clear();
     }
     
-    public final List<TableToolItem> getItems() {
-        return items;
+    public final Map<Integer, TableToolItem> getItems() {
+        return context.getView().getExtendedContext().tableInstance(name).items;
     }
 
     @SuppressWarnings("unchecked")
@@ -76,27 +89,50 @@ public class TableToolData extends AbstractComponentData {
     }
     
     public final void set(Collection<ExtendedObject> objects) {
-        items.clear();
+        getItems().clear();
         add(objects);
     }
     
     public final void set(ExtendedObject[] objects) {
-        items.clear();
+        getItems().clear();
         add(objects);
     }
     
     public final void set(List<TableToolItem> items) {
-        this.items = items;
+        Map<Integer, TableToolItem> tableitems = getItems();
+        int i = 0;
+        
+        tableitems.clear();
+        for (TableToolItem item : items)
+            tableitems.put(i++, item);
     }
     
     public final TableToolItem set(int index, ExtendedObject object) {
+        return set(getItems(), index, object);
+    }
+    
+    public static final TableToolItem set(ExtendedContext extcontext,
+            String ttname, int index, ExtendedObject object) {
+        return set(extcontext, extcontext.getContext().view.getPageName(),
+                ttname, index, object);
+    }
+    
+    public static final TableToolItem set(ExtendedContext extcontext,
+            String page, String ttname, int index, ExtendedObject object) {
+        Map<Integer, TableToolItem> items;
+        
+        items = extcontext.tableInstance(page, ttname).items;
+        return set(items, index, object);
+    }
+    
+    public static final TableToolItem set(
+            Map<Integer, TableToolItem> items, int index, ExtendedObject object)
+    {
         TableToolItem item;
         
-        try {
-            item = items.get(index);
-        } catch (IndexOutOfBoundsException e) {
+        item = items.get(index);
+        if (item == null)
             return null;
-        }
         item.object = object;
         return item;
     }

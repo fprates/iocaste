@@ -95,7 +95,7 @@ public class DocumentExtractor {
         Collection<ExtendedObject> collection;
         ExtendedObject[] objects;
         TableToolData ttdata;
-        List<TableToolItem> ttitems;
+        Map<Integer, TableToolItem> ttitems;
         int i;
         
         switch (conversion.getSourceType()) {
@@ -117,9 +117,8 @@ public class DocumentExtractor {
             if (ttitems == null)
                 break;
             objects = new ExtendedObject[ttitems.size()];
-            i = 0;
-            for (TableToolItem item : ttitems)
-                objects[i++] = item.object;
+            for (TableToolItem item : ttitems.values())
+                objects[item.position] = item.object;
             return objects;
         default:
             break;

@@ -375,9 +375,6 @@ public abstract class AbstractActionHandler {
             case DATA_FORM:
                 extcontext.set(key, getdf(key));
                 break;
-            case TABLE_TOOL:
-                extcontext.set(key, tableitemsget(key));
-                break;
             default:
                 break;
             }
@@ -470,7 +467,7 @@ public abstract class AbstractActionHandler {
     public static final ExtendedObject[] tableitemsget(TableToolData data) {
         ExtendedObject[] objects;
         int i;
-        List<TableToolItem> items = data.getItems();
+        Map<Integer, TableToolItem> items = data.getItems();
         
         if (items == null)
             return null;
@@ -480,9 +477,8 @@ public abstract class AbstractActionHandler {
             return null;
         
         objects = new ExtendedObject[i];
-        i = 0;
-        for (TableToolItem item : items)
-            objects[i++] = item.object;
+        for (TableToolItem item : items.values())
+            objects[item.position] = item.object;
         
         return objects;
     }
@@ -494,17 +490,19 @@ public abstract class AbstractActionHandler {
     
     protected final List<ExtendedObject> tableselectedget(String tabletool) {
         List<ExtendedObject> objects;
-        List<TableToolItem> items = ((TableToolData)components.
+        TableToolItem item;
+        Map<Integer, TableToolItem> items = ((TableToolData)components.
                 getComponentData(tabletool)).getItems();
         
         if (items == null)
             return null;
         
         objects = new ArrayList<>();
-        for (TableToolItem item : items)
+        for (int i : items.keySet()) {
+            item = items.get(i);
             if (item.selected)
                 objects.add(item.object);
-        
+        }
         return objects;
     }
     

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.cmodelviewer.DataFormContextEntry;
 import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.appbuilder.common.tiles.Tile;
 import org.iocaste.documents.common.ExtendedObject;
@@ -32,7 +33,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         if ((entry.handler != null) && entry.handler.isInitialized())
             entry.handler.add(ttname, object);
         else
-            entry.items.put(entry.items.size(), object);
+            TableToolData.add(this, ttname, object);
     }
     
     @Override
@@ -77,7 +78,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     @Override
     public final ExtendedObject get(String page, String ttname, int line) {
         PageContext pagectx = pages.get(page);
-        return pagectx.tabletools.get(ttname).items.get(line);
+        return pagectx.tabletools.get(ttname).items.get(line).object;
     }
     
     @Override
@@ -166,7 +167,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
             entry.handler.add(ttname, objects);
         else
             for (int i = 0; i < objects.length; i++)
-                entry.items.put(i, objects[i]);
+                TableToolData.set(this, page, ttname, i, objects[i]);
     }
 
     @Override
@@ -177,10 +178,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     @Override
     public final void set(
             String page, String ttname, ExtendedObject object, int i) {
-        TableToolContextEntry entry;
-
-        entry = pages.get(page).tabletools.get(ttname);
-        entry.items.put(i, object);
+        TableToolData.set(this, page, ttname, i, object);
     }
 
     @Override

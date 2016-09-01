@@ -1,7 +1,6 @@
 package org.iocaste.appbuilder.common.tabletool;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -122,7 +121,7 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void first() {
-        List<TableToolItem> items = extcontext.data.getItems();
+        Map<Integer, TableToolItem> items = extcontext.data.getItems();
 
         save(extcontext, items);
         extcontext.data.topline = 0;
@@ -211,7 +210,7 @@ public class TableTool extends AbstractComponentTool {
     
     public final void last() {
         int pages;
-        List<TableToolItem> items = extcontext.data.getItems();
+        Map<Integer, TableToolItem> items = extcontext.data.getItems();
         
         save(extcontext, items);
         extcontext.data.topline = extcontext.data.vlines;
@@ -222,12 +221,12 @@ public class TableTool extends AbstractComponentTool {
     
     @Override
     public final void load(AbstractComponentData componentdata) {
-        TableToolData data = (TableToolData)componentdata;
-        List<TableToolItem> ttitems;
+        Map<Integer, TableToolItem> ttitems;
         TableToolItem ttitem;
         int startline, i, ttitemssize, itemsdif;
         Set<TableItem> items;
         int itemssize;
+        TableToolData data = (TableToolData)componentdata;
         
         items = getTable().getItems();
         itemssize = items.size();
@@ -248,7 +247,7 @@ public class TableTool extends AbstractComponentTool {
             for (int j = 0; j < itemsdif; j++) {
                 ttitem = new TableToolItem(data);
                 ttitem.position += ttitems.size();
-                ttitems.add(ttitem);
+                ttitems.put(ttitem.position, ttitem);
             }
         i = startline;
         for (TableItem item : items) {
@@ -263,7 +262,8 @@ public class TableTool extends AbstractComponentTool {
         }
     }
     
-    private final void move(Context context, List<TableToolItem> ttitems) {
+    private final void move(
+            Context context, Map<Integer, TableToolItem> ttitems) {
         TableToolItem ttitem;
         int l, lastline;
         Set<TableItem> items;
@@ -295,7 +295,7 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void next() {
-        List<TableToolItem> items = extcontext.data.getItems();
+        Map<Integer, TableToolItem> items = extcontext.data.getItems();
         int topline = extcontext.data.topline + extcontext.data.vlines;
         
         if (topline > items.size())
@@ -306,7 +306,7 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void previous() {
-        List<TableToolItem> items = extcontext.data.getItems();
+        Map<Integer, TableToolItem> items = extcontext.data.getItems();
         int topline = extcontext.data.topline - extcontext.data.vlines;
         
         if (topline < 0)
@@ -327,7 +327,7 @@ public class TableTool extends AbstractComponentTool {
     public final void remove() {
         int index;
         int i = 0;
-        List<TableToolItem> items = extcontext.data.getItems();
+        Map<Integer, TableToolItem> items = extcontext.data.getItems();
         Table table = getTable();
         
         for (TableItem item : table.getItems()) {
@@ -383,7 +383,8 @@ public class TableTool extends AbstractComponentTool {
                 ctxitems.get(key).visible = extcontext.data.mark;
     }
 
-    private final void save(Context context, List<TableToolItem> ttitems) {
+    private final void save(
+            Context context, Map<Integer, TableToolItem> ttitems) {
         TableToolItem ttitem;
         int l = context.data.topline;
         Set<TableItem> items = getTable().getItems();
@@ -400,11 +401,11 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void selectAll(boolean mark) {
-        List<TableToolItem> items = extcontext.data.getItems();
+        Map<Integer, TableToolItem> items = extcontext.data.getItems();
         
         for (TableItem item : getTable().getItems())
             item.setSelected(mark);
-        for (TableToolItem item : items)
+        for (TableToolItem item : items.values())
             item.selected = mark;
     }
     
@@ -451,7 +452,7 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void setVisibleNavigation(
-            Context context, List<TableToolItem> ttitems) {
+            Context context, Map<Integer, TableToolItem> ttitems) {
         Map<String, TableContextItem> ctxitems;
         boolean visible;
         
