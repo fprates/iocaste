@@ -153,7 +153,6 @@ public class TableTool extends AbstractComponentTool {
             if (element.isDataStorable()) {
                 input = (InputComponent)element;
                 modelitem = input.getModelItem();
-                
                 if (modelitem == null)
                     continue;
                 
@@ -253,11 +252,9 @@ public class TableTool extends AbstractComponentTool {
             }
         i = startline;
         for (TableItem item : items) {
-            try {
-                ttitem = ttitems.get(i++);
-            } catch (IndexOutOfBoundsException e) {
+            ttitem = ttitems.get(i++);
+            if (ttitem == null)
                 break;
-            }
             ttitem.object = get(data, item);
             ttitem.selected = item.isSelected();
             ttitem.set(item);
@@ -392,11 +389,9 @@ public class TableTool extends AbstractComponentTool {
         Set<TableItem> items = getTable().getItems();
         
         for (TableItem item : items) {
-            try {
-                ttitem = ttitems.get(l);
-            } catch (IndexOutOfBoundsException e) {
+            ttitem = ttitems.get(l);
+            if (ttitem == null)
                 break;
-            }
             ttitem.selected = item.isSelected();
             l++;
         }
