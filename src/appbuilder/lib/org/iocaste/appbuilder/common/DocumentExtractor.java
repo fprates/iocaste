@@ -21,16 +21,14 @@ public class DocumentExtractor {
     private PageBuilderContext context;
     private DataConversion hconversion;
     private List<DataConversion> conversions;
-    private Documents documents;
     private boolean ignoreinitialhead;
     private Object ns;
-    private ComplexModel cmodel;
+    private String cmodelname;
     
-    public DocumentExtractor(PageBuilderContext context, String cmodel) {
+    public DocumentExtractor(PageBuilderContext context, String cmodelname) {
         this.context = context;
         conversions = new ArrayList<>();
-        documents = new Documents(context.function);
-        this.cmodel = documents.getComplexModel(cmodel);
+        this.cmodelname = cmodelname;
     }
     
     public final void add(DataConversion conversion) {
@@ -230,11 +228,19 @@ public class DocumentExtractor {
         ComplexDocument document;
         ViewComponents components;
         DataConversionRule rule;
+        ComplexModel cmodel;
+        Documents documents;
         
         if (hconversion == null)
             throw new RuntimeException("no conversion rule for header.");
 
         head = null;
+        documents = new Documents(context.function);
+        cmodel = documents.getComplexModel(cmodelname);
+        if (cmodel == null)
+            throw new RuntimeException(
+                    cmodelname.concat(" is an undefined cmodel."));
+        
         document = new ComplexDocument(cmodel);
         components = context.getView().getComponents();
 
