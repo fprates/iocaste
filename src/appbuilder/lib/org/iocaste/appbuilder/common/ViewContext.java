@@ -224,9 +224,9 @@ public class ViewContext {
         
         validator = this.validators.get(validatorname);
         if (validator == null)
-            throw new RuntimeException(new StringBuilder("validator ").
+            throw new RuntimeException(new StringBuilder("validator '").
                     append(validatorname).
-                    append(" not registered.").toString());
+                    append("' not registered.").toString());
         validators.add(validator);
     }
 }
