@@ -477,8 +477,9 @@ public abstract class AbstractActionHandler {
             return null;
         
         objects = new ExtendedObject[i];
+        i = 0;
         for (TableToolItem item : items.values())
-            objects[item.position] = item.object;
+            objects[i++] = item.object;
         
         return objects;
     }
