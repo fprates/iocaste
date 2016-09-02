@@ -2,12 +2,16 @@ package org.iocaste.appbuilder.common;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.ExecAction;
+import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Validator;
 import org.iocaste.shell.common.ViewCustomAction;
 
 public class BuilderCustomAction implements ViewCustomAction {
-    private static final long serialVersionUID = 2367760748660650540L;
     private Map<String, Map<String, AbstractActionHandler>> handlers;
     
     public BuilderCustomAction() {
@@ -29,8 +33,12 @@ public class BuilderCustomAction implements ViewCustomAction {
     @Override
     public final void execute(AbstractContext context) throws Exception {
         ViewComponents components;
-        String view = context.view.getPageName();
-        AbstractActionHandler handler = handlers.get(view).
+        InputComponent input;
+        String error;
+        PageBuilderContext _context;
+        Map<String, Set<Validator>> validables;
+        String page = context.view.getPageName();
+        AbstractActionHandler handler = handlers.get(page).
                 get(context.action);
         
         if (handler == null)
@@ -41,5 +49,25 @@ public class BuilderCustomAction implements ViewCustomAction {
         for (ComponentEntry entry : components.entries.values())
             entry.component.load(entry.data);
         handler.run(context);
+        
+        _context = (PageBuilderContext)context;
+        validables = _context.getView(page).getValidables();
+        for (String name : validables.keySet()) {
+            input = context.view.getElement(name);
+            if ((input == null) || !input.isEnabled())
+                continue;
+            
+            for (Validator validator : validables.get(name)) {
+                validator.clear();
+                validator.setInput(input);
+                validator.validate();
+                error = validator.getMessage();
+                if (error == null)
+                    continue;
+                context.view.setFocus(input);
+                context.function.message(
+                        Const.ERROR, ExecAction.getMessage(context, error));
+            }
+        }
     }
 }

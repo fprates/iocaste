@@ -2,7 +2,6 @@ package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Set;
 
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.IocasteException;
@@ -13,7 +12,7 @@ public class ExecAction extends AbstractHandler {
     public ViewState state;
     public Map<String, ViewCustomAction> customactions;
     
-    private final String getMessage(String tag) {
+    public static final String getMessage(AbstractContext context, String tag) {
         String text;
         
         if (tag == null)
@@ -26,11 +25,8 @@ public class ExecAction extends AbstractHandler {
     public Object run(Message message) throws Exception {
         Element element;
         ControlComponent control;
-        InputComponent input;
         ViewCustomAction customaction;
         Method method;
-        String error;
-        Map<String, Set<Validator>> validables;
         View view = message.get("view");
         AbstractPage page = getFunction();
         
@@ -40,24 +36,6 @@ public class ExecAction extends AbstractHandler {
         context.view = view;
         context.function = page;
         context.action = context.control = message.getst("action");
-        validables = context.function.getValidables();
-        for (String name : validables.keySet()) {
-            input = (InputComponent)view.getElement(name);
-            if ((input == null) || !input.isEnabled())
-                continue;
-            
-            for (Validator validator : validables.get(name)) {
-                validator.clear();
-                validator.setInput(input);
-                validator.validate(context);
-                error = validator.getMessage();
-                if (error == null)
-                    continue;
-                context.view.setFocus(input);
-                context.function.message(Const.ERROR, getMessage(error));
-                return state;
-            }
-        }
         
         customaction = customactions.get(context.action);
         if (customaction == null) {
@@ -74,7 +52,7 @@ public class ExecAction extends AbstractHandler {
                             append("\".").toString());
                 }
                 method.invoke(page);
-                state.messagetext = getMessage(state.messagetext);
+                state.messagetext = getMessage(context, state.messagetext);
                 return state;
             }
             
@@ -92,7 +70,7 @@ public class ExecAction extends AbstractHandler {
             method.invoke(page);
         }
         
-        state.messagetext = getMessage(state.messagetext);
+        state.messagetext = getMessage(context, state.messagetext);
         return state;
     }
 }

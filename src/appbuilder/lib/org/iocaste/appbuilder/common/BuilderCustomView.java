@@ -115,7 +115,6 @@ public class BuilderCustomView extends AbstractCustomView
         components = viewctx.getComponents();
         if (!viewspec.isInitialized()) {
             _context.view.clear();
-            _context.function.unregisterValidators();
             viewspec.run(_context);
             viewctx.reset();
             

@@ -176,14 +176,15 @@ public abstract class AbstractViewInput implements ViewInput {
         AbstractExtendedValidator exvalidator;
         Element element;
         InputComponent input;
+        Map<String, Set<Validator>> validables;
         
+        validables = context.getView().getValidables();
         for (String name : context.view.getElements().keySet()) {
             element = getElement(name);
-            
             if (!element.isDataStorable() || !element.isVisible())
                 continue;
             
-            validators = context.function.getValidables().get(name);
+            validators = validables.get(name);
             if (validators == null)
                 continue;
             

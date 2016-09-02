@@ -3,7 +3,6 @@ package org.iocaste.appbuilder.common;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.documents.common.Documents;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
@@ -43,21 +42,12 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     public AbstractContext init(View view) throws Exception {
         GenericService service;
         Message message;
-        AbstractExtendedValidator validator;
         Object[] objects;
-        Documents documents = null;
         
         context = new PageBuilderContext();
         context.view = view;
         context.function = this;
         config(context);
-        for (String key : validators.keySet()) {
-            if (documents == null)
-                documents = new Documents(context.function);
-            validator = validators.get(key);
-            validator.setDocuments(documents);
-            register(key, validator);
-        }
         customaction = new BuilderCustomAction();
         reassignCustomActions(context);
         
@@ -144,7 +134,7 @@ class DescriptionValidate extends AbstractExtendedValidator {
     }
 
     @Override
-    protected void validate() {
+    public void validate() {
         InputComponent input = getInput();
         input.setText(getText(input.get()));
     }

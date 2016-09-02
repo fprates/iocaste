@@ -8,7 +8,6 @@ import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractValidator;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
@@ -131,6 +130,10 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
         return object.getst(textfield);
     }
     
+    public final void setContext(PageBuilderContext context) {
+        this.context = context;
+    }
+    
     public final void setDocuments(Documents documents) {
         this.documents = documents;
     }
@@ -151,21 +154,5 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
     protected final void setTextReference(String model, String field) {
         textmodel = model;
         textfield = field;
-    }
-    
-    /**
-     * 
-     * @param context
-     */
-    protected abstract void validate();
-    
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.AbstractValidator#validate()
-     */
-    @Override
-    public final void validate(AbstractContext context) {
-        this.context = (PageBuilderContext)context;
-        validate();
     }
 }

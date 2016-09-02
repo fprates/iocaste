@@ -8,5 +8,5 @@ public interface Validator {
     
     public abstract void setInput(InputComponent input);
     
-    public abstract void validate(AbstractContext context) throws Exception;
+    public abstract void validate() throws Exception;
 }

@@ -1,9 +1,7 @@
 package org.iocaste.shell.common;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
@@ -19,14 +17,9 @@ import org.iocaste.protocol.Message;
  */
 public abstract class AbstractPage extends AbstractFunction {
     private GetViewData getviewdata;
-    private Map<String, Validator> validators;
-    private Map<String, Set<Validator>> validables;
     
     public AbstractPage() {
         ExecAction execaction;
-        
-        validators = new HashMap<>();
-        validables = new HashMap<>();
         
         getviewdata = new GetViewData();
         getviewdata.state = new ViewState();
@@ -131,10 +124,6 @@ public abstract class AbstractPage extends AbstractFunction {
         return getviewdata.state.servername;
     }
     
-    public final Map<String, Set<Validator>> getValidables() {
-        return validables;
-    }
-    
     /**
      * Retorna visão especificada.
      * @param name identificador da visão
@@ -224,15 +213,6 @@ public abstract class AbstractPage extends AbstractFunction {
     
     /**
      * 
-     * @param name
-     * @param validator
-     */
-    public final void register(String name, Validator validator) {
-        validators.put(name, validator);
-    }
-    
-    /**
-     * 
      * @param action
      * @param custom
      */
@@ -289,46 +269,11 @@ public abstract class AbstractPage extends AbstractFunction {
         getviewdata.state.reloadable = reloadable;
     }
     
-    public final void unregisterValidators() {
-        validables.clear();
-    }
-    
     /**
      * Atualiza uma visão, não necessariamente a visão atual.
      * @param view visão a ser atualizada.
      */
     protected final void updateView(View view) {
         new Shell(this).updateView(view);
-    }
-    
-    /**
-     * 
-     * @param input
-     * @param validator
-     */
-    public final void validate(InputComponent input, String validator) {
-        validate(input.getHtmlName(), validator);
-    }
-    
-    /**
-     * 
-     * @param input
-     * @param validator
-     */
-    public final void validate(String input, String validatorname) {
-        Validator validator;
-        Set<Validator> validators = validables.get(input);
-        
-        if (validators == null) {
-            validators = new LinkedHashSet<>();
-            validables.put(input, validators);
-        }
-        
-        validator = this.validators.get(validatorname);
-        if (validator == null)
-            throw new RuntimeException(new StringBuilder("validator ").
-                    append(validatorname).
-                    append(" not registered.").toString());
-        validators.add(validator);
     }
 }

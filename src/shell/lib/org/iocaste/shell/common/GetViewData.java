@@ -66,7 +66,6 @@ public class GetViewData extends AbstractHandler {
             context = page.init(view);
             context.view = view;
             context.function = page;
-            context.function.unregisterValidators();
         }
         
         customview = customviews.get(view.getPageName());

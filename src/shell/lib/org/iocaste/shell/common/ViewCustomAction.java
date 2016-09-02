@@ -1,8 +1,6 @@
 package org.iocaste.shell.common;
 
-import java.io.Serializable;
-
-public interface ViewCustomAction extends Serializable {
+public interface ViewCustomAction {
 
     public abstract void execute(AbstractContext context) throws Exception;
 }

@@ -1,10 +1,13 @@
 package org.iocaste.appbuilder.common;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.navcontrol.NavControlDesign;
+import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Validator;
 
 
 public class ViewContext {
@@ -16,10 +19,14 @@ public class ViewContext {
     private ExtendedContext extcontext;
     private NavControlDesign ncdesign;
     private boolean updateview;
+    private Map<String, Validator> validators;
+    private Map<String, Set<Validator>> validables;
     
     public ViewContext(String name) {
         components = new ViewComponents();
         actionhandlers = new HashMap<>();
+        validators = new HashMap<>();
+        validables = new HashMap<>();
     }
     
     /**
@@ -94,6 +101,22 @@ public class ViewContext {
      * 
      * @return
      */
+    public final Map<String, Set<Validator>> getValidables() {
+        return validables;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Map<String, Validator> getValidators() {
+        return validators;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final boolean isUpdatable() {
         return updateview;
     }
@@ -107,6 +130,18 @@ public class ViewContext {
         actionhandlers.put(action, handler);
     }
     
+    /**
+     * 
+     * @param name
+     * @param validator
+     */
+    public final void put(String name, AbstractExtendedValidator validator) {
+        validators.put(name, validator);
+    }
+    
+    /**
+     * 
+     */
     public final void reset() {
         components.reset();
     }
@@ -162,5 +197,36 @@ public class ViewContext {
      */
     public final void setUpdate(boolean updateview) {
         this.updateview = updateview;
+    }
+    
+    /**
+     * 
+     * @param input
+     * @param validator
+     */
+    public final void validate(InputComponent input, String validator) {
+        validate(input.getHtmlName(), validator);
+    }
+    
+    /**
+     * 
+     * @param input
+     * @param validator
+     */
+    public final void validate(String input, String validatorname) {
+        Validator validator;
+        Set<Validator> validators = validables.get(input);
+        
+        if (validators == null) {
+            validators = new LinkedHashSet<>();
+            validables.put(input, validators);
+        }
+        
+        validator = this.validators.get(validatorname);
+        if (validator == null)
+            throw new RuntimeException(new StringBuilder("validator ").
+                    append(validatorname).
+                    append(" not registered.").toString());
+        validators.add(validator);
     }
 }

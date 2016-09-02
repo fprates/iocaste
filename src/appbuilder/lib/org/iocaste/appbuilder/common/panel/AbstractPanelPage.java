@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
+import org.iocaste.appbuilder.common.AbstractExtendedValidator;
 import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
@@ -68,6 +69,10 @@ public abstract class AbstractPanelPage {
     
     protected final void put(String action, AbstractActionHandler handler) {
         view.put(action, handler);
+    }
+    
+    protected final void put(String name, AbstractExtendedValidator validator) {
+        view.put(name, validator);
     }
     
     protected final void set(ViewConfig config) {

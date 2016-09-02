@@ -7,6 +7,7 @@ import java.util.Set;
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.ComponentEntry;
+import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.tabletool.actions.AcceptAction;
 import org.iocaste.appbuilder.common.tabletool.actions.AddAction;
 import org.iocaste.appbuilder.common.tabletool.actions.DeselectAllAction;
@@ -195,6 +196,7 @@ public class TableTool extends AbstractComponentTool {
         InputComponent input;
         TableToolColumn column;
         Table table = getTable();
+        ViewContext viewctx = entry.data.context.getView();
         
         for (String name : extcontext.data.get().keySet()) {
             column = extcontext.data.get(name);
@@ -203,7 +205,7 @@ public class TableTool extends AbstractComponentTool {
             
             for (TableItem item : table.getItems()) {
                 input = item.get(name);
-                entry.data.context.function.validate(input, column.validator);
+                viewctx.validate(input, column.validator);
             }
         }
     }

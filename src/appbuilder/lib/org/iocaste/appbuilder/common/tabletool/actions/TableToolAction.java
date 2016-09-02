@@ -8,7 +8,6 @@ import org.iocaste.shell.common.TableContextItem;
 import org.iocaste.shell.common.ViewCustomAction;
 
 public abstract class TableToolAction implements ViewCustomAction {
-    private static final long serialVersionUID = 7220679345842901434L;
     private String action, name, locale;
     private TableToolData data;
     protected TableTool tabletool;

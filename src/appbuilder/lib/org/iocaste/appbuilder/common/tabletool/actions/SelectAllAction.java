@@ -5,7 +5,6 @@ import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.shell.common.AbstractContext;
 
 public class SelectAllAction extends TableToolAction {
-    private static final long serialVersionUID = -270765093845726912L;
 
     public SelectAllAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, "select_all");

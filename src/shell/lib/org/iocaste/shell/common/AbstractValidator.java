@@ -87,13 +87,5 @@ public abstract class AbstractValidator implements Validator {
     public final void setInput(InputComponent input) {
         this.input = input;
     }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Validator#validate(
-     *     org.iocaste.shell.common.AbstractContext)
-     */
-    @Override
-    public abstract void validate(AbstractContext context) throws Exception;
 
 }
