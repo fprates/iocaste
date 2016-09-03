@@ -41,6 +41,8 @@ public class TextLoad extends AbstractHandler {
             Iocaste iocaste, String textname, String filename) {
         String fd = iocaste.file(
                 Iocaste.READ, "texteditor", textname, filename);
+        if (fd == null)
+            return null;
         String content = new String(iocaste.read(fd));
         iocaste.close(fd);
         return content;
