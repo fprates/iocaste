@@ -57,12 +57,15 @@ public class FileOperations extends AbstractHandler {
                 services, sessionid, mode, FileServices.getPath(args));
     }
     
+    @SuppressWarnings("resource")
     public final String openabsolute(FileServices services, String sessionid,
             String mode, String path) throws Exception {
         InternalFileEntry entry;
+        RandomAccessFile file;
 
+        file = new RandomAccessFile(path, mode);
         entry = services.instance(sessionid, path);
-        entry.file = new RandomAccessFile(entry.filename, mode);
+        entry.file = file;
         entry.fchannel = entry.file.getChannel();
         return entry.filename;
     }
