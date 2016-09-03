@@ -11,6 +11,7 @@ public class Style extends AbstractViewConfigStyle {
         put("border-bottom-style", "solid");
         put("border-bottom-width", "1px");
         put("border-bottom-color", constant(Shell.FRAME_COLOR));
+        put("cursor", "pointer");
         
         clone(".tile_frame:hover", ".tile_frame");
         put("background-color", constant(Shell.FRAME_COLOR));
