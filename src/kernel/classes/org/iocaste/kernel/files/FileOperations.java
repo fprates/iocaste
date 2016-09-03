@@ -1,5 +1,6 @@
 package org.iocaste.kernel.files;
 
+import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
@@ -63,7 +64,12 @@ public class FileOperations extends AbstractHandler {
         InternalFileEntry entry;
         RandomAccessFile file;
 
-        file = new RandomAccessFile(path, mode);
+        try {
+            file = new RandomAccessFile(path, mode);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+        
         entry = services.instance(sessionid, path);
         entry.file = file;
         entry.fchannel = entry.file.getChannel();
