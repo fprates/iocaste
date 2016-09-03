@@ -1,6 +1,7 @@
 package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,11 +17,13 @@ import org.iocaste.shell.common.Shell;
 public abstract class AbstractElementRenderer<T extends Element>
         implements Renderer<T> {
     private Map<Const, Renderer<?>> renderers;
+    private Map<Const, Source> sources;
     private Const type;
     
     public AbstractElementRenderer(
             Map<Const, Renderer<?>> renderers, Const type) {
         renderers.put(type, this);
+        sources = new HashMap<>();
         this.renderers = renderers;
         this.type = type;
     }
@@ -50,6 +53,14 @@ public abstract class AbstractElementRenderer<T extends Element>
         default:
             return input.getStyleClass();
         }
+    }
+    
+    protected final Source getSource(Const type) {
+        return sources.get(type);
+    }
+    
+    protected final void put(Const type, Source source) {
+        sources.put(type, source);
     }
     
     @Override
