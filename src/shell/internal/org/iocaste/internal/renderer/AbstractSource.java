@@ -3,9 +3,6 @@ package org.iocaste.internal.renderer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.Element;
-
 public abstract class AbstractSource implements Source {
     private Map<String, Object> parameters;
     
@@ -18,13 +15,8 @@ public abstract class AbstractSource implements Source {
     }
     
     @Override
-    public final void set(String name, XMLElement xmlelement) {
-        parameters.put(name, xmlelement);
-    }
-    
-    @Override
-    public final void set(String name, Element element) {
-        parameters.put(name, element);
+    public final void set(String name, Object object) {
+        parameters.put(name, object);
     }
     
 }

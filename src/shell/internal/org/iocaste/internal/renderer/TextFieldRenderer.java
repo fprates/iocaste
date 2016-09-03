@@ -10,6 +10,9 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.internal.Controller;
 import org.iocaste.internal.EventHandler;
 import org.iocaste.internal.TrackingData;
+import org.iocaste.internal.renderer.textfield.TextFieldDataItemSource;
+import org.iocaste.internal.renderer.textfield.TextFieldSource;
+import org.iocaste.internal.renderer.textfield.TextFieldTableItemSource;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.protocol.StandardService;
@@ -17,7 +20,6 @@ import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.SearchHelp;
@@ -30,6 +32,9 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
     
     public TextFieldRenderer(Map<Const, Renderer<?>> renderers) {
         super(renderers, Const.TEXT_FIELD);
+        put(Const.DATA_ITEM, new TextFieldDataItemSource());
+        put(Const.TEXT_FIELD, new TextFieldSource());
+        put(Const.TABLE_ITEM, new TextFieldTableItemSource());
     }
 
     private final boolean allowContextMenu(InputComponent input) {
@@ -54,6 +59,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         DataElement dataelement;
         ContextMenu ctxmenu;
         EventHandler handler;
+        Source source;
         boolean required;
         int length;
         
@@ -61,8 +67,9 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
             return get(Const.PARAMETER).run(input, config);
         
         style = getStyle(input);
-        label = (input.getType() == Const.DATA_ITEM)?
-                ((DataItem)input).getLabel() : input.getName();
+        source = getSource(input.getType());
+        source.set("input", input);
+        label = (String)source.run();
         dataelement = Shell.getDataElement(input);
         length = (dataelement == null)? input.getLength() :
             dataelement.getLength();
@@ -84,11 +91,18 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         handler.call = new StringBuilder("_send('").append(name).
                 append("', '&event=onfocus', null);").toString();
         
+        sb = new StringBuilder();
+        cellstyle = null;
         container = input.getContainer();
-        if ((container != null) && (container.getType() == Const.TABLE_ITEM)) {
-            sb = new StringBuilder("table_cell_content");
-            cellstyle = "text_field_cell";
-        } else {
+        if (container != null) {
+            source = getSource(container.getType());
+            if (source != null) {
+                source.set("sb", sb);
+                cellstyle = (String)source.run();
+            }
+        }
+        
+        if (cellstyle == null) {
             sb = new StringBuilder(style);
             cellstyle = "text_field_regular";
         }
