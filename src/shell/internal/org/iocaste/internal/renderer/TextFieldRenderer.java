@@ -10,6 +10,7 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.internal.Controller;
 import org.iocaste.internal.EventHandler;
 import org.iocaste.internal.TrackingData;
+import org.iocaste.internal.renderer.textfield.TextFieldContainerSource;
 import org.iocaste.internal.renderer.textfield.TextFieldDataItemSource;
 import org.iocaste.internal.renderer.textfield.TextFieldSource;
 import org.iocaste.internal.renderer.textfield.TextFieldTableItemSource;
@@ -35,6 +36,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         put(Const.DATA_ITEM, new TextFieldDataItemSource());
         put(Const.TEXT_FIELD, new TextFieldSource());
         put(Const.TABLE_ITEM, new TextFieldTableItemSource());
+        put(new TextFieldContainerSource());
     }
 
     private final boolean allowContextMenu(InputComponent input) {
@@ -51,7 +53,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         Container container;
         PopupControl popupcontrol;
         StringBuilder sb;
-        String tftext, calname, shname, name, value, label, style, cellstyle;
+        String tftext, calname, shname, name, value, label, cellstyle;
         Text text;
         SearchHelp search;
         Calendar calendar;
@@ -66,7 +68,6 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         if (!input.isVisible())
             return get(Const.PARAMETER).run(input, config);
         
-        style = getStyle(input);
         source = getSource(input.getType());
         source.set("input", input);
         label = (String)source.run();
@@ -91,21 +92,12 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         handler.call = new StringBuilder("_send('").append(name).
                 append("', '&event=onfocus', null);").toString();
         
-        sb = new StringBuilder();
-        cellstyle = null;
         container = input.getContainer();
-        if (container != null) {
-            source = getSource(container.getType());
-            if (source != null) {
-                source.set("sb", sb);
-                cellstyle = (String)source.run();
-            }
-        }
-        
-        if (cellstyle == null) {
-            sb = new StringBuilder(style);
-            cellstyle = "text_field_regular";
-        }
+        source = (container != null)?
+                getSource(container.getType()) : getSource();
+        source.set("sb", sb = new StringBuilder());
+        source.set("style", getStyle(input));
+        cellstyle = (String)source.run();
         
         if (!input.isEnabled()) {
             sb.append("_disabled");

@@ -55,8 +55,17 @@ public abstract class AbstractElementRenderer<T extends Element>
         }
     }
     
+    protected final Source getSource() {
+        return sources.get(Const.NONE);
+    }
+    
     protected final Source getSource(Const type) {
-        return sources.get(type);
+        Source source = sources.get(type);
+        return (source == null)? sources.get(Const.NONE) : source;
+    }
+    
+    protected final void put(Source source) {
+        sources.put(Const.NONE, source);
     }
     
     protected final void put(Const type, Source source) {

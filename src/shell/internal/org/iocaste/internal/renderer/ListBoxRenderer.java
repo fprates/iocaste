@@ -2,6 +2,7 @@ package org.iocaste.internal.renderer;
 
 import java.util.Map;
 
+import org.iocaste.internal.renderer.listbox.ListBoxContainerSource;
 import org.iocaste.internal.renderer.listbox.ListBoxDataFormSource;
 import org.iocaste.internal.renderer.listbox.ListBoxDataItemSource;
 import org.iocaste.internal.renderer.listbox.ListBoxSource;
@@ -20,6 +21,7 @@ public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
         put(Const.LIST_BOX, new ListBoxSource());
         put(Const.TABLE_ITEM, new ListBoxTableItemSource());
         put(Const.DATA_FORM, new ListBoxDataFormSource());
+        put(new ListBoxContainerSource());
     }
     
     @SuppressWarnings("unchecked")
@@ -42,20 +44,11 @@ public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
 
         style = null;
         container = input.getContainer();
-        if (container != null) {
-            source = getSource(container.getType());
-            if (source != null) {
-                source.set("container", container);
-                source.set("input", input);
-                style = (String)source.run();
-            }
-        }
-        
-        if (style == null) {
-            style = input.getStyleClass();
-            if (style == null)
-                style = Const.LIST_BOX.style();
-        }
+        source = (container != null)?
+                getSource(container.getType()) : getSource();
+        source.set("container", container);
+        source.set("input", input);
+        style = (String)source.run();
         
         selecttag.add("name", name);
         selecttag.add("id", name);
