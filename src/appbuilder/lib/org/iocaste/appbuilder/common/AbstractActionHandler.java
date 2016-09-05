@@ -360,26 +360,7 @@ public abstract class AbstractActionHandler {
             context.function.keepView();
     }
     
-    protected void refresh() {
-        AbstractExtendedContext extcontext;
-        Map<String, ComponentEntry> entries;
-        ComponentEntry entry;
-        
-        extcontext = getExtendedContext();
-        if (extcontext == null)
-            return;
-        entries = context.getView().getComponents().entries;
-        for (String key : entries.keySet()) {
-            entry = entries.get(key);
-            switch (entry.data.type) {
-            case DATA_FORM:
-                extcontext.set(key, getdf(key));
-                break;
-            default:
-                break;
-            }
-        }
-    }
+    protected void refresh() { };
     
     public final void run(AbstractContext context) throws Exception {
         run(context, REDIRECT);
