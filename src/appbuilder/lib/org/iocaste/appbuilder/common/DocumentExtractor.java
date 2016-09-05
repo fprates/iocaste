@@ -115,8 +115,9 @@ public class DocumentExtractor {
             if (ttitems == null)
                 break;
             objects = new ExtendedObject[ttitems.size()];
+            i = 0;
             for (TableToolItem item : ttitems.values())
-                objects[item.position] = item.object;
+                objects[i++] = item.object;
             return objects;
         default:
             break;
