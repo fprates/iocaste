@@ -36,6 +36,7 @@
                 <exclude name="**/classes/"/>
                 <exclude name="**/*.xml"/>
             </fileset>
+        	<fileset dir="${basedir}/certs"/>
         	<fileset file="${basedir}/x86/prunsrv.exe"/>
         </copy>
     		
