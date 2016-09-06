@@ -36,8 +36,8 @@ public class CertificateInstall {
         return bais;
     }
 
-    public static void run(String alias, String path, String certname,
-            char[] password) throws Exception {
+    public static void run(String kspath, String alias, String path,
+            String certname, char[] password) throws Exception {
         String javahome;
         File ksfile;
         KeyStore keystore;
@@ -49,7 +49,7 @@ public class CertificateInstall {
         
         javahome = System.getProperty("java.home");
         keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-        ksfile = new File(getKeyStore(javahome));
+        ksfile = new File((kspath == null)? getKeyStore(javahome) : kspath);
         in = new FileInputStream(ksfile);
         keystore.load(in, password);
         in.close();

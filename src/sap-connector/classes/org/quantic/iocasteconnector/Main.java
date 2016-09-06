@@ -22,6 +22,7 @@ public class Main extends AbstractExternalApplication {
         option("--language", KEY_VALUE, "pt_BR");
         option("--listenner-port", KEY_VALUE, "60000");
         option("--net-debug", KEY);
+        option("--keystore", KEY_VALUE);
     }
     
     @Override
@@ -30,6 +31,7 @@ public class Main extends AbstractExternalApplication {
             System.setProperty("javax.net.debug", "all");
         if (message.getst("--cert-alias") != null)
             CertificateInstall.run(
+                    message.getst("--keystore"),
                     message.getst("--cert-alias"),
                     message.getst("--connector-path"),
                     message.getst("--cert-name"),

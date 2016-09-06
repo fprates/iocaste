@@ -50,13 +50,14 @@ public abstract class AbstractExternalApplication {
 	protected abstract void config();
 	
 	protected void connect(Message message) throws Exception {
-		String host, user, secret, locale;
+		String host, user, secret, locale, keystore;
         char[] buffer;
 		
 		host = message.getst("--host");
 		user = message.getst("--user");
 		secret = message.getst("--password");
         locale = message.getst("--language");
+        keystore = message.getst("--keystore");
         
         if (secret == null) {
             System.out.print("Password:");
@@ -70,6 +71,13 @@ public abstract class AbstractExternalApplication {
         }
         
         System.out.print("trying connection to iocaste...");
+        
+        if (keystore != null) {
+            System.err.printf("using keystore at %s.\n", keystore);
+            System.setProperty("javax.net.ssl.trustStore", keystore);
+            System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+        }
+        
         connector = new IocasteConnector(host);
         external = new External(connector);
         external.setConnection(user, secret, locale);
