@@ -17,7 +17,7 @@ public class MainConfig extends AbstractViewConfig {
             tabletool = getTool(name);
             tabletool.model = module.model;
             enable(tabletool, module.enabled);
-            tabletool.mode = TableTool.DISPLAY;
+            tabletool.mode = TableTool.UPDATE;
             tabletool.mark = false;
         }
     }
