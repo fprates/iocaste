@@ -3,7 +3,8 @@ package org.template;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.ViewContext;
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.appbuilder.common.panel.StandardPanel;
 
 /**
  * Template par módulo interno do iocaste.
@@ -14,11 +15,8 @@ public class Main extends AbstractPageBuilder {
 
     @Override
     public void config(PageBuilderContext context) throws Exception {
-        ViewContext main = context.instance("main");
-        
-        main.set(new MainSpec());
-        main.set(new MainConfig());
-        main.put("bind", new Bind());
+        StandardPanel panel = new StandardPanel(context);
+        panel.instance("main", new MainPage());
     }
 
     @Override
@@ -30,4 +28,16 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.setProgramAuthorization("TEMPLATE.EXECUTE");
         installObject("messages", new Install());
     }
+}
+
+class MainPage extends AbstractPanelPage {
+
+    @Override
+    public void execute() throws Exception {
+        set(new MainSpec());
+        set(new MainConfig());
+        set(new MainInput());
+        put("bind", new Bind());
+    }
+    
 }
