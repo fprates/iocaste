@@ -1,10 +1,13 @@
 // para utilização com security manager habilitado no tomcat
 // utilizar as regras abaixo:
 
-// os módulos precisam comunicar-se localmente.
+// os módulos precisam comunicar-se localmente e armazenas arquivos temporários
+// (fileupload exige esse último).
 grant codeBase "file:${catalina.home}/webapps/-" {
     permission java.net.SocketPermission "127.0.0.1:8080", "connect,resolve";
     permission java.net.SocketPermission "127.0.0.1:8443", "connect,resolve";
+    permission java.net.SocketPermission "127.0.0.1:60000", "connect,resolve";
+    permission java.io.FilePermission "${catalina.home}${file.separator}temp", "write";
 };
 
 // kernel precisa de acesso irrestrito.
@@ -35,3 +38,9 @@ grant codeBase "file:${catalina.home}/webapps/iocaste-shell/-" {
 grant codeBase "file:${catalina.home}/webapps/iocaste-mail/-" {
     permission java.net.SocketPermission "*", "connect,resolve";
 };
+
+// integração iocaste-external->sap
+grant codeBase "file:${catalina.home}/webapps/iocaste-external/-" {
+    permission java.net.SocketPermission "127.0.0.1:60081", "connect,resolve";
+};
+
