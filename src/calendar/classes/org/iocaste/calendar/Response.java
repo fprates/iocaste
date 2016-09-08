@@ -184,5 +184,6 @@ class Style {
         style = stylesheet.clone(".caltd", ".table_cell");
         style.put("display", "table-cell");
         style.put("float", "unset");
+        style.remove("width");
     }
 }
