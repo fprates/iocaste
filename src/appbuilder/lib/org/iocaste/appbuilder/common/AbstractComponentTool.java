@@ -22,6 +22,10 @@ public abstract class AbstractComponentTool {
     protected final <T extends Element> T getElement(String name) {
         return entry.data.context.view.getElement(name);
     }
+
+    protected final ExtendedContext getExtendedContext() {
+        return entry.data.context.getView().getExtendedContext();
+    }
     
     protected final String getHtmlName() {
         return htmlname;

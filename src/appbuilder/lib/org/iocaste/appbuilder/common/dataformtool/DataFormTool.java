@@ -17,9 +17,11 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 
 public class DataFormTool extends AbstractComponentTool {
+    private String page;
     
     public DataFormTool(ComponentEntry entry) {
         super(entry);
+        page = entry.data.context.view.getPageName();
     }
     
     @Override
@@ -54,6 +56,10 @@ public class DataFormTool extends AbstractComponentTool {
             return null;
 
         df = getElement();
+        if (df == null)
+            return entry.data.context.getView(page).getExtendedContext().
+                    dfobjectget(page, entry.data.name);
+        
         object = new ExtendedObject(dfdata.custommodel);
         nsreference = df.getNSReference();
         if (nsreference != null) {
@@ -79,23 +85,24 @@ public class DataFormTool extends AbstractComponentTool {
     @Override
     public final void load(AbstractComponentData data) {
         if (getElement() != null)
-            ((DataFormToolData)data).object = getObject();
+            getExtendedContext().set(entry.data.name, getObject());
     }
     
     @Override
     public void refresh() {
         DataFormToolItem item;
-        DataFormToolData data = (DataFormToolData)entry.data;
         DataForm form = getElement();
+        ExtendedObject object = getExtendedContext().
+                dfobjectget(entry.data.name);
         
-        if (data.object == null) {
+        if (object == null) {
             form.clearInputs();
-            for (String name : data.get().keySet()) {
-                item = data.get(name);
+            for (String name : entry.data.get().keySet()) {
+                item = entry.data.get(name);
                 form.get(name).set(item.value);
             }
         } else {
-            setObject(data.object);
+            setObject(object);
         }
     }
 

@@ -76,8 +76,7 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected final void dfset(String form, ExtendedObject object) {
-        ((DataFormToolData)getComponentData(form)).object = object;
-        
+        getExtendedContext().set(form, object);
     }
     
     protected final void dfkeyset(String form, Object value) {

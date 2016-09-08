@@ -8,7 +8,6 @@ import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.ModelBuilder;
-import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
@@ -51,8 +50,7 @@ public class ReportTool extends AbstractComponentTool {
         
         if (rtdata.isInput()) {
             rtdata.input.toolcomponent.load(rtdata.input.tooldata);
-            rtdata.input.object =
-                    ((DataFormToolData)rtdata.input.tooldata).object;
+            rtdata.input.object = getExtendedContext().dfobjectget(data.name);
         } else {
             rtdata.output.toolcomponent.load(rtdata.output.tooldata);
             rtdata.output.objects = AbstractActionHandler.
@@ -64,7 +62,8 @@ public class ReportTool extends AbstractComponentTool {
     public final void refresh() {
         ReportToolData data = (ReportToolData)entry.data;
         if (data.isInput()) {
-            ((DataFormToolData)data.input.tooldata).object = data.input.object;
+            getExtendedContext().set(
+                    data.input.tooldata.name, data.input.object);
             data.input.toolcomponent.refresh();
         } else {
             ((TableToolData)data.output.tooldata).set(data.output.objects);
