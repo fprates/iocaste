@@ -48,7 +48,6 @@ public class BuilderCustomAction implements ViewCustomAction {
         components = ((PageBuilderContext)context).getView().getComponents();
         for (ComponentEntry entry : components.entries.values())
             entry.component.load(entry.data);
-        handler.run(context);
         
         _context = (PageBuilderContext)context;
         validables = _context.getView(page).getValidables();
@@ -69,5 +68,7 @@ public class BuilderCustomAction implements ViewCustomAction {
                         Const.ERROR, ExecAction.getMessage(context, error));
             }
         }
+        
+        handler.run(context);
     }
 }
