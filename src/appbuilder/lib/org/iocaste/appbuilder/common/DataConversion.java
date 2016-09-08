@@ -16,7 +16,7 @@ public class DataConversion {
     public static final byte OBJECTS = 3;
     public static final byte TABLETOOL = 4;
     public static final byte COLLECTION = 5;
-    private String to;
+    private String to, sourcepage;
     private Map<String, FieldConversion> fields;
     private Object source;
     private byte sourcetype;
@@ -36,8 +36,13 @@ public class DataConversion {
     }
     
     public final void dfsource(String dataform) {
+        dfsource(null, dataform);
+    }
+    
+    public final void dfsource(String page, String dataform) {
         sourcetype = DATAFORM;
         source = dataform;
+        sourcepage = page;
     }
     
     public final byte getSourceType() {
@@ -58,6 +63,10 @@ public class DataConversion {
     
     public final Object getSource() {
         return source;
+    }
+    
+    public final String getSourcePage() {
+        return sourcepage;
     }
     
     public final String getTo() {
@@ -108,8 +117,13 @@ public class DataConversion {
     }
     
     public final void tbsource(String tabletool) {
+        tbsource(null, tabletool);
+    }
+    
+    public final void tbsource(String page, String tabletool) {
         sourcetype = TABLETOOL;
         source = tabletool;
+        sourcepage = page;
     }
     
     public final void to(String model) {

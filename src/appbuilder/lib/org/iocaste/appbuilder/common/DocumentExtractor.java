@@ -134,15 +134,18 @@ public class DocumentExtractor {
             ExtendedObject[] objects) {
         DataConversionRule rule;
         List<ExtendedObject> result;
-        String to;
+        String to, sourcepage;
         DocumentModel model;
+        ViewContext viewctx;
         Map<String, DocumentModel> models = new HashMap<>();
         
         result = (document == null)? new ArrayList<ExtendedObject>() : null;
         
         if (objects == null) {
-            objects = convertItems(
-                    conversion, context.getView().getComponents());
+            sourcepage = conversion.getSourcePage();
+            viewctx = (sourcepage == null)?
+                    context.getView() : context.getView(sourcepage);
+            objects = convertItems(conversion, viewctx.getComponents());
             if (objects == null)
                 return null;
         }
@@ -222,7 +225,7 @@ public class DocumentExtractor {
     
     public final ComplexDocument save() {
         DocumentModel model;
-        String to, source;
+        String to, source, sourcepage;
         ExtendedObject head;
         ExtendedObject[] objects;
         DataFormTool dftool;
@@ -243,7 +246,9 @@ public class DocumentExtractor {
                     cmodelname.concat(" is an undefined cmodel."));
         
         document = new ComplexDocument(cmodel);
-        components = context.getView().getComponents();
+        sourcepage = hconversion.getSourcePage();
+        components = (sourcepage == null)? context.getView().getComponents() :
+            context.getView(sourcepage).getComponents();
 
         switch (hconversion.getSourceType()) {
         case DataConversion.DATAFORM:
