@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common.tabletool;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,7 +44,8 @@ public class TableTool extends AbstractComponentTool {
     public static final byte ENABLED = 1;
     private Context extcontext;
     private DocumentModel model;
-    private Map<String, TableToolAction> actions;
+    private Map<String, TableToolAction> actionsstore;
+    private Set<String> actions;
     
     /**
      * 
@@ -53,7 +55,7 @@ public class TableTool extends AbstractComponentTool {
     public TableTool(ComponentEntry entry) {
         super(entry);
         extcontext = new Context();
-        actions = new LinkedHashMap<>();
+        actions = new LinkedHashSet<>();
     }
     
     /**
@@ -109,8 +111,8 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void buildControls(Table table) {
-        for (String name : actions.keySet())
-            actions.get(name).build(table);
+        for (String name : actions)
+            actionsstore.get(name).build(table);
     }
     
     /**
@@ -346,23 +348,30 @@ public class TableTool extends AbstractComponentTool {
     public void run() {
         Map<String, TableContextItem> ctxitems;
         TableToolData data = (TableToolData)entry.data;
+
+        if (actionsstore == null) {
+            actionsstore = new LinkedHashMap<>();
+            new SelectAllAction(this, data, actionsstore);
+            new DeselectAllAction(this, data, actionsstore);
+            new AcceptAction(this, data, actionsstore);
+            new AddAction(this, data, actionsstore);
+            new RemoveAction(this, data, actionsstore);
+            new FirstAction(this, data, actionsstore);
+            new PreviousAction(this, data, actionsstore);
+            new NextAction(this, data, actionsstore);
+            new LastAction(this, data, actionsstore);
+        }
         
-        if (data.actions != null)
-            for (String action : data.actions)
-                actions.put(action, new CustomAction(this, data, action));
-        
-        for (TableToolAction action : new TableToolAction[] {
-                new SelectAllAction(this, data),
-                new DeselectAllAction(this, data),
-                new AcceptAction(this, data),
-                new AddAction(this, data),
-                new RemoveAction(this, data),
-                new FirstAction(this, data),
-                new PreviousAction(this, data),
-                new NextAction(this, data),
-                new LastAction(this, data)
-        })
-            actions.put(action.getAction(), action);
+        actions.clear();
+        if (data.actions != null) {
+            for (String key : data.actions) {
+                actions.add(key);
+                if (!actionsstore.containsKey(key))
+                    new CustomAction(this, data, actionsstore, key);
+            }
+        } else {
+            actions.addAll(actionsstore.keySet());
+        }
         
         extcontext.data = data;
         extcontext.htmlname = data.name.concat("_table");
@@ -377,8 +386,8 @@ public class TableTool extends AbstractComponentTool {
             model = data.custommodel;
 
         ctxitems = getTable().getContextItems();
-        for (String key : actions.keySet())
-            if (actions.get(key).isMarkable())
+        for (String key : actions)
+            if (actionsstore.get(key).isMarkable())
                 ctxitems.get(key).visible = extcontext.data.mark;
     }
 
@@ -457,8 +466,8 @@ public class TableTool extends AbstractComponentTool {
                 (context.data.vlines > 0));
         
         ctxitems = getTable().getContextItems();
-        for (String action : actions.keySet())
-            if (actions.get(action).isNavigable())
+        for (String action : actions)
+            if (actionsstore.get(action).isNavigable())
                 ctxitems.get(action).visible = visible;
     }
 }

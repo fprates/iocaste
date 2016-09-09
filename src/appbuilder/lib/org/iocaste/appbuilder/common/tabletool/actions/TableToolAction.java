@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common.tabletool.actions;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.shell.common.AbstractContext;
@@ -13,17 +15,18 @@ public abstract class TableToolAction implements ViewCustomAction {
     protected TableTool tabletool;
     protected boolean navigable, markable;
 
-    public TableToolAction(
-            TableTool tabletool, TableToolData data, String action) {
-        this(tabletool, data, action, true);
+    public TableToolAction(TableTool tabletool, TableToolData data,
+            Map<String, TableToolAction> store, String action) {
+        this(tabletool, data, store, action, true);
     }
     
-    public TableToolAction(TableTool tabletool,
-            TableToolData data, String action, boolean register) {
+    public TableToolAction(TableTool tabletool, TableToolData data,
+            Map<String, TableToolAction> store, String action, boolean register)
+    {
         name = action.concat(data.name);
         if (register)
             tabletool.getContext().function.register(name, this);
-        
+        store.put(action, this);
         this.tabletool = tabletool;
         this.action = action;
         this.data = data;

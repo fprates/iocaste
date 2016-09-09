@@ -192,16 +192,16 @@ public abstract class AbstractTableHandler {
         switch (context.data.mode) {
         case TableTool.UPDATE:
         case TableTool.CONTINUOUS_UPDATE:
-            ctxitems.get("accept").visible = false;
-            ctxitems.get("add").visible = true;
-            ctxitems.get("remove").visible = true;
+            setVisible(ctxitems, "accept", false);
+            setVisible(ctxitems, "add", true);
+            setVisible(ctxitems, "remove", true);
             break;
             
         case TableTool.DISPLAY:
         case TableTool.CONTINUOUS_DISPLAY:
-            ctxitems.get("accept").visible = false;
-            ctxitems.get("add").visible = false;
-            ctxitems.get("remove").visible = false;
+            setVisible(ctxitems, "accept", false);
+            setVisible(ctxitems, "add", false);
+            setVisible(ctxitems, "remove", false);
             table.setEnabled(false);
             columns = context.data.get();
             for (String column : columns.keySet())
@@ -246,6 +246,12 @@ public abstract class AbstractTableHandler {
         }
         
         additems(tabletool, context, items);
+    }
+    
+    private static final void setVisible(Map<String, TableContextItem> ctxitems,
+            String name, boolean visible) {
+        if (ctxitems.containsKey(name))
+            ctxitems.get(name).visible = visible;
     }
 
 }
