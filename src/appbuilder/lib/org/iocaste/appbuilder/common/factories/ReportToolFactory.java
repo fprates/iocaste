@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common.factories;
 
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.ComponentEntry;
+import org.iocaste.appbuilder.common.dataformtool.DataFormSpecItemHandler;
 import org.iocaste.appbuilder.common.dataformtool.DataFormTool;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
@@ -14,6 +15,10 @@ import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DocumentModel;
 
 public class ReportToolFactory extends AbstractSpecFactory {
+    
+    public ReportToolFactory() {
+        setHandler(new DataFormSpecItemHandler());
+    }
     
     @Override
     protected AbstractComponentData dataInstance() {
