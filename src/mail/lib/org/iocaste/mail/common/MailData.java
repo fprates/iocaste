@@ -6,8 +6,7 @@ import java.util.List;
 
 public class MailData implements Serializable {
     private static final long serialVersionUID = 7131124961075596425L;
-    public String user, secret;
-    public String smtphost;
+    public String user, secret, smtphost, encoding;
     public int smtpport;
     public boolean smtpauth, smtpsslenable; 
     public List<MailDocument> documents;

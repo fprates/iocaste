@@ -29,6 +29,7 @@ public class Send extends AbstractHandler {
         properties.put("mail.smtp.port", data.smtpport);
         properties.put("mail.smtp.auth", data.smtpauth);
         properties.put("mail.smtp.ssl.enable", data.smtpsslenable);
+        properties.put("mail.mime.charset", data.encoding);
         session = Session.getInstance(properties);
         
         for (MailDocument document : data.documents) {
