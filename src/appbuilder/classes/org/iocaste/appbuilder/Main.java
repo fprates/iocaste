@@ -5,6 +5,7 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
 import org.iocaste.appbuilder.common.cmodelviewer.DisplayMaintenancePage;
+import org.iocaste.appbuilder.common.cmodelviewer.EntityPage;
 import org.iocaste.appbuilder.common.cmodelviewer.Load;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenancePage;
 import org.iocaste.appbuilder.common.cmodelviewer.Save;
@@ -32,7 +33,8 @@ public class Main extends AbstractModelViewer {
         link.save = new Save();
         link.custompage = new MaintenancePage();
         link.displaypage = new DisplayMaintenancePage();
-
+        link.entitypage = new EntityPage();
+        
         if (link.cmodel != null) {
             documents = new Documents(context.function);
             cmodel = documents.getComplexModel(link.cmodel);
@@ -56,6 +58,7 @@ public class Main extends AbstractModelViewer {
 class Messages {
     
     public Messages(MessageSource messages) {
+        messages.instance("pt_BR");
         messages.put("code.exists", "Documento já existe.");
         messages.put("invalid.code", "Código de documento inválido.");
         messages.put("record.saved", "Documento %s gravado com sucesso.");
