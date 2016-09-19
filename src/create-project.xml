@@ -1,6 +1,6 @@
 <project name="new-project" default="compile">
 	<property name="custom.project"
-		value="${project.destination}/${project}"/>
+		value="${basedir}/../${project}"/>
 		
 	<target name="compile">
 		<delete dir="${custom.project}"/>
