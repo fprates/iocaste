@@ -51,13 +51,13 @@
 	<classpathentry kind="src" path="src/mail/lib"/>
 	<classpathentry kind="src" path="src/sysconfig/classes"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
+	<classpathentry kind="lib" path="/usr/share/java/hsqldb.jar"/>
 	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>
-	<classpathentry kind="lib" path="ext/servlet-api.jar"/>
+	<classpathentry kind="lib" path="/usr/share/tomcat/lib/tomcat-servlet-3.1-api.jar"/>
 	<classpathentry kind="lib" path="ext/sapjco3.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java.jar"/>
-	<classpathentry kind="lib" path="lib-shell/commons-fileupload-1.2.2.jar"/>
-	<classpathentry kind="lib" path="lib-mail/javax.mail.jar"/>
-	<classpathentry kind="lib" path="lib/postgresql-jdbc.jar"/>
+	<classpathentry kind="lib" path="/usr/share/java/mysql-connector-java.jar"/>
+	<classpathentry kind="lib" path="/usr/share/java/apache-commons-fileupload.jar"/>
+	<classpathentry kind="lib" path="/usr/share/java/javax.mail/javax.mail.jar"/>
+	<classpathentry kind="lib" path="/usr/share/java/postgresql-jdbc3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
