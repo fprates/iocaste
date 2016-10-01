@@ -130,4 +130,4 @@ window.onclick = function(event) {
   setElementDisplay('nc_login_options', 'none');
 }
 
-history.pushState(null, null, "#");
+history.pushState(null, null, "");
