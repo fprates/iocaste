@@ -352,7 +352,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
      * @param sessionctx
      * @return
      */
-    @SuppressWarnings("unchecked")
     protected final PageContext getPageContext(HttpServletRequest req)
             throws Exception {
         PageStackItem pagestackitem;
