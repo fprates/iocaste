@@ -1,5 +1,6 @@
 var global_form = "";
 var global_action = "";
+var check_double_submit = false;
 
 function closeCal() {
     var cal = document.getElementById('calstdcnt');
@@ -115,6 +116,9 @@ function setGlobalContext(form, action) {
 }
 
 window.onpopstate = function(event) {
+   if (check_double_submit)
+      return;
+   check_double_submit = true;
    history.go(1)
    formSubmit(global_form, global_action, "back");
 };
