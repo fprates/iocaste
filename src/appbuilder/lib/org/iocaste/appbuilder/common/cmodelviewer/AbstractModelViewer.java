@@ -1,5 +1,8 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -43,7 +46,8 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
             AppBuilderLink link) {
         StandardPanel panel;
         ViewSpec selspec;
-        String entityaction;
+        String entityaction, action;
+        Map<String, String> actions;
         
         if (extcontext == null)
             extcontext = new Context(context);
@@ -57,11 +61,14 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
             link.inputvalidate = new InputValidate();
         panel = new StandardPanel(context);
         
-        for (String action : new String[] {CREATE, EDIT, DISPLAY}) {
-            if ((link.number != null) && action.equals(CREATE) &&
-                    (link.entitypage.config == null))
-                continue;
-            
+        actions = new HashMap<>();
+        actions.put(link.createview, CREATE);
+        actions.put(link.displayview, DISPLAY);
+        actions.put(link.editview, EDIT);
+        
+        action = actions.get(context.view.getPageName());
+        if ((link.number == null) || !action.equals(CREATE) ||
+                (link.entitypage.config != null)) {
             link.entitypage.action = action;
             link.entitypage.spec = selspec;
             link.entitypage.link = link;
@@ -71,11 +78,10 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         }
         
         link.custompage.link = link;
-        
         for (String view : new String[] {
                 link.createview, link.create1view, link.edit1view}) {
-            if (view.equals(link.createview) &&
-                    ((link.number == null) || (link.custompage.config != null)))
+            if (view.equals(link.createview) && ((link.number == null) ||
+            		(link.custompage.config != null)))
                 continue;
             
             panel.instance(view, link.custompage, extcontext);
