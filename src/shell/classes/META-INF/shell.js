@@ -119,8 +119,8 @@ window.onpopstate = function(event) {
    if (check_double_submit)
       return;
    check_double_submit = true;
-   history.go(1)
    formSubmit(global_form, global_action, "back");
+   history.replaceState(null, null, "");
 };
 
 window.onclick = function(event) {
