@@ -57,7 +57,10 @@ public class StyleSheet {
     }
     
     public final void export(View view) {
+        HeaderLink link;
+        String csslink;
         Object[][] styleconst = new Object[constants.size()][2];
+        
         for (Integer i : constants.keySet()) {
             styleconst[i][0] = i;
             styleconst[i][1] = constants.get(i);
@@ -65,6 +68,12 @@ public class StyleSheet {
         
         view.setStyleSheet(convertStyleSheet(this));
         view.setStyleConst(styleconst);
+        
+        csslink = getLink();
+        if (csslink != null) {
+            link = new HeaderLink("stylesheet", "text/css", csslink);
+            view.add(link);
+        }
     }
 
     public final Map<String, String> get(String media, String name) {

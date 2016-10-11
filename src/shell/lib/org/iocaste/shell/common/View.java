@@ -80,8 +80,6 @@ public class View implements Serializable {
         containers.clear();
         elements.clear();
         lines.clear();
-        if (links != null)
-            links.clear();
     }
     
     /**

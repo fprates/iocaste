@@ -31,7 +31,6 @@ import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
-import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.StyleSheet;
@@ -138,7 +137,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     protected View createView(String sessionid, PageContext pagectx)
             throws Exception {
         Object[] viewreturn;
-        String complexid, appname, pagename, csslink;
+        String complexid, appname, pagename;
         int logid;
         Input input;
         Message message;
@@ -147,7 +146,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         View view;
         Service service;
         StyleSheet stylesheet;
-        HeaderLink link;
         
         appctx = pagectx.getAppContext();
         appname = appctx.getName();
@@ -159,15 +157,9 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             throw new IocasteException("page not especified.");
 
         view = pagectx.getViewData();
-        stylesheet = DefaultStyle.instance(view); 
-        if (!pagectx.keepView() || (view == null)) {
+        if (!pagectx.keepView() || (view == null))
             view = new View(appname, pagename);
-            csslink = stylesheet.getLink();
-            if (csslink != null) {
-                link = new HeaderLink("stylesheet", "text/css", csslink);
-                view.add(link);
-            }
-        }
+        stylesheet = DefaultStyle.instance(view);
         stylesheet.export(view);
         
         message = new Message("get_view_data");
