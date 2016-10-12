@@ -163,6 +163,9 @@
         <!-- sap-connector -->
         <ant antfile="${basedir}/src/sap-connector/build.xml"/>
     	
+    	<!-- root -->
+    	<ant antfile="${basedir}/src/ROOT/build.xml"/>
+    	
     	<ant antfile="${basedir}/src/transport.xml"/>
         <ant antfile="${basedir}/src/build.xml" target="clean"/>
     </target>
