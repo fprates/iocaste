@@ -10,6 +10,8 @@ import org.iocaste.appbuilder.common.cmodelviewer.Load;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenancePage;
 import org.iocaste.appbuilder.common.cmodelviewer.Save;
 import org.iocaste.appbuilder.common.cmodelviewer.Validate;
+import org.iocaste.appbuilder.install.PortalInstall;
+import org.iocaste.appbuilder.install.TextsInstall;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.MessageSource;
@@ -52,6 +54,7 @@ public class Main extends AbstractModelViewer {
         defaultinstall.setProgramAuthorization("APPBUILDER.EXECUTE");
         
         installObject("messages", new TextsInstall());
+        installObject("portal", new PortalInstall());
     }
 }
 

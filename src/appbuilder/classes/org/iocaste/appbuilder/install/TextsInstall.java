@@ -1,4 +1,4 @@
-package org.iocaste.appbuilder;
+package org.iocaste.appbuilder.install;
 
 import org.iocaste.appbuilder.common.AbstractInstallObject;
 import org.iocaste.appbuilder.common.MessagesInstall;
