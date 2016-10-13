@@ -10,8 +10,8 @@ public class StyleSheet {
     private String link;
     
     public StyleSheet() {
-        this.stylesheet = new HashMap<>();
-        this.media = new HashMap<>();
+        stylesheet = new HashMap<>();
+        media = new HashMap<>();
         instanceMedia("default");
     }
 
@@ -20,8 +20,8 @@ public class StyleSheet {
         stylesheet.get(media).putAll(style);
     }
     
-    public final Map<String, String> clone(String media, String to, String from)
-    {
+    public final Map<String, String> clone(
+    		String media, String to, String from) {
         Map<String, String> clone, source;
         Map<String, Map<String, String>> original;
         
@@ -146,7 +146,7 @@ public class StyleSheet {
         if (media != null)
             return media;
         media = new Media(this.media, name);
-        this.stylesheet.put(name, new HashMap<>());
+        stylesheet.put(name, new HashMap<>());
         return media;
     }
     
@@ -161,6 +161,15 @@ public class StyleSheet {
         return newElement("default", name);
     }
     
+    public final void put(String name, Map<String, String> style) {
+    	put("default", name, style);
+    }
+    
+    public final void put(String media, String name, Map<String, String> style)
+    {
+    	stylesheet.get(media).put(name, style);
+    }
+    
     public final void remove(String media, String element, String property) {
         Map<String, String> properties = stylesheet.get(media).get(element);
         properties.remove(property);
@@ -172,7 +181,7 @@ public class StyleSheet {
     
     public final void set(String media, Map<String, Map<String, String>> styles)
     {
-        this.stylesheet.put(media, styles);
+        stylesheet.put(media, styles);
     }
     
     public final void setConstants(Map<Integer, String> contants) {

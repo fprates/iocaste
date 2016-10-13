@@ -68,7 +68,7 @@ public class GetStyleSheet extends AbstractHandler {
         String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
         String FRAME_COLOR, SHADOW;
         Object[][] width;
-        StyleSheet stylesheet;
+        StyleSheet stylesheet, defaultstyle;
         
         stylesheet = StyleSheet.instance(null);
         stylesheet.setConstants(constants);
@@ -209,6 +209,32 @@ public class GetStyleSheet extends AbstractHandler {
         style.put("padding", "0px");
         style.put("text-decoration", "none");
         style.put("cursor", "pointer");
+        
+        style = stylesheet.newElement(".portal_viewport");
+        style.put("list-style-type", "none");
+        style.put("max-width", "400px");
+        style.put("margin-left", "auto");
+        style.put("margin-right", "auto");
+        style.put("margin-top", "0px");
+        style.put("margin-bottom", "0px");
+        style.put("padding", "5px");
+        
+        defaultstyle = DefaultStyle.instance(null);
+        style = defaultstyle.get(".button");
+        stylesheet.put(".portal_button", style);
+        style.put("width", "100%");
+
+        style = defaultstyle.get(".link");
+        stylesheet.put(".portal_login_option", style);
+        style.put("width", "100%");
+        style.put("text-align", "center");
+        style.put("display", "block");
+        
+        style = defaultstyle.get(".link:hover");
+        stylesheet.put(".portal_login_option:hover", style);
+        style.put("width", "100%");
+        style.put("text-align", "center");
+        style.put("display", "block");
         
         return StyleSheet.convertStyleSheet(stylesheet);
     }
