@@ -1,0 +1,6 @@
+bin/
+ext/
+lib/
+*.war
+*.aar
+
