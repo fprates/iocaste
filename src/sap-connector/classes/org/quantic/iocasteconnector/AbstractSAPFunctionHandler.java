@@ -290,6 +290,10 @@ public abstract class AbstractSAPFunctionHandler implements
         functionmodel = new Documents(function).
                 getComplexDocument("XTRNL_FUNCTION", null, sapfunctionname);
         
+        if (functionmodel == null)
+            throw new RuntimeException(new StringBuilder(sapfunctionname).
+                    append(" not registered.").toString());
+        
         parameters = functionmodel.getItems("parameters");
         if (parameters == null)
             throw new RuntimeException("failed recovering parameters.");
