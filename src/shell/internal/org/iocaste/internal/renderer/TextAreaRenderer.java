@@ -16,6 +16,9 @@ public class TextAreaRenderer extends AbstractElementRenderer<TextArea> {
         XMLElement areatag = new XMLElement("textarea");
         String name = area.getHtmlName();
         String value = area.get();
+
+        if (!area.isVisible())
+            return get(Const.PARAMETER).run(area, config);
         
         areatag.add("id", name);
         areatag.add("name", name);
