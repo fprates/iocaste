@@ -95,15 +95,19 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
                 reference = references.get(modelname);
                 switch (keytype) {
                 case DataType.CHAR:
-                    charitemid = charid.concat(
-                            String.format(cmodelitem.keyformat, i));
-                    item.set(itemkey, charitemid);
+                    if (cmodelitem.keyformat != null) {
+                        charitemid = charid.concat(
+                                String.format(cmodelitem.keyformat, i));
+                        item.set(itemkey, charitemid);
+                    }
                     id = charid;
                     break;
                 default:
-                    numitemid = cmodelitem.keydigits;
-                    numitemid = (numid * (int)(Math.pow(10, numitemid))) + i;
-                    item.set(itemkey, numitemid);
+                    if (cmodelitem.keydigits > 0) {
+                        numitemid = cmodelitem.keydigits;
+                        numitemid = (numid * (int)(Math.pow(10, numitemid))) + i;
+                        item.set(itemkey, numitemid);
+                    }
                     id = numid;
                     break;
                 }
