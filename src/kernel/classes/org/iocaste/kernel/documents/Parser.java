@@ -452,8 +452,13 @@ public class Parser {
     private static final void whereRange(
             WhereData data, String operator, ValueRange range) {
         byte condition;
+        List<ValueRangeItem> items;
+        int size, c;
         
-        for (ValueRangeItem rangeitem : range.getItens()) {
+        items = range.getItens();
+        size = items.size();
+        c = 0;
+        for (ValueRangeItem rangeitem : items) {
             condition = rangeitem.getOption().getOperator();
             switch (condition) {
             case WhereClause.BT:
@@ -462,6 +467,9 @@ public class Parser {
                 break;
             default:
                 whereSimple(data, condition, operator, rangeitem.getLow());
+                c++;
+                if (c < size)
+                    data.sb.append(" or ");
                 break;
             }
         }
