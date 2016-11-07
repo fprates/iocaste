@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.hsqldb.HsqlException;
 import org.iocaste.kernel.session.Session;
 import org.iocaste.protocol.AbstractFunction;
 
@@ -81,8 +80,6 @@ public class Database extends AbstractFunction {
                     Connection.TRANSACTION_READ_UNCOMMITTED);
             
             return connection;
-        } catch (HsqlException e) {
-            throw new SQLException(e.getMessage());
         } catch (SQLServerException e) {
             throw new SQLException(e.getMessage());
         } catch (MySQLSyntaxErrorException e) {

@@ -6,7 +6,6 @@ import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 
-import org.hsqldb.HsqlException;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 
@@ -46,8 +45,6 @@ public class Update extends AbstractHandler {
                     ps.setObject(i++, object);
                     
             return ps.executeUpdate();
-        } catch (HsqlException e) {
-            throw new SQLException(e.getMessage());
         } catch (SQLServerException e) {
             i = e.getErrorCode();
             switch (i) {
