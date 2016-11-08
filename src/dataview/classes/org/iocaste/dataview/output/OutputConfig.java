@@ -1,8 +1,9 @@
-package org.iocaste.dataview;
+package org.iocaste.dataview.output;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
+import org.iocaste.dataview.Context;
 
 public class OutputConfig extends AbstractViewConfig {
 

@@ -1,7 +1,8 @@
-package org.iocaste.dataview;
+package org.iocaste.dataview.output;
 
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.dataview.Context;
 
 public class OutputInput extends AbstractViewInput {
 

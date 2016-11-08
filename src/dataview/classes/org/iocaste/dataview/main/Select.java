@@ -1,7 +1,8 @@
-package org.iocaste.dataview;
+package org.iocaste.dataview.main;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.dataview.Context;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;

@@ -1,7 +1,9 @@
-package org.iocaste.dataview;
+package org.iocaste.dataview.ns;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.dataview.Context;
+import org.iocaste.dataview.main.Select;
 import org.iocaste.shell.common.Const;
 
 public class ContinueSelect extends AbstractActionHandler {

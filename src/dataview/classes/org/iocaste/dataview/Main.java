@@ -3,8 +3,10 @@ package org.iocaste.dataview;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
+import org.iocaste.dataview.main.MainPage;
+import org.iocaste.dataview.ns.NSInputPage;
+import org.iocaste.dataview.output.OutputPage;
 
 public class Main extends AbstractPageBuilder {
 
@@ -32,37 +34,4 @@ public class Main extends AbstractPageBuilder {
         
         installObject("main", new Install());
     }
-}
-
-class MainPage extends AbstractPanelPage {
-
-    @Override
-    public void execute() {
-        set(new MainSpec());
-        set(new MainConfig());
-        submit("select", new Select());
-    }
-    
-}
-
-class OutputPage extends AbstractPanelPage {
-
-    @Override
-    public void execute() {
-        set(new OutputSpec());
-        set(new OutputConfig());
-        set(new OutputInput());
-    }
-    
-}
-
-class NSInputPage extends AbstractPanelPage {
-
-    @Override
-    public void execute() {
-        set(new NSInputSpec());
-        set(new NSInputConfig());
-        submit("continuesel", new ContinueSelect());
-    }
-    
 }
