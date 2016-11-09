@@ -25,6 +25,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TextArea;
@@ -216,6 +217,10 @@ public abstract class AbstractActionHandler {
         return (T)context.getView(page).getExtendedContext();
     }
 
+    protected final byte[] getFileContent(String name) {
+        return ((MultipartElement)context.view.getElement(name)).getContent();
+    }
+    
     protected final double getinputd(String name) {
         return ((InputComponent)context.view.getElement(name)).getd();
     }
