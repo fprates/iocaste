@@ -4,11 +4,11 @@ import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
-import org.iocaste.shell.common.MessageSource;
 import org.iocaste.upload.install.LayoutInstall;
 import org.iocaste.upload.install.OptionsInstall;
+import org.iocaste.upload.main.MainPage;
+import org.iocaste.upload.ns.NSInputPage;
 
 public class Main extends AbstractPageBuilder {
 
@@ -43,32 +43,9 @@ public class Main extends AbstractPageBuilder {
         extcontext = new Context(context);
         panel = new StandardPanel(context);
         panel.instance("main", new MainPage(), extcontext);
+        panel.instance("ns", new NSInputPage());
         
         new Messages(context.messages);
     }
 
-}
-
-class MainPage extends AbstractPanelPage {
-
-    @Override
-    public void execute() {
-        set(new MainSpec());
-        set(new MainConfig());
-        action("upload", new Upload());
-    }
-    
-}
-
-class Messages {
-    
-    public Messages(MessageSource messages) {
-        messages.put("columns", "Colunas");
-        messages.put("FILE", "Arquivo");
-        messages.put("IGNORE_FIRST_LINES", "Primeiras linhas ignoradas");
-        messages.put("iocaste-upload", "Utilitário de carga");
-        messages.put("LAYOUT", "Layout");
-        messages.put("TRUNCATE_CHAR", "Truncar caracteres excedentes");
-        messages.put("upload", "Carregar");
-    }
 }

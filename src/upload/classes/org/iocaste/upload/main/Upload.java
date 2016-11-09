@@ -1,18 +1,16 @@
-package org.iocaste.upload;
+package org.iocaste.upload.main;
 
 import java.util.Locale;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.MultipartElement;
+import org.iocaste.upload.Context;
 
 public class Upload extends AbstractActionHandler {
 
@@ -20,39 +18,57 @@ public class Upload extends AbstractActionHandler {
     protected void execute(PageBuilderContext context) throws Exception {
         Object value;
         DataElement element;
-        DocumentModel model;
-        ComplexDocument layout;
-        ExtendedObject options;
-        String linemodel, name;
-        byte[] content;
+        String name;
         String[] lines, tokens;
         ExtendedObject object, column;
         ExtendedObject[] columns;
-        int count, skip, length;
         Locale locale;
         IocasteException ie;
+        Context extcontext;
+        Object ns;
+        int count, length, skip;
         boolean truncate;
-        
-        options = getdf("options");
-        layout = getDocument("layout", options.getst("LAYOUT"));
-        linemodel = layout.getHeader().getst("MODEL");
-        skip = options.geti("IGNORE_FIRST_LINES");
-        content = ((MultipartElement)context.view.getElement("options.FILE")).
-                getContent();
-        
-        lines = new String(content).split("\n");
-        columns = layout.getItems("columns");
+
+        extcontext = getExtendedContext();
+        switch (context.view.getPageName()) {
+        case "ns":
+            ns = getdf("ns", "NSKEY");
+            back();
+            break;
+        default:
+            ns = null;
+            extcontext.options = getdf("options");
+            extcontext.layout = getDocument(
+                    "UPL_LAYOUT", extcontext.options.getst("LAYOUT"));
+            extcontext.linemodel = extcontext.layout.getHeader().getst("MODEL");
+            extcontext.model = new Documents(context.function).
+                    getModel(extcontext.linemodel);
+            extcontext.content = getFileContent("options_dataform.FILE");
+            
+            /*
+             * solicita valor se modelo possuir namespace.
+             */
+            extcontext.nsitem = extcontext.model.getNamespace();
+            if ((extcontext.model.getNamespace() != null) &&
+                    (extcontext.ns == null)) {
+                init("ns", extcontext);
+                redirect("ns");
+                return;
+            }
+            break;
+        }
+
+        skip = extcontext.options.geti("IGNORE_FIRST_LINES");
+        lines = new String(extcontext.content).split("\n");
+        columns = extcontext.layout.getItems("columns");
         count = 0;
-        model = null;
-        truncate = options.getbl("TRUNCATE_CHAR");
+        truncate = extcontext.options.getbl("TRUNCATE_CHAR");
         locale = context.view.getLocale();
         for (String line : lines) {
             count++;
             if ((count - 1) < skip)
                 continue;
-            object = instance(linemodel);
-            if (model == null)
-                model = object.getModel();
+            object = instance(extcontext.linemodel);
             tokens = line.split(";");
             for (int i = 0; i < columns.length; i++) {
                 if (tokens.length == i)
@@ -62,7 +78,7 @@ public class Upload extends AbstractActionHandler {
                 if (column.getbl("IGNORE") || (name == null))
                     continue;
                 name = name.split("\\.")[1];
-                element = model.getModelItem(name).getDataElement();
+                element = extcontext.model.getModelItem(name).getDataElement();
                 value = Documents.convertValue(tokens[i], element, locale);
                 if ((element.getType() == DataType.CHAR) && (value != null) && 
                         truncate) {
@@ -78,6 +94,7 @@ public class Upload extends AbstractActionHandler {
                 continue;
             
             try {
+                object.setNS(ns);
                 modify(object);
             } catch (Exception e) {
                 name = new StringBuilder(e.getMessage()).append("\n").

@@ -1,4 +1,4 @@
-package org.iocaste.upload;
+package org.iocaste.upload.main;
 
 import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
