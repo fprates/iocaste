@@ -14,5 +14,6 @@ public class PortalLoginPage extends AbstractPanelPage {
         set(new PortalStyle());
         put("signup", new PortalSignUp());
         put("connect", new PortalConnect());
+        put("newpassword", new PortalNewPassword());
     }
 }

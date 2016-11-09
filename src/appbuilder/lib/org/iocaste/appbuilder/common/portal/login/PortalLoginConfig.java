@@ -44,7 +44,7 @@ public class PortalLoginConfig extends AbstractViewConfig {
         link.setStyleClass("portal_login_option");
         link.setCancellable(true);
         
-        link = getElement("forgot_user");
+        link = getElement("newpassword");
         link.setStyleClass("portal_login_option");
         link.setCancellable(true);
     }

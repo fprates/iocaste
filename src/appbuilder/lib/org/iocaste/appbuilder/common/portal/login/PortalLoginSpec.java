@@ -15,8 +15,8 @@ public class PortalLoginSpec extends AbstractViewSpec {
         nodelistitem("viewport", "signup_node");
         link("signup_node", "signup");
         
-        nodelistitem("viewport", "forgot_user_node");
-        link("forgot_user_node", "forgot_user");
+        nodelistitem("viewport", "new_password_node");
+        link("new_password_node", "newpassword");
     }
     
 }

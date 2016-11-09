@@ -41,6 +41,10 @@ public abstract class AbstractPortalBuilder extends AbstractPageBuilder {
 		this.language = language;
 	}
 	
+	protected final void newpassword(AbstractPanelPage page) {
+	    instance("newpassword", page);
+	}
+	
 	protected final void signup(AbstractPanelPage page) {
 		instance("signup", page);
 	}
