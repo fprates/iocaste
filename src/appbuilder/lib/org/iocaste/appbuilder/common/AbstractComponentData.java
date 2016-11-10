@@ -7,7 +7,7 @@ import org.iocaste.documents.common.DocumentModel;
 
 public abstract class AbstractComponentData {
     public boolean disabled;
-    public String name, model, style;
+    public String name, model, style, parent;
     public DocumentModel custommodel;
     public PageBuilderContext context;
     public ViewSpecItem.TYPES type;

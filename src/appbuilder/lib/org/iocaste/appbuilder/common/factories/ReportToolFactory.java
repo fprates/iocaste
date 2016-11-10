@@ -13,11 +13,20 @@ import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.StandardContainer;
 
 public class ReportToolFactory extends AbstractSpecFactory {
     
     public ReportToolFactory() {
         setHandler(new DataFormSpecItemHandler());
+    }
+
+    @Override
+    protected final void containerInstance(
+            Container container, AbstractComponentData data) {
+        data.parent = data.name.concat("_input");
+        new StandardContainer(container, data.parent);
     }
     
     @Override
@@ -46,6 +55,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
             dfdata.context = entry.data.context;
             dfdata.name = entry.data.name;
             dfdata.style = rtdata.input.outerstyle = rtdata.input.outerstyle;
+            dfdata.parent = rtdata.parent;
             rtdata.input.tooldata = dfdata;
             if (rtdata.input.items.size() > 0) {
                 model = ReportTool.buildModel(rtdata);
@@ -84,6 +94,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
             ttdata.vlines = 0;
             ttdata.style = rtdata.output.outerstyle;
             ttdata.model = rtdata.output.model;
+            ttdata.parent = rtdata.parent;
             rtdata.output.tooldata = ttdata;
             if (rtdata.output.items.size() > 0) {
                 ttdata.custommodel = ReportTool.buildModel(rtdata);

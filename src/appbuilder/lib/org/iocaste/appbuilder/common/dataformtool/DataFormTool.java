@@ -108,18 +108,15 @@ public class DataFormTool extends AbstractComponentTool {
 
     @Override
     public void run() {
-        String htmlname;
         DataFormToolItem item;
         DataItem input;
         DataForm df;
         ComponentEntry nsentry;
         Map<String, List<String>> groups;
         DataFormToolData data = getComponentData();
-        Container container = getElement(data.name);
+        Container container = getElement(data.parent);
         
-        htmlname = new StringBuilder(data.name).
-                append("_").append(data.type.toString()).toString();
-        df = new DataForm(container, htmlname);
+        df = new DataForm(container, data.name);
         setHtmlName(df.getHtmlName());
         if (data.custommodel != null)
             DataForm.importModel(df, data.custommodel);

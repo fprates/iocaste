@@ -76,7 +76,7 @@ public class TableRender extends AbstractTableHandler {
         Map<String, String> style;
         Table table;
         
-        container = context.data.context.view.getElement(context.data.name);
+        container = context.data.context.view.getElement(context.data.parent);
         container.setStyleClass(context.data.style);
         
         style = context.data.context.stylesheet.newElement(".tt_skip");

@@ -18,6 +18,12 @@ public abstract class AbstractSpecFactory implements SpecFactory {
         return null;
     }
     
+    protected void containerInstance(
+            Container container, AbstractComponentData data) {
+        data.parent = data.name;
+        new StandardContainer(container, data.name);
+    }
+    
     protected void execute(Container container, String parent, String name) { }
 
     @Override
@@ -73,7 +79,7 @@ public abstract class AbstractSpecFactory implements SpecFactory {
         data.context = context;
         data.name = name;
         if (prefix == null)
-            new StandardContainer(container, data.name);
+            containerInstance(container, data);
         components.add(data);
     }
     
