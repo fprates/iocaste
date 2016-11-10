@@ -43,7 +43,7 @@ public class Upload extends AbstractActionHandler {
             extcontext.linemodel = extcontext.layout.getHeader().getst("MODEL");
             extcontext.model = new Documents(context.function).
                     getModel(extcontext.linemodel);
-            extcontext.content = getFileContent("options_dataform.FILE");
+            extcontext.content = getFileContent("options.FILE");
             
             /*
              * solicita valor se modelo possuir namespace.
