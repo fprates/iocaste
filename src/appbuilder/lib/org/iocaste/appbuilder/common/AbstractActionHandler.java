@@ -241,6 +241,10 @@ public abstract class AbstractActionHandler {
         return documents.getNextNumber(range);
     }
     
+    protected final long getNextNumber(String range, Object ns) {
+        return documents.getNSNextNumber(range, ns);
+    }
+    
     protected final ExtendedObject getObject(String model, Object key) {
         return getObject(model, null, key);
     }
