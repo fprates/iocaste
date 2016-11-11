@@ -6,8 +6,9 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.portal.PortalContext;
-import org.iocaste.documents.common.ComplexDocument;
+//import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.Const;
 
 public class PortalConnect extends AbstractActionHandler {
@@ -21,24 +22,40 @@ public class PortalConnect extends AbstractActionHandler {
     
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        ComplexDocument usertree;
+//        ComplexDocument usertree;
+        String form, appname;
+        ExtendedObject object;
+        boolean connected;
         PortalContext extcontext = getExtendedContext();
-        String form = forms.get(context.view.getPageName());
-        String email = getdfst(form, "EMAIL");
-        ExtendedObject object = getObject("PORTAL_USERS_REF", email);
         
+        if (extcontext.email == null) {
+            form = forms.get(context.view.getPageName());
+            extcontext.email = getdfst(form, "EMAIL");
+            extcontext.secret = getdfst(form, "SECRET");
+        }
+        
+        appname = context.view.getAppName();
+        object = getObject("PORTAL_USERS", appname, extcontext.email);
         if (object == null) {
             message(Const.ERROR, "invalid.user");
             return;
         }
 
-        usertree = getDocument("PORTAL_USER_TREE", object.getl("ID"));
-        object = usertree.getHeader();
-        if (!object.getst("SECRET").equals(getdfst(form, "SECRET"))) {
-            message(Const.ERROR, "invalid.user");
+//        usertree = getDocument("PORTAL_USER_TREE", object.getl("ID"));
+//        object = usertree.getHeader();
+//        if (!object.getst("SECRET").equals(extcontext.secret)) {
+//            message(Const.ERROR, "invalid.user");
+//            return;
+//        }
+
+        connected = new Iocaste(context.function).
+                login(object.getst("USERNAME"), extcontext.secret, "pt_BR");
+        if (!connected) {
+            message(Const.ERROR, "invalid.username.password");
             return;
         }
-
+        
+        extcontext.secret = null;
         init("main", extcontext);
         redirect("main");
     }

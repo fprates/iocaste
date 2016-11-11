@@ -7,8 +7,10 @@ public class PortalSignUpSpec extends AbstractViewSpec {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        // TODO Auto-generated method stub
-        
+        nodelist(parent, "viewport");
+        nodelistitem("viewport", "user_node");
+        dataform("user_node", "user");
+        button("user_node", "record");
     }
     
 }

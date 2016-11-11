@@ -27,7 +27,7 @@ public class PortalLoginConfig extends AbstractViewConfig {
         getElement("connect").setStyleClass("portal_button");
         
         tool = getTool("login");
-        tool.model = "PORTAL_USERS";
+        tool.model = "PORTAL_USER_INPUT";
         tool.internallabel = true;
         show(tool, "EMAIL", "SECRET");
         
