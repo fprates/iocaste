@@ -58,6 +58,7 @@ public class PortalConnect extends AbstractActionHandler {
         extcontext.secret = null;
         init("main", extcontext);
         redirect("main");
+        execute("load");
     }
     
 }
