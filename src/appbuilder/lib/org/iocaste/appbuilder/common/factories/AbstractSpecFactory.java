@@ -42,9 +42,10 @@ public abstract class AbstractSpecFactory implements SpecFactory {
         return null;
     }
     
+    @SuppressWarnings("unchecked")
     @Override
-    public final SpecItemHandler getHandler() {
-        return handler;
+    public final <T extends SpecItemHandler> T getHandler() {
+        return (T)handler;
     }
     
     @Override

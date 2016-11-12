@@ -16,7 +16,7 @@ public interface SpecFactory {
     
     public abstract <T> T get();
     
-    public abstract SpecItemHandler getHandler();
+    public abstract <T extends SpecItemHandler> T getHandler();
     
     public abstract void run(PageBuilderContext context,
             ViewComponents components, ViewSpecItem item, String prefix);

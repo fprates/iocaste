@@ -2,10 +2,10 @@ package org.iocaste.appbuilder.common.factories;
 
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.ComponentEntry;
-import org.iocaste.appbuilder.common.dataformtool.DataFormSpecItemHandler;
 import org.iocaste.appbuilder.common.dataformtool.DataFormTool;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
+import org.iocaste.appbuilder.common.reporttool.ReportSpecItemHandler;
 import org.iocaste.appbuilder.common.reporttool.ReportTool;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.reporttool.ReportToolStageItem;
@@ -19,7 +19,7 @@ import org.iocaste.shell.common.StandardContainer;
 public class ReportToolFactory extends AbstractSpecFactory {
     
     public ReportToolFactory() {
-        setHandler(new DataFormSpecItemHandler());
+        setHandler(new ReportSpecItemHandler());
     }
 
     @Override
@@ -47,8 +47,10 @@ public class ReportToolFactory extends AbstractSpecFactory {
         TableToolData ttdata;
         TableToolColumn ttcol;
         DataFormToolData dfdata;
+        ReportSpecItemHandler handler;
         ReportToolData rtdata = (ReportToolData)entry.data;
-            
+        
+        handler = getHandler();
         entry.component = new ReportTool(entry);
         if (rtdata.isInput()) {
             dfdata = (DataFormToolData)rtdata.input.tooldata;
@@ -86,6 +88,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
             dfentry = new ComponentEntry();
             dfentry.data = dfdata;
             rtdata.input.toolcomponent = new DataFormTool(dfentry);
+            handler.input = true;
         } else {
             ttdata = (TableToolData)rtdata.output.tooldata;
             ttdata.context = entry.data.context;
