@@ -2,13 +2,11 @@ package org.iocaste.appbuilder.common;
 
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
-
 public class StandardViewInput extends AbstractViewInput {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        TableToolContextEntry ttentry;
+        ContextEntry ctxentry;
         ComponentEntry entry;
         Map<String, ComponentEntry> entries;
         ExtendedContext extcontext = getExtendedContext();
@@ -16,13 +14,16 @@ public class StandardViewInput extends AbstractViewInput {
         entries = context.getView().getComponents().entries;
         for (String name : entries.keySet()) {
             entry = entries.get(name);
+            ctxentry = extcontext.tilesInstance(name);
             switch (entry.data.type) {
+            case TILES:
+                tilesset(name, ctxentry.getObjects());
+                break;
             case DATA_FORM:
-                dfset(name, extcontext.dfobjectget(name));
+                dfset(name, ctxentry.getObject());
                 break;
             case TABLE_TOOL:
-                ttentry = extcontext.tableInstance(name);
-                tableitemsset(name, ttentry.getItems());
+                tableitemsset(name, ctxentry.getObjects());
                 break;
             default:
                 break;

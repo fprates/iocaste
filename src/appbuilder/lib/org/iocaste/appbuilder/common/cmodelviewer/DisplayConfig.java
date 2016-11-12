@@ -22,7 +22,7 @@ public class DisplayConfig extends AbstractViewConfig {
         for (String name : entries.keySet())
             switch (entries.get(name).data.type) {
             case TABLE_TOOL:
-                extcontext.tableInstance(name).handler = handler;
+                extcontext.tableInstance(name).set(handler);
                 break;
             default:
                 break;

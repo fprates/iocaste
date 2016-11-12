@@ -6,48 +6,44 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.AbstractContextEntry;
 import org.iocaste.appbuilder.common.ContextDataHandler;
-import org.iocaste.appbuilder.common.ContextEntry;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.documents.common.ExtendedObject;
 
-public class TableToolContextEntry implements ContextEntry {
+public class TableToolContextEntry extends AbstractContextEntry {
     private String name;
-    private List<ExtendedObject> citems;
     public Map<Integer, TableToolItem> items;
-    public ContextDataHandler handler;
     
     public TableToolContextEntry(String name) {
-        items = new LinkedHashMap<>();
-        citems = new ArrayList<>();
+        super(ViewSpecItem.TYPES.TABLE_TOOL);
         this.name = name;
+        items = new LinkedHashMap<>();
+        set(new ArrayList<>());
     }
     
-    private Collection<ExtendedObject> getItems(String name) {
-        ExtendedObject[] objects = handler.get(name);
+    private Collection<ExtendedObject> getObjects(String name) {
+        ExtendedObject[] objects = getHandler().get(name);
         
         if (objects == null)
             return null;
-        citems.clear();
+        clear();
         for (ExtendedObject object : objects)
-            citems.add(object);
-        return citems;
+            add(object);
+        return super.getObjects();
     }
     
-    public Collection<ExtendedObject> getItems() {
+    @Override
+    public final Collection<ExtendedObject> getObjects() {
         List<ExtendedObject> objects;
+        ContextDataHandler handler = getHandler();
         
         if ((handler != null) && handler.isInitialized())
-            return getItems(name);
+            return getObjects(name);
         objects = new ArrayList<>();
         for (int index : items.keySet())
             objects.add(items.get(index).object);
         return objects;
-    }
-    
-    @Override
-    public final ViewSpecItem.TYPES getType() {
-        return ViewSpecItem.TYPES.TABLE_TOOL;
     }
 }

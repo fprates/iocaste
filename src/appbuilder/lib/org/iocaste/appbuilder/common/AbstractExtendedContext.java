@@ -29,10 +29,12 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     @Override
     public final void add(String page, String ttname, ExtendedObject object) {
         TableToolContextEntry entry;
+        ContextDataHandler handler;
         
         entry = pages.get(page).get(ttname);
-        if ((entry.handler != null) && entry.handler.isInitialized())
-            entry.handler.add(ttname, object);
+        handler = entry.getHandler();
+        if ((handler != null) && handler.isInitialized())
+            handler.add(ttname, object);
         else
             TableToolData.add(this, page, ttname, object);
     }
@@ -68,7 +70,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         if ((entry.handler != null) && entry.handler.isInitialized())
             return entry.handler.get();
         else
-            return entry.object;
+            return entry.getObject();
     }
     
     @Override
@@ -129,10 +131,12 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     {
         TableToolContextEntry entry;
         int index;
+        ContextDataHandler handler;
         
         entry = pages.get(page).get(ttname);
-        if ((entry.handler != null) && entry.handler.isInitialized()) {
-            entry.handler.remove(ttname, object);
+        handler = entry.getHandler();
+        if ((handler != null) && handler.isInitialized()) {
+            handler.remove(ttname, object);
         } else {
             index = -1;
             for (int i : entry.items.keySet()) {
@@ -160,13 +164,15 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     public final void set(String page, String ttname, ExtendedObject[] objects)
     {
         TableToolContextEntry entry;
+        ContextDataHandler handler;
 
         entry = pages.get(page).get(ttname);
         entry.items.clear();
         if (objects == null)
             return;
-        if ((entry.handler != null) && entry.handler.isInitialized())
-            entry.handler.add(ttname, objects);
+        handler = entry.getHandler();
+        if ((handler != null) && handler.isInitialized())
+            handler.add(ttname, objects);
         else
             for (ExtendedObject object : objects)
                 TableToolData.add(this, page, ttname, object);
@@ -194,7 +200,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         if ((entry.handler != null) && entry.handler.isInitialized())
             entry.handler.set(dfname, object);
         else
-            entry.object = object;
+            entry.set(object);
     }
     
     @Override
@@ -222,10 +228,10 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
             for (String key : pagectx.getTools().keySet()) {
                 entry = pagectx.get(key);
                 if (entry.getType() == ViewSpecItem.TYPES.TABLE_TOOL)
-                    ((TableToolContextEntry)entry).handler = handler;
+                    entry.set(handler);
             }
         for (String key : tabletools)
-            ((TableToolContextEntry)pagectx.get(key)).handler = handler;
+            pagectx.get(key).set(handler);
 
         if (dataforms == null)
             for (String key : pagectx.getTools().keySet()) {
@@ -285,7 +291,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         TilesContextEntry entry;
         
         entry = pages.get(page).get(tiles);
-        entry.objects.add(object);
+        entry.add(object);
     }
     
     public final void tilesset(String tiles, ExtendedObject[] objects) {
@@ -297,9 +303,9 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         TilesContextEntry entry;
         
         entry = pages.get(page).get(tiles);
-        entry.objects.clear();
+        entry.clear();
         for (ExtendedObject object : objects)
-            entry.objects.add(object);
+            entry.add(object);
     }
     
     @Override
