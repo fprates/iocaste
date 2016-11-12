@@ -91,9 +91,9 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     private final void reassignCustomActions(PageBuilderContext context) {
         ViewContext viewctx;
         BuilderCustomView customview;
-        AbstractViewSpec viewspec;
+        ViewSpec viewspec;
         ViewConfig viewconfig;
-        AbstractViewInput viewinput;
+        ViewInput viewinput;
         
         for (String name : context.getViews()) {
             viewctx = context.getView(name);

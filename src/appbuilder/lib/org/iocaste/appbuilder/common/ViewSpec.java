@@ -6,6 +6,8 @@ public interface ViewSpec {
     
     public abstract <T extends ExtendedContext> T getExtendedContext();
     
+    public abstract ViewSpecItem get(String name);
+    
     public abstract Collection<ViewSpecItem> getItems();
     
     public abstract boolean isInitialized();

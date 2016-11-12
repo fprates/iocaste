@@ -34,7 +34,7 @@ import org.iocaste.tasksel.common.TaskSelector;
 import org.iocaste.texteditor.common.TextEditor;
 import org.iocaste.texteditor.common.TextEditorTool;
 
-public abstract class AbstractActionHandler {
+public abstract class AbstractActionHandler implements ActionHandler {
     public static final boolean REDIRECT = true;
     private PageBuilderContext context;
     private ViewComponents components;
@@ -275,7 +275,7 @@ public abstract class AbstractActionHandler {
     }
     
     protected final void init(String view, ExtendedContext extcontext) {
-        AbstractViewSpec spec;
+        ViewSpec spec;
         
         ViewContext viewctx = context.getView(view);
         viewctx.set(extcontext);
@@ -331,7 +331,7 @@ public abstract class AbstractActionHandler {
     public static final void redirectContext(
             PageBuilderContext context, ViewContext viewctx) {
         String appname, rappname, pagename, rpagename;
-        AbstractViewSpec viewspec;
+        ViewSpec viewspec;
         ViewContext rviewctx;
         
         context.function.setReloadableView(true);

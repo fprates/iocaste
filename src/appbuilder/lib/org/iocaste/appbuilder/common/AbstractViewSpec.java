@@ -47,6 +47,7 @@ public abstract class AbstractViewSpec implements ViewSpec {
         put(parent, ViewSpecItem.TYPES.FRAME, name);
     }
     
+    @Override
     public final ViewSpecItem get(String name) {
         return items.get(name);
     }

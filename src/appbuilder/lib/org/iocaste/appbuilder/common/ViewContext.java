@@ -11,11 +11,11 @@ import org.iocaste.shell.common.Validator;
 
 
 public class ViewContext {
-    private AbstractViewSpec spec;
+    private ViewSpec spec;
     private ViewConfig config;
-    private AbstractViewInput input;
+    private ViewInput input;
     private ViewComponents components;
-    private Map<String, AbstractActionHandler> actionhandlers;
+    private Map<String, ActionHandler> actionhandlers;
     private ExtendedContext extcontext;
     private NavControlDesign ncdesign;
     private boolean updateview;
@@ -35,7 +35,7 @@ public class ViewContext {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public final <T extends AbstractActionHandler> T getActionHandler(
+    public final <T extends ActionHandler> T getActionHandler(
             String action) {
         return (T)actionhandlers.get(action);
     }
@@ -85,7 +85,7 @@ public class ViewContext {
      * 
      * @return
      */
-    public final AbstractViewInput getInput() {
+    public final ViewInput getInput() {
         return input;
     }
     
@@ -93,7 +93,7 @@ public class ViewContext {
      * 
      * @return
      */
-    public final AbstractViewSpec getSpec() {
+    public final ViewSpec getSpec() {
         return spec;
     }
     
@@ -126,7 +126,7 @@ public class ViewContext {
      * @param action
      * @param handler
      */
-    public final void put(String action, AbstractActionHandler handler) {
+    public final void put(String action, ActionHandler handler) {
         actionhandlers.put(action, handler);
     }
     
@@ -163,7 +163,7 @@ public class ViewContext {
      * 
      * @param spec
      */
-    public final void set(AbstractViewSpec spec) {
+    public final void set(ViewSpec spec) {
         this.spec = spec;
     }
     

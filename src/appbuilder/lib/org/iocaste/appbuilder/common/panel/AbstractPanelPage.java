@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.AbstractExtendedValidator;
+import org.iocaste.appbuilder.common.ActionHandler;
 import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
@@ -28,7 +29,7 @@ public abstract class AbstractPanelPage {
         actions = new HashSet<>();
     }
     
-    protected void action(String action, AbstractActionHandler handler) {
+    protected void action(String action, ActionHandler handler) {
         actions.add(action);
         put(action, handler);
     }
@@ -67,7 +68,7 @@ public abstract class AbstractPanelPage {
         return submit;
     }
     
-    protected final void put(String action, AbstractActionHandler handler) {
+    protected final void put(String action, ActionHandler handler) {
         view.put(action, handler);
     }
     
@@ -99,7 +100,7 @@ public abstract class AbstractPanelPage {
         this.view = view;
     }
     
-    protected final void submit(String action, AbstractActionHandler handler) {
+    protected final void submit(String action, ActionHandler handler) {
         submit = action;
         put(action, handler);
     }
