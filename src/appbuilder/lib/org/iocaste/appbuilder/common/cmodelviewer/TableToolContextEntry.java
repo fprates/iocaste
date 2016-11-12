@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.ContextDataHandler;
+import org.iocaste.appbuilder.common.ContextEntry;
+import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.documents.common.ExtendedObject;
 
-public class TableToolContextEntry {
+public class TableToolContextEntry implements ContextEntry {
     private String name;
     private List<ExtendedObject> citems;
     public Map<Integer, TableToolItem> items;
@@ -42,5 +44,10 @@ public class TableToolContextEntry {
         for (int index : items.keySet())
             objects.add(items.get(index).object);
         return objects;
+    }
+    
+    @Override
+    public final ViewSpecItem.TYPES getType() {
+        return ViewSpecItem.TYPES.TABLE_TOOL;
     }
 }

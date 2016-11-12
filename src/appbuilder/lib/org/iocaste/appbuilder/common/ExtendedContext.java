@@ -4,6 +4,7 @@ import org.iocaste.appbuilder.common.cmodelviewer.DataFormContextEntry;
 import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.appbuilder.common.tiles.Tile;
+import org.iocaste.appbuilder.common.tiles.TilesContextEntry;
 import org.iocaste.documents.common.ExtendedObject;
 
 public interface ExtendedContext {
@@ -71,6 +72,10 @@ public interface ExtendedContext {
     
     public abstract TableToolContextEntry tableInstance(
             String page, String ttname);
+    
+    public abstract TilesContextEntry tilesInstance(String tiles);
+    
+    public abstract TilesContextEntry tilesInstance(String page, String tiles);
 
     public abstract <T> T tileobjectget();
 }

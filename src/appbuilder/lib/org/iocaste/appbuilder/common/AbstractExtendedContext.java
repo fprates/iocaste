@@ -8,6 +8,7 @@ import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.appbuilder.common.tiles.Tile;
+import org.iocaste.appbuilder.common.tiles.TilesContextEntry;
 import org.iocaste.documents.common.ExtendedObject;
 
 public abstract class AbstractExtendedContext implements ExtendedContext {
@@ -29,7 +30,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     public final void add(String page, String ttname, ExtendedObject object) {
         TableToolContextEntry entry;
         
-        entry = pages.get(page).tabletools.get(ttname);
+        entry = pages.get(page).get(ttname);
         if ((entry.handler != null) && entry.handler.isInitialized())
             entry.handler.add(ttname, object);
         else
@@ -48,10 +49,10 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         PageContext pagectx;
         
         pagectx = pages.get(page);
-        entry = pagectx.dataforms.get(dfname);
+        entry = pagectx.get(dfname);
         if (entry == null) {
             entry = new DataFormContextEntry();
-            pagectx.dataforms.put(dfname, entry);
+            pagectx.put(dfname, entry);
         }
         return entry;
     }
@@ -63,7 +64,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     
     @Override
     public final ExtendedObject dfobjectget(String page, String dfname) {
-        DataFormContextEntry entry = pages.get(page).dataforms.get(dfname);
+        DataFormContextEntry entry = pages.get(page).get(dfname);
         if ((entry.handler != null) && entry.handler.isInitialized())
             return entry.handler.get();
         else
@@ -78,7 +79,8 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     @Override
     public final ExtendedObject get(String page, String ttname, int line) {
         PageContext pagectx = pages.get(page);
-        TableToolItem ttitem = pagectx.tabletools.get(ttname).items.get(line);
+        TableToolItem ttitem = ((TableToolContextEntry)pagectx.get(ttname)).
+                items.get(line);
         return (ttitem == null)? null : ttitem.object;
     }
     
@@ -95,7 +97,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     @Override
     public final boolean isInstantializedTable(String page, String ttname) {
         PageContext pagectx = pages.get(page);
-        return pagectx.tabletools.containsKey(ttname);
+        return pagectx.contains(ttname);
     }
 
     @Override
@@ -103,8 +105,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         PageContext pagectxfrom = pages.get(pagefrom);
         PageContext pagectxto = pages.get(pageto);
         
-        pagectxto.dataforms.putAll(pagectxfrom.dataforms);
-        pagectxto.tabletools.putAll(pagectxfrom.tabletools);
+        pagectxto.putAll(pagectxfrom);
     }
     
     @Override
@@ -129,7 +130,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         TableToolContextEntry entry;
         int index;
         
-        entry = pages.get(page).tabletools.get(ttname);
+        entry = pages.get(page).get(ttname);
         if ((entry.handler != null) && entry.handler.isInitialized()) {
             entry.handler.remove(ttname, object);
         } else {
@@ -160,7 +161,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     {
         TableToolContextEntry entry;
 
-        entry = pages.get(page).tabletools.get(ttname);
+        entry = pages.get(page).get(ttname);
         entry.items.clear();
         if (objects == null)
             return;
@@ -189,7 +190,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     
     @Override
     public final void set(String page, String dfname, ExtendedObject object) {
-        DataFormContextEntry entry = pages.get(page).dataforms.get(dfname);
+        DataFormContextEntry entry = pages.get(page).get(dfname);
         if ((entry.handler != null) && entry.handler.isInitialized())
             entry.handler.set(dfname, object);
         else
@@ -214,23 +215,26 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     @Override
     public final void setDataHandler(ContextDataHandler handler,
             String[] dataforms, String[] tabletools) {
-        TableToolContextEntry ttentry;
-        DataFormContextEntry dfentry;
+        ContextEntry entry;
         PageContext pagectx = pages.get(context.view.getPageName());
         
         if (tabletools == null)
-            tabletools = pagectx.tabletools.keySet().toArray(new String[0]);
-        for (String key : tabletools) {
-            ttentry = pagectx.tabletools.get(key);
-            ttentry.handler = handler;
-        }
+            for (String key : pagectx.getTools().keySet()) {
+                entry = pagectx.get(key);
+                if (entry.getType() == ViewSpecItem.TYPES.TABLE_TOOL)
+                    ((TableToolContextEntry)entry).handler = handler;
+            }
+        for (String key : tabletools)
+            ((TableToolContextEntry)pagectx.get(key)).handler = handler;
 
         if (dataforms == null)
-            dataforms = pagectx.dataforms.keySet().toArray(new String[0]);
-        for (String key : dataforms) {
-            dfentry = pagectx.dataforms.get(key);
-            dfentry.handler = handler;
-        }
+            for (String key : pagectx.getTools().keySet()) {
+                entry = pagectx.get(key);
+                if (entry.getType() == ViewSpecItem.TYPES.DATA_FORM)
+                    ((DataFormContextEntry)entry).handler = handler;
+            }
+        for (String key : dataforms)
+            ((DataFormContextEntry)pagectx.get(key)).handler = handler;
     }
     
     @Override
@@ -245,12 +249,57 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         PageContext pagectx;
         
         pagectx = pages.get(page);
-        entry = pagectx.tabletools.get(ttname);
+        entry = pagectx.get(ttname);
         if (entry == null) {
             entry = new TableToolContextEntry(ttname);
-            pagectx.tabletools.put(ttname, entry);
+            pagectx.put(ttname, entry);
         }
         return entry;
+    }
+    
+    @Override
+    public final TilesContextEntry tilesInstance(String tiles) {
+        return tilesInstance(context.view.getPageName(), tiles);
+    }
+    
+    @Override
+    public final TilesContextEntry tilesInstance(String page, String tiles) {
+        TilesContextEntry entry;
+        PageContext pagectx;
+        
+        pagectx = pages.get(page);
+        entry = pagectx.get(tiles);
+        if (entry == null) {
+            entry = new TilesContextEntry();
+            pagectx.put(tiles, entry);
+        }
+        return entry;
+    }
+    
+    public final void tilesadd(String tiles, ExtendedObject object) {
+        tilesadd(context.view.getPageName(), tiles, object);
+    }
+    
+    public final void tilesadd(String page, String tiles, ExtendedObject object)
+    {
+        TilesContextEntry entry;
+        
+        entry = pages.get(page).get(tiles);
+        entry.objects.add(object);
+    }
+    
+    public final void tilesset(String tiles, ExtendedObject[] objects) {
+        tilesset(context.view.getPageName(), tiles, objects);
+    }
+    
+    public final void tilesset(String page, String tiles,
+            ExtendedObject[] objects) {
+        TilesContextEntry entry;
+        
+        entry = pages.get(page).get(tiles);
+        entry.objects.clear();
+        for (ExtendedObject object : objects)
+            entry.objects.add(object);
     }
     
     @Override
