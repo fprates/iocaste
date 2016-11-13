@@ -326,20 +326,22 @@ public class TableTool extends AbstractComponentTool {
      * 
      */
     public final void remove() {
+        Map<Integer, TableToolItem> items;
+        Table table;
         int index;
-        int i = 0;
-        Map<Integer, TableToolItem> items = extcontext.data.getItems();
-        Table table = getTable();
+        
+        entry.component.load(entry.data);
+        items = extcontext.data.getItems();
+        table = getTable();
+        index = extcontext.data.topline;
         
         for (TableItem item : table.getItems()) {
             if (!item.isSelected()) {
-                i++;
+                index++;
                 continue;
             }
             table.remove(item);
-            index = i + extcontext.data.topline;
-            if (items.size() > index)
-                items.remove(index);
+            items.remove(index++);
         }
         save(extcontext, items);
     }
@@ -407,12 +409,13 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void selectAll(boolean mark) {
-        Map<Integer, TableToolItem> items = extcontext.data.getItems();
-        
+        Map<Integer, TableToolItem> items;
+
+        entry.component.load(entry.data);
+        items = extcontext.data.getItems();
         for (TableItem item : getTable().getItems())
             item.setSelected(mark);
-        for (TableToolItem item : items.values())
-            item.selected = mark;
+        save(extcontext, items);
     }
     
     /**
