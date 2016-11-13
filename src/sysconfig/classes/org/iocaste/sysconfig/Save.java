@@ -14,7 +14,7 @@ public class Save extends AbstractActionHandler {
         Collection<ExtendedObject> objects;
         
         for (String name : extcontext.modules.keySet()) {
-            objects = extcontext.tableInstance(name).getItems();
+            objects = extcontext.tableInstance(name).getObjects();
             for (ExtendedObject object : objects)
                 modify(object);
         }
