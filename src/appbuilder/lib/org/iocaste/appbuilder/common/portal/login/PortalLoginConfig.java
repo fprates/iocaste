@@ -4,6 +4,7 @@ import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
 
@@ -15,16 +16,15 @@ public class PortalLoginConfig extends AbstractViewConfig {
         DataFormToolData tool;
         DataFormToolItem item;
         NodeList nodes;
-//        PortalContext extcontext;
-//        String page = context.view.getPageName();
-        
-//        context.view.setTitle(extcontext.get(page).title);
+        Button button;
         
         nodes = getElement("viewport");
         nodes.setStyleClass("portal_viewport");
         nodes.setItemsStyle("portal_viewport_node");
         
-        getElement("connect").setStyleClass("portal_button");
+        button = getElement("connect");
+        button.setStyleClass("portal_button");
+        button.setSubmit(true);
         
         tool = getTool("login");
         tool.model = "PORTAL_USER_INPUT";
