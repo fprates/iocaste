@@ -1,7 +1,7 @@
 package org.iocaste.appbuilder.common;
 
-import org.iocaste.appbuilder.common.cmodelviewer.DataFormContextEntry;
-import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
+import org.iocaste.appbuilder.common.dataformtool.DataFormContextEntry;
+import org.iocaste.appbuilder.common.tabletool.TableToolContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.appbuilder.common.tiles.Tile;
 import org.iocaste.appbuilder.common.tiles.TilesContextEntry;

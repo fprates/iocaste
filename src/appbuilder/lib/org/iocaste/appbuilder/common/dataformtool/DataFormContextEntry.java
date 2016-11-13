@@ -1,4 +1,4 @@
-package org.iocaste.appbuilder.common.cmodelviewer;
+package org.iocaste.appbuilder.common.dataformtool;
 
 import org.iocaste.appbuilder.common.AbstractContextEntry;
 import org.iocaste.appbuilder.common.ContextDataHandler;

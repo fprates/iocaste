@@ -3,8 +3,8 @@ package org.iocaste.appbuilder.common;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.cmodelviewer.DataFormContextEntry;
-import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
+import org.iocaste.appbuilder.common.dataformtool.DataFormContextEntry;
+import org.iocaste.appbuilder.common.tabletool.TableToolContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.appbuilder.common.tiles.Tile;

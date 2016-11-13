@@ -8,7 +8,6 @@ import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentDataItem;
 import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
-import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class TableToolData extends AbstractComponentData {

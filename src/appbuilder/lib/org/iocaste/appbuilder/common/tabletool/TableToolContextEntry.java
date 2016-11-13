@@ -1,4 +1,4 @@
-package org.iocaste.appbuilder.common.cmodelviewer;
+package org.iocaste.appbuilder.common.tabletool;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,7 +9,6 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractContextEntry;
 import org.iocaste.appbuilder.common.ContextDataHandler;
 import org.iocaste.appbuilder.common.ViewSpecItem;
-import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class TableToolContextEntry extends AbstractContextEntry {

@@ -8,7 +8,7 @@ import org.iocaste.appbuilder.common.DataConversion;
 import org.iocaste.appbuilder.common.DataConversionRule;
 import org.iocaste.appbuilder.common.ObjectExtractor;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
+import org.iocaste.appbuilder.common.tabletool.TableToolContextEntry;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;

@@ -2,7 +2,7 @@ package org.iocaste.workbench.project.java;
 
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
+import org.iocaste.appbuilder.common.tabletool.TableToolContextEntry;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.workbench.Context;
 import org.iocaste.workbench.project.viewer.ItemLoader;
