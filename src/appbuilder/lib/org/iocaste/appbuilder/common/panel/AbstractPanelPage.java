@@ -76,15 +76,15 @@ public abstract class AbstractPanelPage {
         view.put(name, validator);
     }
     
-    protected final void set(ViewConfig config) {
+    protected void set(ViewConfig config) {
         this.config = config;
     }
     
-    protected final void set(ViewInput input) {
+    protected void set(ViewInput input) {
         this.input = input;
     }
     
-    protected final void set(ViewSpec spec) {
+    protected void set(ViewSpec spec) {
         this.spec = spec;
     }
     
