@@ -26,6 +26,10 @@ public abstract class AbstractViewConfigStyle implements ViewConfigStyle {
         return context.stylesheet.getConstants().get(code);
     }
     
+    protected final void constant(int code, String value) {
+        context.stylesheet.getConstants().put(code, value);
+    }
+    
     @Override
     public final void execute(String media) {
         this.media = media;
