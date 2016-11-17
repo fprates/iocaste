@@ -294,6 +294,14 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         entry.add(object);
     }
     
+    public final void tilesclear(String tiles) {
+        tilesclear(context.view.getPageName());
+    }
+    
+    public final void tilesclear(String page, String tiles) {
+        pages.get(page).get(tiles).clear();
+    }
+    
     public final void tilesset(String tiles, ExtendedObject[] objects) {
         tilesset(context.view.getPageName(), tiles, objects);
     }
