@@ -18,7 +18,7 @@ public abstract class AbstractPortalBuilder extends AbstractPageBuilder {
 	public final void config(PageBuilderContext context) {
         Iocaste iocaste;
 		
-		portalctx = new PortalContext(context);
+		portalctx = contextInstance(context);
 		config(portalctx);
 
         if (!context.view.getPageName().equals("authentic"))
@@ -30,6 +30,10 @@ public abstract class AbstractPortalBuilder extends AbstractPageBuilder {
 	}
 
 	protected abstract void config(PortalContext portalctx);
+	
+	protected PortalContext contextInstance(PageBuilderContext context) {
+	    return new PortalContext(context);
+	}
 	
 	protected final void instance(String name, AbstractPanelPage page) {
 		portalctx.panel.instance(name, page, portalctx);
