@@ -23,13 +23,14 @@ public class PortalConnect extends AbstractActionHandler {
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
 //        ComplexDocument usertree;
-        String form, appname;
+        String form, appname, pagename;
         ExtendedObject object;
         boolean connected;
         PortalContext extcontext = getExtendedContext();
         
-        if (extcontext.email == null) {
-            form = forms.get(context.view.getPageName());
+        pagename = context.view.getPageName();
+        if (pagename.equals("authentic")) {
+            form = forms.get(pagename);
             extcontext.email = getdfst(form, "EMAIL");
             extcontext.secret = getdfst(form, "SECRET");
         }
