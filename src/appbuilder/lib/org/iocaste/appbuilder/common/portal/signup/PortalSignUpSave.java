@@ -3,6 +3,7 @@ package org.iocaste.appbuilder.common.portal.signup;
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.portal.PortalContext;
+import org.iocaste.authority.common.Authority;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Iocaste;
@@ -19,6 +20,7 @@ public class PortalSignUpSave extends AbstractActionHandler {
         User user;
         long userid;
         Iocaste iocaste;
+        Authority authority;
         
         extcontext = getExtendedContext();
         extcontext.email = getdfst("user", "EMAIL");
@@ -41,6 +43,11 @@ public class PortalSignUpSave extends AbstractActionHandler {
         iocaste.setUserPassword(
                 user.getUsername(), extcontext.secret, false);
 
+        authority = new Authority(context.function);
+        authority.assign(username, "BASE");
+        authority.assign(username, "APPBUILDER");
+        authority.assign(username, "MOTELGOGO");
+        
         object = instance("PORTAL_USERS");
         Documents.move(object, getdf("user"));
         object.setNS(appname);
