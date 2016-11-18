@@ -8,6 +8,10 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.kernel.config.Config;
 import org.iocaste.kernel.database.Database;
+import org.iocaste.kernel.documents.dataelement.CreateDataElement;
+import org.iocaste.kernel.documents.dataelement.GetDataElement;
+import org.iocaste.kernel.documents.dataelement.InsertDataElement;
+import org.iocaste.kernel.documents.dataelement.UpdateDataElement;
 import org.iocaste.protocol.AbstractFunction;
 
 public class Documents extends AbstractFunction {
@@ -47,6 +51,7 @@ public class Documents extends AbstractFunction {
         export("select_document", new SelectDocument());
         export("select_to_map", new SelectToMap());
         export("unlock", new Unlock());
+        protect("update_data_element", new UpdateDataElement());
         export("update_document", new UpdateDocument());
         export("update_m", new UpdateMultiple());
         export("update_model", new UpdateModel());

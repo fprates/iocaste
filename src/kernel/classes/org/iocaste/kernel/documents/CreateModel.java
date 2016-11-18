@@ -8,6 +8,8 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.kernel.common.CreateTable;
 import org.iocaste.kernel.common.Table;
+import org.iocaste.kernel.documents.dataelement.CreateDataElement;
+import org.iocaste.kernel.documents.dataelement.GetDataElement;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 

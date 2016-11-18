@@ -1,10 +1,12 @@
-package org.iocaste.kernel.documents;
+package org.iocaste.kernel.documents.dataelement;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
+import org.iocaste.kernel.documents.AbstractDocumentsHandler;
+import org.iocaste.kernel.documents.Documents;
 import org.iocaste.protocol.Message;
 
 public class GetDataElement extends AbstractDocumentsHandler {

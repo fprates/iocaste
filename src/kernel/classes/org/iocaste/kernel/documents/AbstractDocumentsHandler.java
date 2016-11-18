@@ -16,6 +16,7 @@ import org.iocaste.documents.common.Query;
 import org.iocaste.kernel.config.GetSystemParameter;
 import org.iocaste.kernel.database.Select;
 import org.iocaste.kernel.database.Update;
+import org.iocaste.kernel.documents.dataelement.GetDataElement;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
@@ -330,16 +331,45 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
 
         return update(connection, QUERIES[INS_SH_REF], tname, shname);
     }
+    
+    private void prepare(DataElement element) throws Exception {
+        
+        switch (element.getType()) {
+        case DataType.DATE:
+            element.setLength(10);
+            element.setDecimals(0);
+            element.setUpcase(false);
+            
+            break;
+        case DataType.TIME:
+            element.setLength(8);
+            element.setDecimals(0);
+            element.setUpcase(false);
+            
+            break;
+        case DataType.BOOLEAN:
+            element.setLength(1);
+            element.setDecimals(0);
+            element.setUpcase(false);
+            
+            break;
+            
+        default:
+            if (element.getLength() == 0)
+                throw new IocasteException(
+                        new StringBuilder("Invalid length for data element ").
+                        append(element.getName()).toString());
+            break;
+        }
+    }
 
     protected void prepareElements(Connection connection, Documents documents,
             DocumentModel model) throws Exception {
         DocumentModelItem reference;
         DataElement element;
-        CreateDataElement createde;
         GetDataElement getde;
         String refname, modelrefname;
         
-        createde = documents.get("create_data_element");
         getde = documents.get("get_data_element");
         for (DocumentModelItem item : model.getItens()) {
             if (item.isDummy())
@@ -381,7 +411,7 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
                 element = getde.run(connection, element.getName());
                 item.setDataElement(element);
             } else {
-                createde.prepare(element);
+                prepare(element);
             }   
         }
     }

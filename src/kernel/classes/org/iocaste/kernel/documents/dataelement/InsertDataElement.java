@@ -1,9 +1,10 @@
-package org.iocaste.kernel.documents;
+package org.iocaste.kernel.documents.dataelement;
 
 import java.sql.Connection;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.kernel.documents.AbstractDocumentsHandler;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 

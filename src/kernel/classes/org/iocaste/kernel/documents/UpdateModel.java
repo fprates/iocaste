@@ -11,6 +11,8 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.kernel.common.AlterTable;
 import org.iocaste.kernel.common.Table;
+import org.iocaste.kernel.documents.dataelement.InsertDataElement;
+import org.iocaste.kernel.documents.dataelement.UpdateDataElement;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
@@ -291,6 +293,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
             throws Exception {
         String shname;
         Object[] criteria;
+        UpdateDataElement updatede;
         
         update(data.connection,
                 QUERIES[DEL_SH_REF],
@@ -299,17 +302,11 @@ public class UpdateModel extends AbstractDocumentsHandler {
         /*
          * atualização do modelo
          */
-        criteria = new Object[5];
-        criteria[0] = data.element.getDecimals();
-        criteria[1] = data.element.getLength();
-        criteria[2] = data.element.getType();
-        criteria[3] = data.element.isUpcase();
-        criteria[4] = data.element.getName();
-
-        if (update(data.connection, QUERIES[UPDATE_ELEMENT], criteria) < 0)
+        updatede = getFunction().get("update_data_element");
+        if (updatede.run(data.connection, data.element) < 0)
             throw new IocasteException(
                     new StringBuilder("error updating data element ").
-                            append(criteria[4]).toString());
+                            append(data.element.getName()).toString());
         
         criteria = new Object[7];
         criteria[0] = data.model.getName();

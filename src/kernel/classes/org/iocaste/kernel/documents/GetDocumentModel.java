@@ -8,6 +8,7 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.kernel.documents.dataelement.GetDataElement;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
