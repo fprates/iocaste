@@ -67,8 +67,9 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     @Override
     public final ExtendedObject dfobjectget(String page, String dfname) {
         DataFormContextEntry entry = pages.get(page).get(dfname);
-        if ((entry.handler != null) && entry.handler.isInitialized())
-            return entry.handler.get();
+        ContextDataHandler handler = entry.getHandler();
+        if ((handler != null) && handler.isInitialized())
+            return handler.get();
         else
             return entry.getObject();
     }
@@ -197,8 +198,9 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     @Override
     public final void set(String page, String dfname, ExtendedObject object) {
         DataFormContextEntry entry = pages.get(page).get(dfname);
-        if ((entry.handler != null) && entry.handler.isInitialized())
-            entry.handler.set(dfname, object);
+        ContextDataHandler handler = entry.getHandler();
+        if ((handler != null) && handler.isInitialized())
+            handler.set(dfname, object);
         else
             entry.set(object);
     }
@@ -212,35 +214,18 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     public final void set(String page, String ttname, TableToolItem ttitem) {
         set(page, ttname, ttitem.object, ttitem.position);
     }
-
-    @Override
-    public final void setDataHandler(ContextDataHandler handler) {
-        setDataHandler(handler, null, null);
-    }
     
     @Override
     public final void setDataHandler(ContextDataHandler handler,
-            String[] dataforms, String[] tabletools) {
-        ContextEntry entry;
+            String... tools) {
         PageContext pagectx = pages.get(context.view.getPageName());
-        
-        if (tabletools == null)
-            for (String key : pagectx.getTools().keySet()) {
-                entry = pagectx.get(key);
-                if (entry.getType() == ViewSpecItem.TYPES.TABLE_TOOL)
-                    entry.set(handler);
-            }
-        for (String key : tabletools)
-            pagectx.get(key).set(handler);
 
-        if (dataforms == null)
-            for (String key : pagectx.getTools().keySet()) {
-                entry = pagectx.get(key);
-                if (entry.getType() == ViewSpecItem.TYPES.DATA_FORM)
-                    ((DataFormContextEntry)entry).handler = handler;
-            }
-        for (String key : dataforms)
-            ((DataFormContextEntry)pagectx.get(key)).handler = handler;
+        if (tools == null)
+            for (String key : pagectx.getTools().keySet())
+                pagectx.get(key).set(handler);
+        else
+            for (String key : tools)
+                pagectx.get(key).set(handler);
     }
     
     @Override

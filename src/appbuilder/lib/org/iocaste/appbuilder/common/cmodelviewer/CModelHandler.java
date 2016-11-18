@@ -8,7 +8,7 @@ public class CModelHandler extends AbstractTableToolHandler {
 
     public CModelHandler(ExtendedContext extcontext) {
         super(extcontext);
-        extcontext.setDataHandler(this, new String[] {"head", "base"}, null);
+        extcontext.setDataHandler(this, "head", "base");
     }
     
     @Override

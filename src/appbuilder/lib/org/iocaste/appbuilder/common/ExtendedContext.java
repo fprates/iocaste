@@ -63,10 +63,8 @@ public interface ExtendedContext {
     public abstract void set(String page, String ttname,
             ExtendedObject object, int line);
     
-    public abstract void setDataHandler(ContextDataHandler handler);
-    
     public abstract void setDataHandler(ContextDataHandler handler,
-            String[] dataforms, String[] tabletools);
+            String... tools);
     
     public abstract TableToolContextEntry tableInstance(String ttname);
     
