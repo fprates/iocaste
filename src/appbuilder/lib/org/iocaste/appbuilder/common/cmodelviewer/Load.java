@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common.cmodelviewer;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 
 public class Load extends AbstractActionHandler {
@@ -13,6 +14,8 @@ public class Load extends AbstractActionHandler {
     
     @Override
     protected void execute(PageBuilderContext context) {
+        ExtendedObject object;
+        String table;
         Context extcontext = getExtendedContext();
         
         extcontext.id = getdfkey("head");
@@ -24,6 +27,16 @@ public class Load extends AbstractActionHandler {
             return;
         }
         
+        object = extcontext.document.getHeader();
+        extcontext.dataformInstance(redirect, "head");
+        extcontext.set(redirect, "head", object);
+        extcontext.dataformInstance(redirect, "base");
+        extcontext.set(redirect, "base", object);
+        for (String name : extcontext.document.getModel().getItems().keySet()) {
+            table = name.concat("_table");
+            extcontext.tableInstance(redirect, table);
+            extcontext.set(redirect, table, extcontext.document.getItems(name));
+        }
         init(redirect, extcontext);
         redirect(redirect);
     }
