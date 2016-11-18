@@ -10,7 +10,7 @@ package org.iocaste.shell.common;
  */
 public class Text extends AbstractComponent {
     private static final long serialVersionUID = -6584462992412783994L;
-    private String tag;
+    private String tag, mask;
     
     public Text(View view, String name) {
         super(view, Const.TEXT, name);
@@ -20,6 +20,14 @@ public class Text extends AbstractComponent {
     public Text(Container container, String name) {
         super(container, Const.TEXT, name);
         init();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getMask() {
+        return mask;
     }
     
     /**
@@ -53,6 +61,14 @@ public class Text extends AbstractComponent {
     @Override
     public final boolean isDataStorable() {
         return false;
+    }
+    
+    /**
+     * 
+     * @param mask
+     */
+    public final void setMask(String mask) {
+        this.mask = mask;
     }
     
     /**
