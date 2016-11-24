@@ -88,7 +88,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
             dfentry = new ComponentEntry();
             dfentry.data = dfdata;
             rtdata.input.toolcomponent = new DataFormTool(dfentry);
-            handler.input = true;
+            handler.input = dfdata.context.view.getPageName();
         } else {
             ttdata = (TableToolData)rtdata.output.tooldata;
             ttdata.context = entry.data.context;
