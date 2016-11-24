@@ -446,9 +446,9 @@ public class DefaultStyle {
         style.put("font-weight", "bold");
         style.put("padding", "0.3em");
         style.put("margin", "0px");
-        style.put("border-color", FRAME_COLOR);
+        style.put("border-color", FONT_COLOR);
         style.put("border-style", "solid");
-        style.put("border-bottom-width", "1px");
+        style.put("border-bottom-width", "2px");
         style.put("border-top-width", "0px");
         style.put("border-left-width", "0px");
         style.put("border-right-width", "0px");
@@ -619,8 +619,9 @@ public class DefaultStyle {
 
             style = stylesheet.clone(
                     mediakey, ".tp_button_unfocused", ".tp_button");
-            style.put("border-bottom-style", "none");
             style.put("background-color", BACKGROUND_COLOR);
+            style.put("border-bottom-style", "solid");
+            style.put("border-bottom-color", FONT_COLOR);
         }
         
         return stylesheet;
