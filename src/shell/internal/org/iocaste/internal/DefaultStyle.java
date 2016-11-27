@@ -26,8 +26,8 @@ public class DefaultStyle {
         constants.put(Shell.SHADOW, "1px 1px 2px #b0b0b0");
         
         resolutions = new HashMap<>();
-        resolutions.put("default", new Object[][] {
-            {null, "400px", "18pt", "200px", "none"},
+        resolutions.put("mobile0", new Object[][] {
+            {"all and (max-width:767px)", "400px", "18pt", "200px", "none"},
             {"none",
                 new String[][] {
                     {"border-bottom-style", "solid"},
@@ -45,7 +45,7 @@ public class DefaultStyle {
                     {"width", "100%"}}
             }
         });
-        resolutions.put("screen768", new Object[][] {
+        resolutions.put("mobile1", new Object[][] {
             {"screen and (min-width:768px) and (max-width:1019px)",
                 "708px", "22pt", "308px", "inline-block"},
             {"table-header-group",
@@ -66,7 +66,7 @@ public class DefaultStyle {
                     {"width", "unset"}}
             }
         });
-        resolutions.put("screen1020", new Object[][] {
+        resolutions.put("default", new Object[][] {
             {"screen and (min-width:1020px) and (max-width:1229px)",
                 "960px", "22pt", "560px", "inline-block"},
             {"table-header-group",
