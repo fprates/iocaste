@@ -32,9 +32,7 @@ public class PortalSignUpSave extends AbstractActionHandler {
             return;
         }
         
-        new Documents(context.function).
-                createNumberFactory("PRTLUSRS", appname);
-        userid = getNextNumber("PRTLUSRS", appname);
+        userid = new Documents(context.function).getNextNumber("PRTLUSRS");
         username = String.format("PTL%05d", userid);
         user = new User();
         user.setUsername(username);

@@ -27,6 +27,8 @@ public class PortalInstall extends AbstractInstallObject {
         model = modelInstance("PORTAL_USER_INPUT");
         model.key("EMAIL", email);
         model.item("SECRET", secret);
+        
+        context.getInstallData().addNumberFactory("PRTLUSRS");
     }
 
 }
