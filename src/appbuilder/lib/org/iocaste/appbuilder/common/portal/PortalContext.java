@@ -7,7 +7,7 @@ import org.iocaste.appbuilder.common.panel.StandardPanel;
 
 public class PortalContext extends AbstractExtendedContext {
 	public StandardPanel panel;
-    public String email, secret;
+    public String email, secret, userprofile;
     public ActionHandler load;
 
 	public PortalContext(PageBuilderContext context) {

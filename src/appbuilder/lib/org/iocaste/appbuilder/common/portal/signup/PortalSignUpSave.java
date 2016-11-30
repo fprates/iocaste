@@ -46,7 +46,7 @@ public class PortalSignUpSave extends AbstractActionHandler {
         authority = new Authority(context.function);
         authority.assign(username, "BASE");
         authority.assign(username, "APPBUILDER");
-        authority.assign(username, "MOTELGOGO");
+        authority.assign(username, extcontext.userprofile);
         
         object = instance("PORTAL_USERS");
         Documents.move(object, getdf("user"));
