@@ -30,6 +30,22 @@
         <url-pattern>/view.html</url-pattern>
     </servlet-mapping>
     
+    <!-- using portalbuilder? uncomment and set below -->
+    <!--<servlet>
+        <servlet-name>portal_index</servlet-name>
+        <servlet-class>org.iocaste.appbuilder.common.portal.PortalServlet</servlet-class>
+        <init-param>
+            <param-name>login_manager</param-name>
+            <param-value>template</param-value>
+        </init-param>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>portal_index</servlet-name>
+        <url-pattern>/index.html</url-pattern>
+    </servlet-mapping>
+    -->
+    
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
