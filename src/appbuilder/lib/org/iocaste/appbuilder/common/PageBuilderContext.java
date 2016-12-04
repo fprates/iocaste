@@ -63,6 +63,11 @@ public class PageBuilderContext extends AbstractContext {
         view.setStyleSheet((Object[][])style[1]);
     }
     
+    public final void run(String page, String action) throws Exception {
+        this.action = action;
+        getView(page).getActionHandler(action).run(this);
+    }
+    
     public final void storeStyle() {
         String name = view.getPageName();
         Object[] style = styles.get(name);
