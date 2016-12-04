@@ -21,7 +21,7 @@ public abstract class AbstractPortalBuilder extends AbstractPageBuilder {
 		portalctx = contextInstance(context);
 		config(portalctx);
 
-        if (!portalctx.login)
+        if (portalctx.nologin)
         	return;
         iocaste = new Iocaste(context.function);
         if (!iocaste.isConnected()) {
