@@ -15,21 +15,23 @@ public abstract class AbstractPortalBuilder extends AbstractPageBuilder {
 	}
 	
 	@Override
-	public final void config(PageBuilderContext context) {
+	public final void config(PageBuilderContext context) throws Exception {
         Iocaste iocaste;
 		
 		portalctx = contextInstance(context);
 		config(portalctx);
 
-        if (!context.view.getPageName().equals("authentic"))
+        if (!portalctx.login)
         	return;
         iocaste = new Iocaste(context.function);
-        if (!iocaste.isConnected())
+        if (!iocaste.isConnected()) {
             iocaste.login(user, password, language);
+            user = password = language = null;
+        }
         new Shell(context.function).pushPage(context.view);
 	}
 
-	protected abstract void config(PortalContext portalctx);
+	protected abstract void config(PortalContext portalctx) throws Exception;
 	
 	protected PortalContext contextInstance(PageBuilderContext context) {
 	    return new PortalContext(context);
