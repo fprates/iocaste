@@ -126,12 +126,12 @@ public class PageRenderer extends AbstractRenderer {
      * @param logid
      * @return
      */
-    private final PageContext createLoginContext(HttpServletRequest req,
+    private final PageContext createStartContext(HttpServletRequest req,
             String sessionid, int logid) {
         SessionContext sessionctx;
         PageContext pagectx;
         Enumeration<String> parameternames;
-        String key;
+        String key, startpage;
         ContextData contextdata;
         
         contextdata = new ContextData();
@@ -141,9 +141,13 @@ public class PageRenderer extends AbstractRenderer {
         if (contextdata.appname == null)
             contextdata.appname = "iocaste-login";
         contextdata.sessionid = sessionid;
-        contextdata.pagename = "authentic";
         contextdata.logid = logid;
         contextdata.initialize = true;
+        
+        startpage = req.getParameter("start-page");
+        if (startpage == null)
+            startpage = "authentic";
+        contextdata.pagename = startpage;
         
         pagectx = createPageContext(contextdata);
         sessionctx = apps.get(sessionid).get(logid);
@@ -221,7 +225,7 @@ public class PageRenderer extends AbstractRenderer {
             if (pagectx == null) {
                 tickets.load(this);
                 if (!hasTicket(req))
-                    pagectx = createLoginContext(req, sessionid, logid);
+                    pagectx = createStartContext(req, sessionid, logid);
                 else
                     pagectx = createTicketContext(req, sessionid, logid, this);
             }
