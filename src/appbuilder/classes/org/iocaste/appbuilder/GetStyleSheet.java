@@ -210,15 +210,6 @@ public class GetStyleSheet extends AbstractHandler {
         style.put("text-decoration", "none");
         style.put("cursor", "pointer");
         
-        style = stylesheet.newElement(".portal_viewport");
-        style.put("list-style-type", "none");
-        style.put("max-width", "400px");
-        style.put("margin-left", "auto");
-        style.put("margin-right", "auto");
-        style.put("margin-top", "0px");
-        style.put("margin-bottom", "0px");
-        style.put("padding", "5px");
-        
         defaultstyle = DefaultStyle.instance(null);
         style = defaultstyle.get(".button");
         stylesheet.put(".portal_button", style);
