@@ -50,7 +50,7 @@ public class TilesTool extends AbstractComponentTool {
         TilesData data = (TilesData)entry.data;
         
         pagename = data.context.view.getPageName();
-        view = data.context.getView();
+        view = data.context.getView(pagename);
         tilesspec = view.getSpec().get(entry.data.name);
         builder = new BuilderCustomView();
         builder.setView(pagename);

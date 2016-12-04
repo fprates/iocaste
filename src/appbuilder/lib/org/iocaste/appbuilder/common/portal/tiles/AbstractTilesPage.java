@@ -21,25 +21,30 @@ public abstract class AbstractTilesPage extends AbstractPanelPage {
         super.set((input != null)? input : new StandardViewInput());
         
         extcontext = getExtendedContext();
-        extcontext.pagetiles = new PortalPageTiles();
+        extcontext.pagetiles.put(getName(), new PortalPageTiles());
         entry();
     }
 
     protected abstract void entry() throws Exception;
     
+    private final PortalPageTiles getPageTiles() {
+        PortalContext extcontext = getExtendedContext();
+        return extcontext.pagetiles.get(getName());
+    }
+    
     @Override
     protected final void set(ViewConfig config) {
-        ((PortalContext)getExtendedContext()).pagetiles.config = config;
+        getPageTiles().config = config;
     }
     
     @Override
     protected final void set(ViewInput input) {
-        ((PortalContext)getExtendedContext()).pagetiles.input = input;
+        getPageTiles().input = input;
     }
     
     @Override
     protected final void set(ViewSpec spec) {
-        ((PortalContext)getExtendedContext()).pagetiles.spec = spec;
+        getPageTiles().spec = spec;
     }
     
     protected final void setParent(ViewConfig config) {

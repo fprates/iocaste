@@ -21,7 +21,7 @@ public abstract class AbstractPanelPage {
     public ViewConfig config;
     public ViewInput input;
     private Set<String> actions;
-    private String submit;
+    private String submit, name;
     private ViewConfigStyle style;
     private NavControlDesign ncdesign;
     
@@ -64,6 +64,10 @@ public abstract class AbstractPanelPage {
         return style;
     }
     
+    protected final String getName() {
+        return name;
+    }
+    
     public final String getSubmit() {
         return submit;
     }
@@ -94,6 +98,10 @@ public abstract class AbstractPanelPage {
     
     protected final void set(NavControlDesign ncdesign) {
         this.ncdesign = ncdesign;
+    }
+    
+    public final void setName(String name) {
+        this.name = name;
     }
     
     public final void setViewContext(ViewContext view) {

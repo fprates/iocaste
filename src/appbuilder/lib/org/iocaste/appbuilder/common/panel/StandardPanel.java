@@ -34,6 +34,7 @@ public class StandardPanel {
         view.set(extcontext);
         
         page.setViewContext(view);
+        page.setName(name);
         try {
             page.execute();
             view.set(page.getDesign());

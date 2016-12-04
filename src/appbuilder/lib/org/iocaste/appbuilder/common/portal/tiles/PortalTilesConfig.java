@@ -14,16 +14,18 @@ public class PortalTilesConfig extends AbstractViewConfig {
         TilesData tiles;
         NodeList nodes;
         PortalContext extcontext;
+        PortalPageTiles pagetiles;
         
         nodes = getElement("viewport");
         nodes.setStyleClass("portal_viewport");
         nodes.setItemsStyle("portal_viewport_node");
         
         extcontext = getExtendedContext();
+        pagetiles = extcontext.pagetiles.get(context.view.getPageName());
         tiles = getTool("items");
-        tiles.spec = extcontext.pagetiles.spec;
-        tiles.config = extcontext.pagetiles.config;
-        tiles.input = (AbstractTileInput)extcontext.pagetiles.input;
+        tiles.spec = pagetiles.spec;
+        tiles.config = pagetiles.config;
+        tiles.input = (AbstractTileInput)pagetiles.input;
     }
     
 }
