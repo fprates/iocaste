@@ -25,6 +25,7 @@ import org.iocaste.appbuilder.common.factories.TextEditorFactory;
 import org.iocaste.appbuilder.common.factories.TextFactory;
 import org.iocaste.appbuilder.common.factories.TextFieldFactory;
 import org.iocaste.appbuilder.common.factories.TilesFactory;
+import org.iocaste.appbuilder.common.factories.VirtualControlFactory;
 
 public class ViewSpecItem {
     
@@ -53,7 +54,8 @@ public class ViewSpecItem {
         TEXT_FIELD("textfield", new TextFieldFactory()),
         TILES("tiles", new TilesFactory()),
         PARAMETER("parameter", new ParameterFactory()),
-        VIEW("view", null);
+        VIEW("view", null),
+        VIRTUAL_CONTROL("virtualcontrol", new VirtualControlFactory());
 
         private String name;
         private SpecFactory factory;
