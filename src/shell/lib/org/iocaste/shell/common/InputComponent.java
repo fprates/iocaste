@@ -71,6 +71,12 @@ public interface InputComponent extends Component {
     public abstract long getl();
     
     /**
+     * 
+     * @return
+     */
+    public abstract String getLabel();
+    
+    /**
      * Retorna comprimento máximo de entrada.
      * @return comprimento
      */
@@ -211,6 +217,12 @@ public interface InputComponent extends Component {
      * @param dataelement
      */
     public abstract void setDataElement(DataElement dataelement);
+    
+    /**
+     * 
+     * @param label
+     */
+    public abstract void setLabel(String label);
     
     /**
      * Define comprimento máximo (em caracteres) da entrada.

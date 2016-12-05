@@ -7,7 +7,7 @@ public class TextFieldSource extends AbstractSource {
 
     @Override
     public Object run() {
-        return ((InputComponent)get("input")).getName();
+        return ((InputComponent)get("input")).getLabel();
     }
     
 }

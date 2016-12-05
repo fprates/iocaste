@@ -27,7 +27,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private DataElement dataelement;
     private SearchHelp search;
     private Calendar calendar;
-    private String master, nsreference;
+    private String master, nsreference, label;
     private byte[] content;
     private boolean placeholder;
     private boolean nohelper;
@@ -144,6 +144,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
             return (value == null)? 0 : (long)value;
         
         return ((BigDecimal)value).longValue();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getLabel()
+     */
+    @Override
+    public final String getLabel() {
+        return label;
     }
     
     /*
@@ -417,6 +426,16 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setLabel(
+     *     java.lang.String)
+     */
+    @Override
+    public final void setLabel(String label) {
+        this.label = label;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#setLength(int)
      */
     @Override
@@ -535,8 +554,22 @@ public abstract class AbstractInputComponent extends AbstractComponent
                 append(value.toString()).toString();
     }
     
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractComponent#translate(
+     *    org.iocaste.shell.common.MessageSource)
+     */
     @Override
-    public void translate(MessageSource messages) { }
+    public void translate(MessageSource messages) {
+        if (!isTranslatable())
+            return;
+        if (label == null)
+            label = getTranslation(messages, getName());
+        else
+            label = messages.get(label);
+        if (label == null)
+            label = getTranslation(messages, getName());
+    }
 }
 
 class OnFocus extends AbstractEventHandler {

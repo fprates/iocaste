@@ -11,7 +11,6 @@ import org.iocaste.internal.Controller;
 import org.iocaste.internal.EventHandler;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.internal.renderer.textfield.TextFieldContainerSource;
-import org.iocaste.internal.renderer.textfield.TextFieldDataItemSource;
 import org.iocaste.internal.renderer.textfield.TextFieldSource;
 import org.iocaste.internal.renderer.textfield.TextFieldTableItemSource;
 import org.iocaste.protocol.Message;
@@ -33,7 +32,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
     
     public TextFieldRenderer(Map<Const, Renderer<?>> renderers) {
         super(renderers, Const.TEXT_FIELD);
-        put(Const.DATA_ITEM, new TextFieldDataItemSource());
+        put(Const.DATA_ITEM, new TextFieldSource());
         put(Const.TEXT_FIELD, new TextFieldSource());
         put(Const.TABLE_ITEM, new TextFieldTableItemSource());
         put(new TextFieldContainerSource());

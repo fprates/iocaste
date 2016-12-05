@@ -13,7 +13,7 @@ public class DataItem extends AbstractInputComponent
         implements RangeInputComponent, MultipartElement {
     private static final long serialVersionUID = 3376883855229003535L;
     private Map<String, Object> values;
-    private String highname, lowname, label;
+    private String highname, lowname;
     
     public DataItem(DataForm form, Const type, String name) {
         super(form, Const.DATA_ITEM, type, name);
@@ -49,14 +49,6 @@ public class DataItem extends AbstractInputComponent
     @Override
     public final String getHighHtmlName() {
         return highname;
-    }
-
-    /**
-     * 
-     * @return
-     */
-    public final String getLabel() {
-        return label;
     }
     
     /*
@@ -128,31 +120,5 @@ public class DataItem extends AbstractInputComponent
         htmlname = getHtmlName();
         lowname = htmlname.concat(".low");
         highname = htmlname.concat(".high");
-    }
-    
-    /**
-     * 
-     * @param label
-     */
-    public final void setLabel(String label) {
-        this.label = label;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractComponent#translate(
-     *    org.iocaste.shell.common.MessageSource)
-     */
-    @Override
-    public final void translate(MessageSource messages) {
-        if (!isTranslatable())
-            return;
-        if (label == null)
-            label = getTranslation(messages, getName());
-        else
-            label = messages.get(label);
-        if (label == null)
-            label = getTranslation(messages, getName());
-            
     }
 }
