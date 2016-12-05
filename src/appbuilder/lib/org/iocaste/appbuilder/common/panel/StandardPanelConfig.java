@@ -23,29 +23,28 @@ public class StandardPanelConfig extends AbstractViewConfig {
         
         viewctx = context.getView();
         page = viewctx.getPanelPage();
-        navcontrol = getNavControl();
         submit = page.getSubmit();
+        navcontrol = getNavControl();
         if (submit != null)
             navcontrol.submit(submit);
         for (String action : page.getActions())
             navcontrol.add(action);
+        
+        extconfig = page.getConfig();
+        if (extconfig != null) {
+            style = page.getConfigStyle();
+            if (style != null) {
+                style.setContext(context);
+                style.execute();
+                style.getStyleSheet().export(context.view);
+            }
+    
+            context.storeStyle();
+            config(extconfig);
+        }
 
         design = viewctx.getDesign();
         if (design != null)
             config(design.getConfig());
-        
-        extconfig = page.getConfig();
-        if (extconfig == null)
-            return;
-        
-        style = page.getConfigStyle();
-        if (style != null) {
-            style.setContext(context);
-            style.execute();
-            style.getStyleSheet().export(context.view);
-        }
-
-        context.storeStyle();
-        config(extconfig);
     }
 }
