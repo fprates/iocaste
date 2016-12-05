@@ -5,7 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.appbuilder.common.navcontrol.NavControlDesign;
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Validator;
 
@@ -17,7 +17,7 @@ public class ViewContext {
     private ViewComponents components;
     private Map<String, ActionHandler> actionhandlers;
     private ExtendedContext extcontext;
-    private NavControlDesign ncdesign;
+    private AbstractPanelPage ncdesign, panelpage;
     private boolean updateview;
     private Map<String, Validator> validators;
     private Map<String, Set<Validator>> validables;
@@ -68,7 +68,7 @@ public class ViewContext {
      * 
      * @return
      */
-    public final NavControlDesign getDesign() {
+    public final AbstractPanelPage getDesign() {
         return ncdesign;
     }
     
@@ -87,6 +87,10 @@ public class ViewContext {
      */
     public final ViewInput getInput() {
         return input;
+    }
+    
+    public final AbstractPanelPage getPanelPage() {
+        return panelpage;
     }
     
     /**
@@ -179,15 +183,23 @@ public class ViewContext {
      * 
      * @param input
      */
-    public final void set(AbstractViewInput input) {
+    public final void set(ViewInput input) {
         this.input = input;
+    }
+    
+    /**
+     * 
+     * @param panelpage
+     */
+    public final void set(AbstractPanelPage panelpage) {
+        this.panelpage = panelpage;
     }
     
     /**
      * 
      * @param ncdesign
      */
-    public final void set(NavControlDesign ncdesign) {
+    public final void setDesign(AbstractPanelPage ncdesign) {
         this.ncdesign = ncdesign;
     }
     

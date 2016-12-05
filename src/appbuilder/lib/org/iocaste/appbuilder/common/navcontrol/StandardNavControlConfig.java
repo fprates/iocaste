@@ -1,36 +1,29 @@
 package org.iocaste.appbuilder.common.navcontrol;
 
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
+import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
 import org.iocaste.shell.common.Button;
-import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.ControlComponent;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeListItem;
 import org.iocaste.shell.common.PageStackItem;
-import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.ViewTitle;
 import org.iocaste.shell.common.VirtualControl;
 
-public class StandardNavControlDesign implements NavControlDesign {
-    protected StandardContainer buttonbar;
-    protected boolean actionbarinit;
+public class StandardNavControlConfig extends AbstractViewConfig {
     
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.appbuilder.common.navcontrol.NavControlDesign#
-     *    build(
-     *       org.iocaste.shell.common.Container,
-     *       org.iocaste.appbuilder.common.PageBuilderContext)
-     */
     @Override
-    public final void build(Container container, PageBuilderContext context) {
+    protected final void execute(PageBuilderContext context) {
         Text text;
         Link link;
+        Button button;
         String name, page;
         ViewTitle title;
         Iocaste iocaste;
@@ -38,18 +31,33 @@ public class StandardNavControlDesign implements NavControlDesign {
         NodeListItem loginitem;
         AbstractPageBuilder function;
         User user;
+        VirtualControl back;
+        NavControl navcontrol;
+        NavControlButton navbutton;
         
         context.view.add(new HeaderLink(
                 "shortcut icon", "/iocaste-shell/images/favicon.ico"));
 
         title = context.view.getTitle();
         name = (title.text != null)? title.text : context.view.getAppName();
-        text = context.view.getElement("this");
+        text = getElement("this");
         text.setText(name, title.args);
         
-        buttonbar = context.view.getElement("actionbar");
+        navcontrol = getNavControl();
+        viewctx = context.getView();
+        navbutton = null;
+        for (String key : viewctx.getPanelPage().getActions()) {
+            navbutton = navcontrol.get(key);
+            button = getElement(key);
+            button.setSubmit(navbutton.type != NavControl.NORMAL);
+            button.setNoScreenLock(navbutton.nolock);
+        }
         
-        link = context.view.getElement("nc_user");
+        setNavControlConfig(context);
+        if (navbutton != null)
+            getElement("actionbar").setStyleClass("nc_nav_buttonbar");
+        
+        link = getElement("nc_user");
         if (link == null)
             return;
         link.setText("");
@@ -60,18 +68,18 @@ public class StandardNavControlDesign implements NavControlDesign {
             return;
         
         user = iocaste.getUserData(iocaste.getUsername());
-        text = context.view.getElement("nc_username");
+        text = getElement("nc_username");
         text.setTag("span");
         text.setText(user.getFirstname());
 
-        loginitem = context.view.getElement("nc_login_options");
+        loginitem = getElement("nc_login_options");
         loginitem.addAttribute("style", "display:none");
         
         page = context.view.getPageName();
-        viewctx = context.getView();
         viewctx.put("logout", new Logout());
 
-        new VirtualControl(container, "back").setCancellable(true);
+        back = getElement("back");
+        back.setCancellable(true);
         if (viewctx.getActionHandler("back") == null) {
             viewctx.put("back", new Back());
             function = (AbstractPageBuilder)context.function;
@@ -83,28 +91,33 @@ public class StandardNavControlDesign implements NavControlDesign {
         context.messages.put("pt_BR", "nc_logout", "Log out");
     }
     
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.appbuilder.common.navcontrol.NavControlDesign#
-     *    buildButton(java.lang.String)
-     */
-    @Override
-    public void buildButton(String action, NavControlButton buttoncfg) {
-        Button button;
-
-        if (!actionbarinit) {
-            buttonbar.setStyleClass("nc_nav_buttonbar");
-            actionbarinit = true;
-        }
-        
-        button = new Button(buttonbar, action);
-        button.setSubmit(buttoncfg.type != NavControl.NORMAL);
-        button.setNoScreenLock(buttoncfg.nolock);
-    }
-    
     public static String getAddress(PageStackItem position) {
         return new StringBuilder(position.getApp()).
                 append(".").
                 append(position.getPage()).toString();
+    }
+    
+    private final void setNavControlConfig(PageBuilderContext context) {
+        String name, style, action;
+        Element element;
+        ControlComponent control;
+        boolean cancellable;
+        
+        for (int i = 0; i < context.ncconfig.length; i++) {
+            name = (String)context.ncconfig[i][0];
+            style = (String)context.ncconfig[i][1];
+            action = (String)context.ncconfig[i][2];
+            cancellable = (boolean)context.ncconfig[i][3];
+            element = getElement(name);
+            if (element == null)
+                continue;
+            if (style != null)
+                element.setStyleClass(style);
+            if (action == null)
+                continue;
+            control = (ControlComponent)element;
+            control.setAction(action);
+            control.setCancellable(cancellable);
+        }
     }
 }

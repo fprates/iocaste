@@ -39,7 +39,7 @@ public class GetStyleSheet extends AbstractHandler {
         Object[][] spec;
         
         iocaste = new Iocaste(getFunction());
-        spec = (!iocaste.isConnected())? new Object[5][3] : new Object[13][3];
+        spec = (!iocaste.isConnected())? new Object[5][3] : new Object[14][3];
         
         spec[0] = ncspec(TYPES.NODE_LIST, "navcontrol_cntnr", "nc_inner");
         spec[1] = ncspec(TYPES.NODE_LIST_ITEM, "nc_inner", "nc_inner_logo");
@@ -47,7 +47,6 @@ public class GetStyleSheet extends AbstractHandler {
         spec[3] = ncspec(TYPES.NODE_LIST_ITEM, "nc_inner", "nc_inner_title");
         spec[4] = ncspec(TYPES.TEXT, "nc_inner_title", "this");
         
-        iocaste = new Iocaste(getFunction());
         if (spec.length == 5)
             return spec;
         
@@ -60,6 +59,7 @@ public class GetStyleSheet extends AbstractHandler {
         spec[11] = ncspec(
                 TYPES.STANDARD_CONTAINER, "nc_login_options", "nc_options");
         spec[12] = ncspec(TYPES.LINK, "nc_options", "nc_logout");
+        spec[13] = ncspec(TYPES.VIRTUAL_CONTROL, "navcontrol_cntnr", "back");
         return spec;
     }
     

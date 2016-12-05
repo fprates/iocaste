@@ -5,17 +5,12 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewInput;
 
 public class StandardPanelInput extends AbstractViewInput {
-    private AbstractPanelPage page;
-    
-    public StandardPanelInput(AbstractPanelPage page) {
-        this.page = page;
-    }
     
     @Override
     protected void execute(PageBuilderContext context) {
         ViewInput input;
         
-        input = page.getInput();
+        input = context.getView().getPanelPage().getInput();
         if (input != null)
             input.run(context, false);
     }
@@ -24,7 +19,7 @@ public class StandardPanelInput extends AbstractViewInput {
     protected void init(PageBuilderContext context) {
         ViewInput input;
         
-        input = page.getInput();
+        input = context.getView().getPanelPage().getInput();
         if (input != null)
             input.run(context, true);
     }

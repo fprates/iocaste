@@ -127,9 +127,6 @@ public class BuilderCustomView extends AbstractCustomView
                 viewconfig.setNavControl(navcontrol);
                 viewconfig.run(_context);
             }
-
-            if (navcontrol != null)
-                navcontrol.build(_context);
             
             viewspec.setInitialized(!viewctx.isUpdatable());
             if (viewinput != null)

@@ -6,16 +6,24 @@ import org.iocaste.appbuilder.common.AbstractExtendedValidator;
 import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
+import org.iocaste.appbuilder.common.navcontrol.StandardNavControlPage;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.Validator;
 
 public class StandardPanel {
     private PageBuilderContext context;
+    private AbstractPanelPage ncdesign;
     
     public StandardPanel(PageBuilderContext context) {
-        this.context = context;
+        this(context, new StandardNavControlPage());
     }
 
+    public StandardPanel(PageBuilderContext context, AbstractPanelPage ncdesign)
+    {
+        this.context = context;
+        this.ncdesign = ncdesign;
+    }
+    
     public final void instance(String name, AbstractPanelPage page) {
         instance(name, page, null);
     }
@@ -26,18 +34,29 @@ public class StandardPanel {
         Documents documents;
         AbstractExtendedValidator validator;
         Map<String, Validator> validators;
+        AbstractPanelPage ncdesign;
         
         view = context.instance(name);
-        view.set(new StandardPanelSpec(page));
-        view.set(new StandardPanelConfig(page));
-        view.set(new StandardPanelInput(page));
+        view.set(new StandardPanelSpec());
+        view.set(new StandardPanelConfig());
+        view.set(new StandardPanelInput());
         view.set(extcontext);
+        view.set(page);
         
         page.setViewContext(view);
         page.setName(name);
         try {
             page.execute();
-            view.set(page.getDesign());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        
+        ncdesign = page.getDesign();
+        view.setDesign((ncdesign == null)? this.ncdesign : ncdesign);
+        ncdesign = view.getDesign();
+        try {
+            if (ncdesign.getSpec() == null)
+                ncdesign.execute();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

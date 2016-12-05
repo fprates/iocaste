@@ -43,7 +43,7 @@ class InputPanelPage extends AbstractPanelPage {
         set(new ReportInputSpec());
         set(data.input.config);
         set(data.input.input);
-        set(data.ncdesign);
+        setDesign(data.ncdesign);
         action("select", data.select);
     }
     
@@ -66,7 +66,7 @@ class OutputPanelPage extends AbstractPanelPage {
         set(new ReportOutputSpec());
         set(new ReportOutputConfig(data));
         set(data.output.input);
-        set(data.ncdesign);
+        setDesign(data.ncdesign);
         for (String key : data.output.actions.keySet()) {
             handler = data.output.actions.get(key);
             if (handler != null)
