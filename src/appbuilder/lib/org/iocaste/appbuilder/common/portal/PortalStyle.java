@@ -49,6 +49,8 @@ class PortalStyleMedia extends AbstractViewConfigStyle {
         put("list-style-type", "none");
         if (!getMediaKey().startsWith("mobile"))
             put("max-width", "calc((%s / 4) - 2em)", width);
+        else
+            put("max-width", "unset");
         clone(".tile_frame:hover", ".tile_frame");
         put("background-color", FRAME_COLOR);
     }
