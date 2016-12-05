@@ -103,6 +103,11 @@ public class Controller {
         }
     }
     
+    private static final String getTranslation(InputComponent input) {
+        String text = input.getLabel();
+        return (text == null)? input.getHtmlName() : text;
+    }
+    
     /**
      * 
      * @param input
@@ -393,7 +398,7 @@ public class Controller {
                 status.input = input;
                 status.error = EINITIAL;
                 status.msgtype = Const.ERROR;
-                status.msgargs = new String[] {input.getHtmlName()};
+                status.msgargs = new String[] {getTranslation(input)};
             }
         }
         
@@ -418,7 +423,7 @@ public class Controller {
             status.input = input;
             status.error = EINVALID_REFERENCE;
             status.msgtype = (input.isEnabled())? Const.ERROR : Const.WARNING;
-            status.msgargs = new String[] {name};
+            status.msgargs = new String[] {getTranslation(input)};
         }
     }
     
