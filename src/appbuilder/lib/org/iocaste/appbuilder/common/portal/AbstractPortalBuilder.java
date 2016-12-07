@@ -1,12 +1,12 @@
 package org.iocaste.appbuilder.common.portal;
 
-import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.Shell;
 
-public abstract class AbstractPortalBuilder extends AbstractPageBuilder {
+public abstract class AbstractPortalBuilder extends AbstractModelViewer {
 	private PortalContext portalctx;
 	private String user, password, language;
 	
