@@ -9,7 +9,7 @@ public class Validate extends AbstractActionHandler {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        Context extcontext = getExtendedContext();
+        CModelViewerContext extcontext = getExtendedContext();
         ExtendedObject object = getdf("head");
         
         extcontext.id = getdfkey("head");

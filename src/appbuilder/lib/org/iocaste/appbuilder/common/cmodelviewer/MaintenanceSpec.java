@@ -12,7 +12,7 @@ public class MaintenanceSpec extends AbstractViewSpec {
     
     @Override
     public void execute(PageBuilderContext context) {
-        Context extcontext = getExtendedContext();
+        CModelViewerContext extcontext = getExtendedContext();
         ComplexModel model = new Documents(context.function).
                 getComplexModel(extcontext.link.cmodel);
         
@@ -23,7 +23,7 @@ public class MaintenanceSpec extends AbstractViewSpec {
         tabs(extcontext, model.getItems());
     }
 
-    protected void tabs(Context extcontext,
+    protected void tabs(CModelViewerContext extcontext,
             Map<String, ComplexModelItem> models) {
         String tablename;
         

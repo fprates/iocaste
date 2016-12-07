@@ -10,7 +10,7 @@ public class MaintenanceConfig extends AbstractViewConfig {
     @Override
     protected void execute(PageBuilderContext context) {
         ConfigData configdata;
-        Context extcontext = getExtendedContext();
+        CModelViewerContext extcontext = getExtendedContext();
         
         new CModelHandler(extcontext);
         configdata = new ConfigData();

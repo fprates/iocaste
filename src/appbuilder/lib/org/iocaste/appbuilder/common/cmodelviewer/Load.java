@@ -16,7 +16,7 @@ public class Load extends AbstractActionHandler {
     protected void execute(PageBuilderContext context) {
         ExtendedObject object;
         String table;
-        Context extcontext = getExtendedContext();
+        CModelViewerContext extcontext = getExtendedContext();
         
         extcontext.id = getdfkey("head");
         extcontext.ns = getdfns("head");

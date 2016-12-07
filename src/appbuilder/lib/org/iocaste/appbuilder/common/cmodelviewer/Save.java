@@ -21,7 +21,7 @@ public class Save extends AbstractActionHandler {
         DataConversion conversion;
         ComplexModel cmodel;
         String keyname;
-        Context extcontext;
+        CModelViewerContext extcontext;
         
         extcontext = getExtendedContext();
         cmodel = new Documents(context.function).

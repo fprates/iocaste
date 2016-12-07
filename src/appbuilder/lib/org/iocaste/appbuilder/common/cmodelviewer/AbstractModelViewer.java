@@ -14,20 +14,28 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
     public static final String CREATE = "create";
     public static final String DISPLAY = "display";
     public static final String EDIT = "edit";
-    private Context extcontext;
+    private CModelViewerContext extcontext;
     
     protected final AppBuilderLink getReceivedLink() {
+        return getReceivedLink(
+                getParameter("name"),
+                getParameter("cmodel"),
+                getParameter("number"),
+                getParameter("numberseries"));
+    }
+    
+    protected final AppBuilderLink getReceivedLink(
+            String entity, String cmodel, String number, String nseries) {
         AppBuilderLink link;
-        String entity = getParameter("name");
         
         if (entity == null)
             return null;
         
         link = new AppBuilderLink();
         link.entity = entity;
-        link.cmodel = getParameter("cmodel");
-        link.number = getParameter("number");
-        link.numberseries = getParameter("numberseries");
+        link.cmodel = cmodel;
+        link.number = number;
+        link.numberseries = nseries;
         link.createview = link.entity.concat(CREATE);
         link.create1view = link.createview.concat("1");
         link.editview = link.entity.concat(EDIT);
@@ -46,11 +54,11 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
             AppBuilderLink link) {
         StandardPanel panel;
         ViewSpec selspec;
-        String entityaction, action;
+        String action;
         Map<String, String> actions;
         
         if (extcontext == null)
-            extcontext = new Context(context);
+            extcontext = new CModelViewerContext(context);
         
         extcontext.link = link;
         extcontext.redirect = (link.number == null)?
@@ -66,15 +74,16 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         actions.put(link.displayview, DISPLAY);
         actions.put(link.editview, EDIT);
         
-        action = actions.get(context.view.getPageName());
+        action = actions.get((link.action == null)?
+                context.view.getPageName() : link.action);
         if ((link.number == null) || !action.equals(CREATE) ||
                 (link.entitypage.config != null)) {
             link.entitypage.action = action;
             link.entitypage.spec = selspec;
             link.entitypage.link = link;
             
-            entityaction = link.entity.concat(action);
-            panel.instance(entityaction, link.entitypage, extcontext);
+            link.entitypagename = link.entity.concat(action);
+            panel.instance(link.entitypagename, link.entitypage, extcontext);
         }
         
         link.custompage.link = link;
@@ -95,7 +104,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
      * 
      * @param extcontext
      */
-    protected final void setExtendedContext(Context extcontext) {
+    protected final void setExtendedContext(CModelViewerContext extcontext) {
         this.extcontext = extcontext;
     }
 }

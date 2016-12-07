@@ -9,7 +9,7 @@ public class AppBuilderLink {
     public String create, display, change, entity, cmodel, taskgroup;
     public String createview, create1view, displayview, display1view;
     public String editview, edit1view;
-    public String number, numberseries, appname;
+    public String number, numberseries, appname, action, entitypagename;
     public AbstractPanelPage maintenancepage, createselectpage;
     public AbstractPanelPage updateselectpage, displayselectpage;
     public AbstractActionHandler save, validate, updateload, displayload;

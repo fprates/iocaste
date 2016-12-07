@@ -10,7 +10,7 @@ public class SelectInput extends AbstractViewInput {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        Context extcontext = getExtendedContext();
+        CModelViewerContext extcontext = getExtendedContext();
         Map<String, ComponentEntry> entries;
         
         entries = context.getView().getComponents().entries;

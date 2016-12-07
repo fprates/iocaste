@@ -15,7 +15,7 @@ public class DisplayConfig extends AbstractViewConfig {
     protected void execute(PageBuilderContext context) {
         ConfigData configdata;
         Map<String, ComponentEntry> entries;
-        Context extcontext = getExtendedContext();
+        CModelViewerContext extcontext = getExtendedContext();
         ContextDataHandler handler = new CModelHandler(extcontext);
         
         entries = context.getView().getComponents().entries;

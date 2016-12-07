@@ -13,7 +13,7 @@ public class CModelHandler extends AbstractTableToolHandler {
     
     @Override
     public final void add(String ttname, ExtendedObject[] items) {
-        Context cmodelctx = (Context)extcontext;
+        CModelViewerContext cmodelctx = (CModelViewerContext)extcontext;
         
         if (cmodelctx.document == null)
             return;
@@ -23,26 +23,26 @@ public class CModelHandler extends AbstractTableToolHandler {
     
     @Override
     public final void add(String ttname, ExtendedObject object) {
-        Context cmodelctx = (Context)extcontext;
+        CModelViewerContext cmodelctx = (CModelViewerContext)extcontext;
         cmodelctx.document.add(object);
     }
     
     @Override
     public ExtendedObject get() {
-        Context cmodelctx = (Context)extcontext;
+        CModelViewerContext cmodelctx = (CModelViewerContext)extcontext;
         return (!isInitialized())? null : cmodelctx.document.getHeader();
     }
     
     @Override
     public ExtendedObject[] get(String ttname) {
-        Context cmodelctx = (Context)extcontext;
+        CModelViewerContext cmodelctx = (CModelViewerContext)extcontext;
         return (!isInitialized())? null : cmodelctx.document.getItems(
                 cmodelctx.models.get(ttname));
     }
 
     @Override
     public final boolean isInitialized() {
-        Context cmodelctx = (Context)extcontext;
+        CModelViewerContext cmodelctx = (CModelViewerContext)extcontext;
         if (cmodelctx == null)
             return false;
         return (cmodelctx.document != null);
@@ -50,13 +50,13 @@ public class CModelHandler extends AbstractTableToolHandler {
     
     @Override
     public final void remove(String ttname, ExtendedObject object) {
-        Context cmodelctx = (Context)extcontext;
+        CModelViewerContext cmodelctx = (CModelViewerContext)extcontext;
         cmodelctx.document.remove(object);
     }
     
     @Override
     public final void set(String dfname, ExtendedObject object) {
-        Context cmodelctx = (Context)extcontext;
+        CModelViewerContext cmodelctx = (CModelViewerContext)extcontext;
         cmodelctx.document.setHeader(object);
     }
 }

@@ -2,7 +2,7 @@ package org.iocaste.external;
 
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.cmodelviewer.Context;
+import org.iocaste.appbuilder.common.cmodelviewer.CModelViewerContext;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceSpec;
 import org.iocaste.documents.common.ComplexModelItem;
 
@@ -10,7 +10,7 @@ public class ExternalMaintenanceSpec extends MaintenanceSpec {
 
     @Override
     protected void tabs(
-            Context extcontext, Map<String, ComplexModelItem> models) {
+            CModelViewerContext extcontext, Map<String, ComplexModelItem> models) {
         String tablename;
         
         for (String name : models.keySet()) {
