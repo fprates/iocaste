@@ -4,6 +4,7 @@ import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.ViewSpecItem.TYPES;
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 
 public class StandardNavControlSpec extends AbstractViewSpec {
 
@@ -11,6 +12,7 @@ public class StandardNavControlSpec extends AbstractViewSpec {
     protected void execute(PageBuilderContext context) {
         ViewSpecItem.TYPES type;
         String parent, name;
+        AbstractPanelPage panel;
         
         for (int i = 0; i < context.ncspec.length; i++) {
             type = (TYPES)context.ncspec[i][0];
@@ -19,7 +21,12 @@ public class StandardNavControlSpec extends AbstractViewSpec {
             component(type, parent, name);
         }
         
-        for (String key : context.getView().getPanelPage().getActions())
+        panel = context.getView().getPanelPage();
+        for (String key : panel.getActions())
             button("actionbar", key);
+        
+        name = panel.getSubmit();
+        if (name != null)
+            button("actionbar", name);
     }
 }

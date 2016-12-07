@@ -4,6 +4,7 @@ import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
 import org.iocaste.shell.common.Button;
@@ -23,7 +24,6 @@ public class StandardNavControlConfig extends AbstractViewConfig {
     protected final void execute(PageBuilderContext context) {
         Text text;
         Link link;
-        Button button;
         String name, page;
         ViewTitle title;
         Iocaste iocaste;
@@ -34,6 +34,7 @@ public class StandardNavControlConfig extends AbstractViewConfig {
         VirtualControl back;
         NavControl navcontrol;
         NavControlButton navbutton;
+        AbstractPanelPage panel;
         
         context.view.add(new HeaderLink(
                 "shortcut icon", "/iocaste-shell/images/favicon.ico"));
@@ -46,12 +47,13 @@ public class StandardNavControlConfig extends AbstractViewConfig {
         navcontrol = getNavControl();
         viewctx = context.getView();
         navbutton = null;
-        for (String key : viewctx.getPanelPage().getActions()) {
-            navbutton = navcontrol.get(key);
-            button = getElement(key);
-            button.setSubmit(navbutton.type != NavControl.NORMAL);
-            button.setNoScreenLock(navbutton.nolock);
-        }
+        panel = viewctx.getPanelPage();
+        for (String key : panel.getActions())
+            navbutton = setNavButton(navcontrol, key);
+        
+        name = panel.getSubmit();
+        if (name != null)
+            navbutton = setNavButton(navcontrol, name);
         
         setNavControlConfig(context);
         if (navbutton != null)
@@ -95,6 +97,18 @@ public class StandardNavControlConfig extends AbstractViewConfig {
         return new StringBuilder(position.getApp()).
                 append(".").
                 append(position.getPage()).toString();
+    }
+    
+    private final NavControlButton setNavButton(
+            NavControl navcontrol, String name) {
+        Button button;
+        NavControlButton navbutton;
+        
+        navbutton = navcontrol.get(name);
+        button = getElement(name);
+        button.setSubmit(navbutton.type != NavControl.NORMAL);
+        button.setNoScreenLock(navbutton.nolock);
+        return navbutton;
     }
     
     private final void setNavControlConfig(PageBuilderContext context) {
