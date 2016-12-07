@@ -49,8 +49,9 @@ public class PortalConnect extends AbstractActionHandler {
 //            return;
 //        }
 
+        extcontext.username = object.getst("USERNAME");
         connected = new Iocaste(context.function).
-                login(object.getst("USERNAME"), extcontext.secret, "pt_BR");
+                login(extcontext.username, extcontext.secret, "pt_BR");
         if (!connected) {
             message(Const.ERROR, "invalid.username.password");
             return;
