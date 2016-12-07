@@ -70,6 +70,7 @@ public class Common {
         Map<String, ComplexModelItem> models;
         ComplexModelItem cmodelitem;
         TableToolData tabletool;
+        DocumentModelItem ns;
         ViewComponents components = griddata.context.getView().getComponents();
         
         models = griddata.cmodel.getItems();
@@ -88,6 +89,9 @@ public class Common {
                 Documents.getKey(cmodelitem.model).getName()
             })
                 tabletool.instance(hide).invisible = true;
+            ns = cmodelitem.model.getNamespace();
+            if (ns != null)
+                tabletool.instance(ns.getName()).invisible = true;
         }
     }
     
