@@ -13,6 +13,7 @@ import java.util.TreeSet;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.SearchHelpData;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;

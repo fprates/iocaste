@@ -8,7 +8,7 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DummyModelItem;
-import org.iocaste.packagetool.common.SearchHelpData;
+import org.iocaste.documents.common.SearchHelpData;
 
 public class PortsInstall extends AbstractInstallObject {
 

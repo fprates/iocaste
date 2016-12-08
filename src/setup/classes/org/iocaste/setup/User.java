@@ -5,8 +5,8 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.DummyElement;
 import org.iocaste.documents.common.DummyModelItem;
+import org.iocaste.documents.common.SearchHelpData;
 import org.iocaste.packagetool.common.InstallData;
-import org.iocaste.packagetool.common.SearchHelpData;
 
 public class User {
 

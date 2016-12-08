@@ -3,7 +3,7 @@ package org.iocaste.usereditor;
 import org.iocaste.appbuilder.common.AbstractInstallObject;
 import org.iocaste.appbuilder.common.MessagesInstall;
 import org.iocaste.appbuilder.common.StandardInstallContext;
-import org.iocaste.packagetool.common.SearchHelpData;
+import org.iocaste.documents.common.SearchHelpData;
 
 public class Install extends AbstractInstallObject {
 

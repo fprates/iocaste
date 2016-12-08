@@ -5,7 +5,7 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
-import org.iocaste.packagetool.common.SearchHelpData;
+import org.iocaste.documents.common.SearchHelpData;
 import org.iocaste.protocol.user.Authorization;
 
 public class Units {

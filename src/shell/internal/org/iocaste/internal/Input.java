@@ -9,7 +9,7 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.SearchHelpData;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Const;
@@ -98,12 +98,11 @@ public class Input {
             InputData inputdata) {
         SearchHelp sh, search;
         String shname, name, htmlname, nsreference;
-        ExtendedObject[] shdata;
+        SearchHelpData shdata;
         
         shname = input.getModelItem().getSearchHelp();
         shdata = new SHLib(inputdata.function).get(shname);
-        
-        if (shdata == null || shdata.length == 0)
+        if (shdata == null)
             return;
         
         name = input.getName();
@@ -111,8 +110,8 @@ public class Input {
         nsreference = input.getNSReference();
         sh = new SearchHelp(inputdata.container, name.concat(".sh"));
         sh.setHtmlName(htmlname.concat(".sh"));
-        sh.setModelName((String)shdata[0].get("MODEL"));
-        sh.setExport((String)shdata[0].get("EXPORT"));
+        sh.setModelName(shdata.getModel());
+        sh.setExport(shdata.getExport());
         sh.setNSReference(nsreference);
         
         search = new SearchHelp(inputdata.container, name.concat(".search"));
@@ -121,10 +120,8 @@ public class Input {
         search.setNSReference(nsreference);
         
         sh.setChild(search.getHtmlName());
-        for (int i = 1; i < shdata.length; i++) {
-            shname = shdata[i].get("ITEM");
-            sh.addModelItemName(shname);
-        }
+        for (String key : shdata.getItems().keySet())
+            sh.addModelItemName(key);
         
         input.setSearchHelp(sh);
     }
