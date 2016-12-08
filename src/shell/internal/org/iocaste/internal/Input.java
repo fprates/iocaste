@@ -108,11 +108,13 @@ public class Input {
         name = input.getName();
         htmlname = input.getHtmlName();
         nsreference = input.getNSReference();
+        
         sh = new SearchHelp(inputdata.container, name.concat(".sh"));
         sh.setHtmlName(htmlname.concat(".sh"));
         sh.setModelName(shdata.getModel());
         sh.setExport(shdata.getExport());
         sh.setNSReference(nsreference);
+        sh.setCriteria(shdata.getWhere());
         
         search = new SearchHelp(inputdata.container, name.concat(".search"));
         search.setHtmlName(htmlname.concat(".search"));

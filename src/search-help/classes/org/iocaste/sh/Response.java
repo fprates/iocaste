@@ -11,7 +11,6 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
@@ -111,13 +110,12 @@ public class Response {
     
     public static final void main(Context context) {
         View view;
-        String name, searchjs, action, form, searchbt, master, nsreference;
+        String name, searchjs, action, form, searchbt, master;
         String criteriajs;
         ExtendedObject[] result;
         Container stdcnt, datacnt;
         SearchHelp sh;
         Button select, criteria;
-        Object ns;
         Map<String, String> style;
         Documents documents = new Documents(context.function);
         StyleSheet stylesheet = StyleSheet.instance(context.view);
@@ -188,13 +186,8 @@ public class Response {
 
         datacnt = new StandardContainer(stdcnt, "shdatacnt");
         datacnt.setStyleClass("shdatacnt");
-        nsreference = sh.getNSReference();
-        if (nsreference != null)
-            ns = ((InputComponent)view.getElement(nsreference)).get();
-        else
-            ns = null;
         
-        result = Common.getResultsFrom(documents, context, ns);
+        result = Common.getResultsFrom(documents, context, sh);
         if (result == null) {
             new Text(datacnt, "no.results.found");
             context.view.setTitle(sh.getText());

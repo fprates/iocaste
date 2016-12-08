@@ -1,11 +1,13 @@
 package org.iocaste.shell.common;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.WhereClause;
 
 /**
  * Ajuda de pesquisa
@@ -19,6 +21,7 @@ public class SearchHelp extends PopupControl {
     private static final long serialVersionUID = -1582634834243087782L;
     private String modelname, export, inputname, master, child, nsreference;
     private Set<String> itemnames;
+    private List<WhereClause> criteria;
     
     public SearchHelp(Container container, String name) {
         super(container, Const.SEARCH_HELP, name);
@@ -51,6 +54,14 @@ public class SearchHelp extends PopupControl {
      */
     public final String getChild() {
         return child;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public List<WhereClause> getCriteria() {
+        return criteria;
     }
     
     /**
@@ -107,6 +118,14 @@ public class SearchHelp extends PopupControl {
      */
     public final void setChild(String child) {
         this.child = child;
+    }
+    
+    /**
+     * 
+     * @param criteria
+     */
+    public final void setCriteria(List<WhereClause> criteria) {
+        this.criteria = criteria;
     }
     
     /**
