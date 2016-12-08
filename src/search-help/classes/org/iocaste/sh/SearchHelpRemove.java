@@ -23,9 +23,13 @@ public class SearchHelpRemove extends AbstractHandler {
         query.andEqual("SEARCH_HELP", shname);
         objects = documents.select(query);
         if (objects != null)
-            throw new IocasteException(String.format(
-                    "Search help has pendence on %s",
-                    objects[0].getst("MODEL_ITEM")));
+            throw new IocasteException("Search help has pendence on %s",
+                    objects[0].getst("MODEL_ITEM"));
+        
+        query = new Query("delete");
+        query.setModel("SH_QUERIES");
+        query.andEqual("SEARCH_HELP", shname);
+        documents.update(query);
         
         query = new Query("delete");
         query.setModel("SH_ITENS");

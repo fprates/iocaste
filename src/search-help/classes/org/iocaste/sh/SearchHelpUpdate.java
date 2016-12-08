@@ -12,6 +12,7 @@ public class SearchHelpUpdate extends AbstractHandler {
     @Override
     public Object run(Message message) throws Exception {
         Query query;
+        SearchHelpSave save;
         ExtendedObject object;
         String model, export, shname;
         SearchHelpData shdata = message.get("shdata");
@@ -32,14 +33,16 @@ public class SearchHelpUpdate extends AbstractHandler {
         query.setModel("SH_ITENS");
         query.andEqual("SEARCH_HELP", shname);
         documents.update(query);
+
+        save = function.get("save");
+        save.items(function, documents, shdata);
         
-        object = new ExtendedObject(documents.getModel("SH_ITENS"));
-        for (String key : shdata.getItems().keySet()) {
-            object.set("NAME", function.composeName(shname, key));
-            object.set("ITEM", function.composeName(model, key));
-            object.set("SEARCH_HELP", shname);
-            documents.save(object);
-        }
+        query = new Query("delete");
+        query.setModel("SH_QUERY");
+        query.andEqual("SEARCH_HELP", shname);
+        documents.update(query);
+        
+        save.queries(documents, documents.getModel(model), shdata);
         
         function.cache.put(shname, shdata);
         return null;
