@@ -14,10 +14,15 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class SaveComplexDocument extends AbstractDocumentsHandler {
-
+    private static final String UNDEFINED_DOCUMENT_KEY =
+            "document key undefined for cmodel %s.";
+    private static final String UNDEFINED_DOCUMENT_KEY_VALUE =
+            "document key value for cmodel %s undefined.";
+    
     public Object run(Message message) throws Exception {
         Map<String, String> keys, references;
         Map<String, ComplexModelItem> models;
@@ -45,7 +50,8 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         model = cmodel.getHeader();
         headerkey = org.iocaste.documents.common.Documents.getKey(model);
         if (headerkey == null)
-            throw new RuntimeException("Header key undefined.");
+            throw new IocasteException(
+                    UNDEFINED_DOCUMENT_KEY, cmodel.getName());
 
         id = charid = null;
         numid = 0;
@@ -54,6 +60,9 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         switch (keytype) {
         case DataType.CHAR:
             charid = head.getst(headerkey.getName());
+            if (charid == null)
+                throw new IocasteException(
+                        UNDEFINED_DOCUMENT_KEY_VALUE, cmodel.getName());
             break;
         default:
             numid = head.getl(headerkey.getName());
@@ -105,7 +114,7 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
                 default:
                     if (cmodelitem.keydigits > 0) {
                         numitemid = cmodelitem.keydigits;
-                        numitemid = (numid * (int)(Math.pow(10, numitemid))) + i;
+                        numitemid = (numid * (int)(Math.pow(10,numitemid))) + i;
                         item.set(itemkey, numitemid);
                     }
                     id = numid;
@@ -138,7 +147,8 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         return document;
     }
 
-    private final void save(ComplexDocument document, String sessionid) throws Exception {
+    private final void save(ComplexDocument document, String sessionid)
+            throws Exception {
         DeleteDocument delete;
         ModifyDocument modify;
         GetComplexDocument getcdoc;
