@@ -15,5 +15,6 @@ public class Servlet extends AbstractIocasteServlet {
         
         authorize("update_view", null);
         authorize("process_inputs", null);
+        authorize("http_req_process", null);
     }
 }

@@ -14,6 +14,7 @@ public class Services extends AbstractFunction {
         export("get_pages_positions", "getPagesPositions");
         export("get_view", "getView");
         export("home", "home");
+        export("http_req_process", PageRenderer.reqproc);
         export("login_app_get", "getLoginApp");
         export("pop_page", "popPage");
         export("push_page", "pushPage");
@@ -50,7 +51,7 @@ public class Services extends AbstractFunction {
      */
     public final PageStackItem[] getPagesPositions(Message message) {
         String sessionid = message.getSessionid();
-        return PageRenderer.getPagesPositions(sessionid);
+        return PageRenderer.reqproc.getPagesPositions(sessionid);
     }
     
     /**
