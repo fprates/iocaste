@@ -7,8 +7,7 @@ public class MainConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        // TODO Auto-generated method stub
-        
+        context.view.setTitle("welcome");
     }
     
 }

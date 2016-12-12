@@ -11,6 +11,9 @@ public class Style extends AbstractViewConfigStyle {
         
         load(".text");
         put("padding-bottom", "1em");
+        
+        clone(".dbtypes", ".text");
+        remove("padding-bottom");
     }
     
 }

@@ -10,6 +10,7 @@ public class FinishConfig extends AbstractViewConfig {
     protected void execute(PageBuilderContext context) {
         Link link;
         
+        context.view.setTitle("congratulations");
         link = getElement("continue");
         link.setAbsolute(true);
         link.setAction("/iocaste-shell");

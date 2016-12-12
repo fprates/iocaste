@@ -7,7 +7,9 @@ public class Messages {
     public Messages(MessageSource source) {
         source.instance("pt_BR");
         source.put("chngbase", "Apenas aponta para novo banco");
-        
+        source.put("config", "Dados da instalação");
+
+        source.put("congratulations", "Parabéns!");
         source.put("congratulations1",
                 "A instalação do Iocaste foi concluída com sucesso.");
         source.put("congratulations2",
@@ -16,7 +18,7 @@ public class Messages {
                 "O usuário é \"ADMIN\", e a senha é \"iocaste\".");
         source.put("congratulations4",
                 "Para prosseguir, clique em \"Continuar\".");
-        
+
         source.put("continue", "Continuar");
         source.put("DBNAME", "Nome do banco de dados");
         source.put("dbtypes", "Selecione o tipo de banco");
@@ -32,6 +34,7 @@ public class Messages {
                 + "sistema.");
         source.put("warning2", "Todos os dados anteriores serão destruídos.");
         
+        source.put("welcome", "Bem-vindo à instalação do Iocaste");
         source.put("welcome1",
                 "Bem-vindo ao utilitário de instalação do Iocaste.");
         source.put("welcome2",

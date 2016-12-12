@@ -9,6 +9,7 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Frame;
 
 public class SettingsConfig extends AbstractViewConfig {
     private static final Object[][] ELEMENTS = {
@@ -26,7 +27,9 @@ public class SettingsConfig extends AbstractViewConfig {
         DataElement element;
         AbstractComponentData tool;
         AbstractComponentDataItem toolitem;
+        Frame frame;
         
+        context.view.setTitle("config");
         model = new DocumentModel("CONFIG_DATA");
         for (int i = 0; i < ELEMENTS.length; i++) {
             element = new DataElement((String)ELEMENTS[i][0]);
@@ -49,6 +52,9 @@ public class SettingsConfig extends AbstractViewConfig {
         
         toolitem = tool.instance("OPTIONS");
         toolitem.componenttype = Const.LIST_BOX;
+        
+        frame = getElement("dbtypes");
+        frame.setLegendStyle("dbtypes");
     }
     
 }
