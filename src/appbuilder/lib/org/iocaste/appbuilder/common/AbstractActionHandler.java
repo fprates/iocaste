@@ -148,7 +148,11 @@ public abstract class AbstractActionHandler implements ActionHandler {
         return getdfinput(dataform, field).get();
     }
     
-    protected final long getdfi(String dataform, String field) {
+    protected final byte getdfb(String dataform, String field) {
+        return getdfinput(dataform, field).getb();
+    }
+    
+    protected final int getdfi(String dataform, String field) {
         return getdfinput(dataform, field).geti();
     }
     
