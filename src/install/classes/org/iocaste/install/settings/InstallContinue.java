@@ -1,4 +1,4 @@
-package org.iocaste.install;
+package org.iocaste.install.settings;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,6 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.iocaste.appbuilder.common.AbstractActionHandler;
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.install.DBConfig;
+import org.iocaste.install.Packages;
 import org.iocaste.install.dictionary.Core;
 import org.iocaste.install.dictionary.Documents;
 import org.iocaste.install.dictionary.Login;
@@ -20,9 +24,11 @@ import org.iocaste.install.dictionary.Package;
 import org.iocaste.install.dictionary.SH;
 import org.iocaste.kernel.common.DBNames;
 import org.iocaste.kernel.common.Table;
-import org.iocaste.shell.common.DataForm;
+import org.iocaste.protocol.GenericService;
+import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.Message;
 
-public class DBConfigRequest {
+public class InstallContinue extends AbstractActionHandler {
     private static final String CONFIG_FILE = "core.properties";
     private static final String IOCASTE_DIR = ".iocaste";
     
@@ -45,20 +51,48 @@ public class DBConfigRequest {
         "create database "
     };
     
-    public static final Config action(Context context) throws Exception {
+    private final void createTables(Statement ps, Config config)
+            throws Exception {
+        Module documents, login, sh, package_;
+        Map<String, Table> tables;
+        byte dbtype = DBNames.names.get(config.dbtype);
+        List<String> sqllist = new ArrayList<>();
+        
+        sqllist.addAll(new Core(dbtype).install());
+
+        documents = new Documents(dbtype);
+        sqllist.addAll(documents.install());
+        tables = documents.getTables();
+        
+        login = new Login(dbtype);
+        login.putTables(tables);
+        sqllist.addAll(login.install());
+        
+        sh = new SH(dbtype);
+        sh.putTables(tables);
+        sqllist.addAll(sh.install());
+        
+        package_ = new Package(dbtype);
+        package_.putTables(tables);
+        sqllist.addAll(package_.install());
+        
+        for (String sql : sqllist)
+            ps.addBatch(sql);
+    }
+
+    @Override
+    protected void execute(PageBuilderContext context) throws Exception {
         Statement ps;
         Connection connection;
         String[] init = null;
-        DataForm dbinfo = context.view.getElement("dbinfo");
         Config config = new Config();
         
-        config.option = Byte.parseByte((String)dbinfo.get("options").get());
-        config.host = dbinfo.get("host").get();
-        config.username = dbinfo.get("username").get();
-        config.secret = dbinfo.get("secret").get();
-        config.dbname = dbinfo.get("dbname").get();
-        
-        config.dbtype = context.group.getSelected().getName();
+        config.option = getdfb("dbinfo", "OPTIONS");
+        config.host = getdfst("dbinfo", "HOST");
+        config.username = getdfst("dbinfo", "USERNAME");
+        config.secret = getdfst("dbinfo", "SECRET");
+        config.dbname = getdfst("dbinfo", "DBNAME");
+        config.dbtype = getinputst("dbtype");
         init = getDBInitializator(config);
         
         switch (config.option) {
@@ -122,41 +156,25 @@ public class DBConfigRequest {
             break;
         }
         
-        context.state.rapp = null;
-        context.state.rpage = "FINISH";
-        return config;
+        reconnectdb(context);
+        if (config.option != DBConfig.CHANGE_BASE)
+            Packages.install(context.function);
+        
+        init("finish", getExtendedContext());
+        redirect("finish");
     }
     
-    private static final void createTables(Statement ps, Config config)
-            throws Exception {
-        Module documents, login, sh, package_;
-        Map<String, Table> tables;
-        byte dbtype = DBNames.names.get(config.dbtype);
-        List<String> sqllist = new ArrayList<>();
+    private final void reconnectdb(PageBuilderContext context) {
+        GenericService service;
+        Message message;
         
-        sqllist.addAll(new Core(dbtype).install());
-
-        documents = new Documents(dbtype);
-        sqllist.addAll(documents.install());
-        tables = documents.getTables();
-        
-        login = new Login(dbtype);
-        login.putTables(tables);
-        sqllist.addAll(login.install());
-        
-        sh = new SH(dbtype);
-        sh.putTables(tables);
-        sqllist.addAll(sh.install());
-        
-        package_ = new Package(dbtype);
-        package_.putTables(tables);
-        sqllist.addAll(package_.install());
-        
-        for (String sql : sqllist)
-            ps.addBatch(sql);
+        message = new Message("disconnected_operation");
+        message.add("disconnected", false);
+        service = new GenericService(context.function, Iocaste.SERVERNAME);
+        service.invoke(message);
     }
     
-    private static final String[] getDBInitializator(Config config) {
+    private final String[] getDBInitializator(Config config) {
         String[] init = null;
         byte dbtype = DBNames.names.get(config.dbtype);
         
@@ -267,7 +285,7 @@ public class DBConfigRequest {
         return init;
     }
     
-    private static final void saveConfig(Config config) throws Exception {
+    private final void saveConfig(Config config) throws Exception {
         File file;
         BufferedWriter writer;
         Properties properties = new Properties();
@@ -283,7 +301,7 @@ public class DBConfigRequest {
         properties.put("dbdriver", config.dbdriver);
         properties.put("dbname", config.dbname);
         properties.put("username", config.username);
-        properties.put("secret", config.secret);
+        properties.put("secret", (config.secret == null)? "" : config.secret);
         properties.put("url", config.url);
         properties.put("host", config.host);
         properties.put("dbtype", config.dbtype.toString());
@@ -292,6 +310,7 @@ public class DBConfigRequest {
         writer.flush();
         writer.close();
     }
+
 }
 
 class Config {
@@ -299,4 +318,3 @@ class Config {
     public boolean nex, secconn;
     public String iurl, dbdriver, host, url, username, secret, dbname, dbtype;
 }
-
