@@ -2,7 +2,9 @@ package org.iocaste.protocol;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +17,7 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
     private Map<String, Map<String, Function>> sfunctions;
     private Map<String, Map<String, Object[]>> authorized;
     private Map<String, HttpServletRequest> requests;
+    private Set<String> disconnectedops;
     private boolean singleton;
     
     public AbstractIocasteServlet() {
@@ -22,6 +25,7 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
         sfunctions = new HashMap<>();
         authorized = new HashMap<>();
         requests = new HashMap<>();
+        disconnectedops = new HashSet<>();
         singleton = true;
         config();
     }
@@ -52,6 +56,14 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
         service.setOutputStream(context.resp.getOutputStream());
     }
 
+    /**
+     * 
+     * @param op
+     */
+    protected final void disconnectedop(String op) {
+        disconnectedops.add("disconnected_operation");
+    }
+    
     /*
      * (non-Javadoc)
      * @see javax.servlet.http.HttpServlet#doPost(
@@ -173,6 +185,15 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
                     return true;
         
         return false;
+    }
+    
+    /**
+     * 
+     * @param op
+     * @return
+     */
+    protected final boolean isDisconnectedOp(String op) {
+        return disconnectedops.contains(op);
     }
     
     /**

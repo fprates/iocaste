@@ -65,7 +65,7 @@ public class Update extends AbstractHandler {
         } catch (SQLSyntaxErrorException e) {
             throw e;
         } catch (SQLException e) {
-            switch (database.config.dbtype) {
+            switch (database.dbconfig.dbtype) {
             case "hsqldb":
                 i = e.getErrorCode();
                 switch (i) {

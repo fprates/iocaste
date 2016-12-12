@@ -39,7 +39,7 @@ public class Servlet extends AbstractIocasteServlet {
         CompilerService compiler = new CompilerService();
         
         session = new Session();
-        documents.config = config = new Config();
+        documents.config = database.config = config = new Config();
         
         session.database = users.database = config.database = database; 
         auth.database = documents.database = database;
@@ -69,11 +69,14 @@ public class Servlet extends AbstractIocasteServlet {
                               "SHELL005", "SHELL006"});
         
         authorize("checked_select", parameters);
+        authorize("disconnected_operation", null);
         authorize("get_host", null);
         authorize("get_locale", null);
         authorize("commit", null);
         authorize("rollback", null);
         authorize("is_authorized", null);
+        
+        disconnectedop("disconnected_operation");
     }
     
     /*
@@ -85,7 +88,8 @@ public class Servlet extends AbstractIocasteServlet {
     protected final void preRun(Message message) throws Exception {
         IsConnected isconnected;
         
-        if (!config.isInitialized()) {
+        if (!isDisconnectedOp(message.getId()) && !config.disconnected &&
+                !config.isInitialized()) {
             session.setServletContext(getServletContext());
             config.init();
         }

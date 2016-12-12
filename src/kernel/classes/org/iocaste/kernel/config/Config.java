@@ -15,6 +15,7 @@ public class Config extends AbstractFunction {
     private static final String CONFIG_FILE = "core.properties";
     public Properties properties;
     public Database database;
+    public boolean disconnected;
     
     public Config() {
         export("get_system_info", new GetSystemInfo());

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.iocaste.kernel.config.Config;
 import org.iocaste.kernel.session.Session;
 import org.iocaste.protocol.AbstractFunction;
 
@@ -16,15 +17,17 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 public class Database extends AbstractFunction {
     private Map<String, Connection> connections;
+    public DBConfig dbconfig;
     public Config config;
     public Session session;
     
     public Database() {
-        config = new Config();
+        dbconfig = new DBConfig();
         connections = new HashMap<>();
         export("call_procedure", new CallProcedure());
         export("checked_select", new CheckedSelect());
         export("commit", new Commit());
+        export("disconnected_operation", new DisconnectedOperation());
         export("rollback", new Rollback());
         export("select", new Select());
         export("update", new Update());
@@ -38,10 +41,10 @@ public class Database extends AbstractFunction {
     public final void config(Properties properties) throws Exception {
         String driver = properties.getProperty("dbdriver");
         
-        config.url = properties.getProperty("url");
-        config.username = properties.getProperty("username");
-        config.secret = properties.getProperty("secret");
-        config.dbtype = properties.getProperty("dbtype");
+        dbconfig.url = properties.getProperty("url");
+        dbconfig.username = properties.getProperty("username");
+        dbconfig.secret = properties.getProperty("secret");
+        dbconfig.dbtype = properties.getProperty("dbtype");
         
         Class.forName(driver);
     }
@@ -74,7 +77,7 @@ public class Database extends AbstractFunction {
         
         try {
             connection = DriverManager.getConnection(
-                    config.url, config.username, config.secret);
+                    dbconfig.url, dbconfig.username, dbconfig.secret);
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(
                     Connection.TRANSACTION_READ_UNCOMMITTED);
@@ -96,7 +99,7 @@ public class Database extends AbstractFunction {
     }
 }
 
-class Config {
+class DBConfig {
     public String url;
     public String username;
     public String secret;
