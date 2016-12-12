@@ -21,8 +21,13 @@ public class PortalServlet extends HttpServlet {
         String value;
         StringBuilder url;
         ServletConfig config = getServletConfig();
+    	String shellmanager = config.getInitParameter("shell-manager");
     	
-    	url = new StringBuilder("/iocaste-shell/?");
+    	if (shellmanager == null)
+    	    shellmanager = "iocaste-shell";
+    	
+	    shellmanager = String.format("/%s/?", shellmanager);
+    	url = new StringBuilder(shellmanager);
     	for (int i = 0; i < params.length; i++) {
             value = config.getInitParameter(params[i]);
     	    url.append(params[i]).append("=").append(value);
