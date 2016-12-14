@@ -1,9 +1,9 @@
 package org.iocaste.install.settings;
 
 import org.iocaste.appbuilder.common.AbstractComponentData;
-import org.iocaste.appbuilder.common.AbstractComponentDataItem;
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
@@ -26,7 +26,7 @@ public class SettingsConfig extends AbstractViewConfig {
         DocumentModelItem item;
         DataElement element;
         AbstractComponentData tool;
-        AbstractComponentDataItem toolitem;
+        DataFormToolItem toolitem;
         Frame frame;
         
         context.view.setTitle("config");
@@ -49,6 +49,9 @@ public class SettingsConfig extends AbstractViewConfig {
         
         toolitem = tool.instance("USERNAME");
         toolitem.required = true;
+        
+        toolitem = tool.instance("SECRET");
+        toolitem.secret = true;
         
         toolitem = tool.instance("OPTIONS");
         toolitem.componenttype = Const.LIST_BOX;
