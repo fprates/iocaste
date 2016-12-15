@@ -3,11 +3,13 @@
         <condition property="is.ssh">
             <equals arg1="${target.type}" arg2="ssh"/>
         </condition>
+        <antcall target="scp.target"/>
+        <antcall target="local.target"/>
     </target>
     
     <target name="scp.target" if="is.ssh">
         <scp todir="${war.target}" file="${war.file}"
-        	password="${ssh.password}"/>
+        	trust="true" password="${ssh.password}"/>
     </target>
 	
     <target name="local.target" unless="is.ssh">
