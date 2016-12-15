@@ -1,5 +1,16 @@
 <project name="deployer" default="deploy">
-	<target name="deploy" if="${auto.deploy}">
-		<copy todir="${war.target}" file="${war.file}"/>
+    <target name="deploy" if="${auto.deploy}">
+        <condition property="is.ssh">
+            <equals arg1="${target.type}" arg2="ssh"/>
+        </condition>
+    </target>
+    
+    <target name="scp.target" if="is.ssh">
+        <scp todir="${war.target}" file="${war.file}"
+        	password="${ssh.password}"/>
+    </target>
+	
+    <target name="local.target" unless="is.ssh">
+        <copy todir="${war.target}" file="${war.file}"/>
     </target>
 </project>
