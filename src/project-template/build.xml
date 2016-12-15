@@ -56,7 +56,7 @@
             <classes dir="${builddir}/classes"/>
         </war>
 
-        <ant antfile="${basedir}/src/deploy.xml">
+        <ant antfile="${basedir}/deploy.xml">
             <property name="war.file" value="${warfilename}"/>
             <property name="war.target" value="${war.target}"/>
             <property name="auto.deploy" value="true"/>

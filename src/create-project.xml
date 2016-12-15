@@ -7,6 +7,7 @@
         <mkdir dir="${custom.project}"/>
         <copy todir="${custom.project}">
             <fileset dir="${basedir}/src/project-template"/>
+        	<fileset file="${basedir}/src/deploy.xml"/>
         </copy>
 	    
         <move file="${custom.project}/gitignore"
