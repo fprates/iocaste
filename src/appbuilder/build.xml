@@ -15,6 +15,7 @@
         	<fileset dir="${builddir}/documents/lib"/>
             <fileset dir="${builddir}/packagetool/lib"/>
         	<fileset dir="${builddir}/tasksel/lib"/>
+            <fileset dir="${builddir}/authority/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>
