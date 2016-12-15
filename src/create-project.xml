@@ -18,6 +18,12 @@
         
         <replace file="${custom.project}/launches/${project}.launch"
             token="@project.name@" value="${project}"/>
+        
+        <move file="${custom.project}/launches/template.remote.launch"
+            tofile="${custom.project}/launches/${project}.remote.launch"/>
+		
+        <replace file="${custom.project}/launches/${project}.remote.launch"
+            token="@project.name@" value="${project}"/>
 		
         <copy todir="${custom.project}/lib"
         	file="${basedir}/ext/iocaste.jar"/>
