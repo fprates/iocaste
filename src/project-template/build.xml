@@ -55,8 +55,12 @@
             <lib dir="${basedir}/lib" includes="*.jar"/>
             <classes dir="${builddir}/classes"/>
         </war>
-    	
-		<copy todir="${war.target}" file="${warfilename}"/>
+
+        <ant antfile="${basedir}/src/deploy.xml">
+            <property name="war.file" value="${warfilename}"/>
+            <property name="war.target" value="${war.target}"/>
+            <property name="auto.deploy" value="true"/>
+        </ant>
 
         <delete dir="${builddir}"/>
     </target>

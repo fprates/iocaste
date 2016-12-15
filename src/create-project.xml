@@ -3,22 +3,24 @@
 		value="${basedir}/../${project}"/>
 		
 	<target name="compile">
-		<delete dir="${custom.project}"/>
-		<mkdir dir="${custom.project}"/>
-		<copy todir="${custom.project}">
-			<fileset dir="${basedir}/src/project-template"/>
-		</copy>
-		
-		<move file="${custom.project}/gitignore"
-			tofile="${custom.project}/.gitignore"/>
-		
-		<copy todir="${custom.project}/lib"
-			file="${basedir}/ext/iocaste.jar"/>
-			
-		<copy todir="${custom.project}/ext"
-			file="${basedir}/ext/servlet-api.jar"/>
-			
-		<replace file="${custom.project}/build.xml"
-			token="@project.name@" value="${project}"/>
+        <delete dir="${custom.project}"/>
+        <mkdir dir="${custom.project}"/>
+        <copy todir="${custom.project}">
+            <fileset dir="${basedir}/src/project-template"/>
+        </copy>
+	    
+        <move file="${custom.project}/gitignore"
+        	tofile="${custom.project}/.gitignore"/>
+        
+        <copy todir="${custom.project}/lib"
+        	file="${basedir}/ext/iocaste.jar"/>
+        	
+        <copy todir="${custom.project}/ext">
+            <fileset file="${basedir}/ext/servlet-api.jar"/>
+            <fileset file="${basedir}/ext/jsch.jar"/>
+        </copy>
+        
+        <replace file="${custom.project}/build.xml"
+        	token="@project.name@" value="${project}"/>
 	</target>
 </project>
