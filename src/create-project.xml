@@ -13,6 +13,12 @@
         <move file="${custom.project}/gitignore"
         	tofile="${custom.project}/.gitignore"/>
         
+		<move file="${custom.project}/launches/template.launch"
+            tofile="${custom.project}/launches/${project}.launch"/>
+        
+        <replace file="${custom.project}/launches/${project}.launch"
+            token="@project.name@" value="${project}"/>
+		
         <copy todir="${custom.project}/lib"
         	file="${basedir}/ext/iocaste.jar"/>
         	
