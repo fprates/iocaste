@@ -61,8 +61,8 @@
 	<classpathentry kind="lib" path="lib/hsqldb1-1.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java.jar"/>
 	<classpathentry kind="lib" path="lib/postgresql-jdbc.jar"/>
-	<classpathentry kind="lib" path="ext/tomcat-servlet-3.1-api.jar"/>
 	<classpathentry kind="lib" path="lib-shell/apache-commons-fileupload.jar"/>
 	<classpathentry kind="lib" path="lib-mail/javax.mail.jar"/>
+	<classpathentry kind="lib" path="ext/servlet-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

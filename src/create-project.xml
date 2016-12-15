@@ -9,8 +9,8 @@
 			<fileset dir="${basedir}/src/project-template"/>
 		</copy>
 		
-		<rename src="${custom.project}/gitignore"
-			dest="${custom.project}/.gitignore"/>
+		<move file="${custom.project}/gitignore"
+			tofile="${custom.project}/.gitignore"/>
 		
 		<copy todir="${custom.project}/lib"
 			file="${basedir}/ext/iocaste.jar"/>
