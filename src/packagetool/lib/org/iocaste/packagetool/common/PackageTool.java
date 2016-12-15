@@ -1,11 +1,11 @@
 package org.iocaste.packagetool.common;
 
-import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
+import org.iocaste.shell.common.AbstractContext;
 
 public class PackageTool extends AbstractServiceInterface {
     public static final String NAME = "/iocaste-packagetool/services.html";
@@ -65,7 +65,7 @@ public class PackageTool extends AbstractServiceInterface {
      * @return
      */
     public static final boolean hasPackage(
-            PageBuilderContext context, String name) {
+            AbstractContext context, String name) {
         String[] files = new Iocaste(context.function).getAvailablePackages();
         
         for (String filename : files)
