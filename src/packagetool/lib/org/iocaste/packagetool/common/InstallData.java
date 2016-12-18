@@ -198,16 +198,16 @@ public class InstallData implements Serializable {
      * 
      * @return
      */
-    public final Authorization[] getAuthorizations() {
-        return authorizations.toArray(new Authorization[0]);
+    public final List<Authorization> getAuthorizations() {
+        return authorizations;
     }
     
     /**
      * 
      * @return
      */
-    public final ComplexModel[] getCModels() {
-        return cmodels.toArray(new ComplexModel[0]);
+    public final Set<ComplexModel> getCModels() {
+        return cmodels;
     }
     
     /**

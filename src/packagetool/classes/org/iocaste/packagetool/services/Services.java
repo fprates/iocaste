@@ -1,11 +1,19 @@
 package org.iocaste.packagetool.services;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.packagetool.services.installers.ComplexModelInstaller;
+import org.iocaste.packagetool.services.installers.ModelInstaller;
+import org.iocaste.packagetool.services.installers.ModuleInstaller;
+import org.iocaste.packagetool.services.installers.PackageInstaller;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
 public class Services extends AbstractFunction {
+    public Map<String, ModuleInstaller> installers;
 
     public Services() {
         export("assign_task_group", "assignTaskGroup");
@@ -13,6 +21,21 @@ public class Services extends AbstractFunction {
         export("is_installed", new IsInstalled());
         export("uninstall", new Uninstall());
         export("update", new PackageUpdate());
+        
+        installers = new LinkedHashMap<>();
+        new ModelInstaller(this);
+        new ComplexModelInstaller(this);
+//        new UsersInstaller(installers);
+//        new NumberFactoryInstaller(installers);
+//        new SearchHelpInstaller(installers);
+//        new AuthorizationInstaller(installers);
+//        new UserProfileInstaller(installers);
+//        new LinkInstaller(installers);
+//        new TaskGroupInstaller(installers);
+//        new TaskGroupItemInstaller(installers);
+//        new GlobalConfigInstaller(installers);
+//        new TextInstaller(installers);
+        new PackageInstaller(this);
     }
     
     /**

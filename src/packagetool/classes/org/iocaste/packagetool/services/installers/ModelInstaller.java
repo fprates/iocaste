@@ -1,4 +1,4 @@
-package org.iocaste.packagetool.services;
+package org.iocaste.packagetool.services.installers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +8,20 @@ import java.util.TreeSet;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.packagetool.services.Services;
+import org.iocaste.packagetool.services.State;
+import org.iocaste.packagetool.services.Uninstall;
+import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.IocasteException;
 
-public class Models {
+public class ModelInstaller
+        extends AbstractModuleInstaller<String, DocumentModel> {
+
+    public ModelInstaller(Services services) {
+        super(services, "NAME");
+    }
     
     private static final void extractsh(DocumentModel model, State state) {
         String name;
@@ -32,7 +42,7 @@ public class Models {
         }
     }
     
-    private static final DocumentModel fixPackageReference(
+    private final DocumentModel fixPackageReference(
             Map<String, DocumentModel> models, String name, State state) {
         DocumentModel model, modelreference;
         DocumentModelItem reference;
@@ -52,15 +62,24 @@ public class Models {
         
         return model;
     }
+
+    @Override
+    protected final String getObjectName(DocumentModel model) {
+        return model.getName();
+    }
     
-    public static final void install(DocumentModel model, String modelname,
-            State state) throws Exception {
+    @Override
+    public void install(State state) throws Exception {
+        installAll(state, state.data.getModels());
+    }
+    
+    @Override
+    protected final void install(State state, DocumentModel model) {
         int i;
         List<Object[]> values;
         ExtendedObject header;
-        
+
         model.setPackage(state.pkgname);
-        Registry.add(modelname, "MODEL", state);
         extractsh(model, state);
         
         /*
@@ -85,7 +104,13 @@ public class Models {
         }
     }
     
-    public static final void installAll(Map<String, DocumentModel> models,
+    protected final void installAll(
+            State state, Map<String, DocumentModel> objects) throws Exception {
+        DocumentModel[] models = prepare(objects, null, state);
+        super.installAll(state, models);
+    }
+    
+    private final DocumentModel[] prepare(Map<String, DocumentModel> models,
             List<String> toinstall, State state) throws Exception {
         int error, i;
         DocumentModel[] _models;
@@ -102,15 +127,26 @@ public class Models {
         }
         error = state.documents.createModels(_models);
         if (error < 0)
-            throw new IocasteException(
-                    new StringBuilder("error creating models.").toString());
-        
-        for (DocumentModel installed : _models)
-            install(installed, installed.getName(), state);
+            throw new IocasteException("error creating models.");
+        return _models;
     }
     
-    public static final void update(DocumentModel model, String modelname,
-            State state) throws Exception {
+    @Override
+    public final void remove(
+            AbstractServiceInterface[] services, ExtendedObject object) {
+        Documents documents = (Documents)services[Uninstall.DOCS_LIB];
+        documents.removeModel(getObjectName(object));
+        documents.delete(object);
+    }
+    
+    @Override
+    public final void update(State state) throws Exception {
+        updateAll(state, state.data.getModels());
+    }
+    
+    @Override
+    protected final void update(State state, DocumentModel model)
+            throws Exception {
         int i;
         List<Object[]> values;
         ExtendedObject header;
@@ -125,7 +161,6 @@ public class Models {
          */
         model = state.documents.getModel(model.getName());
         values = state.data.getValues(model);
-        
         if (values == null)
             return;
         
@@ -140,16 +175,18 @@ public class Models {
         }
     }
     
-    public static final void updateAll(
-            Map<String, DocumentModel> models, State state) throws Exception {
+    @Override
+    protected final void updateAll(
+            State state, Map<String, DocumentModel> models) throws Exception {
         DocumentModel model;
         List<String> toinstall;
+        DocumentModel[] _models;
         
         toinstall = new ArrayList<>();
         for (String name : models.keySet()) {
             model = models.get(name);
             if (state.documents.getModel(name) != null) {
-                update(model, name, state);
+                update(state, model);
                 continue;
             }
             toinstall.add(name);
@@ -157,6 +194,9 @@ public class Models {
         
         if (toinstall.size() == 0)
             return;
-        installAll(models, toinstall, state);
+        _models = prepare(models, toinstall, state);
+        super.installAll(state, _models);
+        
     }
 }
+

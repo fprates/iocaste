@@ -1,10 +1,10 @@
 package org.iocaste.packagetool.services;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -24,13 +24,11 @@ public class PackageUpdate extends AbstractHandler {
     public Object run(Message message) throws Exception {
         Uninstall uninstall;
         Set<String> types;
-        Map<String, DocumentModel> models;
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
         Map<UserProfile, Set<User>> profiles;
         Map<String, Map<String, Long>> numbers;
-        Authorization[] authorizations;
-        ComplexModel[] cmodels;
+        List<Authorization> authorizations;
         SearchHelpData[] shdata;
         DocumentModel tasks;
         State state;
@@ -43,6 +41,10 @@ public class PackageUpdate extends AbstractHandler {
         state.documents = new Documents(state.function);
         state.pkgname = message.getst("name");
         
+        services = getFunction();
+        for (String key : services.installers.keySet())
+            services.installers.get(key).update(state);
+        
         types = new HashSet<>();
         types.add("SH");
         types.add("MESSAGE");
@@ -52,19 +54,9 @@ public class PackageUpdate extends AbstractHandler {
         types.add("TSKGROUP");
         types.add("TSKITEM");
         types.add("TASK");
-        types.add("CMODEL");
         
-        services = getFunction();
         uninstall = services.get("uninstall");
         uninstall.run(state.pkgname, types);
-        
-        models = state.data.getModels();
-        if (models.size() > 0)
-            Models.updateAll(models, state);
-        
-        cmodels = state.data.getCModels();
-        if (cmodels.length > 0)
-            CModels.install(cmodels, state);
             
         shdata = state.data.getSHData();
         if (shdata.length > 0) {
@@ -77,7 +69,7 @@ public class PackageUpdate extends AbstractHandler {
             InstallMessages.init(state);
         
         authorizations = state.data.getAuthorizations();
-        if (authorizations.length > 0)
+        if (authorizations.size() > 0)
             InstallAuthorizations.init(authorizations, state);
         
         profiles = state.data.getUserProfiles();

@@ -1,0 +1,21 @@
+package org.iocaste.packagetool.services.installers;
+
+import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.packagetool.services.State;
+import org.iocaste.protocol.AbstractServiceInterface;
+
+public interface ModuleInstaller {
+    public enum MODES {
+        INSTALL,
+        UNINSTALL,
+        UPDATE
+    };
+    
+    public abstract void install(State state) throws Exception;
+    
+    public abstract void remove(
+            AbstractServiceInterface[] services, ExtendedObject object);
+    
+    public abstract void update(State state) throws Exception;
+}
+

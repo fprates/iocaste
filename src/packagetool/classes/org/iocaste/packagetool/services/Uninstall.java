@@ -7,9 +7,9 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.globalconfig.common.GlobalConfig;
+import org.iocaste.packagetool.services.installers.ModuleInstaller;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.AbstractServiceInterface;
-import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
@@ -17,17 +17,17 @@ import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.Shell;
 
 public class Uninstall extends AbstractHandler {
-    private static final byte DOCS_LIB = 0;
-    private static final byte SH_LIB = 1;
-    private static final byte AUTH_LIB = 2;
-    private static final byte CONFIG_LIB = 3;
+    public static final byte DOCS_LIB = 0;
+    public static final byte SH_LIB = 1;
+    public static final byte AUTH_LIB = 2;
+    public static final byte CONFIG_LIB = 3;
     
     public final void run(String pkgname, Set<String> types) {
         String objecttype, style;
         Query query;
         ExtendedObject object;
         AbstractServiceInterface[] services;
-        Function function = getFunction();
+        Services function = getFunction();
         ExtendedObject[] objects = Registry.getEntries(pkgname, function);
         
         if (objects == null)
@@ -68,9 +68,10 @@ public class Uninstall extends AbstractHandler {
         ((Documents)services[DOCS_LIB]).update(query);
     }
 
-    private static final void item(ExtendedObject object, Function function,
+    private static final void item(ExtendedObject object, Services function,
             AbstractServiceInterface... services) {
         Query query;
+        ModuleInstaller installer;
         Documents documents = (Documents)services[DOCS_LIB];
         SHLib shlib = (SHLib)services[SH_LIB];
         Authority authority = (Authority)services[AUTH_LIB];
@@ -95,10 +96,6 @@ public class Uninstall extends AbstractHandler {
             documents.update(query);
             documents.delete(object);
             return;
-        case "MODEL":
-            documents.removeModel(name);
-            documents.delete(object);
-            return;
         case "NUMBER":
             documents.removeNumberFactory(name);
             documents.delete(object);
@@ -119,10 +116,6 @@ public class Uninstall extends AbstractHandler {
             Selector.removeTask(name, documents);
             documents.delete(object);
             return;
-        case "CMODEL":
-            documents.removeComplexModel(name);
-            documents.delete(object);
-            return;
         case "CONFIG_ENTRY":
             config.remove(name);
             documents.delete(object);
@@ -134,6 +127,10 @@ public class Uninstall extends AbstractHandler {
         case "DATA_ELEMENT":
             documents.delete(object);
             return;
+        default:
+            installer = function.installers.get(modeltype);
+            if (installer != null)
+                installer.remove(services, object);
         }
     }
 

@@ -1,19 +1,19 @@
 package org.iocaste.packagetool.services;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.documents.common.Query;
 import org.iocaste.documents.common.SearchHelpData;
 import org.iocaste.packagetool.common.GlobalConfigData;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
@@ -21,43 +21,22 @@ import org.iocaste.protocol.user.UserProfile;
 
 public class PackageInstall extends AbstractHandler {
     
-    private final ExtendedObject getPackageHeader(State state) {
-        ExtendedObject[] objects;
-        Query query = new Query();
-        
-        query.setMaxResults(1);
-        query.setModel("PACKAGE");
-        query.andEqual("NAME", state.pkgname);
-        objects = state.documents.select(query);
-        return (objects == null)? null : objects[0];
-    }
-    
-    private final ExtendedObject getPackageHeaderInstance(State state) {
-        ExtendedObject header;
-        
-        header = new ExtendedObject(state.documents.getModel("PACKAGE"));
-        header.set("NAME", state.pkgname);
-        return header;
-    }
-    
     @Override
     public Object run(Message message) throws Exception {
         IsInstalled isinstalled;
-        ExtendedObject header;
         DocumentModel tasks;
         Set<User> users;
         Set<GlobalConfigData> config;
         Map<UserProfile, Set<User>> profiles;
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
-        Map<String, DocumentModel> models;
-        ComplexModel[] cmodels;
         SearchHelpData[] shdata;
-        Authorization[] authorizations;
+        List<Authorization> authorizations;
         String[] dependencies;
         State state;
         Set<String> texts;
         Map<String, Map<String, Long>> numbers;
+        Services function;
         
         state = new State();
         state.data = message.get("data");
@@ -72,38 +51,14 @@ public class PackageInstall extends AbstractHandler {
                 for (String pkgname : dependencies) {
                     if (isinstalled.run(pkgname))
                         continue;
-                    
-                    throw new Exception(new StringBuilder(state.pkgname).
-                            append(": required package ").
-                            append(pkgname).
-                            append(" not installed.").toString());
+                    throw new IocasteException(
+                        "%s: required package %s not installed.",
+                            state.pkgname, pkgname);
                 }
 
-            /*
-             * Registra instalação do pacote
-             */
-            if (isinstalled.run(state.pkgname)) {
-                header = getPackageHeader(state);
-            } else {
-                header = getPackageHeaderInstance(state);
-                state.documents.save(header);
-            }
-            
-            /*
-             * gera modelos;
-             * insere registros;
-             * prepara dados para ajuda de pesquisa.
-             */
-            models = state.data.getModels();
-            if (models.size() > 0) {
-                Models.installAll(models, null, state);
-                state.documents.commit();
-            }
-            
-            state.installed++;
-            cmodels = state.data.getCModels();
-            if (cmodels.length > 0)
-                CModels.install(cmodels, state);
+            function = getFunction();
+            for (String key : function.installers.keySet())
+                function.installers.get(key).install(state);
             
             state.installed++;
             /*
@@ -144,7 +99,7 @@ public class PackageInstall extends AbstractHandler {
              * instala autorizações, perfis
              */
             authorizations = state.data.getAuthorizations();
-            if (authorizations.length > 0)
+            if (authorizations.size() > 0)
                 InstallAuthorizations.init(authorizations, state);
             
             profiles = state.data.getUserProfiles();
@@ -193,5 +148,4 @@ public class PackageInstall extends AbstractHandler {
             throw e;
         }
     }
-
 }

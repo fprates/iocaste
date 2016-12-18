@@ -1,5 +1,6 @@
 package org.iocaste.packagetool.services;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public class InstallAuthorizations {
      * @param authorizations
      * @param state
      */
-    public static final void init(Authorization[] authorizations, State state) {
+    public static final void init(List<Authorization> authorizations, State state) {
         String name;
         Authority authority = new Authority(state.function);
         
