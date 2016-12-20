@@ -14,7 +14,10 @@ public class Messages {
         messages.put("installed", "Instalados");
         messages.put("iocaste-packagetool", "Gerenciador de pacotes");
         messages.put("NAME", "Pacote");
+        messages.put("package.updated", "Pacote atualizado.");
         messages.put("remove", "Remover");
+        messages.put("some.packages.failed",
+                "A instalação de algum pacote falhou");
         messages.put("undetail", "Detalhes");
         messages.put("uninstalled", "Não instalados");
         messages.put("update", "Atualizar");
