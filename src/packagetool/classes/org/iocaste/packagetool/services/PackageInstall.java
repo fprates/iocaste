@@ -31,7 +31,6 @@ public class PackageInstall extends AbstractHandler {
         String[] dependencies;
         State state;
         Set<String> texts;
-        Map<String, Map<String, Long>> numbers;
         Services function;
         ModuleInstaller installer;
         Documents documents;
@@ -68,16 +67,6 @@ public class PackageInstall extends AbstractHandler {
             users = state.data.getUsers();
             if (users.size() > 0)
                 InstallUsers.init(users, state);
-            
-            /*
-             * registra objetos de numeração
-             */
-            numbers = state.data.getNumberFactories();
-            for (String factory : numbers.keySet()) {
-                documents.createNumberFactory(
-                        factory, null, numbers.get(factory));
-                Registry.add(factory, "NUMBER", state);
-            }
             
             for (DataElement element : state.data.getElements())
                 Registry.add(element.getName(), "DATA_ELEMENT", state);

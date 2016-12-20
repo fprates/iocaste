@@ -90,10 +90,6 @@ public class Uninstall extends AbstractHandler {
             documents.update(query);
             documents.delete(object);
             return;
-        case "NUMBER":
-            documents.removeNumberFactory(name);
-            documents.delete(object);
-            return;
         case "AUTH_PROFILE":
             authority.removeProfile(name);
             documents.delete(object);

@@ -54,7 +54,7 @@ public abstract class AbstractModuleInstaller<S,T> implements ModuleInstaller {
         return !(objects.size() == 0);
     }
     
-    private final void registry(State state, T object) {
+    protected final void registry(State state, T object) {
         if (type != null)
             Registry.add(getObjectName(object), type, state);
     }
@@ -62,11 +62,18 @@ public abstract class AbstractModuleInstaller<S,T> implements ModuleInstaller {
     protected abstract void update(State state, T object) throws Exception;
     
     protected void updateAll(State state, Map<S, T> objects) throws Exception {
-        
+        if (!isValid(objects))
+            return;
+        for (S key : objects.keySet())
+            update(state, objects.get(key));
+        for (S key : objects.keySet())
+            registry(state, objects.get(key));
     }
     
     protected void updateAll(State state, Collection<T> objects)
             throws Exception {
+        if (!isValid(objects))
+            return;
         for (T object : objects)
             update(state, object);
         for (T object : objects)

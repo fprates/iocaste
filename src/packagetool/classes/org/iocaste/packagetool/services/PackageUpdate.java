@@ -24,7 +24,6 @@ public class PackageUpdate extends AbstractHandler {
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
         Map<UserProfile, Set<User>> profiles;
-        Map<String, Map<String, Long>> numbers;
         DocumentModel tasks;
         State state;
         Services services;
@@ -43,7 +42,6 @@ public class PackageUpdate extends AbstractHandler {
         types = new HashSet<>();
         types.add("MESSAGE");
         types.add("STYLE");
-        types.add("AUTHORIZATION");
         types.add("AUTH_PROFILE");
         types.add("TSKGROUP");
         types.add("TSKITEM");
@@ -71,13 +69,6 @@ public class PackageUpdate extends AbstractHandler {
         tasksgroups = state.data.getTasksGroups();
         if (tasksgroups.size() > 0)
             InstallTasksGroups.init(tasksgroups, state);
-        
-        numbers = state.data.getNumberFactories();
-        for (String factory : numbers.keySet()) {
-            state.documents.createNumberFactory(
-                    factory, null, numbers.get(factory));
-            Registry.add(factory, "NUMBER", state);
-        }
         
         configs = state.data.getGlobalConfigs();
         if (configs.size() > 0)
