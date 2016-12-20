@@ -12,13 +12,13 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.services.Services;
 import org.iocaste.packagetool.services.State;
-import org.iocaste.packagetool.services.Uninstall;
-import org.iocaste.protocol.AbstractServiceInterface;
+import org.iocaste.protocol.Function;
 import org.iocaste.protocol.IocasteException;
 
 public class ModelInstaller
         extends AbstractModuleInstaller<String, DocumentModel> {
-
+    private Documents documents;
+    
     public ModelInstaller(Services services) {
         super(services, "NAME");
     }
@@ -69,7 +69,13 @@ public class ModelInstaller
     }
     
     @Override
-    public void install(State state) throws Exception {
+    public final void init(Function function) {
+        if (documents == null)
+            documents = new Documents(function);
+    }
+    
+    @Override
+    public final void install(State state) throws Exception {
         installAll(state, state.data.getModels());
     }
     
@@ -85,7 +91,7 @@ public class ModelInstaller
         /*
          * recupera modelo para trazer as queries.
          */
-        model = state.documents.getModel(model.getName());
+        model = documents.getModel(model.getName());
         if (model == null)
             return;
         
@@ -100,7 +106,7 @@ public class ModelInstaller
             for (DocumentModelItem modelitem : model.getItens())
                 header.set(modelitem, line[i++]);
             
-            state.documents.save(header);
+            documents.save(header);
         }
     }
     
@@ -125,16 +131,14 @@ public class ModelInstaller
             for (String name : models.keySet())
                 _models[i++] = fixPackageReference(models, name, state);
         }
-        error = state.documents.createModels(_models);
+        error = documents.createModels(_models);
         if (error < 0)
             throw new IocasteException("error creating models.");
         return _models;
     }
     
     @Override
-    public final void remove(
-            AbstractServiceInterface[] services, ExtendedObject object) {
-        Documents documents = (Documents)services[Uninstall.DOCS_LIB];
+    public final void remove(ExtendedObject object) {
         documents.removeModel(getObjectName(object));
         documents.delete(object);
     }
@@ -151,7 +155,7 @@ public class ModelInstaller
         List<Object[]> values;
         ExtendedObject header;
         
-        if (state.documents.updateModel(model) < 0)
+        if (documents.updateModel(model) < 0)
             throw new IocasteException("update model error.");
         
         extractsh(model, state);
@@ -159,7 +163,7 @@ public class ModelInstaller
         /*
          * recupera modelo para trazer as queries.
          */
-        model = state.documents.getModel(model.getName());
+        model = documents.getModel(model.getName());
         values = state.data.getValues(model);
         if (values == null)
             return;
@@ -171,7 +175,7 @@ public class ModelInstaller
             for (DocumentModelItem modelitem : model.getItens())
                 header.set(modelitem, line[i++]);
             
-            state.documents.modify(header);
+            documents.modify(header);
         }
     }
     
@@ -185,7 +189,7 @@ public class ModelInstaller
         toinstall = new ArrayList<>();
         for (String name : models.keySet()) {
             model = models.get(name);
-            if (state.documents.getModel(name) != null) {
+            if (documents.getModel(name) != null) {
                 update(state, model);
                 continue;
             }

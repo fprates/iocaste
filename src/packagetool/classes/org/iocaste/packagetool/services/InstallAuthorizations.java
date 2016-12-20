@@ -1,6 +1,5 @@
 package org.iocaste.packagetool.services;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,25 +9,6 @@ import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
 
 public class InstallAuthorizations {
-    
-    /**
-     * 
-     * @param authorizations
-     * @param state
-     */
-    public static final void init(List<Authorization> authorizations, State state) {
-        String name;
-        Authority authority = new Authority(state.function);
-        
-        for (Authorization authorization : authorizations) {
-            name = authorization.getName();
-            if (authority.get(name) == null)
-                authority.save(authorization);
-            
-            authority.assign("ADMIN", "ALL", authorization);
-            Registry.add(name, "AUTHORIZATION", state);
-        }
-    }
     
     public static final void init(Map<UserProfile, Set<User>> profiles,
             State state) {

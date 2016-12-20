@@ -1,6 +1,5 @@
 package org.iocaste.packagetool.services;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,11 +9,11 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.GlobalConfigData;
 import org.iocaste.packagetool.common.TaskGroup;
+import org.iocaste.packagetool.services.installers.ModuleInstaller;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
-import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
 
@@ -29,19 +28,20 @@ public class PackageInstall extends AbstractHandler {
         Map<UserProfile, Set<User>> profiles;
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
-        List<Authorization> authorizations;
         String[] dependencies;
         State state;
         Set<String> texts;
         Map<String, Map<String, Long>> numbers;
         Services function;
+        ModuleInstaller installer;
+        Documents documents;
         
         state = new State();
         state.data = message.get("data");
         state.pkgname = message.getst("name");
         state.function = getFunction();
-        state.documents = new Documents(state.function);
         
+        documents = state.documents = new Documents(state.function);
         isinstalled = state.function.get("is_installed");
         try {
             dependencies = state.data.getDependencies();
@@ -55,10 +55,13 @@ public class PackageInstall extends AbstractHandler {
                 }
 
             function = getFunction();
-            for (String key : function.installers.keySet())
-                function.installers.get(key).install(state);
+            for (String key : function.installers.keySet()) {
+                installer = function.installers.get(key);
+                installer.init(state.function);
+                installer.install(state);
+                state.installed++;
+            }
             
-            state.installed++;
             /*
              * insere usuários
              */
@@ -71,7 +74,7 @@ public class PackageInstall extends AbstractHandler {
              */
             numbers = state.data.getNumberFactories();
             for (String factory : numbers.keySet()) {
-                state.documents.createNumberFactory(
+                documents.createNumberFactory(
                         factory, null, numbers.get(factory));
                 Registry.add(factory, "NUMBER", state);
             }
@@ -86,13 +89,6 @@ public class PackageInstall extends AbstractHandler {
             if (state.messages.size() > 0)
                 InstallMessages.init(state);
             
-            /*
-             * instala autorizações, perfis
-             */
-            authorizations = state.data.getAuthorizations();
-            if (authorizations.size() > 0)
-                InstallAuthorizations.init(authorizations, state);
-            
             profiles = state.data.getUserProfiles();
             if (profiles.size() > 0)
                 InstallAuthorizations.init(profiles, state);
@@ -104,7 +100,7 @@ public class PackageInstall extends AbstractHandler {
              */
             links = state.data.getLinks();
             if (links.size() > 0) {
-                tasks = state.documents.getModel("TASKS");
+                tasks = documents.getModel("TASKS");
                 InstallLinks.init(links, tasks, state);
             }
             
@@ -130,12 +126,12 @@ public class PackageInstall extends AbstractHandler {
              * grava itens instalados
              */
             for (ExtendedObject object : state.log)
-                state.documents.save(object);
+                documents.save(object);
             
             return 1;
         } catch (Exception e) {
             if (state.installed > 1)
-                state.documents.rollback();
+                documents.rollback();
             throw e;
         }
     }

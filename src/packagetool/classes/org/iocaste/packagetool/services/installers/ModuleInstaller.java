@@ -2,7 +2,7 @@ package org.iocaste.packagetool.services.installers;
 
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.services.State;
-import org.iocaste.protocol.AbstractServiceInterface;
+import org.iocaste.protocol.Function;
 
 public interface ModuleInstaller {
     public enum MODES {
@@ -11,10 +11,11 @@ public interface ModuleInstaller {
         UPDATE
     };
     
+    public abstract void init(Function function);
+    
     public abstract void install(State state) throws Exception;
     
-    public abstract void remove(
-            AbstractServiceInterface[] services, ExtendedObject object);
+    public abstract void remove(ExtendedObject object);
     
     public abstract void update(State state) throws Exception;
 }

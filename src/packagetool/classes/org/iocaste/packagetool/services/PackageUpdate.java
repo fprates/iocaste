@@ -1,7 +1,6 @@
 package org.iocaste.packagetool.services;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +12,6 @@ import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
-import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
 
@@ -27,7 +25,6 @@ public class PackageUpdate extends AbstractHandler {
         Map<TaskGroup, Set<User>> tasksgroups;
         Map<UserProfile, Set<User>> profiles;
         Map<String, Map<String, Long>> numbers;
-        List<Authorization> authorizations;
         DocumentModel tasks;
         State state;
         Services services;
@@ -58,10 +55,6 @@ public class PackageUpdate extends AbstractHandler {
         state.messages = state.data.getMessages();
         if (state.messages.size() > 0)
             InstallMessages.init(state);
-        
-        authorizations = state.data.getAuthorizations();
-        if (authorizations.size() > 0)
-            InstallAuthorizations.init(authorizations, state);
         
         profiles = state.data.getUserProfiles();
         if (profiles.size() > 0)

@@ -94,10 +94,6 @@ public class Uninstall extends AbstractHandler {
             documents.removeNumberFactory(name);
             documents.delete(object);
             return;
-        case "AUTHORIZATION":
-            authority.remove(name);
-            documents.delete(object);
-            return;
         case "AUTH_PROFILE":
             authority.removeProfile(name);
             documents.delete(object);
@@ -123,8 +119,10 @@ public class Uninstall extends AbstractHandler {
             return;
         default:
             installer = function.installers.get(modeltype);
-            if (installer != null)
-                installer.remove(services, object);
+            if (installer == null)
+                break;
+            installer.init(function);
+            installer.remove(object);
         }
     }
 

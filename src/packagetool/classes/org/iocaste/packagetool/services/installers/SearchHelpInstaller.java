@@ -5,17 +5,25 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.SearchHelpData;
 import org.iocaste.packagetool.services.Services;
 import org.iocaste.packagetool.services.State;
-import org.iocaste.packagetool.services.Uninstall;
-import org.iocaste.protocol.AbstractServiceInterface;
+import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.SHLib;
 
 public class SearchHelpInstaller
         extends AbstractModuleInstaller<String, SearchHelpData> {
-
+    private SHLib shlib;
+    private Documents documents;
     public SearchHelpInstaller(Services services) {
         super(services, "SH");
     }
 
+    @Override
+    public void init(Function function) {
+        if (shlib != null)
+            return;
+        shlib = new SHLib(function);
+        documents = new Documents(function);
+    }
+    
     @Override
     public void install(State state) throws Exception {
         installAll(state, state.data.getSHData());
@@ -32,11 +40,7 @@ public class SearchHelpInstaller
     }
 
     @Override
-    public void remove(AbstractServiceInterface[] services,
-            ExtendedObject object) {
-        Documents documents = (Documents)services[Uninstall.DOCS_LIB];
-        SHLib shlib = (SHLib)services[Uninstall.SH_LIB];
-        
+    public void remove(ExtendedObject object) {
         shlib.remove(getObjectName(object));
         documents.delete(object);
     }
@@ -48,7 +52,7 @@ public class SearchHelpInstaller
 
     @Override
     protected void update(State state, SearchHelpData shd) throws Exception {
-        new SHLib(state.function).remove(getObjectName(shd));
+        shlib.remove(getObjectName(shd));
         install(state, shd);
     }
     

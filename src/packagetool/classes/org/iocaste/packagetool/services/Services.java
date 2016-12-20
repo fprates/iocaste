@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.packagetool.services.installers.AuthorizationInstaller;
 import org.iocaste.packagetool.services.installers.ComplexModelInstaller;
 import org.iocaste.packagetool.services.installers.ModelInstaller;
 import org.iocaste.packagetool.services.installers.ModuleInstaller;
@@ -29,7 +30,7 @@ public class Services extends AbstractFunction {
 //        new UsersInstaller(installers);
 //        new NumberFactoryInstaller(installers);
         new SearchHelpInstaller(this);
-//        new AuthorizationInstaller(installers);
+        new AuthorizationInstaller(this);
 //        new UserProfileInstaller(installers);
 //        new LinkInstaller(installers);
 //        new TaskGroupInstaller(installers);
