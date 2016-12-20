@@ -287,8 +287,8 @@ public class InstallData implements Serializable {
      * 
      * @return
      */
-    public final SearchHelpData[] getSHData() {
-        return shds.toArray(new SearchHelpData[0]);
+    public final List<SearchHelpData> getSHData() {
+        return shds;
     }
     
     /**

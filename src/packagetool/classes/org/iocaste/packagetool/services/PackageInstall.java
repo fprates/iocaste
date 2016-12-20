@@ -8,7 +8,6 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.documents.common.SearchHelpData;
 import org.iocaste.packagetool.common.GlobalConfigData;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.AbstractHandler;
@@ -30,7 +29,6 @@ public class PackageInstall extends AbstractHandler {
         Map<UserProfile, Set<User>> profiles;
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
-        SearchHelpData[] shdata;
         List<Authorization> authorizations;
         String[] dependencies;
         State state;
@@ -77,13 +75,6 @@ public class PackageInstall extends AbstractHandler {
                         factory, null, numbers.get(factory));
                 Registry.add(factory, "NUMBER", state);
             }
-            
-            /*
-             * gera ajudas de pesquisa
-             */
-            shdata = state.data.getSHData();
-            if (shdata.length > 0)
-                InstallSH.init(shdata, state);
             
             for (DataElement element : state.data.getElements())
                 Registry.add(element.getName(), "DATA_ELEMENT", state);

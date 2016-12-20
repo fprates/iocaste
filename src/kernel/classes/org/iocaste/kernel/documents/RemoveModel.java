@@ -117,26 +117,11 @@ public class RemoveModel extends AbstractDocumentsHandler {
      */
     private final int removeModelItem(Connection connection,
             DocumentModelItem item) throws Exception {
-        String error;
         String name = getComposedName(item);
         
         update(connection, QUERIES[DEL_FOREIGN], name);
-        update(connection, QUERIES[DEL_SH_REF], name);
-
-        error = "there is search help dependence on item ";
-        error = new StringBuilder(error).append(name).toString();
-        
-        if (select(connection, QUERIES[SH_ITEM], 1, name) != null)
-            throw new IocasteException(error);
-
-        if (select(connection, QUERIES[SH_HEAD_EXPRT], 1, name) != null)
-            throw new IocasteException(error);
-
         if (update(connection, QUERIES[DEL_ITEM], name) == 0)
             throw new IocasteException("error on removing model item");
-
-        update(connection, QUERIES[DEL_ELEMENT], name);
-        
         return 1;
     }
     

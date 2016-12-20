@@ -9,6 +9,7 @@ import org.iocaste.packagetool.services.installers.ComplexModelInstaller;
 import org.iocaste.packagetool.services.installers.ModelInstaller;
 import org.iocaste.packagetool.services.installers.ModuleInstaller;
 import org.iocaste.packagetool.services.installers.PackageInstaller;
+import org.iocaste.packagetool.services.installers.SearchHelpInstaller;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
@@ -27,7 +28,7 @@ public class Services extends AbstractFunction {
         new ComplexModelInstaller(this);
 //        new UsersInstaller(installers);
 //        new NumberFactoryInstaller(installers);
-//        new SearchHelpInstaller(installers);
+        new SearchHelpInstaller(this);
 //        new AuthorizationInstaller(installers);
 //        new UserProfileInstaller(installers);
 //        new LinkInstaller(installers);

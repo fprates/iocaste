@@ -162,26 +162,12 @@ public class UpdateModel extends AbstractDocumentsHandler {
      */
     private final int removeModelItem(Connection connection,
             DocumentModelItem item) throws Exception {
-        String error;
         String name = getComposedName(item);
         
         update(connection, QUERIES[DEL_FOREIGN], name);
-        update(connection, QUERIES[DEL_SH_REF], name);
-
-        error = "there is search help dependence on item ";
-        error = new StringBuilder(error).append(name).toString();
-        
-        if (select(connection, QUERIES[SH_ITEM], 1, name) != null)
-            throw new IocasteException(error);
-
-        if (select(connection, QUERIES[SH_HEAD_EXPRT], 1, name) != null)
-            throw new IocasteException(error);
-
         if (update(connection, QUERIES[DEL_ITEM], name) == 0)
             throw new IocasteException("error on removing model item");
-
         update(connection, QUERIES[DEL_ELEMENT], name);
-        
         return 1;
     }
     
@@ -291,13 +277,8 @@ public class UpdateModel extends AbstractDocumentsHandler {
      */
     private final void updateModelItem(UpdateData data, DocumentModel model)
             throws Exception {
-        String shname;
         Object[] criteria;
         UpdateDataElement updatede;
-        
-        update(data.connection,
-                QUERIES[DEL_SH_REF],
-                getComposedName(data.olditem));
         
         /*
          * atualização do modelo
@@ -305,8 +286,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
         updatede = getFunction().get("update_data_element");
         if (updatede.run(data.connection, data.element) < 0)
             throw new IocasteException(
-                    new StringBuilder("error updating data element ").
-                            append(data.element.getName()).toString());
+                    "error updating data element ", data.element.getName());
         
         criteria = new Object[7];
         criteria[0] = data.model.getName();
@@ -318,16 +298,9 @@ public class UpdateModel extends AbstractDocumentsHandler {
                 null : getComposedName(data.reference);
         criteria[6] = getComposedName(data.item);
         
-        if (update(data.connection, QUERIES[UPDATE_ITEM], criteria) < 0)
-            throw new IocasteException(
-                    new StringBuilder("error updating model item").
-                            append(criteria[6]).toString());
-        
-        shname = data.item.getSearchHelp();
-        if (Documents.isInitial(shname))
+        if (update(data.connection, QUERIES[UPDATE_ITEM], criteria) >= 0)
             return;
-        
-        update(data.connection, QUERIES[INS_SH_REF], criteria[6], shname);
+        throw new IocasteException("error updating model item", criteria[6]);
     }
     
     private final void updateTable(UpdateData data) throws Exception {

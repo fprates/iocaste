@@ -29,12 +29,12 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
     protected static final byte INS_ITEM = 4;
     protected static final byte INS_FOREIGN = 5;
     protected static final byte SH_HEADER = 6;
-    protected static final byte INS_SH_REF = 7;
+//    protected static final byte INS_SH_REF = 7;
     protected static final byte DEL_KEY = 8;
     protected static final byte DEL_MODEL_REF = 9;
     protected static final byte DEL_MODEL = 10;
     protected static final byte DEL_FOREIGN = 11;
-    protected static final byte DEL_SH_REF = 12;
+//    protected static final byte DEL_SH_REF = 12;
     protected static final byte SH_ITEM = 13;
     protected static final byte SH_HEAD_EXPRT = 14;
     protected static final byte DEL_ITEM = 15;
@@ -293,7 +293,7 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
             DocumentModelItem item) throws Exception {
         DocumentModelItem reference;
         DataElement dataelement;
-        String itemref, tname, shname;
+        String itemref, tname;
         DocumentModel model = item.getDocumentModel();
         
         dataelement = item.getDataElement();
@@ -318,18 +318,10 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
                 itemref) == 0)
             return 0;
         
-        if (itemref != null)
-            if (update(connection, QUERIES[INS_FOREIGN], tname, itemref) == 0)
-                return 0;
-        
-        shname = item.getSearchHelp();
-        if (shname == null)
-            return 1;
-
-        if (select(connection, QUERIES[SH_HEADER], 0, shname) == null)
-            return 1;
-
-        return update(connection, QUERIES[INS_SH_REF], tname, shname);
+        if ((itemref != null) &&
+                (update(connection, QUERIES[INS_FOREIGN], tname, itemref) == 0))
+            return 0;
+        return 1;
     }
     
     private void prepare(DataElement element) throws Exception {

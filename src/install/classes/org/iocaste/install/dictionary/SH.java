@@ -32,7 +32,7 @@ public class SH extends Module {
         
         shref = tableInstance("SHREF");
         shref.key("INAME", DataType.CHAR, 48);
-        shref.ref("SHCAB", DataType.CHAR, 24, "SHCAB", "IDENT");
+        shref.add("SHCAB", DataType.CHAR, 24);
 
         shqry = tableInstance("SHQRY");
         shqry.key("QRYID", DataType.CHAR, 27);
@@ -80,13 +80,12 @@ public class SH extends Module {
                 "SHCAB", "SEARCH_HELP.NAME", "searchHelp", "SEARCH_HELP.NAME");
         insertModelItem(docs002, docs006, "SH_ITENS.ITEM", "SH_ITENS",
                 "MDITM", "MODELITEM.NAME", "modelItem", "MODELITEM.NAME");
-
+        
         insertModel(docs001, docs005, "SH_REFERENCE", "SHREF", null);
         insertModelKey(docs002, docs004, "SH_REFERENCE.MODEL_ITEM",
                 "SH_REFERENCE", "INAME", "MODELITEM.NAME", "modelItem");
         insertModelItem(docs002, docs006, "SH_REFERENCE.SEARCH_HELP",
-                "SH_REFERENCE", "SHCAB", "SEARCH_HELP.NAME", "searchHelp",
-                "SEARCH_HELP.NAME");
+               "SH_REFERENCE", "SHCAB", "SEARCH_HELP.NAME", "searchHelp", null);
 
         insertModel(docs001, docs005, "SH_QUERIES", "SHQRY", null);
         insertElement(docs003, "SH_QUERY_ID", 0, 27, DataType.CHAR, true);

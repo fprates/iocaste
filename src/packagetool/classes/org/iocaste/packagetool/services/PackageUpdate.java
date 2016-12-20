@@ -8,7 +8,6 @@ import java.util.Set;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.documents.common.SearchHelpData;
 import org.iocaste.packagetool.common.GlobalConfigData;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.AbstractHandler;
@@ -29,7 +28,6 @@ public class PackageUpdate extends AbstractHandler {
         Map<UserProfile, Set<User>> profiles;
         Map<String, Map<String, Long>> numbers;
         List<Authorization> authorizations;
-        SearchHelpData[] shdata;
         DocumentModel tasks;
         State state;
         Services services;
@@ -46,7 +44,6 @@ public class PackageUpdate extends AbstractHandler {
             services.installers.get(key).update(state);
         
         types = new HashSet<>();
-        types.add("SH");
         types.add("MESSAGE");
         types.add("STYLE");
         types.add("AUTHORIZATION");
@@ -57,12 +54,6 @@ public class PackageUpdate extends AbstractHandler {
         
         uninstall = services.get("uninstall");
         uninstall.run(state.pkgname, types);
-            
-        shdata = state.data.getSHData();
-        if (shdata.length > 0) {
-            InstallSH.init(shdata, state);
-            InstallSH.reassign(state);
-        }
         
         state.messages = state.data.getMessages();
         if (state.messages.size() > 0)

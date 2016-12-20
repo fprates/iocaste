@@ -73,7 +73,6 @@ public class Uninstall extends AbstractHandler {
         Query query;
         ModuleInstaller installer;
         Documents documents = (Documents)services[DOCS_LIB];
-        SHLib shlib = (SHLib)services[SH_LIB];
         Authority authority = (Authority)services[AUTH_LIB];
         GlobalConfig config = (GlobalConfig)services[CONFIG_LIB];
         String modeltype = object.get("MODEL");
@@ -82,11 +81,6 @@ public class Uninstall extends AbstractHandler {
         switch (modeltype) {
         case "MESSAGE":
             InstallMessages.uninstall(object.getst("PACKAGE"), documents);
-            documents.delete(object);
-            return;
-        case "SH":
-            shlib.unassign(name);
-            shlib.remove(name);
             documents.delete(object);
             return;
         case "TASK":
