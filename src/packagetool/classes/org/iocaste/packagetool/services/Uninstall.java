@@ -24,7 +24,6 @@ public class Uninstall extends AbstractHandler {
     
     public final void run(String pkgname, Set<String> types) {
         String objecttype, style;
-        Query query;
         ExtendedObject object;
         AbstractServiceInterface[] services;
         Services function = getFunction();
@@ -58,14 +57,6 @@ public class Uninstall extends AbstractHandler {
 
         if (style != null)
             new Shell(function).invalidateStyle(style);
-        
-        if (types != null)
-            return;
-        
-        query = new Query("delete");
-        query.setModel("PACKAGE");
-        query.andEqual("NAME", pkgname);
-        ((Documents)services[DOCS_LIB]).update(query);
     }
 
     private static final void item(ExtendedObject object, Services function,
