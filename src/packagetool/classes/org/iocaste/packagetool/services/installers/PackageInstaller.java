@@ -22,7 +22,8 @@ public class PackageInstaller extends AbstractModuleInstaller<String, String> {
 
     @Override
     public void init(Function function) {
-        documents = new Documents(function);
+        if (documents == null)
+            documents = new Documents(function);
     }
     
     private final ExtendedObject getPackageHeader(State state, String pkgname) {
