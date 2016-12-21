@@ -255,14 +255,6 @@ public abstract class AbstractPage extends AbstractFunction {
     
     /**
      * 
-     * @param source
-     */
-    protected final void setMessageSource(String source) {
-        getviewdata.setMessageSource(source);
-    }
-    
-    /**
-     * 
      * @param reloadable
      */
     public final void setReloadableView(boolean reloadable) {

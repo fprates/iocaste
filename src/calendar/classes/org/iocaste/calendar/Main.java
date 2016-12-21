@@ -46,7 +46,6 @@ public class Main extends AbstractPage {
         byte mode;
         View view;
         
-        setMessageSource("iocaste-calendar");
         context.control = context.function.getParameter("control");
         mode = context.control.getMode();
         view = context.control.getView();

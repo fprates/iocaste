@@ -20,11 +20,8 @@ public class Main extends AbstractModelViewer {
     public final void config(PageBuilderContext context) throws Exception {
         ComplexModel cmodel;
         Documents documents;
-        String msgsource = getParameter("msgsource");
+//        String msgsource = getParameter("msgsource");
         AppBuilderLink link = getReceivedLink();
-        
-        if (msgsource != null)
-            setMessageSource(msgsource);
         
         messages(new Messages());
         link.updateload = new Load(link.edit1view);

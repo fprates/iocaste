@@ -63,6 +63,5 @@ public class Main extends AbstractPage {
         }
         
         Response.main(context);
-        setMessageSource(context.model.getPackage());
     }
 }

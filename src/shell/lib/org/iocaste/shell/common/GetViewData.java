@@ -9,7 +9,6 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
 public class GetViewData extends AbstractHandler {
-    private String msgsource;
     public ViewState state;
     public AbstractContext context;
     public Map<String, ViewCustomAction> customactions;
@@ -88,11 +87,6 @@ public class GetViewData extends AbstractHandler {
                 setLocaleForElement(container, view.getLocale());
         }
         
-        context.messages.loadFromApplication(
-                view.getAppName(), locale, page);
-        if (msgsource != null)
-            context.messages.loadFromApplication(msgsource, locale, page);
-        
         if (context.messages.size() > 0)
             fillTranslations(view, context);
         
@@ -103,10 +97,6 @@ public class GetViewData extends AbstractHandler {
         viewreturn[2] = state.contenttype;
         viewreturn[3] = state.contentencoding;
         return viewreturn;
-    }
-
-    public final void setMessageSource(String source) {
-        msgsource = source;
     }
     
     private void setLocaleForElement(Element element, Locale locale) {

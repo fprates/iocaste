@@ -34,10 +34,8 @@ public class Main extends AbstractPageBuilder {
             extcontext.auto = true;
         if (extcontext.model != null) {
             model = new Documents(context.function).getModel(extcontext.model);
-            if (model != null) {
+            if (model != null)
                 extcontext.appname = model.getPackage();
-                setMessageSource(extcontext.appname);
-            }
         }
         
         panel = new StandardPanel(context);
