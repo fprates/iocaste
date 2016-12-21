@@ -64,8 +64,11 @@ public abstract class AbstractModuleInstaller<S,T> implements ModuleInstaller {
     }
     
     protected final void registry(State state, S key, T object) {
-        if (type != null)
-            Registry.add(getObjectName(key, object), type, state);
+        String name;
+        if (type == null)
+            return;
+        name = getObjectName(key, object);
+        Registry.add((name == null)? state.pkgname : name, type, state);
     }
     
     protected abstract void update(State state, S key, T object)

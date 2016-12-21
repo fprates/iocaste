@@ -7,6 +7,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.services.installers.AuthorizationInstaller;
 import org.iocaste.packagetool.services.installers.ComplexModelInstaller;
+import org.iocaste.packagetool.services.installers.GlobalConfigInstaller;
 import org.iocaste.packagetool.services.installers.ModelInstaller;
 import org.iocaste.packagetool.services.installers.ModuleInstaller;
 import org.iocaste.packagetool.services.installers.NumberFactoryInstaller;
@@ -37,7 +38,7 @@ public class Services extends AbstractFunction {
 //        new LinkInstaller(installers);
 //        new TaskGroupInstaller(installers);
 //        new TaskGroupItemInstaller(installers);
-//        new GlobalConfigInstaller(installers);
+        new GlobalConfigInstaller(this);
 //        new TextInstaller(installers);
         new PackageInstaller(this);
     }

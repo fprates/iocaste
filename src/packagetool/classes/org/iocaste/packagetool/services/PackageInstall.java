@@ -7,7 +7,6 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.packagetool.common.GlobalConfigData;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.packagetool.services.installers.ModuleInstaller;
 import org.iocaste.protocol.AbstractHandler;
@@ -23,7 +22,6 @@ public class PackageInstall extends AbstractHandler {
         IsInstalled isinstalled;
         DocumentModel tasks;
         Set<User> users;
-        Set<GlobalConfigData> config;
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
         String[] dependencies;
@@ -90,13 +88,6 @@ public class PackageInstall extends AbstractHandler {
             tasksgroups = state.data.getTasksGroups();
             if (tasksgroups.size() > 0)
                 InstallTasksGroups.init(tasksgroups, state);
-        
-            /*
-             * registra parâmetros de configuração
-             */
-            config = state.data.getGlobalConfigs();
-            if (config.size() > 0)
-                InstallGlobalConfig.init(config, state);
             
             /*
              * registra textos da aplicação

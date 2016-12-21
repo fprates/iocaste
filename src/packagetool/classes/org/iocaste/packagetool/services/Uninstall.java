@@ -64,7 +64,6 @@ public class Uninstall extends AbstractHandler {
         Query query;
         ModuleInstaller installer;
         Documents documents = (Documents)services[DOCS_LIB];
-        GlobalConfig config = (GlobalConfig)services[CONFIG_LIB];
         String modeltype = object.get("MODEL");
         String name = object.get("NAME");
         
@@ -86,10 +85,6 @@ public class Uninstall extends AbstractHandler {
             return;
         case "TSKITEM":
             Selector.removeTask(name, documents);
-            documents.delete(object);
-            return;
-        case "CONFIG_ENTRY":
-            config.remove(name);
             documents.delete(object);
             return;
         case "PACKAGE_TEXT":
