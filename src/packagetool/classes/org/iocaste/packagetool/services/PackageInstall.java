@@ -58,13 +58,6 @@ public class PackageInstall extends AbstractHandler {
             for (DataElement element : state.data.getElements())
                 Registry.add(element.getName(), "DATA_ELEMENT", state);
             
-            /*
-             * registra mensagens
-             */
-            state.messages = state.data.getMessages();
-            if (state.messages.size() > 0)
-                InstallMessages.init(state);
-            
             new Iocaste(state.function).invalidateAuthCache();
             
             /*

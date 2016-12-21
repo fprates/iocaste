@@ -68,10 +68,6 @@ public class Uninstall extends AbstractHandler {
         String name = object.get("NAME");
         
         switch (modeltype) {
-        case "MESSAGE":
-            InstallMessages.uninstall(object.getst("PACKAGE"), documents);
-            documents.delete(object);
-            return;
         case "TASK":
             query = new Query("delete");
             query.setModel("TASKS");

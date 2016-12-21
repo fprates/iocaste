@@ -44,10 +44,6 @@ public class PackageUpdate extends AbstractHandler {
         uninstall = services.get("uninstall");
         uninstall.run(state.pkgname, types);
         
-        state.messages = state.data.getMessages();
-        if (state.messages.size() > 0)
-            InstallMessages.init(state);
-        
         new Iocaste(state.function).invalidateAuthCache();
 
         links = state.data.getLinks();
