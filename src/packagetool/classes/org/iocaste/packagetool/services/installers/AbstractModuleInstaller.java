@@ -16,30 +16,39 @@ public abstract class AbstractModuleInstaller<S,T> implements ModuleInstaller {
         this.type = type;
     }
     
-    protected abstract String getObjectName(T object);
+    protected abstract String getObjectName(S key, T object);
 
     protected final String getObjectName(ExtendedObject object) {
         return object.getst("NAME");
     }
     
-    protected abstract void install(State state, T object);
+    protected abstract void install(State state, S key, T object);
     
     protected void installAll(State state, T[] objects) {
         if (!isValid(objects))
             return;
         for (T object : objects)
-            install(state, object);
+            install(state, null, object);
         for (T object : objects)
-            registry(state, object);
+            registry(state, null, object);
     }
     
     protected void installAll(State state, Collection<T> objects) {
         if (!isValid(objects))
             return;
         for (T object : objects)
-            install(state, object);
+            install(state, null, object);
         for (T object : objects)
-            registry(state, object);
+            registry(state, null, object);
+    }
+
+    protected void installAll(State state, Map<S, T> objects) throws Exception {
+        if (!isValid(objects))
+            return;
+        for (S key : objects.keySet())
+            install(state, key, objects.get(key));
+        for (S key : objects.keySet())
+            registry(state, key, objects.get(key));
     }
     
     protected final boolean isValid(T[] objects) {
@@ -54,20 +63,21 @@ public abstract class AbstractModuleInstaller<S,T> implements ModuleInstaller {
         return !(objects.size() == 0);
     }
     
-    protected final void registry(State state, T object) {
+    protected final void registry(State state, S key, T object) {
         if (type != null)
-            Registry.add(getObjectName(object), type, state);
+            Registry.add(getObjectName(key, object), type, state);
     }
     
-    protected abstract void update(State state, T object) throws Exception;
+    protected abstract void update(State state, S key, T object)
+            throws Exception;
     
     protected void updateAll(State state, Map<S, T> objects) throws Exception {
         if (!isValid(objects))
             return;
         for (S key : objects.keySet())
-            update(state, objects.get(key));
+            update(state, key, objects.get(key));
         for (S key : objects.keySet())
-            registry(state, objects.get(key));
+            registry(state, key, objects.get(key));
     }
     
     protected void updateAll(State state, Collection<T> objects)
@@ -75,9 +85,9 @@ public abstract class AbstractModuleInstaller<S,T> implements ModuleInstaller {
         if (!isValid(objects))
             return;
         for (T object : objects)
-            update(state, object);
+            update(state, null, object);
         for (T object : objects)
-            registry(state, object);
+            registry(state, null, object);
     }
 }
 

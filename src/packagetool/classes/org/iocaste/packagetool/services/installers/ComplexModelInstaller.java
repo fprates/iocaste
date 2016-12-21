@@ -15,6 +15,11 @@ public class ComplexModelInstaller
         super(services, "CMODEL");
     }
 
+    @Override
+    protected final String getObjectName(String key, ComplexModel cmodel) {
+        return cmodel.getName();
+    }
+
     public final void init(Function function) {
         if (documents == null)
             documents = new Documents(function);
@@ -26,13 +31,8 @@ public class ComplexModelInstaller
     }
 
     @Override
-    protected final String getObjectName(ComplexModel cmodel) {
-        return cmodel.getName();
-    }
-
-    @Override
-    protected final void install(State state, ComplexModel cmodel) {
-        if (documents.getComplexModel(getObjectName(cmodel)) == null)
+    protected final void install(State state, String key, ComplexModel cmodel) {
+        if (documents.getComplexModel(getObjectName(key, cmodel)) == null)
             documents.create(cmodel);
     }
 
@@ -48,7 +48,8 @@ public class ComplexModelInstaller
     }
 
     @Override
-    protected final void update(State state, ComplexModel cmodel) throws Exception {
+    protected final void update(State state, String key, ComplexModel cmodel)
+            throws Exception {
         String name = cmodel.getName();
         if (documents.getComplexModel(name) != null)
             documents.update(cmodel);

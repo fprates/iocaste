@@ -64,7 +64,7 @@ public class ModelInstaller
     }
 
     @Override
-    protected final String getObjectName(DocumentModel model) {
+    protected final String getObjectName(String key, DocumentModel model) {
         return model.getName();
     }
     
@@ -80,7 +80,7 @@ public class ModelInstaller
     }
     
     @Override
-    protected final void install(State state, DocumentModel model) {
+    protected final void install(State state, String key, DocumentModel model) {
         int i;
         List<Object[]> values;
         ExtendedObject header;
@@ -110,6 +110,7 @@ public class ModelInstaller
         }
     }
     
+    @Override
     protected final void installAll(
             State state, Map<String, DocumentModel> objects) throws Exception {
         DocumentModel[] models = prepare(objects, null, state);
@@ -149,7 +150,7 @@ public class ModelInstaller
     }
     
     @Override
-    protected final void update(State state, DocumentModel model)
+    protected final void update(State state, String key, DocumentModel model)
             throws Exception {
         int i;
         List<Object[]> values;
@@ -190,7 +191,7 @@ public class ModelInstaller
         for (String name : models.keySet()) {
             model = models.get(name);
             if (documents.getModel(name) != null) {
-                update(state, model);
+                update(state, name, model);
                 continue;
             }
             toinstall.add(name);

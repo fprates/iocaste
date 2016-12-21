@@ -17,6 +17,11 @@ public class AuthorizationInstaller
     }
 
     @Override
+    protected String getObjectName(String key, Authorization authorization) {
+        return authorization.getName();
+    }
+
+    @Override
     public final void init(Function function) {
         if (authority != null)
             return;
@@ -30,12 +35,8 @@ public class AuthorizationInstaller
     }
 
     @Override
-    protected String getObjectName(Authorization authorization) {
-        return authorization.getName();
-    }
-
-    @Override
-    protected void install(State state, Authorization authorization) {
+    protected void install(State state, String key, Authorization authorization)
+    {
         if (authority.get(authorization.getName()) == null)
             authority.save(authorization);
         authority.assign("ADMIN", "ALL", authorization);
@@ -53,9 +54,9 @@ public class AuthorizationInstaller
     }
 
     @Override
-    protected void update(State state, Authorization authorization)
+    protected void update(State state, String key, Authorization authorization)
             throws Exception {
-        install(state, authorization);
+        install(state, key, authorization);
     }
     
 }

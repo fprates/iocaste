@@ -17,9 +17,8 @@ public class NumberFactoryInstaller extends
     }
 
     @Override
-    protected String getObjectName(Map<String, Long> object) {
-        // TODO Auto-generated method stub
-        return null;
+    protected String getObjectName(String key, Map<String, Long> object) {
+        return key;
     }
 
     @Override
@@ -30,18 +29,13 @@ public class NumberFactoryInstaller extends
 
     @Override
     public void install(State state) throws Exception {
-        Map<String, Map<String, Long>> numbers;
-        Map<String, Long> factory;
-        
-        numbers = state.data.getNumberFactories();
-        for (String key : numbers.keySet()) {
-            documents.createNumberFactory(key, null, factory=numbers.get(key));
-            registry(state, factory);
-        }
+        super.installAll(state, state.data.getNumberFactories());
     }
 
     @Override
-    protected void install(State state, Map<String, Long> factory) { }
+    protected void install(State state, String key, Map<String, Long> factory) {
+        documents.createNumberFactory(key, null, factory);
+    }
 
     @Override
     public final void remove(ExtendedObject object) {
@@ -55,8 +49,7 @@ public class NumberFactoryInstaller extends
     }
 
     @Override
-    protected void update(State state, Map<String, Long> object)
-            throws Exception { }
+    protected void update(State state, String key, Map<String, Long> object) { }
     
 }
 

@@ -12,18 +12,17 @@ public class PackageInstaller extends AbstractModuleInstaller<String, String> {
     private Documents documents;
     
     public PackageInstaller(Services services) {
-        super(services, null);
+        super(services, "PACKAGE");
+    }
+
+    @Override
+    protected String getObjectName(String key, String name) {
+        return name;
     }
 
     @Override
     public void init(Function function) {
         documents = new Documents(function);
-    }
-
-    @Override
-    protected String getObjectName(String object) {
-        // TODO Auto-generated method stub
-        return null;
     }
     
     private final ExtendedObject getPackageHeader(State state, String pkgname) {
@@ -48,12 +47,12 @@ public class PackageInstaller extends AbstractModuleInstaller<String, String> {
 
     @Override
     public void install(State state) throws Exception {
-        install(state, state.pkgname);
-        registry(state, state.pkgname);
+        install(state, null, state.pkgname);
+        registry(state, null, state.pkgname);
     }
 
     @Override
-    protected void install(State state, String pkgname) {
+    protected void install(State state, String key, String pkgname) {
         ExtendedObject header;
         IsInstalled isinstalled = state.function.get("is_installed");
         
@@ -81,7 +80,8 @@ public class PackageInstaller extends AbstractModuleInstaller<String, String> {
     }
 
     @Override
-    protected void update(State state, String object) throws Exception {
+    protected void update(State state, String key, String object)
+            throws Exception {
         // TODO Auto-generated method stub
         
     }

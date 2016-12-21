@@ -30,12 +30,12 @@ public class SearchHelpInstaller
     }
 
     @Override
-    protected String getObjectName(SearchHelpData shd) {
+    protected String getObjectName(String key, SearchHelpData shd) {
         return shd.getName();
     }
 
     @Override
-    protected void install(State state, SearchHelpData shd) {
+    protected void install(State state, String key, SearchHelpData shd) {
         new SHLib(state.function).save(shd);
     }
 
@@ -51,9 +51,10 @@ public class SearchHelpInstaller
     }
 
     @Override
-    protected void update(State state, SearchHelpData shd) throws Exception {
-        shlib.remove(getObjectName(shd));
-        install(state, shd);
+    protected void update(State state, String key, SearchHelpData shd)
+            throws Exception {
+        shlib.remove(getObjectName(key, shd));
+        install(state, key, shd);
     }
     
 }
