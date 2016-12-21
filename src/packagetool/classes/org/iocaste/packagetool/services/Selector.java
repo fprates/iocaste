@@ -1,7 +1,5 @@
 package org.iocaste.packagetool.services;
 
-import java.util.Map;
-
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -20,11 +18,9 @@ public class Selector {
      */
     public static final void add(String taskname, String groupname, int count,
             State state) {
-        int counter;
-        String msgid, entryid;
+        String entryid;
         DocumentModel model;
         ExtendedObject object;
-        Map<String, String> messages;
         
         model = state.documents.getModel("TASK_ENTRY");
         entryid = String.format("%s%03d", groupname, count);
@@ -33,21 +29,6 @@ public class Selector {
         object.set("NAME", taskname);
         object.set("GROUP", groupname);
         state.documents.save(object);
-        
-        model = state.documents.getModel("TASK_ENTRY_TEXT");
-        counter = 0;
-        for (String locale : state.messages.keySet()) {
-            messages = state.messages.get(locale);
-            
-            msgid = String.format("%s%03d", taskname, counter++);
-            object = new ExtendedObject(model);
-            object.set("ID", msgid);
-            object.set("GROUP", groupname);
-            object.set("ENTRY", taskname);
-            object.set("LANGUAGE", locale);
-            object.set("TEXT", messages.get(taskname));
-            state.documents.save(object);
-        }
     }
     
     /**

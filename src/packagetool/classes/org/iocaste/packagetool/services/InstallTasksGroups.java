@@ -31,11 +31,10 @@ public class InstallTasksGroups {
             State state) throws Exception {
         int entryid;
         Query query;
-        String groupname, locale, name, message;
-        Map<String, String> itens, properties;
+        String groupname;
+        Map<String, String> itens;
         ExtendedObject group;
-        ExtendedObject[] tasks, entries, texts;
-        Map<String, Map<String, String>> messages;
+        ExtendedObject[] tasks, entries;
         
         itens = new HashMap<>();
         query = new Query();
@@ -66,16 +65,6 @@ public class InstallTasksGroups {
             entries = state.documents.select(query);
             
             if (entries != null) {
-                query = new Query();
-                query.setModel("TASK_ENTRY_TEXT");
-                query.andEqual("GROUP", groupname);
-                texts = state.documents.select(query);
-                
-                query = new Query("delete");
-                query.setModel("TASK_ENTRY_TEXT");
-                query.andEqual("GROUP", groupname);
-                state.documents.update(query);
-                
                 query = new Query("delete");
                 query.setModel("TASK_ENTRY");
                 query.andEqual("GROUP", groupname);
@@ -83,23 +72,6 @@ public class InstallTasksGroups {
 
                 for (ExtendedObject entry : entries)
                     itens.put(entry.getst("NAME"), null);
-
-                messages = state.data.getMessages();
-                if ((texts != null) && (messages != null))
-                    for (ExtendedObject text : texts) {
-                        locale = text.getst("LANGUAGE");
-                        properties = messages.get(locale);
-                        if (properties == null) {
-                            properties = new HashMap<>();
-                            messages.put(locale, properties);
-                        }
-                        
-                        name = text.getst("ENTRY");
-                        message = text.getst("TEXT");
-                        if (message == null)
-                            message = properties.get("TEXT");
-                        properties.put(name, message);
-                    }
             }
 
             /*

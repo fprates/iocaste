@@ -17,7 +17,6 @@ public class State {
     public Map<String, Set<DocumentModelItem>> shm;
     public InstallData data;
     public Function function;
-    public Map<String, Map<String, String>> messages;
     public Stack<ExtendedObject> log;
     public long pkgitem;
     public byte installed;

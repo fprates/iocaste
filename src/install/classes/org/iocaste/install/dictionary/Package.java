@@ -22,8 +22,7 @@ public class Package extends Module {
     public final List<String> install() {
         Set<String> locales;
         String country, tag;
-        Table language, messages;
-        Table package001, package002;
+        Table language, package001, package002;
         Table docs001, docs002, docs003, docs004, docs005, docs006;
         
         language = tableInstance("LANG");
@@ -37,13 +36,6 @@ public class Package extends Module {
         package002.ref("PACKG", DataType.CHAR, 60, "PACKAGE001", "IDENT");
         package002.add("INAME", DataType.CHAR, 60);
         package002.add("MODEL", DataType.CHAR, 24);
-        
-        messages = tableInstance("MSGSRC");
-        messages.key("MSGID", DataType.CHAR, 70);
-        messages.add("MSGNM", DataType.CHAR, 64);
-        messages.ref("LOCAL", DataType.CHAR, 5, "LANG", "LOCAL");
-        messages.ref("PKGNM", DataType.CHAR, 60, "PACKAGE001", "IDENT");
-        messages.add("MSGTX", DataType.CHAR, 255);
 
         docs001 = getTable("DOCS001");
         docs002 = getTable("DOCS002");
@@ -113,26 +105,6 @@ public class Package extends Module {
         insertModelItem(docs002,
                 "PACKAGE_ITEM.MODEL", "PACKAGE_ITEM", "MODEL",
                     "PACKAGE_ITEM.MODEL", null);
-        
-        /*
-         * messages
-         */
-        insertModel(docs001, docs005, "MESSAGES", "MSGSRC", null);
-        insertElement(docs003, "MESSAGES.INDEX", 0, 70, 0, false);
-        insertElement(docs003, "MESSAGES.NAME", 0, 64, 0, false);
-        insertElement(docs003, "MESSAGES.TEXT", 0, 255, 0, false);
-        insertModelKey(docs002, docs004,
-                "MESSAGES.INDEX", "MESSAGES", "MSGID", "MESSAGES.INDEX", null);
-        insertModelItem(docs002,
-                "MESSAGES.NAME", "MESSAGES", "MSGNM", "MESSAGES.NAME", null);
-        insertModelItem(docs002, docs006,
-                "MESSAGES.LOCALE", "MESSAGES", "LOCAL", "LANGUAGES.LOCALE",
-                null, "LANGUAGES.LOCALE");
-        insertModelItem(docs002, docs006,
-                "MESSAGES.PACKAGE", "MESSAGES", "PKGNM", "PACKAGE.NAME", null,
-                    "PACKAGE.NAME");
-        insertModelItem(docs002,
-                "MESSAGES.TEXT", "MESSAGES", "MSGTX", "MESSAGES.TEXT", null);
         
         return compile();
     }

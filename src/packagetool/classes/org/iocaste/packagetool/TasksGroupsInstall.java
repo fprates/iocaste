@@ -13,7 +13,7 @@ public class TasksGroupsInstall extends AbstractInstallObject {
 
     @Override
     protected void execute(StandardInstallContext context) throws Exception {
-        DataElement taskgroupname, taskentryid, entrytextid;
+        DataElement taskgroupname, taskentryid, entrytextid, text;
         ModelInstall model;
         DocumentModelItem groupname;
 
@@ -23,6 +23,8 @@ public class TasksGroupsInstall extends AbstractInstallObject {
                 "TASK_ENTRY.ID", 15, DataType.UPPERCASE);
         entrytextid = elementchar(
                 "TASK_ENTRY_TEXT", 18, DataType.UPPERCASE);
+        text = elementchar(
+                "TASK_TEXT", 64, DataType.KEEPCASE);
         
         /*
          * grupos de tarefas
@@ -56,7 +58,7 @@ public class TasksGroupsInstall extends AbstractInstallObject {
         model.item(
                 "ENTRY", "ENTRY", taskentryid);
         model.item(
-                "TEXT", "TEXT", new DummyElement("MESSAGES.TEXT"));
+                "TEXT", "TEXT", text);
     }
 
 }

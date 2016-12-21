@@ -15,7 +15,6 @@ import java.util.Properties;
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.install.DBConfig;
-import org.iocaste.install.Packages;
 import org.iocaste.install.dictionary.Core;
 import org.iocaste.install.dictionary.Documents;
 import org.iocaste.install.dictionary.Login;
@@ -24,6 +23,7 @@ import org.iocaste.install.dictionary.Package;
 import org.iocaste.install.dictionary.SH;
 import org.iocaste.kernel.common.DBNames;
 import org.iocaste.kernel.common.Table;
+import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
@@ -38,6 +38,23 @@ public class InstallContinue extends AbstractActionHandler {
         "drop database ",
         "create database ",
         "use "
+    };
+    
+    private static final String[] PACKAGES = new String[] {
+        "iocaste-packagetool",
+        "iocaste-tasksel",
+        "iocaste-setup",
+        "iocaste-appbuilder",
+        "iocaste-usereditor",
+        "iocaste-dataeditor",
+        "iocaste-datadict",
+        "iocaste-dataview",
+        "iocaste-gconfigview",
+        "iocaste-external",
+        "iocaste-copy",
+        "iocaste-upload",
+        "iocaste-masterdata",
+        "iocaste-sysconfig"
     };
     
     private static final String[] MYSQL_INIT = {
@@ -158,10 +175,25 @@ public class InstallContinue extends AbstractActionHandler {
         
         reconnectdb(context);
         if (config.option != DBConfig.CHANGE_BASE)
-            Packages.install(context.function);
+            installPackages(context);
         
         init("finish", getExtendedContext());
         redirect("finish");
+    }
+    
+    private final void installPackages(PageBuilderContext context) {
+        PackageTool pkgtool;
+        Iocaste iocaste;
+        
+        iocaste = new Iocaste(context.function);
+        iocaste.login("ADMIN", "iocaste", "pt_BR");
+        
+        pkgtool = new PackageTool(context.function);
+        for (String pkgname : PACKAGES)
+            pkgtool.install(pkgname);
+
+        iocaste.commit();
+        iocaste.disconnect();
     }
     
     private final void reconnectdb(PageBuilderContext context) {
