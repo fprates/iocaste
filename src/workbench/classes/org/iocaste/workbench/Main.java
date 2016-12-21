@@ -10,7 +10,6 @@ import org.iocaste.workbench.install.LinkInstall;
 import org.iocaste.workbench.install.ModelsInstall;
 import org.iocaste.workbench.install.ProjectHeadInstall;
 import org.iocaste.workbench.install.ProjectInstall;
-import org.iocaste.workbench.install.TextsInstall;
 import org.iocaste.workbench.install.ViewInstall;
 import org.iocaste.workbench.project.add.ProjectAddPage;
 import org.iocaste.workbench.project.java.editor.ClassEditorPage;
@@ -24,7 +23,7 @@ public class Main extends AbstractPageBuilder {
         StandardPanel panel = new StandardPanel(context);
         Context extcontext = new Context(context);
         
-        new Messages(context.messages);
+        messages(new Messages());
         panel.instance("main",
                 new MainPage(), extcontext);
         panel.instance("project_add",
@@ -50,7 +49,6 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.setLink("WBDSPTCHR", "iocaste-workbench");
         defaultinstall.addToTaskGroup("DEVELOP", "WBDSPTCHR");
         
-        installObject("messages", new TextsInstall());
         installObject("projecthd", new ProjectHeadInstall());
         installObject("data_elements", new DataElementsInstall());
         installObject("models", new ModelsInstall());

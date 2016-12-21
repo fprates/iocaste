@@ -18,7 +18,8 @@ public class Main extends AbstractPageBuilder {
     public void config(PageBuilderContext context) throws Exception {
         Context extcontext;
         StandardPanel panel;
-        
+
+        messages(new Messages());
         extcontext = new Context(context);
         panel = new StandardPanel(context);
         panel.instance("main", new MainPage(), extcontext);
@@ -34,8 +35,6 @@ public class Main extends AbstractPageBuilder {
         // link
         defaultinstall.setLink("TESTE", "externaltest");
         defaultinstall.addToTaskGroup("TESTE", "TESTE");
-        
-        installObject("main", new Install());
     }
 }
 

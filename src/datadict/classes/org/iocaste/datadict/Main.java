@@ -16,7 +16,7 @@ public class Main extends AbstractPageBuilder {
         StandardPanel panel;
         Context extcontext = new Context(context);
         
-        new Messages(context.messages);
+        messages(new Messages());
         panel = new StandardPanel(context);
         panel.instance(MAIN, new MainPanel(), extcontext);
         panel.instance(STRUCTURE, new StructurePanel(), extcontext);
@@ -29,7 +29,6 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.setProfile("DEVELOP");
         defaultinstall.setProgramAuthorization("DDICT.EXECUTE");
         
-        installObject("texts", new TextsInstall());
         installObject("models", new ModelsInstall());
     }
     

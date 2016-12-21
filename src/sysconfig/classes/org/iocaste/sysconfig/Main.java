@@ -11,7 +11,7 @@ public class Main extends AbstractPageBuilder {
     public void config(PageBuilderContext context) throws Exception {
         StandardPanel panel;
         
-        new Messages(context.messages);
+        messages(new Messages());
         panel = new StandardPanel(context);
         panel.instance("main", new MainPanel(), new Context(context));
         context.getView("main").run("load", context);
@@ -24,7 +24,6 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.addToTaskGroup("ADMIN", "SYSCFG");
         defaultinstall.setProfile("ADMIN");
         defaultinstall.setProgramAuthorization("SYSCFG");
-        installObject("messages", new MessageInstall());
     }
 
 }

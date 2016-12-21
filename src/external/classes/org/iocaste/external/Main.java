@@ -13,7 +13,6 @@ import org.iocaste.appbuilder.common.cmodelviewer.Save;
 import org.iocaste.appbuilder.common.cmodelviewer.Validate;
 import org.iocaste.external.install.FunctionsInstall;
 import org.iocaste.external.install.PortsInstall;
-import org.iocaste.external.install.TextsInstall;
 
 public class Main extends AbstractModelViewer {
 
@@ -34,6 +33,7 @@ public class Main extends AbstractModelViewer {
     public void config(PageBuilderContext context) throws Exception {
         AppBuilderLink link;
         
+        messages(new Messages());
         link = getReceivedLink();
         switch (link.entity) {
         case "externalstruct":
@@ -84,7 +84,6 @@ public class Main extends AbstractModelViewer {
         link.taskgroup = "EXTERNAL";
         link.entity = "externalfunction";
 
-        installObject("texts", new TextsInstall());
         installObject("functions", new FunctionsInstall());
         installObject("ports", new PortsInstall());
     }

@@ -11,10 +11,8 @@ import org.iocaste.appbuilder.common.cmodelviewer.MaintenancePage;
 import org.iocaste.appbuilder.common.cmodelviewer.Save;
 import org.iocaste.appbuilder.common.cmodelviewer.Validate;
 import org.iocaste.appbuilder.install.PortalInstall;
-import org.iocaste.appbuilder.install.TextsInstall;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.shell.common.MessageSource;
 
 public class Main extends AbstractModelViewer {
     
@@ -28,7 +26,7 @@ public class Main extends AbstractModelViewer {
         if (msgsource != null)
             setMessageSource(msgsource);
         
-        new Messages(context.messages);
+        messages(new Messages());
         link.updateload = new Load(link.edit1view);
         link.displayload = new Load(link.display1view);
         link.validate = new Validate();
@@ -53,17 +51,6 @@ public class Main extends AbstractModelViewer {
         defaultinstall.setProfile("APPBUILDER");
         defaultinstall.setProgramAuthorization("APPBUILDER.EXECUTE");
         
-        installObject("messages", new TextsInstall());
         installObject("portal", new PortalInstall());
-    }
-}
-
-class Messages {
-    
-    public Messages(MessageSource messages) {
-        messages.instance("pt_BR");
-        messages.put("code.exists", "Documento já existe.");
-        messages.put("invalid.code", "Código de documento inválido.");
-        messages.put("record.saved", "Documento %s gravado com sucesso.");
     }
 }

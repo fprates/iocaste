@@ -1,8 +1,5 @@
 package org.iocaste.appbuilder.common;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -14,11 +11,6 @@ import org.iocaste.packagetool.common.InstallData;
 public abstract class AbstractInstallObject {
     private StandardInstallContext context;
     private InstallData data;
-    private Map<String, MessagesInstall> messages;
-    
-    public AbstractInstallObject() {
-        messages = new HashMap<>();
-    }
     
     protected final ComplexModelInstall cmodelInstance(String name) {
         return new ComplexModelInstall(name, context);
@@ -84,17 +76,6 @@ public abstract class AbstractInstallObject {
     
     protected final DocumentModelItem getItem(String name) {
         return context.getItem(name);
-    }
-    
-    protected final MessagesInstall messageInstance(String language) {
-        MessagesInstall install = messages.get(language);
-        
-        if (install == null) {
-            install = new MessagesInstall(data, language);
-            messages.put(language, install);
-        }
-        
-        return install;
     }
     
     protected final ModelInstall modelInstance(String name) {

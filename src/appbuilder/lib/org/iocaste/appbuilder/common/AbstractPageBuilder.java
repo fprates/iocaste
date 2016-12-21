@@ -10,6 +10,8 @@ import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.messages.AbstractMessages;
+import org.iocaste.shell.common.messages.GetMessages;
 
 public abstract class AbstractPageBuilder extends AbstractPage {
     private static final String SERVICE = "/iocaste-appbuilder/services.html";
@@ -22,6 +24,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     public AbstractPageBuilder() {
         export("install", "install");
         export("fields_properties_get", new GetFieldsProperties());
+        export("messages_get", new GetMessages());
         validators = new HashMap<>();
     }
     
@@ -86,6 +89,13 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     protected final void installObject(
             String name, AbstractInstallObject object) {
         installcontext.put(name, object);
+    }
+    
+    protected final void messages(AbstractMessages messages) {
+        GetMessages messagesget = get("messages_get");
+        messagesget.set(messages);
+        messages.setContext(context);
+        messages.entries();
     }
     
     private final void reassignCustomActions(PageBuilderContext context) {

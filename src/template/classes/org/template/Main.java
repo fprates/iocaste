@@ -16,6 +16,7 @@ public class Main extends AbstractPageBuilder {
     @Override
     public void config(PageBuilderContext context) throws Exception {
         StandardPanel panel = new StandardPanel(context);
+        messages(new Messages());
         panel.instance("main", new MainPage());
     }
 

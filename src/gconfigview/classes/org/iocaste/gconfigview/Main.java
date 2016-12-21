@@ -18,6 +18,7 @@ public class Main extends AbstractPageBuilder {
         StandardPanel panel;
         Context extcontext;
         
+        messages(new Messages());
         extcontext = new Context(context);
         panel = new StandardPanel(context);
         panel.instance("main", new MainPage(), extcontext);
@@ -32,8 +33,6 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.addToTaskGroup("ADMIN", "GCONFIGVIEW");
         defaultinstall.setProfile("ADMIN");
         defaultinstall.setProgramAuthorization("GCONFIGVIEW");
-        
-        installObject("texts", new TextsInstall());
     }
 }
 

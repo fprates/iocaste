@@ -1,20 +1,23 @@
 package org.iocaste.datadict;
 
-import org.iocaste.shell.common.MessageSource;
+import org.iocaste.shell.common.messages.AbstractMessages;
 
-public class Messages {
+public class Messages extends AbstractMessages {
 
-    public Messages(MessageSource messages) {
-        messages.instance("pt_BR");
-        messages.put("DECIMALS", "Decimais");
-        messages.put("ELEMENT", "Elemento de dados");
-        messages.put("FIELDNAME", "Campo de tabela");
-        messages.put("iocaste-datadict", "Dicionário de dados");
-        messages.put("KEY", "Chave");
-        messages.put("LENGTH", "Comprimento");
-        messages.put("MODEL", "Modelo");
-        messages.put("show", "Exibir");
-        messages.put("TABLE", "Tabela");
-        messages.put("TYPE", "Tipo");
+    @Override
+    public void entries() {
+        locale("pt_BR");
+        put("DECIMALS", "Decimais");
+        put("ELEMENT", "Elemento de dados");
+        put("FIELDNAME", "Campo de tabela");
+        put("iocaste-datadict", "Dicionário de dados");
+        put("KEY", "Chave");
+        put("LENGTH", "Comprimento");
+        put("NAME", "Nome");
+        put("MODEL", "Modelo");
+        put("SE11", "Editor de modelos de dados");
+        put("show", "Exibir");
+        put("TABLE", "Tabela");
+        put("TYPE", "Tipo");
     }
 }

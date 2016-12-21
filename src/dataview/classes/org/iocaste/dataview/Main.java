@@ -16,6 +16,7 @@ public class Main extends AbstractPageBuilder {
         Context extcontext;
         
         extcontext = new Context(context);
+        messages(new Messages());
         
         panel = new StandardPanel(context);
         panel.instance("main", new MainPage(), extcontext);
@@ -31,7 +32,5 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.addToTaskGroup("DEVELOP", "SE16");
         defaultinstall.setProfile("DEVELOP");
         defaultinstall.setProgramAuthorization("DATAVIEWER");
-        
-        installObject("main", new Install());
     }
 }

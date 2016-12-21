@@ -26,7 +26,7 @@ public class Main extends AbstractPageBuilder {
         
         extcontext = new Context(context);
         reload(context, extcontext);
-        new Messages(context.messages);
+        messages(new Messages());
         
         panel = new StandardPanel(context);
         panel.instance("main", new MainPanel(), extcontext);
@@ -45,7 +45,6 @@ public class Main extends AbstractPageBuilder {
         installObject("tasksgroups", new TasksGroupsInstall());
         installObject("usergroups", new UserTaskGroupsInstall());
         installObject("package", new PackageInstall());
-        installObject("messages", new TextsInstall());
     }
     
     public static final void registerException(

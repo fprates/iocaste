@@ -26,7 +26,6 @@ public class InstallData implements Serializable {
     private Map<String, Map<String, Long>> numbers;
     private List<SearchHelpData> shds;
     private List<DataElement> elements;
-    private Map<String, Map<String, String>> messages;
     private List<Authorization> authorizations;
     private Map<TaskGroup, Set<User>> tasksgroups;
     private String[] dependencies;
@@ -41,7 +40,6 @@ public class InstallData implements Serializable {
         numbers = new HashMap<>();
         shds = new ArrayList<>();
         elements = new ArrayList<>();
-        messages = new HashMap<>();
         authorizations = new ArrayList<>();
         tasksgroups = new HashMap<>();
         cmodels = new TreeSet<>();
@@ -222,14 +220,6 @@ public class InstallData implements Serializable {
     
     /**
      * 
-     * @return
-     */
-    public final Map<String, Map<String, String>> getMessages() {
-        return messages;
-    }
-    
-    /**
-     * 
      * @param name
      * @param tablename
      * @param classname
@@ -309,15 +299,5 @@ public class InstallData implements Serializable {
      */
     public final void setDependencies(String... dependencies) {
         this.dependencies = dependencies;
-    }
-    
-    /**
-     * 
-     * @param language
-     * @param messages
-     */
-    public final void setMessages(String language, Map<String, String> messages)
-    {
-        this.messages.put(language, messages);
     }
 }

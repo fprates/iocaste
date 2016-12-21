@@ -24,7 +24,8 @@ public class Main extends AbstractPageBuilder {
         AbstractActionHandler load;
         StandardPanel panel;
         Context extcontext = new Context(context);
-        
+
+        messages(new Messages());
         extcontext.action = getParameter("action");
         extcontext.model = getParameter("model");
         extcontext.number = getParameter("number");
@@ -76,8 +77,6 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.setProgramAuthorization("DATAEDITOR");
         defaultinstall.addToTaskGroup("DEVELOP", "SM30");
         defaultinstall.setProfile("DEVELOP");
-        
-        installObject("messages", new TextsInstall());
     }
 }
 

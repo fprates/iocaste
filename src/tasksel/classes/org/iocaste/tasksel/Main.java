@@ -33,6 +33,7 @@ public class Main extends AbstractPageBuilder {
         Context extcontext;
         AbstractPanelPage tasks;
         
+        messages(new Messages());
         extcontext = new Context(context);
         entries = getLists();
         this.context = context;

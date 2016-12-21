@@ -39,13 +39,12 @@ public class Main extends AbstractPageBuilder {
     public void config(PageBuilderContext context) throws Exception {
         StandardPanel panel;
         Context extcontext;
-        
+
+        messages(new Messages());
         extcontext = new Context(context);
         panel = new StandardPanel(context);
         panel.instance("main", new MainPage(), extcontext);
         panel.instance("ns", new NSInputPage());
-        
-        new Messages(context.messages);
     }
 
 }

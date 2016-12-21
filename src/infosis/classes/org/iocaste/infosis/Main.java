@@ -3,7 +3,6 @@ package org.iocaste.infosis;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 
@@ -27,6 +26,7 @@ public class Main extends AbstractPageBuilder {
         
         panel = new StandardPanel(context);
         panel.instance(MAIN, new MainPage(), new Context(context));
+        messages(new Messages());
 //        int i;
 //        ViewContext view;
 //        Context extcontext = new Context();
@@ -59,7 +59,6 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.addToTaskGroup("ADMIN", "SYSINFO");
         
         installObject("models", new ModelsInstall());
-        installObject("messages", new MessagesInstall());
     }
 }
 
