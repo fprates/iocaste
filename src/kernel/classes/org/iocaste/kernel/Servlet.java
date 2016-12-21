@@ -99,7 +99,7 @@ public class Servlet extends AbstractIocasteServlet {
         
         isconnected = session.get("is_connected");
         if (!(boolean)isconnected.run(message))
-            throw new IocasteException(new StringBuilder(message.getId()).
-                    append("() denied: invalid session.").toString());
+            throw new IocasteException(
+                    "%s() denied: invalid session.", message.getId());
     }
 }
