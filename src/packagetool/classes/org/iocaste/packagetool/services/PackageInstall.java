@@ -15,7 +15,6 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
-import org.iocaste.protocol.user.UserProfile;
 
 public class PackageInstall extends AbstractHandler {
     
@@ -25,7 +24,6 @@ public class PackageInstall extends AbstractHandler {
         DocumentModel tasks;
         Set<User> users;
         Set<GlobalConfigData> config;
-        Map<UserProfile, Set<User>> profiles;
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
         String[] dependencies;
@@ -77,10 +75,6 @@ public class PackageInstall extends AbstractHandler {
             state.messages = state.data.getMessages();
             if (state.messages.size() > 0)
                 InstallMessages.init(state);
-            
-            profiles = state.data.getUserProfiles();
-            if (profiles.size() > 0)
-                InstallAuthorizations.init(profiles, state);
             
             new Iocaste(state.function).invalidateAuthCache();
             

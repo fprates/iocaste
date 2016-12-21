@@ -12,6 +12,7 @@ import org.iocaste.packagetool.services.installers.ModuleInstaller;
 import org.iocaste.packagetool.services.installers.NumberFactoryInstaller;
 import org.iocaste.packagetool.services.installers.PackageInstaller;
 import org.iocaste.packagetool.services.installers.SearchHelpInstaller;
+import org.iocaste.packagetool.services.installers.UserProfileInstaller;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
@@ -32,7 +33,7 @@ public class Services extends AbstractFunction {
         new NumberFactoryInstaller(this);
         new SearchHelpInstaller(this);
         new AuthorizationInstaller(this);
-//        new UserProfileInstaller(installers);
+        new UserProfileInstaller(this);
 //        new LinkInstaller(installers);
 //        new TaskGroupInstaller(installers);
 //        new TaskGroupItemInstaller(installers);

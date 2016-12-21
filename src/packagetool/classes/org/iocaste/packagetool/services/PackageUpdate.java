@@ -13,7 +13,6 @@ import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
-import org.iocaste.protocol.user.UserProfile;
 
 public class PackageUpdate extends AbstractHandler {
 
@@ -23,7 +22,6 @@ public class PackageUpdate extends AbstractHandler {
         Set<String> types;
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
-        Map<UserProfile, Set<User>> profiles;
         DocumentModel tasks;
         State state;
         Services services;
@@ -41,8 +39,6 @@ public class PackageUpdate extends AbstractHandler {
         
         types = new HashSet<>();
         types.add("MESSAGE");
-        types.add("STYLE");
-        types.add("AUTH_PROFILE");
         types.add("TSKGROUP");
         types.add("TSKITEM");
         types.add("TASK");
@@ -53,10 +49,6 @@ public class PackageUpdate extends AbstractHandler {
         state.messages = state.data.getMessages();
         if (state.messages.size() > 0)
             InstallMessages.init(state);
-        
-        profiles = state.data.getUserProfiles();
-        if (profiles.size() > 0)
-            InstallAuthorizations.init(profiles, state);
         
         new Iocaste(state.function).invalidateAuthCache();
 
