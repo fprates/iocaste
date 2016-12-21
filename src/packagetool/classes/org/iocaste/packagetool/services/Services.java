@@ -38,7 +38,6 @@ public class Services extends AbstractFunction {
 //        new TaskGroupInstaller(installers);
 //        new TaskGroupItemInstaller(installers);
         new GlobalConfigInstaller(this);
-//        new TextInstaller(installers);
         new PackageInstaller(this);
     }
     

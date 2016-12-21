@@ -3,11 +3,8 @@ package org.iocaste.texteditor.common;
 import java.io.File;
 import java.util.Map;
 
-import org.iocaste.packagetool.common.InstallData;
-import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
-import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.InputComponent;
@@ -15,15 +12,17 @@ import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.TextArea;
 
 public class TextEditorTool extends AbstractServiceInterface {
+    private static final String TXTEDITOR_SERVERNAME =
+            "/iocaste-texteditor/services.html";
     private AbstractContext context;
     public TextEditorTool tetool;
     
     public TextEditorTool(Function function) {
-        initService(context.function, InstallData.TXTEDITOR_SERVERNAME);
+        initService(context.function, TXTEDITOR_SERVERNAME);
     }
     
     public TextEditorTool(AbstractContext context) {
-        initService(context.function, InstallData.TXTEDITOR_SERVERNAME);
+        initService(context.function, TXTEDITOR_SERVERNAME);
         this.context = context;
     }
     
@@ -80,13 +79,9 @@ public class TextEditorTool extends AbstractServiceInterface {
     }
     
     public final void register(String name) {
-        String app;
-        Iocaste iocaste = new Iocaste(context.function);
-        InstallData data = new InstallData();
-        
-        data.addText(name);
-        app = iocaste.getCurrentApp();
-        new PackageTool(context.function).install(data, app);
+        Message message = new Message("register");
+        message.add("name", name);
+        call(message);
     }
     
     public final void remove(String textobj, String page) {
@@ -104,6 +99,12 @@ public class TextEditorTool extends AbstractServiceInterface {
     
     public final void setEnabled(TextEditor editor, boolean enabled) {
         context.view.getElement(editor.getName()).setEnabled(enabled);
+    }
+    
+    public final void unregister(String name) {
+        Message message = new Message("unregister");
+        message.add("name", name);
+        call(message);
     }
     
     public final void update(TextEditor editor, String textnm) {

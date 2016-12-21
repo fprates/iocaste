@@ -25,7 +25,6 @@ public class PackageInstall extends AbstractHandler {
         Map<TaskGroup, Set<User>> tasksgroups;
         String[] dependencies;
         State state;
-        Set<String> texts;
         Services function;
         ModuleInstaller installer;
         Documents documents;
@@ -80,13 +79,6 @@ public class PackageInstall extends AbstractHandler {
             tasksgroups = state.data.getTasksGroups();
             if (tasksgroups.size() > 0)
                 InstallTasksGroups.init(tasksgroups, state);
-            
-            /*
-             * registra textos da aplicação
-             */
-            texts = state.data.getTexts();
-            if (texts.size() > 0)
-                InstallTexts.init(texts, state);
             
             /*
              * grava itens instalados

@@ -87,10 +87,6 @@ public class Uninstall extends AbstractHandler {
             Selector.removeTask(name, documents);
             documents.delete(object);
             return;
-        case "PACKAGE_TEXT":
-            InstallTexts.uninstall(name, function);
-            documents.delete(object);
-            return;
         case "DATA_ELEMENT":
             documents.delete(object);
             return;
