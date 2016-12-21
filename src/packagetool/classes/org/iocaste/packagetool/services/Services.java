@@ -30,7 +30,6 @@ public class Services extends AbstractFunction {
         installers = new LinkedHashMap<>();
         new ModelInstaller(this);
         new ComplexModelInstaller(this);
-//        new UsersInstaller(installers);
         new NumberFactoryInstaller(this);
         new SearchHelpInstaller(this);
         new AuthorizationInstaller(this);

@@ -21,7 +21,6 @@ public class PackageInstall extends AbstractHandler {
     public Object run(Message message) throws Exception {
         IsInstalled isinstalled;
         DocumentModel tasks;
-        Set<User> users;
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
         String[] dependencies;
@@ -56,13 +55,6 @@ public class PackageInstall extends AbstractHandler {
                 installer.install(state);
                 state.installed++;
             }
-            
-            /*
-             * insere usuários
-             */
-            users = state.data.getUsers();
-            if (users.size() > 0)
-                InstallUsers.init(users, state);
             
             for (DataElement element : state.data.getElements())
                 Registry.add(element.getName(), "DATA_ELEMENT", state);

@@ -33,7 +33,6 @@ public class InstallData implements Serializable {
     private Map<TaskGroup, Set<User>> tasksgroups;
     private String[] dependencies;
     private Set<ComplexModel> cmodels;
-    private Set<User> users;
     private Map<UserProfile, Set<User>> uprofiles;
     private Set<GlobalConfigData> globalcfg;
     private Set<String> texts;
@@ -49,7 +48,6 @@ public class InstallData implements Serializable {
         authorizations = new ArrayList<>();
         tasksgroups = new HashMap<>();
         cmodels = new TreeSet<>();
-        users = new TreeSet<>();
         uprofiles = new HashMap<>();
         globalcfg = new HashSet<>();
         texts = new HashSet<>();
@@ -106,14 +104,6 @@ public class InstallData implements Serializable {
      */
     public final void add(SearchHelpData shd) {
         shds.add(shd);
-    }
-    
-    /**
-     * 
-     * @param user
-     */
-    public final void add(User user) {
-        users.add(user);
     }
     
     /**
@@ -313,14 +303,6 @@ public class InstallData implements Serializable {
      */
     public final Map<UserProfile, Set<User>> getUserProfiles() {
         return uprofiles;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final Set<User> getUsers() {
-        return users;
     }
     
     /**
