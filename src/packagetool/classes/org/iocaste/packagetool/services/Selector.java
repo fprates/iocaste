@@ -53,6 +53,7 @@ public class Selector {
         object.set("ID", groupid);
         object.set("USERNAME", username);
         object.set("GROUP", groupname);
+        object.set("PACKAGE", state.pkgname);
         if (state.documents.save(object) == 0)
             throw new IocasteException("error on assign group");
     }
