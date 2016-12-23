@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.StyleSheet;
 
@@ -13,10 +14,22 @@ public class PageBuilderContext extends AbstractContext {
     public Object[][] ncsheet, ncspec, ncconfig;
     public StyleSheet stylesheet;
     public Map<String, Object[]> styles;
+    public Map<String, Object[]> panels;
     
     public PageBuilderContext() {
         viewcontexts = new HashMap<>();
         styles = new HashMap<>();
+        panels = new HashMap<>();
+    }
+
+    public final void add(
+            String page, AbstractPanelPage panel) {
+        add(page, panel, null);
+    }
+    
+    public final void add(
+            String page, AbstractPanelPage panel, ExtendedContext extcontext) {
+        panels.put(page, new Object[] {panel, extcontext});
     }
     
     /**
