@@ -1,12 +1,12 @@
 package org.iocaste.dataview;
 
-import org.iocaste.shell.common.messages.AbstractMessages;
+import org.iocaste.shell.common.MessageSource;
 
-public class Messages extends AbstractMessages {
+public class Messages extends MessageSource {
 
     @Override
     public void entries() {
-        locale("pt_BR");
+        instance("pt_BR");
         put("continuesel", "Continuar");
         put("dataview-selection", "Seleção de modelo");
         put("invalid.model", "Modelo inválido.");

@@ -33,8 +33,10 @@ public class Main extends AbstractModelViewer {
     public void config(PageBuilderContext context) throws Exception {
         AppBuilderLink link;
         
-        messages(new Messages());
+        context.messages = new Messages();
         link = getReceivedLink();
+        if (link == null)
+            return;
         switch (link.entity) {
         case "externalstruct":
             link.validate = new Validate();

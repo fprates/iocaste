@@ -9,11 +9,14 @@ import org.iocaste.shell.common.View;
 public class Main extends AbstractPage {
     private Context context;
     
+    @SuppressWarnings("unchecked")
+    public final <T extends AbstractContext> T configOnly() {
+        return (T)new Context();
+    }
+    
     @Override
     public final AbstractContext init(View view) {
-        context = new Context();
-        
-        return context;
+        return configOnly();
     }
     
     public void main() {

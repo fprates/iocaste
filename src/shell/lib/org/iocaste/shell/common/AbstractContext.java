@@ -5,8 +5,4 @@ public abstract class AbstractContext {
     public AbstractPage function;
     public String action, control;
     public MessageSource messages;
-    
-    public AbstractContext() {
-        messages = new MessageSource();
-    }
 }

@@ -1,6 +1,4 @@
-package org.iocaste.dataeditor;
-
-import java.util.Map;
+package org.iocaste.dataeditor.display;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.FieldProperty;
@@ -9,7 +7,8 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
-import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.dataeditor.Context;
+import org.iocaste.dataeditor.TableConfig;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 
@@ -70,12 +69,4 @@ public class DisplayConfig extends AbstractViewConfig {
         ttcolumn.componenttype = property.type;
         ttcolumn.values = property.values;
     }
-}
-
-class TableConfig {
-    public byte mode;
-    public boolean mark;
-    public PageBuilderContext context;
-    public Map<String, FieldProperty> properties;
-    public DocumentModel model;
 }

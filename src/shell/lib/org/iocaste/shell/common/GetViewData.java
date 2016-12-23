@@ -87,7 +87,7 @@ public class GetViewData extends AbstractHandler {
                 setLocaleForElement(container, view.getLocale());
         }
         
-        if (context.messages.size() > 0)
+        if ((context.messages != null) && (context.messages.size() > 0))
             fillTranslations(view, context);
         
         state.parameters.clear();

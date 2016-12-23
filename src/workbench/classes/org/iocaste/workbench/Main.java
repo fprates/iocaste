@@ -3,7 +3,6 @@ package org.iocaste.workbench;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.workbench.install.ClassesPackageInstall;
 import org.iocaste.workbench.install.DataElementsInstall;
 import org.iocaste.workbench.install.LinkInstall;
@@ -20,25 +19,24 @@ public class Main extends AbstractPageBuilder {
     
     @Override
     public void config(PageBuilderContext context) {
-        StandardPanel panel = new StandardPanel(context);
         Context extcontext = new Context(context);
         
-        messages(new Messages());
-        panel.instance("main",
+        context.messages = new Messages();
+        context.add("main",
                 new MainPage(), extcontext);
-        panel.instance("project_add",
+        context.add("project_add",
                 new ProjectAddPage(), extcontext);
-        panel.instance("project_viewer",
+        context.add("project_viewer",
                 new ProjectViewer(), extcontext);
-        panel.instance("model_item_editor",
+        context.add("model_item_editor",
                 new ProjectItemEditor("model_item", null), extcontext);
-        panel.instance("view_item_editor",
+        context.add("view_item_editor",
                 new ProjectItemEditor("view_item", "actions"), extcontext);
-        panel.instance("package_item_editor",
+        context.add("package_item_editor",
                 new ProjectItemEditor("package_item", null), extcontext);
-        panel.instance("spec_config_editor",
+        context.add("spec_config_editor",
                 new ProjectItemEditor("spec_config", "tool_item"), extcontext);
-        panel.instance("class-editor",
+        context.add("class-editor",
                 new ClassEditorPage(), extcontext);
     }
 

@@ -1,12 +1,12 @@
 package org.iocaste.tasksel;
 
-import org.iocaste.shell.common.messages.AbstractMessages;
+import org.iocaste.shell.common.MessageSource;
 
-public class Messages extends AbstractMessages {
+public class Messages extends MessageSource {
 
     @Override
     public void entries() {
-        locale("pt_BR");
+        instance("pt_BR");
         put("command", "Comando");
         put("command.not.found", "Comando não encontrado.");
         put("not.authorized", "Sem autorização para executar.");

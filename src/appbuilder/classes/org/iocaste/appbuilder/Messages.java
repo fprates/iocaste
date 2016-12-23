@@ -1,11 +1,11 @@
 package org.iocaste.appbuilder;
 
-import org.iocaste.shell.common.messages.AbstractMessages;
+import org.iocaste.shell.common.MessageSource;
 
-class Messages extends AbstractMessages {
+class Messages extends MessageSource {
     
     public final void entries() {
-        locale("pt_BR");
+        instance("pt_BR");
         put("basetab", "Dados base");
         put("code.exists", "Documento já existe.");
         put("create", "Criar");

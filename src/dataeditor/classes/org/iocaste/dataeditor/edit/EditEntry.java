@@ -1,4 +1,4 @@
-package org.iocaste.dataeditor;
+package org.iocaste.dataeditor.edit;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;

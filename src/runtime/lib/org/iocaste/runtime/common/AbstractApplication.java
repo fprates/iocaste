@@ -39,6 +39,13 @@ public abstract class AbstractApplication extends AbstractPage {
     
     public abstract void config(PageBuilderContext context) throws Exception;
     
+    @SuppressWarnings("unchecked")
+    public final <T extends AbstractContext> T configOnly() {
+        context = new PageBuilderContext();
+        context.function = this;
+        return (T)context;
+    }
+    
     public void config(GetFieldsProperties config) { };
     
     protected final void description(String name, String model, String field) {

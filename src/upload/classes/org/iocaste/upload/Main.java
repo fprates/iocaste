@@ -40,7 +40,7 @@ public class Main extends AbstractPageBuilder {
         StandardPanel panel;
         Context extcontext;
 
-        messages(new Messages());
+        context.messages = new Messages();
         extcontext = new Context(context);
         panel = new StandardPanel(context);
         panel.instance("main", new MainPage(), extcontext);

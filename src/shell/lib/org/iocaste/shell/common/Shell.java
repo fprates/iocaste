@@ -2,7 +2,9 @@ package org.iocaste.shell.common;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
@@ -10,6 +12,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
+import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 
 /**
@@ -136,6 +139,27 @@ public class Shell extends AbstractServiceInterface {
      */
     public final String getLoginApp() {
         return call(new Message("login_app_get"));
+    }
+    
+    public static final Map<String, String> getMessages(
+            Function function, String locale, String packagename) {
+        GenericService service;
+        String servername;
+        String[][] messages;
+        Map<String, String> _messages;
+        Message message = new Message("messages_get");
+        
+        message.add("locale", locale);
+        servername = String.format("/%s/view.html", packagename);
+        service = new GenericService(function, servername);
+        messages = service.invoke(message);
+        if (messages == null)
+            return null;
+        
+        _messages = new HashMap<>();
+        for (int i = 0; i < messages.length; i++)
+            _messages.put(messages[i][0], messages[i][1]);
+        return _messages;
     }
     
     /**

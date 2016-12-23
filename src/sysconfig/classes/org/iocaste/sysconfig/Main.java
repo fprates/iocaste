@@ -11,7 +11,7 @@ public class Main extends AbstractPageBuilder {
     public void config(PageBuilderContext context) throws Exception {
         StandardPanel panel;
         
-        messages(new Messages());
+        context.messages = new Messages();
         panel = new StandardPanel(context);
         panel.instance("main", new MainPanel(), new Context(context));
         context.getView("main").run("load", context);

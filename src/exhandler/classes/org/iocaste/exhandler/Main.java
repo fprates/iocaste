@@ -3,13 +3,11 @@ package org.iocaste.exhandler;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.panel.StandardPanel;
 
 public class Main extends AbstractPageBuilder {
 
     @Override
     public void config(PageBuilderContext context) throws Exception {
-        StandardPanel panel;
         Context extcontext;
         
         extcontext = new Context(context);
@@ -26,9 +24,7 @@ public class Main extends AbstractPageBuilder {
         extcontext.messages.put("view-elements", "Elementos da visão afetada");
         extcontext.messages.put("no.view.information",
                 "Sem informações da visão\n");
-        
-        panel = new StandardPanel(context);
-        panel.instance("main", new MainPage(), extcontext);
+        context.add("main", new MainPage(), extcontext);
     }
 
     @Override

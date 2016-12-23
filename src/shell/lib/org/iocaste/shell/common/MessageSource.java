@@ -13,12 +13,16 @@ import java.util.Properties;
  * @author francisco.prates
  *
  */
-public final class MessageSource {
+public class MessageSource {
     private Map<String, Properties> messages;
     private String locale;
     
     public MessageSource() {
         messages = new HashMap<>();
+    }
+    
+    public void entries() {
+        
     }
     
     /**
@@ -39,6 +43,10 @@ public final class MessageSource {
      */
     public final String get(String name, String default_) {
         return messages.get(locale).getProperty(name, default_);
+    }
+    
+    public final Properties getMessages(String locale) {
+        return messages.get(locale);
     }
     
     public final void instance(String locale) {

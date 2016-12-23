@@ -30,15 +30,16 @@ public class Main extends AbstractPage {
         setReloadableView(false);
     }
     
+    @SuppressWarnings("unchecked")
+    public final <T extends AbstractContext> T configOnly() {
+        context = new Context();
+        context.messages = new Messages();
+        return (T)context;
+    }
+    
     @Override
     public final AbstractContext init(View view) {
-        Messages messages;
-        
-        context = new Context();
-        messages = new Messages();
-        messages.setContext(context);
-        messages.entries();
-        return context;
+        return configOnly();
     }
     
     public void main() throws Exception {

@@ -12,9 +12,14 @@ public class Main extends AbstractPage {
         export("install", "install");
     }
     
+    @SuppressWarnings("unchecked")
+    public final <T extends AbstractContext> T configOnly() {
+        return (T)new Context();
+    }
+    
     @Override
     public final AbstractContext init(View view) {
-        return new Context();
+        return configOnly();
     }
     
     public final InstallData install(Message message) {

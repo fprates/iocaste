@@ -1,7 +1,9 @@
-package org.iocaste.dataeditor;
+package org.iocaste.dataeditor.edit;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.dataeditor.TableConfig;
+import org.iocaste.dataeditor.display.DisplayConfig;
 
 public class EditConfig extends DisplayConfig {
 

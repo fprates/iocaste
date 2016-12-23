@@ -66,6 +66,12 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
+     * 
+     * @return
+     */
+    public abstract <T extends AbstractContext> T configOnly();
+    
+    /**
      * Não salva página na pilha de chamada.
      */
     public final void dontPushPage() {

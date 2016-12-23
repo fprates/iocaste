@@ -2,46 +2,47 @@ package org.iocaste.install;
 
 import org.iocaste.shell.common.MessageSource;
 
-public class Messages {
+public class Messages extends MessageSource {
 
-    public Messages(MessageSource source) {
-        source.instance("pt_BR");
-        source.put("chngbase", "Apenas aponta para novo banco");
-        source.put("config", "Dados da instalação");
+    @Override
+    public final void entries() {
+        instance("pt_BR");
+        put("chngbase", "Apenas aponta para novo banco");
+        put("config", "Dados da instalação");
 
-        source.put("congratulations", "Parabéns!");
-        source.put("congratulations1",
+        put("congratulations", "Parabéns!");
+        put("congratulations1",
                 "A instalação do Iocaste foi concluída com sucesso.");
-        source.put("congratulations2",
+        put("congratulations2",
                 "Você será redirecionado à tela de conexão.");
-        source.put("congratulations3",
+        put("congratulations3",
                 "O usuário é \"ADMIN\", e a senha é \"iocaste\".");
-        source.put("congratulations4",
+        put("congratulations4",
                 "Para prosseguir, clique em \"Continuar\".");
 
-        source.put("continue", "Continuar");
-        source.put("DBNAME", "Nome do banco de dados");
-        source.put("dbtypes", "Selecione o tipo de banco");
-        source.put("HOST", "Hostname");
-        source.put("keepbase", "Utiliza o banco, recria tabelas");
-        source.put("newbase", "Cria nova banco");
-        source.put("OPTIONS", "Tipo de instalação");
-        source.put("SECRET", "Senha");
-        source.put("USERNAME", "Usuário");
+        put("continue", "Continuar");
+        put("DBNAME", "Nome do banco de dados");
+        put("dbtypes", "Selecione o tipo de banco");
+        put("HOST", "Hostname");
+        put("keepbase", "Utiliza o banco, recria tabelas");
+        put("newbase", "Cria nova banco");
+        put("OPTIONS", "Tipo de instalação");
+        put("SECRET", "Senha");
+        put("USERNAME", "Usuário");
         
-        source.put("warning1",
+        put("warning1",
                 "Informe usuário e senha para criação do banco de dados do "
                 + "sistema.");
-        source.put("warning2", "Todos os dados anteriores serão destruídos.");
+        put("warning2", "Todos os dados anteriores serão destruídos.");
         
-        source.put("welcome", "Bem-vindo à instalação do Iocaste");
-        source.put("welcome1",
+        put("welcome", "Bem-vindo à instalação do Iocaste");
+        put("welcome1",
                 "Bem-vindo ao utilitário de instalação do Iocaste.");
-        source.put("welcome2",
+        put("welcome2",
                 "Ao prosseguir, esse utilitário ajustará o sistema para a " +
                 "configuração inicial.");
-        source.put("welcome3",
+        put("welcome3",
                 "Nesse processo, todos os dados serão perdidos.");
-        source.put("welcome4", "Para continuar, clique no botão \"Continuar\"");
+        put("welcome4", "Para continuar, clique no botão \"Continuar\"");
     }
 }

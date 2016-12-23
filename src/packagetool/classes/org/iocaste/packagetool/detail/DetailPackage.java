@@ -1,10 +1,11 @@
-package org.iocaste.packagetool;
+package org.iocaste.packagetool.detail;
 
 import java.util.List;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.packagetool.Context;
 
 public class DetailPackage extends AbstractActionHandler {
     private String table;

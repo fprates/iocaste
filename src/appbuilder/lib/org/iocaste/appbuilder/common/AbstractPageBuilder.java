@@ -3,6 +3,8 @@ package org.iocaste.appbuilder.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
@@ -10,7 +12,6 @@ import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.View;
-import org.iocaste.shell.common.messages.AbstractMessages;
 import org.iocaste.shell.common.messages.GetMessages;
 
 public abstract class AbstractPageBuilder extends AbstractPage {
@@ -28,12 +29,35 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         validators = new HashMap<>();
     }
     
+    private final void buildPanels(PageBuilderContext context) {
+        Object[] panel;
+        StandardPanel panels;
+        
+        panels = new StandardPanel(context);
+        for (String key : context.panels.keySet()) {
+            panel = context.panels.get(key);
+            panels.instance(key,
+                    (AbstractPanelPage)panel[0], (ExtendedContext)panel[1]);
+        }
+    }
+    
     public abstract void config(PageBuilderContext context) throws Exception;
     
     public void config(GetFieldsProperties config) { };
     
+    @SuppressWarnings("unchecked")
+    public final <T extends AbstractContext> T configOnly() {
+        context = new PageBuilderContext();
+        context.function = this;
+        return (T)context;
+    }
+    
     protected final void description(String name, String model, String field) {
         validate(name, new DescriptionValidate(model, field));
+    }
+    
+    protected final PageBuilderContext getContext() {
+        return context;
     }
     
     /*
@@ -47,10 +71,16 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         Message message;
         Object[] objects;
         
-        context = new PageBuilderContext();
+        context = configOnly();
         context.view = view;
-        context.function = this;
         config(context);
+        
+        if (context.panels.size() > 0)
+            buildPanels(context);
+        
+        if (context.messages != null)
+            context.messages.entries();
+        
         customaction = new BuilderCustomAction();
         reassignCustomActions(context);
         
@@ -89,13 +119,6 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     protected final void installObject(
             String name, AbstractInstallObject object) {
         installcontext.put(name, object);
-    }
-    
-    protected final void messages(AbstractMessages messages) {
-        GetMessages messagesget = get("messages_get");
-        messagesget.set(messages);
-        messages.setContext(context);
-        messages.entries();
     }
     
     private final void reassignCustomActions(PageBuilderContext context) {

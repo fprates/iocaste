@@ -23,7 +23,7 @@ public class Main extends AbstractModelViewer {
 //        String msgsource = getParameter("msgsource");
         AppBuilderLink link = getReceivedLink();
         
-        messages(new Messages());
+        context.messages = new Messages();
         link.updateload = new Load(link.edit1view);
         link.displayload = new Load(link.display1view);
         link.validate = new Validate();

@@ -1,26 +1,14 @@
 package org.iocaste.tasksel;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
-import org.iocaste.appbuilder.common.panel.StandardPanel;
-import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.Documents;
-import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.documents.common.Query;
-import org.iocaste.protocol.Iocaste;
 import org.iocaste.tasksel.groups.GroupsPanelPage;
 import org.iocaste.tasksel.tasks.TasksPanelPage;
 
 public class Main extends AbstractPageBuilder {
-    public static final String MAIN = "main";
-    public Set<ExtendedObject> entries;
-    public PageBuilderContext context;
     public GroupsPanelPage page;
+    private Context extcontext;
     
     public Main() {
         export("task_redirect", new Redirect());
@@ -29,72 +17,10 @@ public class Main extends AbstractPageBuilder {
 
     @Override
     public final void config(PageBuilderContext context) {
-        StandardPanel panel;
-        Context extcontext;
-        AbstractPanelPage tasks;
-        
-        messages(new Messages());
-        extcontext = new Context(context);
-        entries = getLists();
-        this.context = context;
-
-        page = new GroupsPanelPage();
-        tasks = new TasksPanelPage();
-        
-        panel = new StandardPanel(context);
-        panel.instance(MAIN, page, extcontext);
-        panel.instance("tasks", tasks, extcontext);
-    }
-    
-    /**
-     * 
-     * @param context
-     * @return
-     */
-    private final Set<ExtendedObject> getLists() {
-        Query query;
-        ExtendedObject entry;
-        ExtendedObject[] result, mobject;
-        Set<ExtendedObject> entries;
-        String groupname, language, taskname, username;
-        DocumentModel model;
-        Iocaste iocaste = new Iocaste(this);
-        Documents documents = new Documents(this);
-        
-        username = iocaste.getUsername();
-        query = new Query();
-        query.addColumns(
-                "TASK_ENTRY.GROUP", "TASK_ENTRY.NAME", "TASK_ENTRY.ID");
-        query.setModel("USER_TASKS_GROUPS");
-        query.join("TASK_ENTRY", "USER_TASKS_GROUPS.GROUP", "GROUP");
-        query.andEqual("USERNAME", username);
-        result = documents.select(query);
-        if (result == null)
-            return null;
-        
-        model = documents.getModel("TASK_TILE_ENTRY");
-        language = iocaste.getLocale().toString(); 
-        entries = new LinkedHashSet<>();
-        for (ExtendedObject object : result) {
-            groupname = object.get("GROUP");
-            taskname = object.getst("NAME");
-            
-            query = new Query();
-            query.setModel("TASK_ENTRY_TEXT");
-            query.andEqual("ENTRY", taskname);
-            query.andEqual("LANGUAGE", language);
-            query.setMaxResults(1);
-            mobject = documents.select(query);
-            
-            entry = new ExtendedObject(model);
-            entry.set("GROUP", groupname);
-            entry.set("NAME", taskname);
-            if (mobject != null)
-                entry.set("TEXT", mobject[0].getst("TEXT"));
-            entries.add(entry);
-        }
-        
-        return entries;
+        context.messages = new Messages();
+        context.add("main", page = new GroupsPanelPage(),
+                extcontext = new Context(context));
+        context.add("tasks", new TasksPanelPage(), extcontext);
     }
     
     @Override
@@ -105,9 +31,11 @@ public class Main extends AbstractPageBuilder {
         installObject("main", new InstallObject());
     }
     
-    public final void refresh() {
-        entries = getLists();
-        context.getView(Main.MAIN).getSpec().setInitialized(false);
+    public final void refresh() throws Exception {
+        PageBuilderContext context = getContext();
+        
+        context.run("main", "lists_get");
+        context.getView("main").getSpec().setInitialized(false);
         setReloadableView(true);
     }
 }

@@ -1,11 +1,11 @@
 package org.iocaste.infosis;
 
-import org.iocaste.shell.common.messages.AbstractMessages;
+import org.iocaste.shell.common.MessageSource;
 
-public class Messages extends AbstractMessages {
+public class Messages extends MessageSource {
     
     public final void entries() {
-        locale("pt_BR");
+        instance("pt_BR");
         put("db_product_version", "Versão do banco de dados");
         put("db_product_name", "Nome do banco de dados");
         put("java-properties", "Propriedades do ambiente java");

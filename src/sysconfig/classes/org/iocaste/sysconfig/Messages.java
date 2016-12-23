@@ -1,12 +1,12 @@
 package org.iocaste.sysconfig;
 
-import org.iocaste.shell.common.messages.AbstractMessages;
+import org.iocaste.shell.common.MessageSource;
 
-public class Messages extends AbstractMessages {
+public class Messages extends MessageSource {
 
     @Override
     public final void entries() {
-        locale("pt_BR");
+        instance("pt_BR");
         put("iocaste-sysconfig", "Configuração do sistema");
         put("NAME", "Nome");
         put("save", "Salvar");

@@ -1,4 +1,4 @@
-package org.iocaste.packagetool;
+package org.iocaste.packagetool.main;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.packagetool.Context;
 import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.shell.common.Const;
 import org.iocaste.tasksel.common.TaskSelector;

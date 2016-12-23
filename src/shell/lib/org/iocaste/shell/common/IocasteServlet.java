@@ -2,6 +2,7 @@ package org.iocaste.shell.common;
 
 import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.Function;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class IocasteServlet extends AbstractIocasteServlet {
@@ -26,8 +27,9 @@ public class IocasteServlet extends AbstractIocasteServlet {
         String name = getServletConfig().getInitParameter(type);
         
         if (name == null)
-            throw new Exception("Servlet parameter \""+type+"\" not defined." +
-                    " Define servlet parameter \"controller\"");
+            throw new IocasteException(
+                    "Servlet parameter \"%s\" not defined." +
+                    " Define servlet parameter \"controller\"", type);
         
         return (Function)Class.forName(name).newInstance();
     }

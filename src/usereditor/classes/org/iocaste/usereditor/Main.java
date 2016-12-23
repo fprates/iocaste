@@ -4,21 +4,18 @@ import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
-import org.iocaste.appbuilder.common.panel.StandardPanel;
 
 public class Main extends AbstractPageBuilder {
 
     @Override
     public void config(PageBuilderContext context) throws Exception {
-        StandardPanel panel;
         Context extcontext;
         
-        messages(new Messages());
+        context.messages = new Messages();
         extcontext = new Context(context);
-        panel = new StandardPanel(context);
-        panel.instance("main", new MainPage(), extcontext);
-        panel.instance("display", new DisplayPage(), extcontext);
-        panel.instance("update", new UpdatePage(), extcontext);
+        context.add("main", new MainPage(), extcontext);
+        context.add("display", new DisplayPage(), extcontext);
+        context.add("update", new UpdatePage(), extcontext);
     }
 
     @Override

@@ -5,7 +5,6 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.StandardViewInput;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
-import org.iocaste.appbuilder.common.panel.StandardPanel;
 
 public class Main extends AbstractPageBuilder {
     public static final String MAIN = "main";
@@ -13,13 +12,10 @@ public class Main extends AbstractPageBuilder {
     
     @Override
     public void config(PageBuilderContext context) throws Exception {
-        StandardPanel panel;
         Context extcontext = new Context(context);
-        
-        messages(new Messages());
-        panel = new StandardPanel(context);
-        panel.instance(MAIN, new MainPanel(), extcontext);
-        panel.instance(STRUCTURE, new StructurePanel(), extcontext);
+        context.messages = new Messages();
+        context.add(MAIN, new MainPanel(), extcontext);
+        context.add(STRUCTURE, new StructurePanel(), extcontext);
     }
 
     @Override

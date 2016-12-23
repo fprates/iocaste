@@ -1,10 +1,11 @@
-package org.iocaste.dataeditor;
+package org.iocaste.dataeditor.edit;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.dataeditor.Context;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;

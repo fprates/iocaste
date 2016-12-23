@@ -4,7 +4,6 @@ import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
-import org.iocaste.appbuilder.common.panel.StandardPanel;
 
 public class Main extends AbstractPageBuilder {
     public static final String[] ACTIONS = {
@@ -22,11 +21,8 @@ public class Main extends AbstractPageBuilder {
 
     @Override
     public void config(PageBuilderContext context) {
-        StandardPanel panel;
-        
-        panel = new StandardPanel(context);
-        panel.instance(MAIN, new MainPage(), new Context(context));
-        messages(new Messages());
+        context.add(MAIN, new MainPage(), new Context(context));
+        context.messages = new Messages();
 //        int i;
 //        ViewContext view;
 //        Context extcontext = new Context();

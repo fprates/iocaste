@@ -12,6 +12,7 @@ import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.NodeListItem;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.Text;
@@ -89,6 +90,8 @@ public class StandardNavControlConfig extends AbstractViewConfig {
             function.register(page, "back", viewctx);
         }
         
+        if (context.messages == null)
+            context.messages = new MessageSource();
         context.messages.instance("pt_BR");
         context.messages.put("pt_BR", "nc_logout", "Log out");
     }

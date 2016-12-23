@@ -3,7 +3,6 @@ package org.iocaste.dataview;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.dataview.main.MainPage;
 import org.iocaste.dataview.ns.NSInputPage;
 import org.iocaste.dataview.output.OutputPage;
@@ -12,16 +11,12 @@ public class Main extends AbstractPageBuilder {
 
     @Override
     public void config(PageBuilderContext context) throws Exception {
-        StandardPanel panel;
         Context extcontext;
-        
         extcontext = new Context(context);
-        messages(new Messages());
-        
-        panel = new StandardPanel(context);
-        panel.instance("main", new MainPage(), extcontext);
-        panel.instance("output", new OutputPage(), extcontext);
-        panel.instance("nsinput", new NSInputPage(), extcontext);
+        context.messages = new Messages();
+        context.add("main", new MainPage(), extcontext);
+        context.add("output", new OutputPage(), extcontext);
+        context.add("nsinput", new NSInputPage(), extcontext);
     }
 
     @Override

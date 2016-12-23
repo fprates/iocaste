@@ -6,7 +6,7 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.tasksel.Main;
+import org.iocaste.tasksel.Context;
 
 public class GroupsInput extends AbstractViewInput {
 
@@ -19,11 +19,12 @@ public class GroupsInput extends AbstractViewInput {
     @Override
     protected void init(PageBuilderContext context) {
         String groupname;
+        Context extcontext;
         Map<String, ExtendedObject> groups;
-        Main main = (Main)context.function;
         
+        extcontext = getExtendedContext();
         groups = new LinkedHashMap<>();
-        for (ExtendedObject entry : main.entries) {
+        for (ExtendedObject entry : extcontext.entries) {
             groupname = entry.getst("GROUP");
             if (!groups.containsKey(groupname))
                 groups.put(groupname, entry);

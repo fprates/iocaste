@@ -9,10 +9,19 @@ import org.iocaste.shell.common.messages.GetMessages;
 
 public class Main extends AbstractPage {
     private GetMessages messagesget;
+    private Messages messages;
     
     public Main() {
         export("install", "install");
         export("messages_get", messagesget = new GetMessages());
+        messagesget.set(messages = new Messages());
+    }
+    
+    @SuppressWarnings("unchecked")
+    public final <T extends AbstractContext> T configOnly() {
+        Context context = new Context();
+        context.messages = messages;
+        return (T)context;
     }
     
     public InstallData install(Message message) {
@@ -27,13 +36,7 @@ public class Main extends AbstractPage {
     
     @Override
     public final AbstractContext init(View view) {
-        Context context = new Context();
-        Messages messages = new Messages();
-        
-        messages.setContext(context);
-        messages.entries();
-        messagesget.set(messages);
-        return context;
+        return configOnly();
     }
 }
 

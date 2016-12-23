@@ -1,7 +1,8 @@
-package org.iocaste.packagetool;
+package org.iocaste.packagetool.main;
 
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.packagetool.Context;
 
 public class MainInput extends AbstractViewInput {
 
