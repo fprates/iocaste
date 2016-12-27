@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
+import org.iocaste.shell.common.messages.GetMessages;
 
 /**
  * Implementação abstrata de página web
@@ -32,6 +33,7 @@ public abstract class AbstractPage extends AbstractFunction {
         
         export("get_view_data", getviewdata);
         export("exec_action", execaction);
+        export("messages_get", new GetMessages());
     }
     
     /**

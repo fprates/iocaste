@@ -12,7 +12,6 @@ import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.View;
-import org.iocaste.shell.common.messages.GetMessages;
 
 public abstract class AbstractPageBuilder extends AbstractPage {
     private static final String SERVICE = "/iocaste-appbuilder/services.html";
@@ -25,7 +24,6 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     public AbstractPageBuilder() {
         export("install", "install");
         export("fields_properties_get", new GetFieldsProperties());
-        export("messages_get", new GetMessages());
         validators = new HashMap<>();
     }
     

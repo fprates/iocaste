@@ -110,13 +110,13 @@ public class Response {
     
     public static final void main(Context context) {
         View view;
-        String name, searchjs, action, form, searchbt, master;
-        String criteriajs;
+        String name, searchjs, action, form, searchbt, master, criteriajs;
+        String locale;
         ExtendedObject[] result;
         Container stdcnt, datacnt;
         SearchHelp sh;
         Button select, criteria;
-        Map<String, String> style;
+        Map<String, String> style, messages;
         Documents documents = new Documents(context.function);
         StyleSheet stylesheet = StyleSheet.instance(context.view);
         Map<Integer, String> constants = stylesheet.getConstants();
@@ -165,8 +165,6 @@ public class Response {
         select = new Button(stdcnt, searchbt);
         select.addAttribute("style", "display:none");
         select.setEvent("click", searchjs);
-        context.messages.instance("pt_BR");
-        context.messages.put(searchbt, "Selecionar");
         
         criteriajs = new StringBuilder("setElementDisplay('").append(searchbt).
                 append("', 'inline');setElementDisplay('criteria','block');"
@@ -187,6 +185,23 @@ public class Response {
         datacnt = new StandardContainer(stdcnt, "shdatacnt");
         datacnt.setStyleClass("shdatacnt");
         
+        locale = view.getLocale().toString();
+        try {
+            messages = Shell.getMessages(context.function, locale,
+                    view.getAppName());
+            if (messages != null) {
+                context.messages.instance(locale);
+                for (String key : messages.keySet())
+                    context.messages.put(key, messages.get(key));
+            }
+        } catch (Exception e) {
+            /*
+             * ignoramos se um programa não tiver traduções. Ex: kernel
+             */
+        }
+        
+        context.messages.instance("pt_BR");
+        context.messages.put(searchbt, "Selecionar");
         result = Common.getResultsFrom(documents, context, sh);
         if (result == null) {
             new Text(datacnt, "no.results.found");
