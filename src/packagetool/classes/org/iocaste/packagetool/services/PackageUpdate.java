@@ -8,6 +8,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.TaskGroup;
+import org.iocaste.packagetool.services.installers.ModuleInstaller;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
@@ -24,6 +25,7 @@ public class PackageUpdate extends AbstractHandler {
         DocumentModel tasks;
         State state;
         Services services;
+        ModuleInstaller installer;
         
         state = new State();
         state.data = message.get("data");
@@ -32,11 +34,13 @@ public class PackageUpdate extends AbstractHandler {
         state.pkgname = message.getst("name");
         
         services = getFunction();
-        for (String key : services.installers.keySet())
-            services.installers.get(key).update(state);
+        for (String key : services.installers.keySet()) {
+            installer = services.installers.get(key);
+            installer.init(services);
+            installer.update(state);
+        }
         
         types = new HashSet<>();
-        types.add("MESSAGE");
         types.add("TSKGROUP");
         types.add("TSKITEM");
         types.add("TASK");
