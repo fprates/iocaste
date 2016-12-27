@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -146,12 +147,14 @@ public class ProcessHttpRequisition extends AbstractHandler {
             PageContext expagectx, Exception exception) throws Exception {
         PageContext pagectx;
         ContextData contextdata = new ContextData();
+        Function function = getFunction();
         
         contextdata.sessionid = sessionid;
-        contextdata.appname = getConfiguredManager(
-                getFunction(), "EXCEPTION_HANDLER");
+        contextdata.appname = getConfiguration(function, "EXCEPTION_HANDLER");
         if (contextdata.appname == null)
             contextdata.appname = "iocaste-exhandler";
+        if (contextdata.locale == null)
+            contextdata.locale = getLocale(contextdata, function);
         
         contextdata.pagename = "main";
         contextdata.logid = expagectx.getLogid();
@@ -201,6 +204,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
         pagectx.setAppContext(appctx);
         pagectx.setLogid(contextdata.logid);
         pagectx.setInitialize(contextdata.initialize);
+        pagectx.locale = new Locale(contextdata.locale);
         appctx.put(contextdata.pagename, pagectx);
         sessionctx.put(contextdata.appname, appctx);
         
@@ -220,17 +224,19 @@ public class ProcessHttpRequisition extends AbstractHandler {
         Enumeration<String> parameternames;
         String key, startpage;
         ContextData contextdata;
+        Function function = getFunction();
         
         contextdata = new ContextData();
         contextdata.appname = context.req.getParameter("login-manager");
         if (contextdata.appname == null)
-            contextdata.appname = getConfiguredManager(
-                    getFunction(), "LOGIN_MANAGER");
+            contextdata.appname = getConfiguration(function, "LOGIN_MANAGER");
         if (contextdata.appname == null)
             contextdata.appname = "iocaste-login";
         contextdata.sessionid = context.sessionid;
         contextdata.logid = logid;
         contextdata.initialize = true;
+        if (contextdata.locale == null)
+            contextdata.locale = getLocale(contextdata, function);
         
         startpage = context.req.getParameter("start-page");
         if (startpage == null)
@@ -324,6 +330,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
         message.add("servername", context.hostname);
         message.add("protocol", context.protocol);
         message.add("port", context.port);
+        message.add("locale", pagectx.locale);
         message.setSessionid(complexid);
         
         if (pagectx.initparams != null) {
@@ -404,7 +411,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
     }
 
     @SuppressWarnings("unchecked")
-    private final String getConfiguredManager(Function function, String name) {
+    private final String getConfiguration(Function function, String name) {
         Object[] objects;
         CheckedSelect select;
         
@@ -419,6 +426,11 @@ public class ProcessHttpRequisition extends AbstractHandler {
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    private final String getLocale(ContextData ctxdata, Function function) {
+        return (isConnected(ctxdata))?
+                getConfiguration(function, "DEFAULT_LANGUAGE") : "pt_BR";
     }
     
     /**
@@ -771,6 +783,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
         contextdata.appname = appname;
         contextdata.pagename = pagename;
         contextdata.logid = config.logid;
+        contextdata.locale = pagectx.getViewData().getLocale().toString();
         
         pagectx_ = getPageContext(contextdata);
         if (pagectx_ == null) {

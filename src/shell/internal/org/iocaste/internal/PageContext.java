@@ -3,6 +3,7 @@ package org.iocaste.internal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,6 +17,8 @@ public class PageContext {
     private View view;
     private AppContext appctx;
     private String name, username, contexturl, contenttype, contentencoding;
+    public String messagetext;
+    public Locale locale;
     private boolean reloadable, initialize, keepview;
     private List<FileItem> files;
     private Map<String, List<EventHandler>> actions;
@@ -29,7 +32,6 @@ public class PageContext {
     public Set<String> initparams;
     public Map<String, String> headervalues;
     public Const messagetype;
-    public String messagetext;
     public Object[] messageargs;
     
     public PageContext(String name) {

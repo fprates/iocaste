@@ -138,7 +138,9 @@ public abstract class AbstractComponent extends AbstractElement
     
     protected final String getTranslation(MessageSource messages, String name) {
         String message;
+        String locale = getView().getLocale().toString();
         
+        messages.instance(locale);
         message = messages.get((this.text != null)? this.text : getName());
         if ((message == null) && (name != null))
             message = messages.get(name);

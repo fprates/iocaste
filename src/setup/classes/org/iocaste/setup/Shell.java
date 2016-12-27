@@ -92,5 +92,6 @@ public class Shell {
         
         data.addValues(model, "LOGIN_MANAGER", "iocaste-login");
         data.addValues(model, "EXCEPTION_HANDLER", "iocaste-exhandler");
+        data.addValues(model, "DEFAULT_LANGUAGE", "pt_BR");
     }
 }

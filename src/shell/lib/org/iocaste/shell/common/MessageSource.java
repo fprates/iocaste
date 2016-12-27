@@ -50,8 +50,12 @@ public class MessageSource {
     }
     
     public final void instance(String locale) {
-        if (!this.messages.containsKey(locale))
-            this.messages.put(locale, new Properties());
+        Properties messages;
+        
+        if (!this.messages.containsKey(locale)) {
+            this.messages.put(locale, messages = new Properties());
+            this.messages.put(locale.toLowerCase(), messages);
+        }
         this.locale = locale;
     }
     

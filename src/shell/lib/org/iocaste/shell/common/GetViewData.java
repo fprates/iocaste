@@ -40,11 +40,10 @@ public class GetViewData extends AbstractHandler {
         Object[] viewreturn;
         Method method;
         CustomView customview;
+        AbstractPage page = getFunction();
         View view = message.get("view");
         boolean initializable = message.getbl("init");
-        AbstractPage page = getFunction();
-        Iocaste iocaste = new Iocaste(page);
-        Locale locale = iocaste.getLocale();
+        Locale locale = message.get("locale");
         
         state.parameters = message.get("parameters");
         state.protocol = message.get("protocol");
@@ -81,7 +80,7 @@ public class GetViewData extends AbstractHandler {
          * definida (provavelmente) apenas depois da chamada da visão.
          */
         if (locale == null) {
-            locale = iocaste.getLocale();
+            locale = new Iocaste(page).getLocale();
             view.setLocale(locale);
             for (Container container : view.getContainers())
                 setLocaleForElement(container, view.getLocale());
