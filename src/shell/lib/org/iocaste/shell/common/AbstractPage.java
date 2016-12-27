@@ -69,7 +69,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * 
      * @return
      */
-    public abstract <T extends AbstractContext> T configOnly();
+    public abstract <T extends AbstractContext> T configOnly() throws Exception;
     
     /**
      * Não salva página na pilha de chamada.

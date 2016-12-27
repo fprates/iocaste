@@ -46,9 +46,10 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     public void config(GetFieldsProperties config) { };
     
     @SuppressWarnings("unchecked")
-    public final <T extends AbstractContext> T configOnly() {
-        context = new PageBuilderContext();
+    public final <T extends AbstractContext> T configOnly() throws Exception {
+        PageBuilderContext context = new PageBuilderContext();
         context.function = this;
+        config(context);
         return (T)context;
     }
     
@@ -71,7 +72,8 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         Message message;
         Object[] objects;
         
-        context = configOnly();
+        context = new PageBuilderContext();
+        context.function = this;
         context.view = view;
         config(context);
         
