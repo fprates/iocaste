@@ -20,7 +20,7 @@ public class GetLists extends AbstractActionHandler {
         ExtendedObject entry;
         ExtendedObject[] result;
         String groupname, language, taskname, username, packagename;
-        Map<String, String> _messages;
+        Map<String, String> _messages, groups;
         Map<String, Map<String, String>> messages;
         Iocaste iocaste = new Iocaste(context.function);
         Context extcontext = getExtendedContext();
@@ -32,7 +32,7 @@ public class GetLists extends AbstractActionHandler {
                 "TASK_ENTRY.GROUP",
                 "TASK_ENTRY.NAME",
                 "TASK_ENTRY.ID",
-                "USER_TASKS_GROUPS.PACKAGE"
+                "TASK_ENTRY.PACKAGE"
         );
         query.setModel("USER_TASKS_GROUPS");
         query.join("TASK_ENTRY", "USER_TASKS_GROUPS.GROUP", "GROUP");
@@ -41,9 +41,10 @@ public class GetLists extends AbstractActionHandler {
         if (result == null)
             return;
         
-        language = iocaste.getLocale().toString();
+        language = context.view.getLocale().toString();
         extcontext.entries = new LinkedHashSet<>();
         messages = new HashMap<>();
+        groups = new HashMap<>();
         for (ExtendedObject object : result) {
             groupname = object.get("GROUP");
             taskname = object.getst("NAME");
@@ -56,11 +57,20 @@ public class GetLists extends AbstractActionHandler {
                 messages.put(packagename, _messages);
             }
             
+            if (_messages.containsKey(groupname))
+                groups.put(groupname, getText(_messages, groupname));
+            
             entry = instance("TASK_TILE_ENTRY");
-            entry.set("GROUP", getText(_messages, groupname));
+            entry.set("GROUP", groupname);
             entry.set("NAME", taskname);
             entry.set("TEXT", getText(_messages, taskname));
             extcontext.entries.add(entry);
+        }
+        
+        for (ExtendedObject object : extcontext.entries) {
+            groupname = groups.get(object.getst("GROUP"));
+            if (groupname != null)
+                object.set("GROUP", groupname);
         }
     }
     

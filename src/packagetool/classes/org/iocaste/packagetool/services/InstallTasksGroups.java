@@ -31,7 +31,7 @@ public class InstallTasksGroups {
             State state) throws Exception {
         int entryid;
         Query query;
-        String groupname;
+        String groupname, packagename;
         Map<String, String> itens;
         ExtendedObject group;
         ExtendedObject[] tasks, entries;
@@ -53,8 +53,6 @@ public class InstallTasksGroups {
             }
             
             itens.clear();
-            for (String link : taskgroup.getLinks())
-                itens.put(link, state.pkgname);
 
             /*
              * reindexa itens do grupo
@@ -71,8 +69,11 @@ public class InstallTasksGroups {
                 state.documents.update(query);
 
                 for (ExtendedObject entry : entries)
-                    itens.put(entry.getst("NAME"), null);
+                    itens.put(entry.getst("NAME"), entry.getst("PACKAGE"));
             }
+            
+            for (String link : taskgroup.getLinks())
+                itens.put(link, state.pkgname);
 
             /*
              * instala entradas e textos
@@ -80,15 +81,12 @@ public class InstallTasksGroups {
             entryid = 0;
             for (String taskname : itens.keySet()) {
                 if (!containsTask(taskname, tasks))
-                    throw new IocasteException(
-                            new StringBuilder("invalid task \"").
-                            append(taskname).append("\".").toString());
-                
-                Selector.add(taskname, groupname, entryid++, state);
-                if (itens.get(taskname) != null)
+                   throw new IocasteException("invalid task \"%s\".", taskname);
+                packagename = itens.get(taskname);
+                Selector.add(taskname,groupname,entryid++,packagename,state);
+                if (packagename.equals(state.pkgname))
                     Registry.add(taskname, "TSKITEM", state);
             }
         }
     }
-
 }

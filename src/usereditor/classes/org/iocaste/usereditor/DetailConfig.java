@@ -34,14 +34,12 @@ public abstract class DetailConfig extends AbstractViewConfig {
         
         tasks = getTool("tasks");
         tasks.model = "USER_TASKS_GROUPS";
-        for (String name : new String[] {"ID", "USERNAME", "PACKAGE"})
-            tasks.instance(name).invisible = true;
+        hide(tasks, "ID", "USERNAME");
         tasks.instance("GROUP").sh = "SH_TASKS_GROUPS";
 
         profiles = getTool("profiles");
         profiles.model = "USER_AUTHORITY";
-        for (String name : new String[] {"ID", "USERNAME"})
-            profiles.instance(name).invisible = true;
+        hide(profiles, "ID", "USERNAME");
         profiles.instance("PROFILE").sh = "SH_USER_PROFILE";
         
         config(identity, extras, tasks, profiles);

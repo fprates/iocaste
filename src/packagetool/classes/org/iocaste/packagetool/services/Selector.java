@@ -17,7 +17,7 @@ public class Selector {
      * @return
      */
     public static final void add(String taskname, String groupname, int count,
-            State state) {
+            String packagename, State state) {
         String entryid;
         DocumentModel model;
         ExtendedObject object;
@@ -28,6 +28,7 @@ public class Selector {
         object.set("ID", entryid);
         object.set("NAME", taskname);
         object.set("GROUP", groupname);
+        object.set("PACKAGE", packagename);
         state.documents.save(object);
     }
     
@@ -53,7 +54,6 @@ public class Selector {
         object.set("ID", groupid);
         object.set("USERNAME", username);
         object.set("GROUP", groupname);
-        object.set("PACKAGE", state.pkgname);
         if (state.documents.save(object) == 0)
             throw new IocasteException("error on assign group");
     }
@@ -110,7 +110,6 @@ public class Selector {
      * @param documents
      */
     public static final void removeTask(String taskname, Documents documents) {
-        Query[] queries;
         String taskid;
         ExtendedObject[] task;
         Query query = new Query();
@@ -123,14 +122,9 @@ public class Selector {
             return;
         
         taskid = task[0].getst("ID");
-        queries = new Query[2];
-        queries[0] = new Query("delete");
-        queries[0].setModel("TASK_ENTRY_TEXT");
-        queries[0].andEqual("ENTRY", taskid);
-        
-        queries[1] = new Query("delete");
-        queries[1].setModel("TASK_ENTRY");
-        queries[1].andEqual("ID", taskid);
-        documents.update(queries);
+        query = new Query("delete");
+        query.setModel("TASK_ENTRY");
+        query.andEqual("ID", taskid);
+        documents.update(query);
     }
 }

@@ -13,13 +13,12 @@ public class UserTaskGroupsInstall extends AbstractInstallObject {
 
     @Override
     protected void execute(StandardInstallContext context) throws Exception {
-        DataElement groupid, username, packagename;
+        DataElement groupid, username;
         DocumentModelItem userkey;
         ModelInstall model;
         
         groupid = elementchar("USER_TASKS_GROUPS.ID", 30, DataType.UPPERCASE);
         username = new DummyElement("LOGIN.USERNAME");
-        packagename = new DummyElement("PACKAGE.NAME");
         userkey = new DummyModelItem("LOGIN", "USERNAME");
         
         model = modelInstance("USER_TASKS_GROUPS", "USRTASKGRP");
@@ -29,8 +28,6 @@ public class UserTaskGroupsInstall extends AbstractInstallObject {
                 "USERNAME", "UNAME", username, userkey);
         model.reference(
                 "GROUP", "GRPID", getItem("groupid"));
-        model.item(
-                "PACKAGE", "PKGNM", packagename);
     }
 
 }

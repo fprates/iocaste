@@ -6,12 +6,13 @@ import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.DummyElement;
 
 public class TasksGroupsInstall extends AbstractInstallObject {
 
     @Override
     protected void execute(StandardInstallContext context) throws Exception {
-        DataElement taskgroupname, taskentryid;
+        DataElement taskgroupname, taskentryid, packagename;
         ModelInstall model;
         DocumentModelItem groupname;
 
@@ -19,6 +20,7 @@ public class TasksGroupsInstall extends AbstractInstallObject {
                 "TASKS_GROUPS.NAME", 12, DataType.UPPERCASE);
         taskentryid = elementchar(
                 "TASK_ENTRY.ID", 15, DataType.UPPERCASE);
+        packagename = new DummyElement("PACKAGE.NAME");
         
         /*
          * grupos de tarefas
@@ -37,6 +39,8 @@ public class TasksGroupsInstall extends AbstractInstallObject {
                 "GROUP", "GRPID", groupname);
         model.item(
                 "NAME", "ENTRY", getItem("taskname"));
+        model.item(
+                "PACKAGE", "PKGNM", packagename);
     }
 
 }
