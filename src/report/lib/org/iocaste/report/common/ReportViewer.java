@@ -2,26 +2,23 @@ package org.iocaste.report.common;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
-import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.report.common.data.ReportViewerData;
 import org.iocaste.report.common.export.CSVGenerate;
 
 public class ReportViewer {
-    private StandardPanel panel;
     
     public ReportViewer(ReportViewerData data) {
-        panel = new StandardPanel(data.context);
         if (data.input.name != null) {
             if (data.input.input == null)
                 data.input.input = new ReportInputInput();
             
-            panel.instance(
+            data.context.add(
                     data.input.name, new InputPanelPage(data), data.extcontext);
         }
         
         if (data.output.input == null)
             data.output.input = new ReportOutputInput();
-        panel.instance(
+        data.context.add(
                 data.output.name, new OutputPanelPage(data), data.extcontext);
     }
 
