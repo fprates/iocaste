@@ -8,7 +8,6 @@ import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.ViewSpec;
-import org.iocaste.appbuilder.common.panel.StandardPanel;
 
 public abstract class AbstractModelViewer extends AbstractPageBuilder {
     public static final String CREATE = "create";
@@ -52,7 +51,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
     
     protected final void loadManagedModule(PageBuilderContext context,
             AppBuilderLink link) {
-        StandardPanel panel;
         ViewSpec selspec;
         String action;
         Map<String, String> actions;
@@ -67,7 +65,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         selspec = new SelectSpec();
         if (link.inputvalidate == null)
             link.inputvalidate = new InputValidate();
-        panel = new StandardPanel(context);
         
         actions = new HashMap<>();
         actions.put(link.createview, CREATE);
@@ -83,7 +80,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
             link.entitypage.link = link;
             
             link.entitypagename = link.entity.concat(action);
-            panel.instance(link.entitypagename, link.entitypage, extcontext);
+            context.add(link.entitypagename, link.entitypage, extcontext);
         }
         
         link.custompage.link = link;
@@ -93,11 +90,11 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
             		(link.custompage.config != null)))
                 continue;
             
-            panel.instance(view, link.custompage, extcontext);
+            context.add(view, link.custompage, extcontext);
         }
 
         link.displaypage.link = link;
-        panel.instance(link.display1view, link.displaypage, extcontext);
+        context.add(link.display1view, link.displaypage, extcontext);
     }
     
     /**
