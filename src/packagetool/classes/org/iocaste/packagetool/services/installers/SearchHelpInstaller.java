@@ -18,8 +18,6 @@ public class SearchHelpInstaller
 
     @Override
     public void init(Function function) {
-        if (shlib != null)
-            return;
         shlib = new SHLib(function);
         documents = new Documents(function);
     }

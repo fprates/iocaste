@@ -23,8 +23,6 @@ public class AuthorizationInstaller
 
     @Override
     public final void init(Function function) {
-        if (authority != null)
-            return;
         authority = new Authority(function);
         documents = new Documents(function);
     }

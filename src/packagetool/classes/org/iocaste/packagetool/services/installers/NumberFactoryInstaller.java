@@ -23,8 +23,7 @@ public class NumberFactoryInstaller extends
 
     @Override
     public void init(Function function) {
-        if (documents == null)
-            documents = new Documents(function);
+        documents = new Documents(function);
     }
 
     @Override

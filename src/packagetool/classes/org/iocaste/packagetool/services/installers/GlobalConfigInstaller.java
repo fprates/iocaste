@@ -25,8 +25,6 @@ public class GlobalConfigInstaller
 
     @Override
     public void init(Function function) {
-        if (globalcfg != null)
-            return;
         globalcfg = new GlobalConfig(function);
         documents = new Documents(function);
     }

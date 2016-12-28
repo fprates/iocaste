@@ -70,8 +70,7 @@ public class ModelInstaller
     
     @Override
     public final void init(Function function) {
-        if (documents == null)
-            documents = new Documents(function);
+        documents = new Documents(function);
     }
     
     @Override
