@@ -28,7 +28,7 @@ public class GetUserData extends AbstractHandler {
         String username = message.getst("username");
         Connection connection;
         Users users = getFunction();
-        connection = users.database.instance();
+        connection = users.database.getDBConnection(message.getSessionid());
         return run(users, connection, username);
     }
     

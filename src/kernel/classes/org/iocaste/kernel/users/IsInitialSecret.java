@@ -19,7 +19,7 @@ public class IsInitialSecret extends AbstractHandler {
         Select select = users.database.get("select");
         UserContext context = users.session.sessions.get(sessionid);
         String username = context.getUser().getUsername();
-        Connection connection = users.database.instance();
+        Connection connection = users.database.getDBConnection(sessionid);
         
         objects = select.run(connection,
                 Users.QUERIES[Users.INIT_QUERY], 1, username);

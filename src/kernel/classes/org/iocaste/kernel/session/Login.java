@@ -43,39 +43,49 @@ public class Login extends AbstractHandler {
 
         session = getFunction();
         connection = session.database.instance();
-        getuserdata = session.users.get("get_user_data");
-        user = getuserdata.run(session.users, connection, username);
-        if ((user == null) || !isSecretOk(
-                connection, getuserdata, user, secret))
-            return false;
-        
-        if (locale_.length == 1)
-            locale = new Locale(locale_[0]);
-        else
-            locale = new Locale(locale_[0], locale_[1]);
-                
-        context = new UserContext(locale);
-        context.setUser(user);
-        session.sessions.put(sessionid, context);
-        if (session.usersessions.containsKey(username)) {
-            sessionslist = session.usersessions.get(username);
-        } else {
-            sessionslist = new ArrayList<>();
-            session.usersessions.put(username, sessionslist);
+        try {
+            getuserdata = session.users.get("get_user_data");
+            user = getuserdata.run(session.users, connection, username);
+            if ((user == null) || !isSecretOk(
+                    connection, getuserdata, user, secret))
+                return false;
+            
+            if (locale_.length == 1)
+                locale = new Locale(locale_[0]);
+            else
+                locale = new Locale(locale_[0], locale_[1]);
+                    
+            context = new UserContext(locale);
+            context.setUser(user);
+            session.sessions.put(sessionid, context);
+            if (session.usersessions.containsKey(username)) {
+                sessionslist = session.usersessions.get(username);
+            } else {
+                sessionslist = new ArrayList<>();
+                session.usersessions.put(username, sessionslist);
+            }
+            
+            sessionslist.add(sessionid);
+            composed = sessionid.split(":");
+            sessionid = composed[0];
+            terminal = Integer.parseInt(composed[1]);
+            context.setTerminal(terminal);
+            if (session.sessions.containsKey(sessionid)) {
+                connection.commit();
+                connection.close();
+                return true;
+            }
+            
+            context = new UserContext(locale);
+            context.setUser(null);
+            context.setTerminal(terminal);
+            session.sessions.put(sessionid, context);
+            connection.commit();
+            connection.close();
+        } catch (Exception e) {
+            connection.rollback();
+            connection.close();
         }
-        
-        sessionslist.add(sessionid);
-        composed = sessionid.split(":");
-        sessionid = composed[0];
-        terminal = Integer.parseInt(composed[1]);
-        context.setTerminal(terminal);
-        if (session.sessions.containsKey(sessionid))
-            return true;
-        
-        context = new UserContext(locale);
-        context.setUser(null);
-        context.setTerminal(terminal);
-        session.sessions.put(sessionid, context);
         return true;
     }
 

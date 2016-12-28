@@ -80,7 +80,7 @@ public class Database extends AbstractFunction {
                     dbconfig.url, dbconfig.username, dbconfig.secret);
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(
-                    Connection.TRANSACTION_READ_UNCOMMITTED);
+                    Connection.TRANSACTION_READ_COMMITTED);
             
             return connection;
         } catch (SQLServerException e) {
