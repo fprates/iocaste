@@ -3,7 +3,6 @@ package org.iocaste.install.settings;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -100,6 +99,8 @@ public class InstallContinue extends AbstractActionHandler {
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
         Statement ps;
+        Exception ex;
+        boolean dorollback;
         Connection connection;
         String[] init = null;
         Config config = new Config();
@@ -115,56 +116,47 @@ public class InstallContinue extends AbstractActionHandler {
         switch (config.option) {
         case DBConfig.KEEP_BASE:
         case DBConfig.NEW_BASE:
-            Class.forName(config.dbdriver).newInstance();
-            connection = DriverManager.getConnection(
-                    config.iurl, config.username, config.secret);
-            connection.setAutoCommit(true);
-            ps = connection.createStatement();
-            if (init != null)
-                for (String sql : init)
-                    ps.addBatch(sql);
+            dorollback = false;
+            connection = null;
             try {
-                ps.executeBatch();
-            } catch (BatchUpdateException e) {
-                if (config.nex) {
-                    e.printStackTrace();
-                    throw e.getNextException();
-                }
-                throw e;
-            }
-
-            if (config.secconn) {
-                connection.close();
+                Class.forName(config.dbdriver).newInstance();
                 connection = DriverManager.getConnection(
-                        config.url, config.username, config.secret);
-                connection.setAutoCommit(false);
+                        config.iurl, config.username, config.secret);
+                connection.setAutoCommit(true);
                 ps = connection.createStatement();
-            }
-            
-            ps.clearBatch();
-            connection.setAutoCommit(false);
-            createTables(ps, config);
-            try {
+                
+                if (init != null)
+                    for (String sql : init)
+                        ps.addBatch(sql);
                 ps.executeBatch();
+
+                dorollback = true;
+                if (config.secconn) {
+                    connection.close();
+                    connection = DriverManager.getConnection(
+                            config.url, config.username, config.secret);
+                    connection.setAutoCommit(false);
+                    ps = connection.createStatement();
+                }
+                
+                ps.clearBatch();
+                connection.setAutoCommit(false);
+                createTables(ps, config);
+                ps.executeBatch();
+                
                 saveConfig(config);
                 connection.commit();
                 connection.close();
                 ps.close();
-            } catch (BatchUpdateException e) {
-                if (config.nex) {
-                    e.printStackTrace();
+            } catch (Exception e) {
+                if (dorollback) {
                     connection.rollback();
                     connection.close();
-                    throw e.getNextException();
                 }
                 
-                connection.rollback();
-                connection.close();
-                throw e;
-            } catch (Exception e) {
-                connection.rollback();
-                connection.close();
-                throw e;
+                ex = new Exception(e.toString());
+                ex.setStackTrace(e.getStackTrace());
+                throw ex;
             }
             
             break;
@@ -300,7 +292,6 @@ public class InstallContinue extends AbstractActionHandler {
             config.url = new StringBuilder("jdbc:postgresql://").
                     append(config.host).append("/").
                     append(config.dbname).toString();
-            config.nex = true;
             
             switch (config.option) {
             case DBConfig.NEW_BASE:
@@ -347,6 +338,6 @@ public class InstallContinue extends AbstractActionHandler {
 
 class Config {
     public byte option;
-    public boolean nex, secconn;
+    public boolean secconn;
     public String iurl, dbdriver, host, url, username, secret, dbname, dbtype;
 }
