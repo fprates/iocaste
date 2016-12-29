@@ -72,7 +72,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
                 reference = run(connection, documents, modelref, broken);
                 try {
                     if (reference != null)
-                        item.setReference(reference.getModelItem(itemref));
+                        item.setReference(reference.getByIndex(itemref));
                 } catch (Exception e) {
                     if (!broken)
                         throw e;

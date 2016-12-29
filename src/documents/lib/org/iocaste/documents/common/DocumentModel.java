@@ -22,6 +22,7 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -42,6 +43,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private DocumentModelItem namespace;
     private String name, tablename, classname, pkgname;
     private Map<String, DocumentModelItem> itens;
+    private Map<String, String> indexes;
     private Set<DocumentModelKey> keys;
     private boolean corrupted;
     
@@ -49,6 +51,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
         this.name = name;
         itens = new LinkedHashMap<>();
         keys = new LinkedHashSet<>();
+        indexes = new HashMap<>();
     }
     
     /**
@@ -56,9 +59,13 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * @param item
      */
     public final void add(DocumentModelItem item) {
-        item.setIndex(String.format("%s%d03", name, itens.size()));
+        String index = String.format("%s%d03", name, itens.size());
+        String name = item.getName();
+        
+        item.setIndex(index);
         item.setDocumentModel(this);
-        itens.put(item.getName(), item);
+        itens.put(name, item);
+        indexes.put(index, name);
     }
     
     /**
@@ -121,6 +128,10 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
         document = (DocumentModel)object;
         
         return name.equals(document.getName());
+    }
+    
+    public final DocumentModelItem getByIndex(String index) {
+        return itens.get(indexes.get(index));
     }
     
     /**
