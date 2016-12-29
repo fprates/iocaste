@@ -493,7 +493,7 @@ public class Documents extends AbstractServiceInterface {
         
         switch (element.getType()) {
         case DataType.BOOLEAN:
-            return (boolean)value;
+            return !(boolean)value;
             
         case DataType.NUMC:
             if (value instanceof BigDecimal)

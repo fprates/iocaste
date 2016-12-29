@@ -87,38 +87,35 @@ public class DocumentExtractor {
     }
 
     @SuppressWarnings("unchecked")
-    private static ExtendedObject[] convertItems(DataConversion conversion,
-            ViewComponents components) {
+    private static Collection<ExtendedObject> convertItems(
+            DataConversion conversion, ViewComponents components) {
         String source;
         Collection<ExtendedObject> collection;
         ExtendedObject[] objects;
         TableToolData ttdata;
         Map<Integer, TableToolItem> ttitems;
-        int i;
         
         switch (conversion.getSourceType()) {
         case DataConversion.OBJECTS:
-            return (ExtendedObject[])conversion.getSource();
+            objects = (ExtendedObject[])conversion.getSource();
+            collection = new ArrayList<>();
+            for (ExtendedObject object : objects)
+                if (!Documents.isInitial(object))
+                    collection.add(object);
+            return collection;
         case DataConversion.COLLECTION:
-            collection = (Collection<ExtendedObject>)conversion.getSource();
-            if (collection == null)
-                break;
-            objects = new ExtendedObject[collection.size()];
-            i = 0;
-            for (ExtendedObject extobject : collection)
-                objects[i++] = extobject;
-            return objects;
+            return (Collection<ExtendedObject>)conversion.getSource();
         case DataConversion.TABLETOOL:
             source = (String)conversion.getSource();
             ttdata = components.getComponentData(source);
             ttitems = ttdata.getItems();
             if (ttitems == null)
                 break;
-            objects = new ExtendedObject[ttitems.size()];
-            i = 0;
+            collection = new ArrayList<>();
             for (TableToolItem item : ttitems.values())
-                objects[i++] = item.object;
-            return objects;
+                if (!Documents.isInitial(item.object))
+                    collection.add(item.object);
+            return collection;
         default:
             break;
         }
@@ -131,15 +128,13 @@ public class DocumentExtractor {
             Documents documents,
             DataConversion conversion,
             ComplexDocument document,
-            ExtendedObject[] objects) {
+            Collection<ExtendedObject> objects) {
         DataConversionRule rule;
         List<ExtendedObject> result;
         String to, sourcepage;
         DocumentModel model;
         ViewContext viewctx;
         Map<String, DocumentModel> models = new HashMap<>();
-        
-        result = (document == null)? new ArrayList<ExtendedObject>() : null;
         
         if (objects == null) {
             sourcepage = conversion.getSourcePage();
@@ -150,6 +145,7 @@ public class DocumentExtractor {
                 return null;
         }
         
+        result = (document == null)? new ArrayList<ExtendedObject>() : null;
         for (ExtendedObject object : objects) {
             if (conversion == null) {
                 if (document == null)
@@ -227,7 +223,7 @@ public class DocumentExtractor {
         DocumentModel model;
         String to, source, sourcepage;
         ExtendedObject head;
-        ExtendedObject[] objects;
+        Collection<ExtendedObject> objects;
         DataFormTool dftool;
         ComplexDocument document;
         ViewComponents components;
