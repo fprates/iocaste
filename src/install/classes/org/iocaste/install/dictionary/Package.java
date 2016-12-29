@@ -13,15 +13,16 @@ public class Package extends Module {
     public Package(byte dbtype) {
         super(dbtype);
     }
-    
+
     /*
      * (non-Javadoc)
-     * @see org.iocaste.install.dictionary.Module#install()
+     * @see org.iocaste.install.dictionary.Module#install(
+     *    org.iocaste.install.dictionary.ModuleContext)
      */
     @Override
-    public final List<String> install() {
+    public final List<String> install(ModuleContext context) {
         Set<String> locales;
-        String country, tag;
+        String country, tag, packagename;
         Table language, package001, package002;
         Table docs001, docs002, docs003, docs004, docs005, docs006;
         
@@ -44,16 +45,24 @@ public class Package extends Module {
         docs005 = getTable("DOCS005");
         docs006 = getTable("DOCS006");
 
+        insertElement(docs003,
+                "LANGUAGES.LOCALE", 0, 5, 0, false);
+        insertElement(docs003,
+                "PACKAGE.NAME", 0, 60, 0, false);
+        insertElement(docs003,
+                "PACKAGE_ITEM.CODE", 0, 72, 0, true);
+        insertElement(docs003,
+                "PACKAGE_ITEM.NAME", 0, 60, 0, true);
+        insertElement(docs003,
+                "PACKAGE_ITEM.MODEL", 0, 24, 0, true);
+        
         /*
          * languages
          */
         insertModel(docs001, docs005,
                 "LANGUAGES", "LANG", null);
-        insertElement(docs003,
-                "LANGUAGES.LOCALE", 0, 5, 0, false);
-        insertModelKey(docs002, docs004,
-                "LANGUAGES.LOCALE", "LANGUAGES", "LOCAL", "LANGUAGES.LOCALE",
-                    null);
+        insertModelKey(docs001, docs002, docs004,
+                "LOCALE", "LOCAL", "LANGUAGES.LOCALE", null);
         
         locales = new HashSet<>();
         for (Locale locale : Locale.getAvailableLocales()) {
@@ -77,34 +86,22 @@ public class Package extends Module {
          */
         insertModel(docs001, docs005,
                 "PACKAGE", "PACKAGE001", null);
-        insertElement(docs003,
-                "PACKAGE.NAME", 0, 60, 0, false);
-        insertModelKey(docs002, docs004,
-                "PACKAGE.NAME", "PACKAGE", "IDENT", "PACKAGE.NAME", null);
+        packagename = insertModelKey(docs001, docs002, docs004,
+                "NAME", "IDENT", "PACKAGE.NAME", null);
 
         /*
          * package item
          */
         insertModel(docs001, docs005,
                 "PACKAGE_ITEM", "PACKAGE002", null);
-        insertElement(docs003,
-                "PACKAGE_ITEM.CODE", 0, 72, 0, true);
-        insertElement(docs003,
-                "PACKAGE_ITEM.NAME", 0, 60, 0, true);
-        insertElement(docs003,
-                "PACKAGE_ITEM.MODEL", 0, 24, 0, true);
-        insertModelKey(docs002, docs004,
-                "PACKAGE_ITEM.CODE", "PACKAGE_ITEM", "IDENT",
-                    "PACKAGE_ITEM.CODE", null);
-        insertModelItem(docs002, docs006,
-                "PACKAGE_ITEM.PACKAGE", "PACKAGE_ITEM", "PACKG", "PACKAGE.NAME",
-                    null, "PACKAGE.NAME");
-        insertModelItem(docs002,
-                "PACKAGE_ITEM.NAME", "PACKAGE_ITEM", "INAME",
-                    "PACKAGE_ITEM.NAME", null);
-        insertModelItem(docs002,
-                "PACKAGE_ITEM.MODEL", "PACKAGE_ITEM", "MODEL",
-                    "PACKAGE_ITEM.MODEL", null);
+        insertModelKey(docs001, docs002, docs004,
+                "CODE", "IDENT", "PACKAGE_ITEM.CODE", null);
+        insertModelItem(docs001, docs002, docs006,
+                "PACKAGE", "PACKG", "PACKAGE.NAME", null, packagename);
+        insertModelItem(docs001, docs002,
+                "NAME", "INAME", "PACKAGE_ITEM.NAME", null);
+        insertModelItem(docs001, docs002,
+                "MODEL", "MODEL", "PACKAGE_ITEM.MODEL", null);
         
         return compile();
     }

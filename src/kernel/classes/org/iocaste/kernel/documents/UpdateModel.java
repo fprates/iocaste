@@ -161,8 +161,8 @@ public class UpdateModel extends AbstractDocumentsHandler {
      * @throws Exception
      */
     private final int removeModelItem(Connection connection,
-            DocumentModelItem item) throws Exception {
-        String name = getComposedName(item);
+            Documents documents, DocumentModelItem item) throws Exception {
+        String name = getModelItemIndex(connection, documents, item);
         
         update(connection, QUERIES[DEL_FOREIGN], name);
         if (update(connection, QUERIES[DEL_ITEM], name) == 0)
@@ -233,7 +233,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
             
             if (!oldmodel.contains(item)) {
                 insert.run(data.connection, data.element);                
-                if (insertModelItem(data.connection, item) == 0)
+                if (insertModelItem(data.connection, data.documents, item) == 0)
                     throw new IocasteException("error on model insert");
             } else {
                 itemname = item.getName();
@@ -247,7 +247,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
             if (data.model.contains(olditem))
                 continue;
 
-            if (removeModelItem(data.connection, olditem) == 0)
+            if (removeModelItem(data.connection, data.documents, olditem) == 0)
                 throw new IocasteException("error on remove model item");
         }
 
@@ -295,8 +295,10 @@ public class UpdateModel extends AbstractDocumentsHandler {
         criteria[3] = data.element.getName();
         criteria[4] = data.item.getAttributeName();
         criteria[5] = (data.reference == null)?
-                null : getComposedName(data.reference);
-        criteria[6] = getComposedName(data.item);
+                null : getModelItemIndex(
+                        data.connection, data.documents, data.reference);
+        criteria[6] = getModelItemIndex(
+                data.connection, data.documents, data.item);
         
         if (update(data.connection, QUERIES[UPDATE_ITEM], criteria) >= 0)
             return;

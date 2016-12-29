@@ -65,7 +65,8 @@ public class RemoveModel extends AbstractDocumentsHandler {
             return 0;
 
         for (DocumentModelKey key : model.getKeys()) {
-            name = getComposedName(model.getModelItem(key.getModelItemName()));
+            name = getModelItemIndex(connection, documents,
+                    model.getModelItem(key.getModelItemName()));
             update(connection, QUERIES[DEL_KEY], name);
         }
         
@@ -84,7 +85,7 @@ public class RemoveModel extends AbstractDocumentsHandler {
                     continue;
                 
                 try {
-                    removeModelItem(connection, item);
+                    removeModelItem(connection, documents, item);
                 } catch (Exception e) {
                     continue;
                 }
@@ -116,8 +117,8 @@ public class RemoveModel extends AbstractDocumentsHandler {
      * @throws Exception
      */
     private final int removeModelItem(Connection connection,
-            DocumentModelItem item) throws Exception {
-        String name = getComposedName(item);
+            Documents documents, DocumentModelItem item) throws Exception {
+        String name = getModelItemIndex(connection, documents, item);
         
         update(connection, QUERIES[DEL_FOREIGN], name);
         if (update(connection, QUERIES[DEL_ITEM], name) == 0)

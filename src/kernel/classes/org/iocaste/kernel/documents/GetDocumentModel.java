@@ -2,6 +2,7 @@ package org.iocaste.kernel.documents;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
@@ -17,11 +18,10 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
     @SuppressWarnings("unchecked")
     public final DocumentModel build(Connection connection, Documents documents,
             String modelname, boolean broken) throws Exception {
+        Map<String, String> itemsnames;
         DataElement element;
         DocumentModel document, reference;
-        int i;
-        String itemref, name, namespace;
-        String[] composed;
+        String itemref, name, namespace, modelref, index;
         Object[] shlines, lines;
         Map<String, Object> columns;
         DocumentModelItem item;
@@ -50,60 +50,60 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
         
         getde = documents.get("get_data_element");
         lines = select(connection, QUERIES[DOC_ITEM], 0, modelname);
-        if (lines != null)
-            for (Object object : lines) {
-                columns = (Map<String, Object>)object;
-                name = (String)columns.get("INAME");
-                composed = name.split("\\.");
-                
-                item = new DocumentModelItem(composed[1]);
-                item.setDocumentModel(document);
-                item.setAttributeName((String)columns.get("ATTRB"));
-                item.setTableFieldName((String)columns.get("FNAME"));
-                item.setDataElement(
-                        getde.run(connection, (String)columns.get("ENAME")));
-                item.setIndex(((BigDecimal)columns.get("NRITM")).intValue());
-                
-                itemref = (String)columns.get("ITREF");
-                if (itemref != null) {
-                    composed = itemref.split("\\.");
-                    reference = run(connection, documents, composed[0], broken);
-                    try {
-                        if (reference != null)
-                            item.setReference(
-                                    reference.getModelItem(composed[1]));
-                    } catch (Exception e) {
-                        if (!broken)
-                            throw e;
-                        /*
-                         * podemos recuperar o modelo à todo custo.
-                         * mas avisamos que está corrompido.
-                         */
-                        document.corrupted();
-                    }
+        if (lines == null)
+            return document;
+        
+        itemsnames = new HashMap<>();
+        for (Object object : lines) {
+            columns = (Map<String, Object>)object;
+            name = (String)columns.get("ITMNM");
+            item = new DocumentModelItem(name);
+            item.setDocumentModel(document);
+            item.setAttributeName((String)columns.get("ATTRB"));
+            item.setTableFieldName((String)columns.get("FNAME"));
+            item.setDataElement(
+                    getde.run(connection, (String)columns.get("ENAME")));
+            item.setIndex(index = (String)columns.get("ITMID"));
+            itemsnames.put(index, name);
+            
+            itemref = (String)columns.get("ITREF");
+            if (itemref != null) {
+                modelref = itemref.substring(0, itemref.length() - 3);
+                reference = run(connection, documents, modelref, broken);
+                try {
+                    if (reference != null)
+                        item.setReference(reference.getModelItem(itemref));
+                } catch (Exception e) {
+                    if (!broken)
+                        throw e;
+                    /*
+                     * podemos recuperar o modelo à todo custo.
+                     * mas avisamos que está corrompido.
+                     */
+                    document.corrupted();
                 }
-                
-                shlines = select(connection, QUERIES[SH_REFERENCE], 0, name);
-                if (shlines != null) {
-                    columns = (Map<String, Object>)shlines[0];
-                    item.setSearchHelp((String)columns.get("SHCAB"));
-                }
-                
-                i = item.getIndex();
-                document.add(item);
-                item.setIndex(i);
             }
+            
+            shlines = select(connection, QUERIES[SH_REFERENCE], 0, name);
+            if (shlines != null) {
+                columns = (Map<String, Object>)shlines[0];
+                item.setSearchHelp((String)columns.get("SHCAB"));
+            }
+            
+            document.add(item);
+        }
         
         lines = select(connection, QUERIES[TABLE_INDEX], 0, modelname);
         if (lines != null)
             for (Object object : lines) {
                 columns = (Map<String, Object>)object;
-                composed = ((String)columns.get("INAME")).split("\\.");
-                document.add(new DocumentModelKey(composed[1]));
+                index = (String)columns.get("ITMID");
+                document.add(new DocumentModelKey(itemsnames.get(index)));
             }
         
         return document;
     }
+    
     @Override
     public Object run(Message message) throws Exception {
         String modelname = message.getst("name");

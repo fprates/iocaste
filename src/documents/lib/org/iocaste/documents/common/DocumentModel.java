@@ -22,10 +22,10 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 /**
  * Implementação de modelo de documento
@@ -47,7 +47,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     
     public DocumentModel(String name) {
         this.name = name;
-        itens = new TreeMap<>();
+        itens = new LinkedHashMap<>();
         keys = new LinkedHashSet<>();
     }
     
@@ -56,7 +56,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * @param item
      */
     public final void add(DocumentModelItem item) {
-        item.setIndex(itens.size());
+        item.setIndex(String.format("%s%d03", name, itens.size()));
         item.setDocumentModel(this);
         itens.put(item.getName(), item);
     }
@@ -137,11 +137,12 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      */
     public final DocumentModelItem[] getItens() {
         DocumentModelItem item;
+        int i = 0;
         DocumentModelItem[] ordered = new DocumentModelItem[itens.size()];
         
         for (String name : itens.keySet()) {
             item = itens.get(name);
-            ordered[item.getIndex()] = item;
+            ordered[i++] = item;
         }
         
         return ordered;

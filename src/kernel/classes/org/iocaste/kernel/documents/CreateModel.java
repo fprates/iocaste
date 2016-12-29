@@ -37,9 +37,8 @@ public class CreateModel extends AbstractDocumentsHandler {
 
         pkgname = model.getPackage();
         if (pkgname == null)
-            throw new IocasteException(new StringBuilder(
-                    "package not specified for model ").
-                    append(model.getName()).toString());
+            throw new IocasteException(
+                    "package not specified for model %s", model.getName());
         
         items = model.getItens();
         getmodel = documents.get("get_document_model");
@@ -58,8 +57,8 @@ public class CreateModel extends AbstractDocumentsHandler {
         for (DocumentModelItem item : items) {
             tname = item.getTableFieldName();
             if (tname == null)
-                throw new IocasteException(new StringBuilder(model.getName()).
-                        append(": Table field name is null.").toString());
+                throw new IocasteException(
+                        "%s: Table field name is null.", model.getName());
 
             dataelement = item.getDataElement();
             size = dataelement.getLength();
@@ -79,12 +78,11 @@ public class CreateModel extends AbstractDocumentsHandler {
             if (reference.isDummy()) {
                 refname = reference.getDocumentModel().getName();
                 refmodel = getmodel.run(connection, documents, refname);
-                refname = getComposedName(reference);
+                refname = getModelItemIndex(connection, documents, reference);
                 reference = refmodel.getModelItem(reference.getName());
                 if (reference == null)
-                    throw new IocasteException(new StringBuilder(refname).
-                            append(": is an invalid reference.").
-                            toString());
+                    throw new IocasteException(
+                            "%s: is an invalid reference.", refname);
             } else {
                 refmodel = reference.getDocumentModel();
             }
@@ -154,14 +152,15 @@ public class CreateModel extends AbstractDocumentsHandler {
         if (documents.cache.mmodel != null) {
             l = documents.getModelItemLen("NAME");
             if (name.length() > l)
-                throw new IocasteException(name.concat(": " +
-                        "invalid modelname length on document header"));
+                throw new IocasteException(
+                       "%s: invalid modelname length on document header", name);
             
             if (tablename != null) {
                 l = documents.getModelItemLen("TABLE");
                 if (tablename.length() > l)
-                    throw new IocasteException(tablename.concat(": " +
-                            "invalid tablename length on document header"));
+                    throw new IocasteException(
+                            "%s: invalid tablename length on document header",
+                            tablename);
             }
         }
         
@@ -206,7 +205,7 @@ public class CreateModel extends AbstractDocumentsHandler {
         
         getde = documents.get("get_data_element");
         for (DocumentModelItem item : itens) {
-            insertModelItem(connection, item);
+            insertModelItem(connection, documents, item);
             
             dataelement = item.getDataElement();
             if (!dataelement.isDummy())
@@ -232,7 +231,7 @@ public class CreateModel extends AbstractDocumentsHandler {
         
         modelname = model.getName();
         for (DocumentModelKey key : model.getKeys()) {
-            name = getComposedName(model.getModelItem(key.getModelItemName()));
+            name = model.getModelItem(key.getModelItemName()).getIndex();
             if (update(connection, QUERIES[INS_KEY], name, modelname) == 0)
                 throw new IocasteException("error on key insert.");
         }

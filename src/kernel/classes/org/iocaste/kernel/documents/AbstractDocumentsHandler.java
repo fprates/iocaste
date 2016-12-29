@@ -56,37 +56,37 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         "select * from DOCS002 where docid = ?",
         "select * from SHREF where iname = ?",
         "select * from DOCS004 where docid = ?",
-        "insert into DOCS002(iname, docid, nritm, " +
+        "insert into DOCS002(itmid, docid, itmnm, " +
                 "fname, ename, attrb, itref) values(?, ?, ?, ?, ?, ?, ?)",
-        "insert into DOCS006(iname, itref) values(?, ?)",
+        "insert into DOCS006(itmid, itref) values(?, ?)",
         "select * from SHCAB where ident = ?",
         "insert into SHREF(iname, shcab) values(?, ?)",
-        "delete from DOCS004 where iname = ?",
+        "delete from DOCS004 where itmid = ?",
         "delete from DOCS005 where tname = ?",
         "delete from DOCS001 where docid = ?",
-        "delete from DOCS006 where iname = ?",
+        "delete from DOCS006 where itmid = ?",
         "delete from SHREF where iname = ?",
         "select * from SHITM where mditm = ?",
         "select * from SHCAB where exprt = ?",
-        "delete from DOCS002 where iname = ?",
+        "delete from DOCS002 where itmid = ?",
         "delete from DOCS003 where ename = ?",
         "select * from DOCS003 where ename = ?",
-        "insert into DOCS004(iname, docid) values (?, ?)",
+        "insert into DOCS004(itmid, docid) values (?, ?)",
         "insert into DOCS001(docid, tname, class, nscol, nstyp, nslen, pkgnm) "+
                 "values(?, ?, ?, ?, ?, ?, ?)",
         "insert into DOCS005(tname, docid) values(? , ?)",
         "update DOCS003 set decim = ?, lngth = ?, etype = ?, upcas = ? " +
                 "where ename = ?",
-        "update DOCS002 set docid = ?, nritm = ?, fname = ?, ename = ?, " +
-                "attrb = ?, itref = ? where iname = ?",
+        "update DOCS002 set docid = ?, itmnm = ?, fname = ?, ename = ?, " +
+                "attrb = ?, itref = ? where itmid = ?",
         "insert into DOCS003(ename, decim, lngth, etype, upcas, atype) " +
                 "values(?, ?, ?, ?, ?, ?)",
         "select CRRNT from RANGE001 where ident = ? and nmspc = ?",
         "update RANGE001 set crrnt = ? where ident = ? and nmspc = ?",
-        "select CRRNT from RANGE002 where SERIE = ? and NMSPC = ?",
-        "update RANGE002 set crrnt = ? where SERIE = ? and NMSPC = ?",
-        "update DOCS001 set TNAME = ?, nscol = ?, nstyp = ?, nslen = ? " +
-                "where DOCID = ?"
+        "select CRRNT from RANGE002 where serie = ? and nmspc = ?",
+        "update RANGE002 set crrnt = ? where serie = ? and nmspc = ?",
+        "update DOCS001 set tname = ?, nscol = ?, nstyp = ?, nslen = ? " +
+                "where docid = ?"
     };
     
     protected final void addTableKey(List<String> statements,
@@ -174,16 +174,6 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
     }
     
     /**
-     * Retorna nome composto.
-     * @param item item de modelo
-     * @return nome composto do item.
-     */
-    protected final String getComposedName(DocumentModelItem item) {
-        return new StringBuilder(item.getDocumentModel().getName()).
-                append(".").append(item.getName()).toString();
-    }
-    
-    /**
      * 
      * @param model
      * @param line
@@ -219,7 +209,6 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         DocumentModel model;
         DocumentModelItem item, itemref;
         String[] composed;
-        int i;
         Documents documents;
         
         documents = getFunction();
@@ -230,7 +219,6 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         }
 
         model = new DocumentModel(null);
-        i = 0;
         for (String column : query.getColumns()) {
             composed = column.split("\\.");
             if (model.contains(composed[1]))
@@ -243,7 +231,7 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
                     connection, documents, composed[0])).
                     getModelItem(composed[1]);
             item.setTableFieldName(itemref.getTableFieldName());
-            item.setIndex(i++);
+            item.setIndex(itemref.getIndex());
             item.setDataElement(itemref.getDataElement());
             item.setDocumentModel(model);
             model.add(item);
@@ -259,6 +247,21 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         
         model = getmodel.run(connection, documents, refname);
         return (model == null)? null : model.getModelItem(name);
+    }
+    
+    protected final String getModelItemIndex(Connection connection,
+            Documents documents, DocumentModelItem item) throws Exception {
+        GetDocumentModel modelget;
+        DocumentModel model;
+        String index = item.getIndex();
+        
+        if (index != null)
+            return index;
+        
+        modelget = documents.get("get_document_model");
+        model = modelget.run(
+                connection, documents, item.getDocumentModel().getName());
+        return model.getModelItem(item.getName()).getIndex();
     }
     
     protected final DocumentModelItem getModelKey(DocumentModel model) {
@@ -290,28 +293,26 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
     }
     
     protected final int insertModelItem(Connection connection,
-            DocumentModelItem item) throws Exception {
+            Documents documents, DocumentModelItem item) throws Exception {
         DocumentModelItem reference;
         DataElement dataelement;
         String itemref, tname;
         DocumentModel model = item.getDocumentModel();
         
         dataelement = item.getDataElement();
-        tname = getComposedName(item);
+        tname = getModelItemIndex(connection, documents,item);
         reference = item.getReference();
         if (reference != null) {
-            itemref = getComposedName(reference);
+            itemref = getModelItemIndex(connection, documents, reference);
             if (model.getName().equals(reference.getDocumentModel().getName()))
-                throw new IocasteException(
-                        new StringBuilder("Self model reference for ").
-                            append(tname).toString());
+               throw new IocasteException("Self model reference for %s", tname);
         } else {
             itemref = null;
         }
         
         if (update(connection, QUERIES[INS_ITEM], tname,
                 model.getName(),
-                item.getIndex(),
+                item.getName(),
                 item.getTableFieldName(),
                 dataelement.getName(),
                 item.getAttributeName(),

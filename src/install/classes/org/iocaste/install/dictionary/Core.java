@@ -13,10 +13,11 @@ public class Core extends Module {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.install.dictionary.Module#install()
+     * @see org.iocaste.install.dictionary.Module#install(
+     *    org.iocaste.install.dictionary.ModuleContext)
      */
     @Override
-    public final List<String> install() {
+    public final List<String> install(ModuleContext context) {
         Table users000, users001, users002, auth001, auth002, auth003, auth004;
         
         users000 = tableInstance("USERS000");

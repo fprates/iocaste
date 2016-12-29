@@ -90,10 +90,8 @@ public class Context extends AbstractExtendedContext {
         
         item.setDocumentModel(model);
         item.setAttributeName(name);
-        item.setIndex(index);
-        
+        item.setIndex(String.format("%s%03d", model.getName(), index));
         model.add(item);
-        
         return item;
     }
 }

@@ -35,7 +35,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     private DocumentModel document;
     private DataElement dataelement;
     private String name, attribname, gettername, settername, fieldname, sh;
-    private int index;
+    private String index;
     private DocumentModelItem reference;
     private boolean dummy;
     
@@ -125,7 +125,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * Posição do item no modelo.
      * @return posição
      */
-    public final int getIndex() {
+    public final String getIndex() {
     	return index;
     }
     
@@ -238,7 +238,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * Define posição do item no modelo.
      * @param index posição.
      */
-    public final void setIndex(int index) {
+    public final void setIndex(String index) {
     	this.index = index;
     }
     

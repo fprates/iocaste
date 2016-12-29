@@ -18,6 +18,7 @@ import org.iocaste.install.dictionary.Core;
 import org.iocaste.install.dictionary.Documents;
 import org.iocaste.install.dictionary.Login;
 import org.iocaste.install.dictionary.Module;
+import org.iocaste.install.dictionary.ModuleContext;
 import org.iocaste.install.dictionary.Package;
 import org.iocaste.install.dictionary.SH;
 import org.iocaste.kernel.common.DBNames;
@@ -73,24 +74,25 @@ public class InstallContinue extends AbstractActionHandler {
         Map<String, Table> tables;
         byte dbtype = DBNames.names.get(config.dbtype);
         List<String> sqllist = new ArrayList<>();
+        ModuleContext context = new ModuleContext();
         
-        sqllist.addAll(new Core(dbtype).install());
+        sqllist.addAll(new Core(dbtype).install(context));
 
         documents = new Documents(dbtype);
-        sqllist.addAll(documents.install());
+        sqllist.addAll(documents.install(context));
         tables = documents.getTables();
         
         login = new Login(dbtype);
         login.putTables(tables);
-        sqllist.addAll(login.install());
+        sqllist.addAll(login.install(context));
         
         sh = new SH(dbtype);
         sh.putTables(tables);
-        sqllist.addAll(sh.install());
+        sqllist.addAll(sh.install(context));
         
         package_ = new Package(dbtype);
         package_.putTables(tables);
-        sqllist.addAll(package_.install());
+        sqllist.addAll(package_.install(context));
         
         for (String sql : sqllist)
             ps.addBatch(sql);
@@ -180,9 +182,15 @@ public class InstallContinue extends AbstractActionHandler {
         iocaste = new Iocaste(context.function);
         iocaste.login("ADMIN", "iocaste", "pt_BR");
         
-        pkgtool = new PackageTool(context.function);
-        for (String pkgname : PACKAGES)
-            pkgtool.install(pkgname);
+        try {
+            pkgtool = new PackageTool(context.function);
+            for (String pkgname : PACKAGES)
+                pkgtool.install(pkgname);
+        } catch (Exception e) {
+            iocaste.rollback();
+            iocaste.disconnect();
+            throw e;
+        }
 
         iocaste.commit();
         iocaste.disconnect();

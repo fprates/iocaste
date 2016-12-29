@@ -17,6 +17,7 @@ public abstract class Module {
     private List<Query> queries;
     private Map<String, Authorization> authorizations;
     private Map<String, Profile> profiles;
+    private String docid;
     private int nritm;
     private byte dbtype;
     
@@ -132,21 +133,24 @@ public abstract class Module {
         docs005.set("docid", docid);
         insert(docs005);
         
+        this.docid = docid;
         nritm = 0;
     }
     
-    protected final void insertModelItem(Table docs002, String iname,
-            String docid, String fname, String ename, String attrb) {
-        insertModelItem(docs002, null, iname, docid, fname, ename, attrb,
-                null);
-        
+    protected final String insertModelItem(Table docs001, Table docs002,
+            String name, String fname, String ename, String attrb) {
+        return insertModelItem(
+                docs001, docs002, null, name, fname, ename, attrb, null);
     }
     
-    protected final void insertModelItem(Table docs002, Table docs006,
-            String iname, String docid, String fname, String ename,
+    protected final String insertModelItem(Table docs001, Table docs002,
+            Table docs006, String name, String fname, String ename,
             String attrb, String itref) {
-        docs002.set("iname", iname);
+        String iname = String.format("%s%03d", docid, nritm);
+        
+        docs002.set("itmid", iname);
         docs002.set("docid", docid);
+        docs002.set("itmnm", name);
         docs002.set("nritm", nritm++);
         docs002.set("fname", fname);
         docs002.set("ename", ename);
@@ -155,24 +159,28 @@ public abstract class Module {
         insert(docs002);
         
         if (itref == null)
-            return;
+            return iname;
 
-        docs006.set("iname", iname);
+        docs006.set("itmid", iname);
         docs006.set("itref", itref);
         insert(docs006);
+        return iname;
     }
     
-    protected final void insertModelKey (Table docs002, Table docs004,
-            String iname, String docid, String fname, String ename,
+    protected final String insertModelKey (Table docs001, Table docs002,
+            Table docs004, String name, String fname, String ename,
             String attrb) {
-        insertModelItem(docs002, iname, docid, fname, ename, attrb);
+        String itemname;
         
-        docs004.set("iname", iname);
+        itemname = insertModelItem(docs001, docs002, name, fname, ename, attrb);
+        
+        docs004.set("itmid", docs002.getValues().get("ITMID"));
         docs004.set("docid", docid);
         insert(docs004);
+        return itemname;
     }
     
-    public abstract List<String> install();
+    public abstract List<String> install(ModuleContext context);
     
     protected final void linkAuthorizationToProfile(String prfnm, String autnm)
     {

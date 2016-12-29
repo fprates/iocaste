@@ -73,10 +73,9 @@ public class Upload extends AbstractActionHandler {
             items = extcontext.model.getItens();
             columns = new ExtendedObject[items.length];
             for (int i = 0; i < items.length; i++) {
-                count = items[i].getIndex();
-                columns[count] = instance("UPL_LAYOUT_COLUMN");
-                columns[count].set("NAME", items[i].getName());
-                columns[count].set("MODEL_ITEM", items[i].toString());
+                columns[i] = instance("UPL_LAYOUT_COLUMN");
+                columns[i].set("NAME", items[i].getName());
+                columns[i].set("MODEL_ITEM", items[i].toString());
             }
         }
         count = 0;
