@@ -92,17 +92,34 @@ public class IsAuthorized extends AbstractHandler {
         return (authlist.size() == 0)? null : authlist;
     }
 
+    private boolean check(List<Authorization> usrauthorizations,
+            String key, String value) {
+        String usrvalue;
+        Map<String, String> usrparameters;
+        
+        for (Authorization usrauthorization : usrauthorizations) {
+            usrparameters = usrauthorization.getParameters();
+            usrvalue = usrparameters.get(key);
+            if ((usrvalue == null) || !usrvalue.equals(value))
+                continue;
+            return false;
+        }
+        
+        return true;
+    }
+    
     @Override
     public Object run(Message message) throws Exception {
         boolean fail;
         User user;
-        String objvalue, usrvalue, username;
-        Map<String, String> usrparameters, objparameters;
+        String objvalue, username;
+        Map<String, String> objparameters;
         List<Authorization> usrauthorizations;
         Connection connection;
         Authorization objauthorization;
         Auth auth = getFunction();
-        UserContext context = auth.session.sessions.get(message.getSessionid());
+        String sessionid = message.getSessionid();
+        UserContext context = auth.session.sessions.get(sessionid);
         
         if (context == null && auth.isAuthorizedCall())
             return false;
@@ -115,9 +132,8 @@ public class IsAuthorized extends AbstractHandler {
         usrauthorizations = context.getAuthorizations();
         username = user.getUsername();
         if (usrauthorizations == null) {
-            connection = auth.database.instance();
+            connection = auth.database.getDBConnection(sessionid);
             usrauthorizations = getAuthorizations(connection, username);
-            connection.close();
             context.setAuthorizations(usrauthorizations);
         }
         
@@ -130,16 +146,7 @@ public class IsAuthorized extends AbstractHandler {
             if (objvalue == null || objvalue.length() == 0)
                 continue;
             
-            fail = true;
-            for (Authorization usrauthorization : usrauthorizations) {
-                usrparameters = usrauthorization.getParameters();
-                usrvalue = usrparameters.get(key);
-                if ((usrvalue == null) || !usrvalue.equals(objvalue))
-                    continue;
-                fail = false;
-                break;
-            }
-            
+            fail = check(usrauthorizations, key, objvalue);
             if (!fail)
                 continue;
             
