@@ -6,6 +6,7 @@ import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
@@ -22,6 +23,7 @@ public class Upload extends AbstractActionHandler {
         String[] lines, tokens;
         ExtendedObject object, column;
         ExtendedObject[] columns;
+        DocumentModelItem[] items;
         Locale locale;
         IocasteException ie;
         Context extcontext;
@@ -40,6 +42,12 @@ public class Upload extends AbstractActionHandler {
             extcontext.options = getdf("options");
             extcontext.layout = getDocument(
                     "UPL_LAYOUT", extcontext.options.getst("LAYOUT"));
+            if (extcontext.layout == null) {
+                setFocus("UPL_LAYOUT", "LAYOUT");
+                message(Const.ERROR, "invalid.layout");
+                return;
+            }
+            
             extcontext.linemodel = extcontext.layout.getHeader().getst("MODEL");
             extcontext.model = new Documents(context.function).
                     getModel(extcontext.linemodel);
@@ -61,6 +69,15 @@ public class Upload extends AbstractActionHandler {
         skip = extcontext.options.geti("IGNORE_FIRST_LINES");
         lines = new String(extcontext.content).split("\n");
         columns = extcontext.layout.getItems("columns");
+        if ((columns == null) || (columns.length == 0)) {
+            items = extcontext.model.getItens();
+            columns = new ExtendedObject[items.length];
+            for (int i = 0; i < items.length; i++) {
+                columns[i] = instance("UPL_LAYOUT_COLUMN");
+                columns[i].set("NAME", items[i].getName());
+                columns[i].set("MODEL_ITEM", items[i].toString());
+            }
+        }
         count = 0;
         truncate = extcontext.options.getbl("TRUNCATE_CHAR");
         locale = context.view.getLocale();

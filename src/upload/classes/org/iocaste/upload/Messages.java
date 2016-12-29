@@ -14,6 +14,7 @@ public class Messages extends MessageSource {
         put("IGNORE", "Ignorar");
         put("IGNORE_FIRST_LINES", "Primeiras linhas ignoradas");
         put("iocaste-upload", "Utilitário de carga");
+        put("invalid.lyout", "Layout inválido.");
         put("LAYOUT", "Layout");
         put("layoutcreate", "Criar layout");
         put("layoutcreate1", "Editar layout");
