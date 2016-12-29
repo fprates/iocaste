@@ -58,7 +58,6 @@ public class Documents extends Module {
         docs002.key("ITMID", DataType.CHAR, 48);
         docs002.ref("DOCID", DataType.CHAR, 24, "DOCS001", "DOCID");
         docs002.add("ITMNM", DataType.CHAR, 24);
-        docs002.add("NRITM", DataType.NUMC, 3);
         docs002.add("FNAME", DataType.CHAR, DocumentModelItem.MAX_FNAME_LEN);
         docs002.ref("ENAME", DataType.CHAR, 48, "DOCS003", "ENAME");
         docs002.add("ATTRB", DataType.CHAR, 64);
@@ -103,8 +102,6 @@ public class Documents extends Module {
         insertElement(docs003,
                 "MODELITEM.FIELDNAME", 0, DocumentModelItem.MAX_FNAME_LEN, 0,
                         true);
-        insertElement(docs003,
-                "MODELITEM.INDEX", 1, 3, 3, false);
         insertElement(docs003,
                 "MODELITEM.ATTRIB", 0, 64, 0, false);
         insertElement(docs003,
@@ -162,8 +159,6 @@ public class Documents extends Module {
                 "ID", "ITMID", "MODELITEM.ID", null);
         insertModelItem(docs001, docs002, docs006,
             "MODEL", "DOCID", "MODEL.NAME", "documentModel", context.modelname);
-        insertModelItem(docs001, docs002,
-                "INDEX", "NRITM", "MODELITEM.INDEX", "index");
         insertModelItem(docs001, docs002,
                 "NAME", "ITMNM", "MODELITEM.NAME", "name");
         insertModelItem(docs001, docs002,

@@ -59,7 +59,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * @param item
      */
     public final void add(DocumentModelItem item) {
-        String index = String.format("%s%d03", name, itens.size());
+        String index = String.format("%s%03d", name, itens.size());
         String name = item.getName();
         
         item.setIndex(index);

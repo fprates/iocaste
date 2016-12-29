@@ -146,12 +146,11 @@ public abstract class Module {
     protected final String insertModelItem(Table docs001, Table docs002,
             Table docs006, String name, String fname, String ename,
             String attrb, String itref) {
-        String iname = String.format("%s%03d", docid, nritm);
+        String iname = String.format("%s%03d", docid, nritm++);
         
         docs002.set("itmid", iname);
         docs002.set("docid", docid);
         docs002.set("itmnm", name);
-        docs002.set("nritm", nritm++);
         docs002.set("fname", fname);
         docs002.set("ename", ename);
         docs002.set("attrb", attrb);

@@ -300,7 +300,7 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         DocumentModel model = item.getDocumentModel();
         
         dataelement = item.getDataElement();
-        tname = getModelItemIndex(connection, documents,item);
+        tname = getModelItemIndex(connection, documents, item);
         reference = item.getReference();
         if (reference != null) {
             itemref = getModelItemIndex(connection, documents, reference);
