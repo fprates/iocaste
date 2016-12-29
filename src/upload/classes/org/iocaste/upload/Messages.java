@@ -32,5 +32,6 @@ public class Messages extends MessageSource {
         put("UPLLAYOUTDS", "Exibir layout");
         put("upload", "Carregar");
         put("UPLOAD", "Upload");
+        put("upload.successful", "Upload efetuado com sucesso.");
     }
 }
