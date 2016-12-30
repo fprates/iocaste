@@ -15,30 +15,24 @@ public class RemoveModel extends AbstractDocumentsHandler {
     public static final void recursive(Connection connection,
             Documents documents, DocumentModel model) throws Exception {
         DocumentModel reference;
-        String[] tokens;
         ExtendedObject[] objects;
         Query query;
-        String field, modelname;
         String name = model.getTableName();
         SelectDocument select = documents.get("select_document");
         GetDocumentModel getmodel = documents.get("get_document_model");
         RemoveModel removemodel = documents.get("remove_model");
         String pkg = model.getPackage();
         
-        modelname = model.getName();
         for (DocumentModelItem item : model.getItens()) {
-            field = new StringBuilder(modelname).
-                    append(".").append(item.getName()).toString();
             query = new Query();
             query.setModel("FOREIGN_KEY");
-            query.andEqual("ITEM_NAME", field);
+            query.andEqual("ITEM_NAME", item.getIndex());
             objects = select.run(connection, query);
             if (objects == null)
                 continue;
             for (ExtendedObject object : objects) {
-                tokens = object.getst("REFERENCE").split("\\.");
                 reference = getmodel.run(
-                        connection, documents, tokens[0], true);
+                        connection, documents, object.getst("REFERENCE"), true);
                 if (reference.getPackage().equals(pkg));
                     recursive(connection, documents, reference);
             }
@@ -96,7 +90,7 @@ public class RemoveModel extends AbstractDocumentsHandler {
             update(connection, QUERIES[DEL_MODEL_REF], tablename);
         
         try {
-        update(connection, QUERIES[DEL_MODEL], modelname);
+            update(connection, QUERIES[DEL_MODEL], modelname);
         } catch (Exception e) {
             // avoid any error on mssql.
         }
