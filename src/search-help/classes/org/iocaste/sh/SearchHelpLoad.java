@@ -19,7 +19,6 @@ public class SearchHelpLoad extends AbstractHandler {
         Query query;
         Documents documents;
         ExtendedObject header;
-        String value;
         ExtendedObject[] items;
         SearchHelpData shdata;
         Services function = getFunction();
@@ -32,9 +31,6 @@ public class SearchHelpLoad extends AbstractHandler {
         if (header == null)
             return null;
         
-        value = header.get("EXPORT");
-        header.set("EXPORT", value.split("\\.")[1]);
-        
         query = new Query();
         query.setModel("SH_ITENS");
         query.andEqual("SEARCH_HELP", name);
@@ -46,10 +42,8 @@ public class SearchHelpLoad extends AbstractHandler {
         shdata.setModel(header.getst("MODEL"));
         shdata.setExport(header.getst("EXPORT"));
         
-        for (ExtendedObject item : items) {
-            value = item.get("ITEM");
-            shdata.add(value.split("\\.")[1]);
-        }
+        for (ExtendedObject item : items)
+            shdata.add(item.get("ITEM"));
         
         function.cache.put(name, shdata);
         

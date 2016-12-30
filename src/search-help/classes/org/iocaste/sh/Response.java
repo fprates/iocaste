@@ -27,7 +27,6 @@ public class Response {
     
     private static final void addCriteria(Context context, SearchHelp sh,
             Container container) {
-        String name;
         DataItem item;
         DataForm criteria;
         
@@ -41,8 +40,7 @@ public class Response {
                 continue;
             
             item = (DataItem)element;
-            name = item.getName();
-            if (sh.contains(name)) {
+            if (sh.contains(item.getModelItem().getIndex())) {
                 item.setComponentType(Const.RANGE_FIELD);
                 if (context.view.getFocus() == null)
                     context.view.setFocus(item);
@@ -57,7 +55,7 @@ public class Response {
             Container container, String name, ExtendedObject[] items) {
         TableColumn column;
         TableItem tableitem;
-        String export, action, iname;
+        String export, action, iname, index;
         Object value;
         Text text;
         Link link;
@@ -74,7 +72,8 @@ public class Response {
             column.setModelItem(item);
             column.setLength(item.getDataElement().getLength());
         }
-        
+
+        export = sh.getExport();
         for (ExtendedObject object : items) {
             tableitem = new TableItem(table);
             
@@ -82,9 +81,9 @@ public class Response {
                 name = modelitem.getName();
                 column = table.getColumn(name);
                 value = object.get(modelitem);
-                export = sh.getExport();
+                index = modelitem.getIndex();
                 
-                if (export != null && export.equals(name)) {
+                if (export != null && export.equals(index)) {
                     param.setModelItem(modelitem);
                     action = new StringBuilder("setFieldSh('").
                             append(sh.getInputName()).
@@ -100,7 +99,7 @@ public class Response {
                     text.setText((value == null)? "" : value.toString());
                 }
                 
-                if (!sh.contains(name))
+                if (!sh.contains(index))
                     column.setVisible(false);
             }
             

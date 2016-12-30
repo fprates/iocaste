@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.SearchHelpColumn;
@@ -15,24 +16,28 @@ import org.iocaste.protocol.Message;
 
 public class SearchHelpSave extends AbstractHandler {
 
-    public final void items(Services function, Documents documents,
-            SearchHelpData shdata) throws Exception {
-        String shname, shmodel;
+    public final void items(Documents documents, SearchHelpData shdata,
+            DocumentModel model) throws Exception {
+        String shname;
         ExtendedObject object;
         Map<String, SearchHelpColumn> items;
+        DocumentModelItem item;
+        int i = 0;
         
         items = shdata.getItems();
         if (items.size() == 0)
             throw new IocasteException("sh has no columns itens.");
 
         shname = shdata.getName();
-        shmodel = shdata.getModel();
         object = new ExtendedObject(documents.getModel("SH_ITENS"));
         for (String key : items.keySet()) {
-            object.set("NAME", function.composeName(shname, key));
-            object.set("ITEM", function.composeName(shmodel, key));
+            item = model.getModelItem(key);
+            if (item == null)
+                throw new IocasteException("item %s.%s not found for sh %s",
+                        model.getName(), key, shname);
+            object.set("NAME", String.format("%s%03d", shname, i++));
+            object.set("ITEM", item.getIndex());
             object.set("SEARCH_HELP", shname);
-            
             if (documents.save(object) != 0)
                 continue;
             throw new IocasteException(
@@ -85,7 +90,7 @@ public class SearchHelpSave extends AbstractHandler {
             throw new IocasteException("%s is an invalid model.", shmodel);
 
         shname = shdata.getName();
-        export = function.composeName(shmodel, shdata.getExport());
+        export = model.getModelItem(shdata.getExport()).getIndex();
         
         object = new ExtendedObject(documents.getModel("SEARCH_HELP"));
         object.set("NAME", shname);
@@ -94,7 +99,7 @@ public class SearchHelpSave extends AbstractHandler {
         if (documents.save(object) == 0)
            throw new IocasteException ("Error saving header of sh %s.", shname);
         
-        items(function, documents, shdata);
+        items(documents, shdata, model);
         queries(documents, model, shdata);
         
         function.cache.put(shname, shdata);

@@ -45,17 +45,6 @@ public class Services extends AbstractFunction {
     
     /**
      * 
-     * @param model
-     * @param item
-     * @return
-     */
-    public final String composeName(String model, Object item) {
-        return new StringBuilder(model).append(".").
-                append(item).toString();
-    }
-    
-    /**
-     * 
      * @param message
      * @return
      */
