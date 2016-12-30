@@ -64,13 +64,13 @@ public class SHLib extends AbstractServiceInterface {
     }
     
     /**
-     * Remove ajuda de pesquisa.
+     * Remove ajuda de pesquisa de um item de modelo.
      * @param shname nome
      * @return 1, se removido com sucesso
      */
-    public final int unassign(String shname) {
+    public final int unassign(DocumentModelItem item) {
         Message message = new Message("unassign");
-        message.add("name", shname);
+        message.add("item", item);
         return call(message);
     }
     

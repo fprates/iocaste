@@ -14,10 +14,12 @@ import org.iocaste.packagetool.services.Services;
 import org.iocaste.packagetool.services.State;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.IocasteException;
+import org.iocaste.shell.common.SHLib;
 
 public class ModelInstaller
         extends AbstractModuleInstaller<String, DocumentModel> {
     private Documents documents;
+    private SHLib shlib;
     
     public ModelInstaller(Services services) {
         super(services, "NAME");
@@ -71,6 +73,7 @@ public class ModelInstaller
     @Override
     public final void init(Function function) {
         documents = new Documents(function);
+        shlib = new SHLib(function);
     }
     
     @Override
@@ -83,7 +86,8 @@ public class ModelInstaller
         int i;
         List<Object[]> values;
         ExtendedObject header;
-
+        DocumentModelItem[] items;
+        
         model.setPackage(state.pkgname);
         extractsh(model, state);
         
@@ -94,6 +98,11 @@ public class ModelInstaller
         if (model == null)
             return;
         
+        items = model.getItens();
+        for (DocumentModelItem item : items)
+            if (item.getSearchHelp() != null)
+                shlib.assign(item);
+        
         values = state.data.getValues(model);
         if (values == null)
             return;
@@ -102,7 +111,7 @@ public class ModelInstaller
             header = new ExtendedObject(model);
             i = 0;
             
-            for (DocumentModelItem modelitem : model.getItens())
+            for (DocumentModelItem modelitem : items)
                 header.set(modelitem, line[i++]);
             
             documents.save(header);
@@ -139,7 +148,12 @@ public class ModelInstaller
     
     @Override
     public final void remove(ExtendedObject object) {
-        documents.removeModel(getObjectName(object));
+        String name = getObjectName(object);
+        DocumentModel model = documents.getModel(name);
+        for (DocumentModelItem item : model.getItens())
+            if (item.getSearchHelp() != null)
+                shlib.unassign(item);
+        documents.removeModel(name);
         documents.delete(object);
     }
     

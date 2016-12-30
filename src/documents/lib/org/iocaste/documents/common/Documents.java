@@ -294,16 +294,6 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
-     * Retorna nome composto.
-     * @param item item de modelo
-     * @return nome composto do item.
-     */
-    public static final String getComposedName(DocumentModelItem item) {
-        return new StringBuilder(item.getDocumentModel().getName()).
-                append(".").append(item.getName()).toString();
-    }
-    
-    /**
      * Retorna elemento de dados especificado.
      * @param name nome
      * @return elemento de dados, null se não encontrado

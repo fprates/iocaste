@@ -84,7 +84,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
                 }
             }
             
-            shlines = select(connection, QUERIES[SH_REFERENCE], 0, name);
+            shlines = select(connection, QUERIES[SH_REFERENCE], 0, index);
             if (shlines != null) {
                 columns = (Map<String, Object>)shlines[0];
                 item.setSearchHelp((String)columns.get("SHCAB"));
