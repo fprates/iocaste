@@ -3,15 +3,8 @@ package org.iocaste.kernel.database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLDataException;
-import java.sql.SQLException;
 
-import org.hsqldb.HsqlException;
 import org.iocaste.protocol.Message;
-
-import com.microsoft.sqlserver.jdbc.SQLServerException;
-import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 public class Select extends AbstractDatabaseHandler {
     
@@ -38,6 +31,7 @@ public class Select extends AbstractDatabaseHandler {
      */
     public final Object[] run(Connection connection, String query,
             int rows, Object... criteria) throws Exception {
+        Exception ex;
         ResultSet results;
         int cols = 1;
         PreparedStatement ps = connection.prepareStatement(query);
@@ -52,18 +46,10 @@ public class Select extends AbstractDatabaseHandler {
             
             results = ps.executeQuery();
             return processResultSet(results);
-        } catch (HsqlException e) {
-            throw new SQLException(e.getMessage());
-        } catch (SQLServerException e) {
-            throw new SQLException(e.getMessage());
-        } catch (MySQLSyntaxErrorException e) {
-            throw new SQLException(e.getMessage());
-        } catch (MySQLNonTransientConnectionException e) {
-            throw new SQLException(e.getMessage());
-        } catch (SQLDataException e) {
-            throw new SQLDataException(e.getMessage());
-        } catch (SQLException e) {
-            throw new SQLException (e.getMessage());
+        } catch (Exception e) {
+            ex = new Exception(e.getMessage());
+            ex.setStackTrace(e.getStackTrace());
+            throw ex;
         } finally {
             ps.close();
         }
