@@ -22,6 +22,7 @@ public class SearchHelpSave extends AbstractHandler {
         ExtendedObject object;
         Map<String, SearchHelpColumn> items;
         DocumentModelItem item;
+        Object[][] objects;
         int i = 0;
         
         items = shdata.getItems();
@@ -30,19 +31,27 @@ public class SearchHelpSave extends AbstractHandler {
 
         shname = shdata.getName();
         object = new ExtendedObject(documents.getModel("SH_ITENS"));
+        objects = new Object[items.size()][2];
         for (String key : items.keySet()) {
             item = model.getModelItem(key);
             if (item == null)
                 throw new IocasteException("item %s.%s not found for sh %s",
                         model.getName(), key, shname);
-            object.set("NAME", String.format("%s%03d", shname, i++));
-            object.set("ITEM", item.getIndex());
+            
+            objects[i][0] = item.getIndex();
+            objects[i][1] = items.get(key);
+            object.set("NAME", String.format("%s%03d", shname, i));
+            object.set("ITEM", (String)objects[i++][0]);
             object.set("SEARCH_HELP", shname);
             if (documents.save(object) != 0)
                 continue;
             throw new IocasteException(
                     "Error saving line of sh %s", object.getst("NAME"));
         }
+        
+        items.clear();
+        for (i = 0; i < objects.length; i++)
+            items.put((String)objects[i][0], (SearchHelpColumn)objects[i][1]);
     }
     
     public final void queries(Documents documents, DocumentModel shmodel,
@@ -91,6 +100,7 @@ public class SearchHelpSave extends AbstractHandler {
 
         shname = shdata.getName();
         export = model.getModelItem(shdata.getExport()).getIndex();
+        shdata.setExport(export);
         
         object = new ExtendedObject(documents.getModel("SEARCH_HELP"));
         object.set("NAME", shname);
