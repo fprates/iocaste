@@ -290,7 +290,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
         
         criteria = new Object[7];
         criteria[0] = data.model.getName();
-        criteria[1] = data.item.getIndex();
+        criteria[1] = data.item.getName();
         criteria[2] = data.item.getTableFieldName();
         criteria[3] = data.element.getName();
         criteria[4] = data.item.getAttributeName();
