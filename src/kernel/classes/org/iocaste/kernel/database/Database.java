@@ -28,6 +28,7 @@ public class Database extends AbstractFunction {
         export("checked_select", new CheckedSelect());
         export("commit", new Commit());
         export("disconnected_operation", new DisconnectedOperation());
+        export("ext_db_instance", new InstanceExternalDB());
         export("rollback", new Rollback());
         export("select", new Select());
         export("update", new Update());

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.GenericService;
@@ -74,6 +75,20 @@ public class External extends AbstractServiceInterface {
         throw new RuntimeException("error connecting to remote iocaste.");
     }
     
+    public final Function dbInstance(String dbname) {
+        Function function;
+        Message message;
+        String sessionid;
+        
+        message = new Message("ext_db_instance");
+        message.add("dbname", dbname);
+        sessionid = call(message);
+        
+        function = new ExternalFunction();
+        function.setSessionid(sessionid);
+        return function;
+    }
+    
     public final void disconnect() {
         call(new Message("disconnect"));
     }
@@ -104,4 +119,8 @@ public class External extends AbstractServiceInterface {
         this.secret= secret;
         this.locale = locale;
     }
+}
+
+class ExternalFunction extends AbstractFunction {
+    
 }
