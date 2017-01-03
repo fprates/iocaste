@@ -16,6 +16,7 @@ public class Messages extends MessageSource {
         put("idtab", "Identificação");
         put("INIT", "Senha inicial?");
         put("invalid.user", "Usuário inválido.");
+        put("NAME", "Nome");
         put("PROFILE", "Perfil");
         put("profiletab", "Perfis");
         put("save", "Salvar");
