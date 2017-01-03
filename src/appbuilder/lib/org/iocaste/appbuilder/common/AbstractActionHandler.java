@@ -225,6 +225,10 @@ public abstract class AbstractActionHandler implements ActionHandler {
         return ((MultipartElement)context.view.getElement(name)).getContent();
     }
     
+    protected final boolean getinputbl(String name) {
+        return ((InputComponent)context.view.getElement(name)).isSelected();
+    }
+    
     protected final double getinputd(String name) {
         return ((InputComponent)context.view.getElement(name)).getd();
     }
