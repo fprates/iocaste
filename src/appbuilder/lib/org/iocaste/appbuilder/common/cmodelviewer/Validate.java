@@ -20,12 +20,12 @@ public class Validate extends AbstractActionHandler {
             message(Const.ERROR, "document.already.exists");
             return;
         }
-        
+
+        init(extcontext.redirect, extcontext);
         extcontext.dataformInstance(extcontext.redirect, "head");
         extcontext.set(extcontext.redirect, "head", object);
         extcontext.dataformInstance(extcontext.redirect, "base");
         extcontext.set(extcontext.redirect, "base", object);
-        init(extcontext.redirect, extcontext);
         redirect(extcontext.redirect);
     }
 
