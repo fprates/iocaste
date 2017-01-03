@@ -43,7 +43,7 @@ public class Upload extends AbstractActionHandler {
             extcontext.layout = getDocument(
                     "UPL_LAYOUT", extcontext.options.getst("LAYOUT"));
             if (extcontext.layout == null) {
-                setFocus("UPL_LAYOUT", "LAYOUT");
+                setFocus("options", "LAYOUT");
                 message(Const.ERROR, "invalid.layout");
                 return;
             }
@@ -97,12 +97,11 @@ public class Upload extends AbstractActionHandler {
                 name = name.split("\\.")[1];
                 element = extcontext.model.getModelItem(name).getDataElement();
                 value = Documents.convertValue(tokens[i], element, locale);
-                if ((element.getType() == DataType.CHAR) && (value != null) && 
-                        truncate) {
+                if ((element.getType() == DataType.CHAR) && (value != null)) {
                     length = element.getLength();
-                    tokens[i] = (String)value;
-                    if (tokens[i].length() > length)
-                        value = tokens[i].substring(0, length);
+                    tokens[i] = ((String)value).trim();
+                    value = (truncate && (tokens[i].length() > length))?
+                        tokens[i].substring(0, length) : tokens[i];
                 }
                 object.set(name, value);
             }

@@ -26,7 +26,7 @@ public class LayoutInstall extends AbstractInstallObject {
         ignore = elementbool("UPL_COLUMN_IGNORE");
         
         modelname = new DummyModelItem("MODEL", "NAME");
-        modelitem = new DummyModelItem("MODELITEM", "NAME");
+        modelitem = new DummyModelItem("MODELITEM", "ID");
         
         /*
          * head
@@ -55,9 +55,10 @@ public class LayoutInstall extends AbstractInstallObject {
                 "IGNORE", "IGNRE", ignore);
         
         shd = searchHelpInstance("UPL_SH_MODEL_ITEM", "MODELITEM");
-        shd.setExport("NAME");
-        shd.add("MODEL");
+        shd.setExport("ID");
+        shd.add("ID");
         shd.add("NAME");
+        shd.add("MODEL");
         
         shd = searchHelpInstance("UPL_SH_LAYOUT", "UPL_LAYOUT_HEAD");
         shd.setExport("ID");
