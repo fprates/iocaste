@@ -3,7 +3,8 @@ package org.iocaste.copy;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.copy.install.DBInstall;
+import org.iocaste.copy.main.MainPage;
 
 public class Main extends AbstractPageBuilder {
 
@@ -20,17 +21,7 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.addToTaskGroup("ADMIN", "COPY");
         defaultinstall.setProgramAuthorization("COPY");
         defaultinstall.setProfile("ADMIN");
+        installObject("db", new DBInstall());
     }
 
-}
-
-class MainPage extends AbstractPanelPage {
-
-    @Override
-    public void execute() {
-        set(new InputSpec());
-        set(new InputConfig());
-        submit("copy", new Copy());
-    }
-    
 }

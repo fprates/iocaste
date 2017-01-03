@@ -1,4 +1,4 @@
-package org.iocaste.copy;
+package org.iocaste.copy.main;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -10,15 +10,15 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Const;
 
-public class Copy extends AbstractActionHandler {
+public class CopyFromPortSource extends AbstractActionHandler {
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
         GenericService service;
         Message message;
         External external;
-        ExtendedObject[] objects;
         Iocaste iocaste;
+        ExtendedObject[] objects;
         String model = getdfst("model", "NAME");
         String ns = getdfst("model", "NAMESPACE");
         String port = getdfst("port", "PORT_NAME");
@@ -43,7 +43,7 @@ public class Copy extends AbstractActionHandler {
         iocaste.commit();
         
         external.disconnect();
-        message(Const.STATUS, "sucessful.copy");
     }
-
+    
 }
+

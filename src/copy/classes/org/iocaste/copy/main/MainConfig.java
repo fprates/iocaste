@@ -1,11 +1,11 @@
-package org.iocaste.copy;
+package org.iocaste.copy.main;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 
-public class InputConfig extends AbstractViewConfig {
+public class MainConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
@@ -21,7 +21,9 @@ public class InputConfig extends AbstractViewConfig {
         form = getTool("port");
         form.model = "XTRNL_PORT_HEAD";
         show(form, "PORT_NAME");
-        form.instance("PORT_NAME").required = true;
+        
+        form = getTool("db");
+        form.model = "COPY_EXTERNAL_DB";
     }
 
 }
