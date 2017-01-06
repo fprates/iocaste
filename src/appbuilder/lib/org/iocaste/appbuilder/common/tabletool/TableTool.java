@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractComponentData;
+import org.iocaste.appbuilder.common.AbstractComponentDataItem;
 import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.ViewContext;
@@ -24,10 +25,9 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
@@ -141,6 +141,7 @@ public class TableTool extends AbstractComponentTool {
         InputComponent input;
         DocumentModelItem modelitem;
         TableToolColumn ttcolumn;
+        AbstractComponentDataItem component;
         ExtendedObject object = new ExtendedObject(model);
         
         for (String name : data.get().keySet()) {
@@ -162,8 +163,10 @@ public class TableTool extends AbstractComponentTool {
                 continue;
             }
             
-            if ((element.getType() == Const.LINK) && (model.contains(name)))
-                object.set(name, ((Link)element).getText());
+            component = data.instance(name);
+            if (component.action == null)
+                continue;
+            object.set(name, ((Component)element).getText());
         }
         
         return object;
