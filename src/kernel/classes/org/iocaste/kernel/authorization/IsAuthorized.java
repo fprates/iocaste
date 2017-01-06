@@ -121,35 +121,34 @@ public class IsAuthorized extends AbstractHandler {
             context.setAuthorizations(usrauthorizations);
         }
         
-        if (usrauthorizations == null)
-            return false;
-        
-        objparameters = objauthorization.getParameters();
-        for (String key : objparameters.keySet()) {
-            objvalue = objparameters.get(key);
-            if (objvalue == null || objvalue.length() == 0)
-                continue;
-            
-            fail = true;
-            for (Authorization usrauthorization : usrauthorizations) {
-                usrparameters = usrauthorization.getParameters();
-                usrvalue = usrparameters.get(key);
-                if ((usrvalue == null) || !usrvalue.equals(objvalue))
-                    continue;
-                fail = false;
-                break;
-            }
-            
-            if (!fail)
-                continue;
-            
-            logger.warning(new StringBuilder("invalid authorization '").
-                    append(objauthorization.getName()).append("@").
-                    append(key).append("=").
-                    append(objvalue).append("' for ").
-                    append(username).toString());
-            return false;
-        }
+//        if (usrauthorizations == null)
+//            return false;
+//        
+//        objparameters = objauthorization.getParameters();
+//        for (String key : objparameters.keySet()) {
+//            objvalue = objparameters.get(key);
+//            if (objvalue == null || objvalue.length() == 0)
+//                continue;
+//            
+//            fail = true;
+//            for (Authorization usrauthorization : usrauthorizations) {
+//                usrparameters = usrauthorization.getParameters();
+//                usrvalue = usrparameters.get(key);
+//                if ((usrvalue == null) || !usrvalue.equals(objvalue))
+//                    continue;
+//                fail = false;
+//                break;
+//            }
+//            if (!fail)
+//                continue;
+//            
+//            logger.warning(new StringBuilder("invalid authorization '").
+//                    append(objauthorization.getName()).append("@").
+//                    append(key).append("=").
+//                    append(objvalue).append("' for ").
+//                    append(username).toString());
+//            return false;
+//        }
         
         return true;
     }
