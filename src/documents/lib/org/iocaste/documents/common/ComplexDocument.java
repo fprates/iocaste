@@ -1,8 +1,8 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -95,7 +95,7 @@ public class ComplexDocument implements Serializable,
      * Adds an array of items to the document
      * @param objects array of extended objects
      */
-    public final void add(List<ExtendedObject> objects) {
+    public final void add(Collection<ExtendedObject> objects) {
         if (objects == null)
             return;
         
