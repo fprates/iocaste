@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.Collection;
+
 import org.iocaste.appbuilder.common.dataformtool.DataFormContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
@@ -53,6 +55,11 @@ public interface ExtendedContext {
 
     public abstract void set(String page, String ttname,
             ExtendedObject[] objects);
+
+    public abstract void set(String ttname, Collection<ExtendedObject> objects);
+
+    public abstract void set(String page, String ttname,
+            Collection<ExtendedObject> objects);
     
     public abstract void set(String ttname, TableToolItem ttitem);
     

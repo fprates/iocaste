@@ -1,10 +1,14 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.Collection;
+
 import org.iocaste.documents.common.ExtendedObject;
 
 public interface ContextDataHandler {
 
     public abstract void add(String ttname, ExtendedObject[] items);
+    
+    public abstract void add(String ttname, Collection<ExtendedObject> items);
     
     public abstract void add(String ttname, ExtendedObject object);
     

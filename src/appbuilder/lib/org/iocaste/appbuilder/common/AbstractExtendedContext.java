@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -164,6 +165,29 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     @Override
     public final void set(String page, String ttname, ExtendedObject[] objects)
     {
+        TableToolContextEntry entry;
+        ContextDataHandler handler;
+
+        entry = pages.get(page).get(ttname);
+        entry.items.clear();
+        if (objects == null)
+            return;
+        handler = entry.getHandler();
+        if ((handler != null) && handler.isInitialized())
+            handler.add(ttname, objects);
+        else
+            for (ExtendedObject object : objects)
+                TableToolData.add(this, page, ttname, object);
+    }
+
+    @Override
+    public final void set(String ttname, Collection<ExtendedObject> objects) {
+        set(context.view.getPageName(), ttname, objects);
+    }
+
+    @Override
+    public final void set(String page, String ttname,
+            Collection<ExtendedObject> objects) {
         TableToolContextEntry entry;
         ContextDataHandler handler;
 

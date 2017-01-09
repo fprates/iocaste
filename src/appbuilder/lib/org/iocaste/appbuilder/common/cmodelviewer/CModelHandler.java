@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
+import java.util.Collection;
+
 import org.iocaste.appbuilder.common.AbstractTableToolHandler;
 import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.documents.common.ExtendedObject;
@@ -13,6 +15,16 @@ public class CModelHandler extends AbstractTableToolHandler {
     
     @Override
     public final void add(String ttname, ExtendedObject[] items) {
+        CModelViewerContext cmodelctx = (CModelViewerContext)extcontext;
+        
+        if (cmodelctx.document == null)
+            return;
+        cmodelctx.document.remove(cmodelctx.models.get(ttname));
+        cmodelctx.document.add(items);
+    }
+    
+    @Override
+    public final void add(String ttname, Collection<ExtendedObject> items) {
         CModelViewerContext cmodelctx = (CModelViewerContext)extcontext;
         
         if (cmodelctx.document == null)
