@@ -61,6 +61,9 @@ public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
         }
         
         addAttributes(selecttag, input);
+
+        if (input.hasPlaceHolder())
+            selecttag.add("style", "text-align:center;width:100%;");
         
         if (values.size() == 0) {
             selecttag.addInner("");
