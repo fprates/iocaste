@@ -1,7 +1,6 @@
 package org.iocaste.globalconfig;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataType;
@@ -23,14 +22,14 @@ import org.iocaste.shell.common.Shell;
 public class Services extends AbstractFunction {
     
     public Services() {
-        export("define", "define");
+        export("define", new DefineGlobalConfig());
         export("get", "get");
         export("remove", "remove");
         export("set", "set");
     }
     
-    private final ExtendedObject configValueGet(String appname,
-            Documents documents, long itemid, int ptype, Object value)
+    private static final ExtendedObject configValueGet(String appname,
+            Documents documents, String itemid, int ptype, Object value)
                     throws Exception {
         DocumentModel model;
         ExtendedObject object;
@@ -63,7 +62,7 @@ public class Services extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    private final byte convertClassType(Class<?> type) {
+    public static final byte convertClassType(Class<?> type) {
         switch (type.getName()) {
         case "java.lang.Integer":
         case "java.lang.Byte":
@@ -82,73 +81,13 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
-     * @throws Exception
-     */
-    public final void define(Message message) throws Exception {
-        Query query;
-        ExtendedObject[] objects;
-        long itemid, gconfigid;
-        int ptype;
-        DocumentModel model;
-        Map<String, ExtendedObject> items;
-        ExtendedObject item, globalconfig;
-        Documents documents = new Documents(this);
-        String appname = message.getst("appname");
-        String itemname = message.getst("name");
-        Object value = message.get("value");
-        
-        globalconfig = documents.getObject("GLOBAL_CONFIG", appname);
-        if (globalconfig == null) {
-            items = null;
-            gconfigid = documents.getNextNumber("GLOBALCFG");
-            model = documents.getModel("GLOBAL_CONFIG");
-            globalconfig = new ExtendedObject(model);
-            globalconfig.set("NAME", appname);
-            globalconfig.set("CURRENT", gconfigid * 1000);
-            documents.save(globalconfig);
-        } else {
-            query = new Query();
-            query.setModel("GLOBAL_CONFIG_ITEM");
-            query.andEqual("GLOBAL_CONFIG", appname);
-            objects = documents.select(query);
-            items = new HashMap<>();
-            for (ExtendedObject object : objects)
-                items.put(object.getst("NAME"), object);
-        }
-        
-        if ((items == null) || !items.containsKey(itemname)) {
-            itemid = globalconfig.getl("CURRENT") + 1;
-            globalconfig.set("CURRENT", itemid);
-            documents.modify(globalconfig);
-            
-            model = documents.getModel("GLOBAL_CONFIG_ITEM");
-            item = new ExtendedObject(model);
-            item.set("ID", itemid);
-            item.set("GLOBAL_CONFIG", appname);
-            item.set("NAME", itemname);
-        } else {
-            item = items.get(itemname);
-            itemid = item.getl("ID");
-        }
-        
-        ptype = convertClassType((Class<?>)message.get("type"));
-        item.set("TYPE", ptype);
-        documents.modify(item);
-        
-        save(appname, documents, itemid, ptype, value);
-    }
-    
-    /**
-     * 
-     * @param message
      * @return
      * @throws Exception
      */
     public final Object get(Message message) throws Exception {
         Query query;
-        long itemid;
         int type;
-        String value;
+        String value, itemid;
         ExtendedObject[] objects;
         Iocaste iocaste = new Iocaste(this);
         String appname = iocaste.getCurrentApp();
@@ -163,7 +102,7 @@ public class Services extends AbstractFunction {
         if (objects == null)
             return null;
         
-        itemid = objects[0].getl("ID");
+        itemid = objects[0].getst("ID");
         type = objects[0].geti("TYPE");
         objects[0] = documents.getObject("GLOBAL_CONFIG_VALUES", itemid);
         if (objects[0] == null)
@@ -182,7 +121,7 @@ public class Services extends AbstractFunction {
         throw new IocasteException("invalid data type definition.");
     }
     
-    private final void modify(String appname, Documents documents, long itemid,
+    private final void modify(String appname,Documents documents, String itemid,
             int ptype, Object value) throws Exception {
         ExtendedObject object = configValueGet(
                 appname, documents, itemid, ptype, value);
@@ -211,8 +150,8 @@ public class Services extends AbstractFunction {
         new Documents(this).update(queries);
     }
     
-    private final void save(String appname, Documents documents, long itemid,
-            int ptype, Object value) throws Exception {
+    public static final void save(String appname, Documents documents,
+            String itemid, int ptype, Object value) throws Exception {
         ExtendedObject object = configValueGet(
                 appname, documents, itemid, ptype, value);
         documents.save(object);
@@ -221,7 +160,7 @@ public class Services extends AbstractFunction {
     public final void set(Message message) throws Exception {
         String name;
         Query query;
-        long id;
+        String id;
         int type;
         ExtendedObject[] objects;
         Documents documents = new Documents(this);
@@ -233,11 +172,11 @@ public class Services extends AbstractFunction {
         query.andEqual("GLOBAL_CONFIG", appname);
         objects = documents.select(query);
         if (objects == null)
-            throw new IocasteException(appname.concat(" is an invalid config"));
+            throw new IocasteException(appname, " is an invalid config");
         
         for (ExtendedObject object : objects) {
             name = object.getst("NAME");
-            id = object.getl("ID");
+            id = object.getst("ID");
             type = object.geti("TYPE");
             modify(appname, documents, id, type, values.get(name));
         }

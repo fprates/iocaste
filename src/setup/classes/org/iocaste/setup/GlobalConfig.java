@@ -39,17 +39,6 @@ public class GlobalConfig {
         model.add(nmcfg);
         model.add(new DocumentModelKey(nmcfg));
         
-        // id do último parâmetro
-        element = new DataElement("GLOBAL_CONFIG_ITEM.ID");
-        element.setType(DataType.NUMC);
-        element.setLength(8);
-        element.setUpcase(false);
-        
-        item = new DocumentModelItem("CURRENT");
-        item.setTableFieldName("CRRID");
-        item.setDataElement(element);
-        model.add(item);
-        
         data.addNumberFactory("GLOBALCFG");
         
         /*
@@ -58,6 +47,11 @@ public class GlobalConfig {
         model = data.getModel("GLOBAL_CONFIG_ITEM", "GCNFGITM", null);
         
         // identificador
+        element = new DataElement("GLOBAL_CONFIG_ITEM_ID");
+        element.setType(DataType.CHAR);
+        element.setLength(63);
+        element.setUpcase(false);
+        
         idcfgit = new DocumentModelItem("ID");
         idcfgit.setTableFieldName("IDENT");
         idcfgit.setDataElement(element);
@@ -72,7 +66,7 @@ public class GlobalConfig {
         model.add(item);
         
         // nome do parâmetro
-        element = new DataElement("GLOBAL_CONFIG_ITEM.NAME");
+        element = new DataElement("GLOBAL_CONFIG_ITEM_NAME");
         element.setType(DataType.CHAR);
         element.setLength(64);
         element.setUpcase(true);
@@ -83,7 +77,7 @@ public class GlobalConfig {
         model.add(item);
         
         // tipo de dado
-        element = new DataElement("GLOBAL_CONFIG_ITEM.TYPE");
+        element = new DataElement("GLOBAL_CONFIG_ITEM_TYPE");
         element.setType(DataType.NUMC);
         element.setLength(2);
         element.setUpcase(false);
@@ -114,7 +108,7 @@ public class GlobalConfig {
         model.add(item);
         
         // valor
-        element = new DataElement("GLOBAL_CONFIG_VALUES.VALUE");
+        element = new DataElement("GLOBAL_CONFIG_VALUES_VALUE");
         element.setType(DataType.CHAR);
         element.setLength(256);
         element.setUpcase(false);
