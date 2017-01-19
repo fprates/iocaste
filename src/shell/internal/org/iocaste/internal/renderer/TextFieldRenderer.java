@@ -218,6 +218,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         
         message.add("view", view);
         message.add("init", true);
+        message.add("locale", config.pagectx.locale);
         message.add("parameters", parameters);
         viewreturn = (Object[])service.call(message);
         view = (View)viewreturn[0];

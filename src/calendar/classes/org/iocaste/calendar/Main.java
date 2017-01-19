@@ -32,14 +32,15 @@ public class Main extends AbstractPage {
     
     @SuppressWarnings("unchecked")
     public final <T extends AbstractContext> T configOnly() {
-        context = new Context();
+        Context context = new Context();
         context.messages = new Messages();
+        context.messages.entries();
         return (T)context;
     }
     
     @Override
     public final AbstractContext init(View view) {
-        return configOnly();
+        return context = configOnly();
     }
     
     public void main() throws Exception {
