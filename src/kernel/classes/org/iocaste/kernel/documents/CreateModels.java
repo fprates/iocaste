@@ -29,6 +29,8 @@ public class CreateModels extends AbstractDocumentsHandler {
         rollback = new Stack<>();
         getmodel = documents.get("get_document_model");
         createmodel = documents.get("create_model"); 
+        documents.cache.models.clear();
+        
         for (DocumentModel model : models) {
             name = model.getTableName();
             if (name == null)
