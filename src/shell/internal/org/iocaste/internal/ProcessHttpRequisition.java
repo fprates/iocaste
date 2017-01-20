@@ -281,6 +281,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
         contextdata.logid = logid;
         contextdata.sessionid = context.sessionid;
         contextdata.initialize = true;
+        contextdata.locale = getLocale(contextdata, getFunction());
         
         pagectx = createPageContext(contextdata);
         pagectx.parameters.put("username", ticket.getUsername());
