@@ -569,6 +569,11 @@ public class DefaultStyle {
         style.put("font-weight", "bold");
         style.put("font-family", FONT_FAMILY);
         
+        style = stylesheet.newElement(".text_field_cell");
+        style.put("margin", "0px");
+        style.put("padding", "0px");
+        style.put("list-style-type", "none");
+        
         for (String mediakey : resolutions.keySet()) {
             values = resolutions.get(mediakey);
             stylesheet.instanceMedia(mediakey).setRule((String)values[0][0]);
@@ -586,12 +591,6 @@ public class DefaultStyle {
             style.put("border-right-width", "0px");
             style.put("border-left-width", "0px");
             fillstyle(style, values[1][2]);
-            
-            style = stylesheet.newElement(mediakey, ".text_field_cell");
-            style.put("margin", "0px");
-            style.put("padding", "0px");
-            style.put("list-style-type", "none");
-            fillstyle(style, values[1][3]);
 
             style = stylesheet.newElement(mediakey, ".tp_button");
             style.put("font-size", FONT_SIZE);
