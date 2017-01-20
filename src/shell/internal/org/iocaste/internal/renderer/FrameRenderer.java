@@ -19,16 +19,23 @@ public class FrameRenderer extends AbstractElementRenderer<Frame> {
      * @return
      */
     protected final XMLElement execute(Frame frame, Config config) {
-        XMLElement frametag = new XMLElement("fieldset");
-        XMLElement legendtag = new XMLElement("legend");
-        String text = frame.getText();
-
-        legendtag.add("class", frame.getLegendStyle());
-        legendtag.addInner(text);
+        XMLElement frametag, legendtag;
+        String text;
         
-        frametag.add("id", frame.getName());
-        frametag.add("class", frame.getStyleClass());
-        frametag.addChild(legendtag);
+        if (frame.isVisible()) {
+            frametag = new XMLElement("fieldset");
+            legendtag = new XMLElement("legend");
+            text = frame.getText();
+
+            legendtag.add("class", frame.getLegendStyle());
+            legendtag.addInner(text);
+            
+            frametag.add("id", frame.getName());
+            frametag.add("class", frame.getStyleClass());
+            frametag.addChild(legendtag);
+        } else {
+            frametag = new XMLElement("div");
+        }
         frametag.addChildren(renderElements(frame.getElements(), config));
         
         return frametag;

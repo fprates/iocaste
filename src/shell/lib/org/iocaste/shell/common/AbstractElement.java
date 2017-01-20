@@ -240,7 +240,7 @@ public abstract class AbstractElement implements Element {
      * @see org.iocaste.shell.common.Element#isVisible()
      */
     @Override
-    public final boolean isVisible() {
+    public boolean isVisible() {
         return visible;
     }
     

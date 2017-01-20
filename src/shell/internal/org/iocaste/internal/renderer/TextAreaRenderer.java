@@ -13,13 +13,15 @@ public class TextAreaRenderer extends AbstractElementRenderer<TextArea> {
     }
 
     protected final XMLElement execute(TextArea area, Config config) {
-        XMLElement areatag = new XMLElement("textarea");
-        String name = area.getHtmlName();
-        String value = area.get();
+        XMLElement areatag;
+        String name, value;
 
         if (!area.isVisible())
             return get(Const.PARAMETER).run(area, config);
-        
+
+        name = area.getHtmlName();
+        value = area.get();
+        areatag = new XMLElement("textarea");
         areatag.add("id", name);
         areatag.add("name", name);
         areatag.add("class", area.getStyleClass());
