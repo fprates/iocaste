@@ -133,12 +133,12 @@ public class Controller {
      * @return
      * @throws Exception
      */
-    private static final boolean hasValidReference(InputComponent input,
-            RangeInputStatus ri, ControllerData config) throws Exception {
+    private static final boolean hasValidReference(Documents documents,
+            InputComponent input, RangeInputStatus ri, ControllerData config)
+                    throws Exception {
         InputComponent nsinput;
         Object ns;
         String nsreference;
-        Documents documents;
         ExtendedObject object;
         DocumentModelItem reference, item;
         
@@ -153,7 +153,6 @@ public class Controller {
         if (reference == null)
             return true;
         
-        documents = new Documents(config.function);
         nsreference = input.getNSReference();
         if (nsreference != null) {
             nsinput = config.state.view.getElement(nsreference);
@@ -318,6 +317,7 @@ public class Controller {
         DataElement dataelement;
         InputComponent input;
         RangeInputStatus ri;
+        Documents documents;
         
         /*
          * Componentes selecionáveis (como checkboxes), só fornecem
@@ -404,7 +404,8 @@ public class Controller {
         
         if (status.error != 0)
             return;
-        
+
+        documents = new Documents(config.function);
         for (String name : config.values.keySet()) {
             element = config.state.view.getElement(name);
             
@@ -417,7 +418,7 @@ public class Controller {
             if (input.get() == null || dataelement == null)
                 continue;
             
-            if (hasValidReference(input, ri, config))
+            if (hasValidReference(documents, input, ri, config))
                 continue;
 
             status.input = input;
@@ -425,6 +426,7 @@ public class Controller {
             status.msgtype = (input.isEnabled())? Const.ERROR : Const.WARNING;
             status.msgargs = new String[] {getTranslation(input)};
         }
+        documents.commit();
     }
     
     /**
