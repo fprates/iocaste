@@ -12,7 +12,6 @@ public class MaintenanceConfig extends AbstractViewConfig {
         ConfigData configdata;
         CModelViewerContext extcontext = getExtendedContext();
         
-        new CModelHandler(extcontext);
         configdata = new ConfigData();
         configdata.cmodel = new Documents(context.function).
                 getComplexModel(extcontext.link.cmodel);

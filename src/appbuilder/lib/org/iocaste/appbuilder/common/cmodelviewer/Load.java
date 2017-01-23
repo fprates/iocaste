@@ -26,7 +26,8 @@ public class Load extends AbstractActionHandler {
             message(Const.ERROR, "invalid.code");
             return;
         }
-        
+
+        init(redirect, extcontext);
         object = extcontext.document.getHeader();
         extcontext.dataformInstance(redirect, "head");
         extcontext.set(redirect, "head", object);
@@ -37,7 +38,6 @@ public class Load extends AbstractActionHandler {
             extcontext.tableInstance(redirect, table);
             extcontext.set(redirect, table, extcontext.document.getItems(name));
         }
-        init(redirect, extcontext);
         redirect(redirect);
     }
 
