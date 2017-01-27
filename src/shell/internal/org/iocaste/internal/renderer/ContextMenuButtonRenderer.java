@@ -19,7 +19,11 @@ public class ContextMenuButtonRenderer {
         linktag.add("name", htmlname);
         linktag.add("href", onclick);
         linktag.add("class", "ctxmenu_link");
-        linktag.addInner((messages != null)? messages.get(text) : text);
+        if (messages != null)
+            linktag.addInner(
+                    messages.containsKey(text)? messages.get(text) : text);
+        else
+            linktag.addInner(text);
         return linktag;
     }
 }

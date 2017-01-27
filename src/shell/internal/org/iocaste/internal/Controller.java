@@ -42,6 +42,8 @@ public class Controller {
         messages.put("field.is.obligatory", "Campo é obrigatório (%s).");
         messages.put("field.type.mismatch",
                 "Tipo de valor incompatível com campo.");
+        messages.put("grid.options", "Opções da grid");
+        messages.put("input.options", "Opções da entrada");
         messages.put("invalid.value", "Valor inválido (%s).");
         messages.put("not.connected", "Não conectado");
         messages.put("required", "Obrigatório");

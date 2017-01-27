@@ -7,12 +7,15 @@ import org.iocaste.protocol.utils.XMLElement;
 public class ContextMenu {
     private XMLElement options;
     private Map<String, String> messages;
-    private String itemstyle;
+    private String itemstyle, title;
     
-    public ContextMenu(XMLElement tagt, String name) {
+    public ContextMenu(Map<String, String> messages, String title,
+            XMLElement tagt, String name) {
         String tfcontext;
         XMLElement tag;
-        
+
+        this.messages = messages;
+        this.title = title;
         tfcontext = name.concat("_menu");
         tag = new XMLElement("li");
         renderOpenMenuButton(tag, tfcontext, name);
@@ -86,6 +89,8 @@ public class ContextMenu {
                 append(setElementDisplay(menu, "inline-block")).
                 append(setElementDisplay(open, "none")).
                 append(setElementDisplay(close, "inline")).toString());
+        if (title != null)
+            button.add("title", messages.get(title));
         button.addInner("+");
     }
     
@@ -103,9 +108,5 @@ public class ContextMenu {
     
     public final void setItemStyle(String itemstyle) {
         this.itemstyle = itemstyle;
-    }
-    
-    public final void setMessages(Map<String, String> messages) {
-        this.messages = messages;
     }
 }

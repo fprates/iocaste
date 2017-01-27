@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.internal.Controller;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
@@ -62,7 +63,8 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
                     tag = new XMLElement("ul");
                     tag.add("style",
                             "margin:0px;padding:0px;list-style-type:none");
-                    ctxmenu = new ContextMenu(tag, "mark");
+                    ctxmenu = new ContextMenu(Controller.messages,
+                            "grid.options", tag, "mark");
                     ctxitems = table.getContextItems();
                     for (String itemname : ctxitems.keySet()) {
                         ctxitem = ctxitems.get(itemname);

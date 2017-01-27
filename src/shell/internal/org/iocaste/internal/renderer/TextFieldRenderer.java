@@ -140,8 +140,8 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         }
         
         tag.add("style", "display:inline;float:left;");
-        ctxmenu = new ContextMenu(tagt, name);
-        ctxmenu.setMessages(Controller.messages);
+        ctxmenu = new ContextMenu(Controller.messages,
+                "input.options", tagt, name);
         required = input.isObligatory();
         if (required)
             ctxmenu.add(Controller.messages.get("required"));
