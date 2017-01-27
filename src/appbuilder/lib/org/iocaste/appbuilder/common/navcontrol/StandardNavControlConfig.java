@@ -111,6 +111,7 @@ public class StandardNavControlConfig extends AbstractViewConfig {
         button = getElement(name);
         button.setSubmit(navbutton.type != NavControl.NORMAL);
         button.setNoScreenLock(navbutton.nolock);
+        button.setStyleClass("nc_button");
         return navbutton;
     }
     

@@ -13,6 +13,7 @@ import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
 
 public class GetStyleSheet extends AbstractHandler {
+    private static final String ROUND = "3px";
     
     private final Object[] getNavbarConfig() {
         Object[][] config = new Object[12][4];
@@ -116,6 +117,30 @@ public class GetStyleSheet extends AbstractHandler {
             style.put("font-family", FONT_FAMILY);
             style.put("margin", "0px");
             style.put("padding", "0px");
+            
+            style = stylesheet.newElement(mediakey, ".nc_button");
+            style.put("padding-top", "0px");
+            style.put("padding-bottom", "0px");
+            style.put("padding-left", "1em");
+            style.put("padding-right", "1em");
+            style.put("margin", "0px");
+            style.put("color", BACKGROUND_COLOR);
+            style.put("background-color", CLICKABLE_COLOR);
+            style.put("font-weight", "normal");
+            style.put("font-size", "10pt");
+            style.put("display", "inline");
+            style.put("border-color", FRAME_COLOR);
+            style.put("border-radius", ROUND);
+            style.put("border-width", "0px");
+            style.put("border-style", "none");
+            style.put("text-align", "center");
+            style.put("vertical-align", "middle");
+            style.put("height", "36px");
+            style.put("box-shadow", SHADOW);
+            if (!mediakey.startsWith("mobile"))
+                continue;
+            style.put("width", "100%");
+            style.put("margin-bottom", "2px");
         }
         
         style = stylesheet.newElement("#nc_inner_logo");
@@ -158,7 +183,6 @@ public class GetStyleSheet extends AbstractHandler {
         style.put("padding-bottom", "0px");
         style.put("padding-right", "0px");
         style.put("padding-left", "0px");
-        style.put("height", "40px");
         style.put("margin-top", "0px");
         style.put("margin-bottom", "0px");
         style.put("margin-left", "0px");
