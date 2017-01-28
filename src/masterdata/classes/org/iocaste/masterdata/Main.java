@@ -21,6 +21,7 @@ public class Main extends AbstractPage {
     public final <T extends AbstractContext> T configOnly() {
         Context context = new Context();
         context.messages = messages;
+        messages.entries();
         return (T)context;
     }
     
