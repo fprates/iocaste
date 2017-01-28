@@ -28,5 +28,18 @@ public class Style extends AbstractViewConfigStyle {
         put("margin-bottom", "0px");
         put("display", "block");
         remove("margin");
+        
+        forEachMedia(new TitleStyle());
     }
+}
+
+class TitleStyle extends AbstractViewConfigStyle {
+
+    @Override
+    public void execute() {
+        load("#nc_inner_title");
+        put("width", getMediaKey().startsWith("mobile")?
+                "100%" : "calc(100% - 145px - 145px)");
+    }
+    
 }

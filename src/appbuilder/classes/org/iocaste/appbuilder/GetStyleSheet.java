@@ -138,19 +138,20 @@ public class GetStyleSheet extends AbstractHandler {
             style.put("opacity", "0.8");
             
             style = stylesheet.newElement(mediakey, "#nc_inner_logo");
-            style.put("display", (!mobile)? "inline-block" : "none");
+            style.put("display", !mobile? "inline-block" : "none");
             style.put("width", "145px");
             style.put("padding-top", "20px");
             style.put("padding-bottom", "20px");
             style.put("float", "left");
+            
+            style = stylesheet.newElement(mediakey, "#nc_inner_title");
+            style.put("display", "inline-block");
+            style.put("width", mobile?
+                    "calc(100% - 145px)" : "calc(100% - 145px - 145px)");
+            style.put("padding-top", "12px");
+            style.put("padding-bottom", "12px");
+            style.put("float", "left");
         }
-        
-        style = stylesheet.newElement("#nc_inner_title");
-        style.put("display", "inline-block");
-        style.put("width", "calc(100% - 145px - 145px)");
-        style.put("padding-top", "12px");
-        style.put("padding-bottom", "12px");
-        style.put("float", "left");
         
         style = stylesheet.newElement(".nc_title");
         style.put("font-size", "22pt");
