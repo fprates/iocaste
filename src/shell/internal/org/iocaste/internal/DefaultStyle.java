@@ -36,7 +36,7 @@ public class DefaultStyle {
         
         resolutions = new HashMap<>();
         resolutions.put("mobile0", new Object[][] {
-            {"all and (max-width:767px)", "400px", "18pt", "200px", "none"},
+            {"all and (max-width:767px)", "400px", null},
             {"none",
                 new String[][] {
                     {"border-bottom-style", "solid"},
@@ -56,7 +56,7 @@ public class DefaultStyle {
         });
         resolutions.put("mobile1", new Object[][] {
             {"screen and (min-width:768px) and (max-width:1019px)",
-                "708px", "22pt", "308px", "inline-block"},
+                "708px", null},
             {"table-header-group",
                 new String[][] {
                     {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
@@ -77,7 +77,7 @@ public class DefaultStyle {
         });
         resolutions.put("default", new Object[][] {
             {"screen and (min-width:1020px) and (max-width:1229px)",
-                "960px", "22pt", "560px", "inline-block"},
+                "960px", null},
             {"table-header-group",
                 new String[][] {
                     {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
@@ -98,7 +98,7 @@ public class DefaultStyle {
         });
         resolutions.put("screen1230", new Object[][] {
             {"screen and (min-width:1230px) and (max-width:1439px)",
-                "1170px", "22pt", "770px", "inline-block"},
+                "1170px", null},
             {"table-header-group",
                 new String[][] {
                     {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
@@ -119,7 +119,7 @@ public class DefaultStyle {
         });
         resolutions.put("screen1440", new Object[][] {
             {"screen and (min-width:1440px) and (max-width:1599px)",
-                "1380px", "22pt", "980px", "inline-block"},
+                "1380px", null},
             {"table-header-group",
                 new String[][] {
                     {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
@@ -139,8 +139,7 @@ public class DefaultStyle {
         }
         });
         resolutions.put("screen1600", new Object[][] {
-            {"screen and (min-width:1600px)",
-                "1540px", "22pt", "1140px", "inline-block"},
+            {"screen and (min-width:1600px)", "1540px", null},
             {"table-header-group",
                 new String[][] {
                     {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},

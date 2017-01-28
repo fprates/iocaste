@@ -70,6 +70,7 @@ public class GetStyleSheet extends AbstractHandler {
         String FRAME_COLOR, SHADOW;
         Object[][] width;
         StyleSheet stylesheet, defaultstyle;
+        boolean mobile;
         
         stylesheet = StyleSheet.instance(null);
         stylesheet.setConstants(constants);
@@ -82,6 +83,8 @@ public class GetStyleSheet extends AbstractHandler {
         SHADOW = constants.get(Shell.SHADOW);
         
         for (String mediakey : DefaultStyle.resolutions.keySet()) {
+            mobile = mediakey.startsWith("mobile");
+            
             width = DefaultStyle.resolutions.get(mediakey);
             stylesheet.instanceMedia(mediakey).setRule((String)width[0][0]);
             
@@ -102,21 +105,6 @@ public class GetStyleSheet extends AbstractHandler {
             style.put("padding", "0px");
             style.put("width", (String)width[0][1]);
             style.put("list-style-type", "none");
-            
-            style = stylesheet.newElement(mediakey, "#nc_inner_title");
-            style.put("display", (String)width[0][4]);
-            style.put("width", (String)width[0][3]);
-            style.put("padding-top", "12px");
-            style.put("padding-bottom", "12px");
-            
-            style = stylesheet.newElement(mediakey, ".nc_title");
-            style.put("font-size", (String)width[0][2]);
-            style.put("font-weight", "300");
-            style.put("display", "inline-block");
-            style.put("color", BACKGROUND_COLOR);
-            style.put("font-family", FONT_FAMILY);
-            style.put("margin", "0px");
-            style.put("padding", "0px");
             
             style = stylesheet.newElement(mediakey, ".nc_button");
             style.put("padding-top", "0px");
@@ -141,24 +129,44 @@ public class GetStyleSheet extends AbstractHandler {
             style.put("transition-property", "opacity");
             style.put("transition-duration", "0.2s");
             style.put("opacity", "1");
-            if (mediakey.startsWith("mobile")) {
+            if (mobile) {
                 style.put("width", "100%");
                 style.put("margin-bottom", "2px");
             }
             
             style = stylesheet.clone(mediakey,".nc_button:hover", ".nc_button");
             style.put("opacity", "0.8");
+            
+            style = stylesheet.newElement(mediakey, "#nc_inner_logo");
+            style.put("display", (!mobile)? "inline-block" : "none");
+            style.put("width", "145px");
+            style.put("padding-top", "20px");
+            style.put("padding-bottom", "20px");
+            style.put("float", "left");
         }
         
-        style = stylesheet.newElement("#nc_inner_logo");
+        style = stylesheet.newElement("#nc_inner_title");
         style.put("display", "inline-block");
-        style.put("width", "195px");
-        style.put("padding-top", "20px");
-        style.put("padding-bottom", "20px");
+        style.put("width", "calc(100% - 145px - 145px)");
+        style.put("padding-top", "12px");
+        style.put("padding-bottom", "12px");
+        style.put("float", "left");
+        
+        style = stylesheet.newElement(".nc_title");
+        style.put("font-size", "22pt");
+        style.put("font-weight", "300");
+        style.put("display", "block");
+        style.put("color", BACKGROUND_COLOR);
+        style.put("font-family", FONT_FAMILY);
+        style.put("margin", "0px");
+        style.put("padding", "0px");
+        style.put("white-space", "nowrap");
+        style.put("overflow", "hidden");
+        style.put("text-overflow", "ellipsis");
         
         style = stylesheet.newElement("#nc_inner_login");
-        style.put("float", "right");
-        style.put("width", "195px");
+        style.put("float", "left");
+        style.put("width", "145px");
         style.put("padding-top", "20px");
         style.put("padding-bottom", "20px");
         
@@ -168,7 +176,7 @@ public class GetStyleSheet extends AbstractHandler {
         style.put("background-repeat", "no-repeat");
         style.put("width", "93px");
         style.put("height", "20px");
-        style.put("display", "inline-block");
+        style.put("display", "block");
         
         style = stylesheet.newElement(".nc_container");
         style.put("width", "100%");
@@ -202,7 +210,7 @@ public class GetStyleSheet extends AbstractHandler {
         style = stylesheet.newElement(".nc_login");
         style.put("margin", "0px");
         style.put("padding", "0px");
-        style.put("display", "inline");
+        style.put("display", "block");
         style.put("list-style-type", "none");
         
         style = stylesheet.newElement(".nc_login_item");

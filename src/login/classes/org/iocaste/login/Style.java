@@ -17,23 +17,16 @@ public class Style extends AbstractViewConfigStyle {
         clone(".loginsubmit", ".button");
         put("width", "100%");
         
-        forEachMedia(new TitleStyle());
-    }
-}
-
-class TitleStyle extends AbstractViewConfigStyle {
-
-    @Override
-    public void execute() {
+        clone(".loginsubmit:hover", ".button:hover");
+        put("width", "100%");
+        
         load(".nc_title");
         put("text-align", "center");
         put("margin-left", "auto");
         put("margin-right", "auto");
         put("margin-top", "0px");
         put("margin-bottom", "0px");
-        put("width", "350px");
         put("display", "block");
         remove("margin");
     }
-    
 }
