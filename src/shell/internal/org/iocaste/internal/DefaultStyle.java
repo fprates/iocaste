@@ -15,15 +15,24 @@ public class DefaultStyle {
     
     static {
         constants = new HashMap<>();
-        constants.put(Shell.FONT_COLOR, "#444");
+        constants.put(Shell.FONT_COLOR,
+                "#444");
         constants.put(Shell.FONT_FAMILY,
                 "'Lato', 'Dejavu Sans', sans-serif");
-        constants.put(Shell.BACKGROUND_COLOR, "#ffffff");
-        constants.put(Shell.CLICKABLE_COLOR, "#298eea");
-        constants.put(Shell.FRAME_COLOR, "rgb(237, 237, 237)");
-        constants.put(Shell.DISABLED_FONT_COLOR, "rgb(150, 150, 150)");
-        constants.put(Shell.FONT_SIZE, "11pt");
-        constants.put(Shell.SHADOW, "1px 1px 2px #b0b0b0");
+        constants.put(Shell.BACKGROUND_COLOR,
+                "#ffffff");
+        constants.put(Shell.CLICKABLE_COLOR,
+                "#298eea");
+        constants.put(Shell.FRAME_COLOR,
+                "rgb(237, 237, 237)");
+        constants.put(Shell.DISABLED_FONT_COLOR,
+                "rgb(150, 150, 150)");
+        constants.put(Shell.FONT_SIZE,
+                "11pt");
+        constants.put(Shell.SHADOW,
+                "1px 1px 2px #b0b0b0");
+        constants.put(Shell.CONTROL_BACKGROUND,
+                "linear-gradient(to bottom, #29afff, #298eea)");
         
         resolutions = new HashMap<>();
         resolutions.put("mobile0", new Object[][] {
@@ -165,6 +174,7 @@ public class DefaultStyle {
         Object[][] values;
         String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
         String FRAME_COLOR, DISABLED_FONT_COLOR, FONT_SIZE, SHADOW;
+        String CONTROL_BACKGROUND;
         
         /*
          * default style
@@ -187,6 +197,7 @@ public class DefaultStyle {
         DISABLED_FONT_COLOR = constants.get(Shell.DISABLED_FONT_COLOR);
         FONT_SIZE = constants.get(Shell.FONT_SIZE);
         SHADOW = constants.get(Shell.SHADOW);
+        CONTROL_BACKGROUND = constants.get(Shell.CONTROL_BACKGROUND);
         
         style = stylesheet.newElement("body");
         style.put("background-color", BACKGROUND_COLOR);
@@ -201,7 +212,7 @@ public class DefaultStyle {
         style.put("padding-right", "1em");
         style.put("margin", "0px");
         style.put("color", BACKGROUND_COLOR);
-        style.put("background-color", CLICKABLE_COLOR);
+        style.put("background", CONTROL_BACKGROUND);
         style.put("font-weight", "normal");
         style.put("font-size", "10pt");
         style.put("display", "inline");
@@ -213,6 +224,11 @@ public class DefaultStyle {
         style.put("vertical-align", "middle");
         style.put("height", "36px");
         style.put("box-shadow", SHADOW);
+        style.put("transition-property", "opacity");
+        style.put("transition-duration", "0.2s");
+        
+        style = stylesheet.clone(".button:hover", ".button");
+        style.put("opacity", "0.6");
 
         style = stylesheet.newElement(".button_ctxmenu_open");
         style.put("margin-top", "0px");
@@ -618,10 +634,14 @@ public class DefaultStyle {
             style.put("border-bottom-width", "1px");
             style.put("background-color", FRAME_COLOR);
 
-            style = stylesheet.clone(
-                    mediakey, ".tp_button_unfocused", ".tp_button_focused");
+            style = stylesheet.clone(mediakey,
+                    ".tp_button_unfocused", ".tp_button_focused");
             style.put("background-color", BACKGROUND_COLOR);
             style.put("border-bottom-color", FONT_COLOR);
+            
+            style = stylesheet.clone(mediakey,
+                    ".tp_button_unfocused:hover", ".tp_button_unfocused");
+            style.put("color", CLICKABLE_COLOR);
         }
         
         return stylesheet;

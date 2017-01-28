@@ -124,23 +124,30 @@ public class GetStyleSheet extends AbstractHandler {
             style.put("padding-left", "1em");
             style.put("padding-right", "1em");
             style.put("margin", "0px");
-            style.put("color", BACKGROUND_COLOR);
-            style.put("background-color", CLICKABLE_COLOR);
+            style.put("color", CLICKABLE_COLOR);
+            style.put("background",
+                    "linear-gradient(to bottom, #ffffff, #cfefff)");
             style.put("font-weight", "normal");
             style.put("font-size", "10pt");
             style.put("display", "inline");
-            style.put("border-color", FRAME_COLOR);
+            style.put("border-color", CLICKABLE_COLOR);
             style.put("border-radius", ROUND);
-            style.put("border-width", "0px");
-            style.put("border-style", "none");
+            style.put("border-width", "1px");
+            style.put("border-style", "solid");
             style.put("text-align", "center");
             style.put("vertical-align", "middle");
             style.put("height", "36px");
             style.put("box-shadow", SHADOW);
-            if (!mediakey.startsWith("mobile"))
-                continue;
-            style.put("width", "100%");
-            style.put("margin-bottom", "2px");
+            style.put("transition-property", "opacity");
+            style.put("transition-duration", "0.2s");
+            style.put("opacity", "1");
+            if (mediakey.startsWith("mobile")) {
+                style.put("width", "100%");
+                style.put("margin-bottom", "2px");
+            }
+            
+            style = stylesheet.clone(mediakey,".nc_button:hover", ".nc_button");
+            style.put("opacity", "0.8");
         }
         
         style = stylesheet.newElement("#nc_inner_logo");
@@ -167,17 +174,13 @@ public class GetStyleSheet extends AbstractHandler {
         style.put("width", "100%");
         style.put("height", "60px");
         style.put("top", "0px");
-        style.put("background-color", CLICKABLE_COLOR);
+        style.put("background", "linear-gradient(to bottom, #298eea, #29afff)");
         style.put("position", "fixed");
         style.put("box-shadow", SHADOW);
         
         style = stylesheet.newElement(".nc_nav_buttonbar");
         style.put("width", "100%");
-        style.put("border-top-style", "none");
-        style.put("border-top-width", "0px");
-        style.put("border-bottom-style", "solid");
-        style.put("border-bottom-width", "2px");
-        style.put("border-bottom-color", FRAME_COLOR);
+        style.put("border-style", "none");
         style.put("display", "block");
         style.put("padding-top", "4px");
         style.put("padding-bottom", "0px");
