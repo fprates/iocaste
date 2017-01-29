@@ -47,6 +47,7 @@ public class Controller {
         messages.put("invalid.value", "Valor inválido (%s).");
         messages.put("not.connected", "Não conectado");
         messages.put("required", "Obrigatório");
+        messages.put("select", "Selecionar");
         messages.put("user.not.authorized", "Usuário não autorizado.");
         messages.put("values", "Valores possíveis");
         

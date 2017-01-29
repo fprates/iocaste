@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.internal.Controller;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
@@ -33,11 +34,12 @@ public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
         boolean mark, savemark;
         Component component;
         TableColumn column;
-        String text, style, tdstyle;
+        String text, style, tdstyle, select;
         Table table = (Table)item.getContainer();
         TableColumn[] columns = table.getColumns();
         int i = 0;
-        XMLElement tdtag, trtag = new XMLElement("tr");
+        XMLElement tdtag, tdinner, tdinnerlabel, tdinnercontent;
+        XMLElement trtag = new XMLElement("tr");
         List<XMLElement> tags = new ArrayList<>();
         
         savemark = true;
@@ -46,6 +48,7 @@ public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
         trtag.add("class",
                 (style == null)? table.getStyleClass(Table.TABLE_LINE) : style);
         tdstyle = table.getStyleClass(Table.TABLE_CELL);
+        select = Controller.messages.get("select");
         for (Element element : item.getElements()) {
             column = columns[i++];
             mark = column.isMark();
@@ -61,15 +64,20 @@ public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
             tdtag = new XMLElement("td");
             tdtag.add("class", tdstyle);
             
+            tdinnerlabel = new XMLElement("li");
+            tdinnerlabel.add("class", "td_label");
+            tdinnerlabel.addInner((mark)? select : column.getText());
+            
+            tdinnercontent = new XMLElement("li");
             if (element != null) {
                 tags.clear();
                 if (column.getRenderTextOnly()) {
                     if (!(element instanceof Component)) {
-                        tdtag.addInner("");
+                        tdinnercontent.addInner("");
                     } else {
                         component = (Component)element;
                         text = component.getText();
-                        tdtag.addInner(text);
+                        tdinnercontent.addInner(text);
                     }
                 } else {
                     /*
@@ -85,10 +93,16 @@ public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
                     tags.add(get(element.getType()).run(element, config));
                     if (mark)
                         table.setEnabled(savemark);
-                    tdtag.addChildren(tags);
+                    tdinnercontent.addChildren(tags);
                 }
             }
             
+            tdinner = new XMLElement("ul");
+            tdinner.add("class", "td_inner");
+            tdinner.addChild(tdinnerlabel);
+            tdinner.addChild(tdinnercontent);
+            
+            tdtag.addChild(tdinner);
             trtag.addChild(tdtag);
         }
         

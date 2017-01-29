@@ -178,7 +178,6 @@ public class DefaultStyle {
         /*
          * default style
          */
-        
         if (view != null) {
             view.setStyleSheet(null);
             view.setStyleConst(null);
@@ -471,6 +470,16 @@ public class DefaultStyle {
         style = stylesheet.newElement(".table_item_check");
         style.put("margin", "0px");
         
+        style = stylesheet.newElement(".td_inner");
+        style.put("padding", "0px");
+        style.put("margin", "0px");
+        style.put("list-style-type", "none");
+        
+        style = stylesheet.newElement(".text_field_cell");
+        style.put("margin", "0px");
+        style.put("padding", "0px");
+        style.put("list-style-type", "none");
+        
         // textfield base
         style = stylesheet.newElement(".text_field_base");
         style.put("margin", "0px");
@@ -584,11 +593,6 @@ public class DefaultStyle {
         style.put("font-weight", "bold");
         style.put("font-family", FONT_FAMILY);
         
-        style = stylesheet.newElement(".text_field_cell");
-        style.put("margin", "0px");
-        style.put("padding", "0px");
-        style.put("list-style-type", "none");
-        
         for (String mediakey : resolutions.keySet()) {
             values = resolutions.get(mediakey);
             stylesheet.instanceMedia(mediakey).setRule((String)values[0][0]);
@@ -641,6 +645,19 @@ public class DefaultStyle {
             style = stylesheet.clone(mediakey,
                     ".tp_button_unfocused:hover", ".tp_button_unfocused");
             style.put("color", CLICKABLE_COLOR);
+            
+            style = stylesheet.newElement(mediakey, ".td_label");
+            style.put("padding", "0px");
+            style.put("margin-top", "0px");
+            style.put("margin-bottom", "2px");
+            style.put("margin-right", "0px");
+            style.put("margin-left", "0px");
+            style.put("width", "100%");
+            style.put("font-weight", "bold");
+            style.put("font-size", FONT_SIZE);
+            style.put("font-family", FONT_FAMILY);
+            style.put("color", FONT_COLOR);
+            style.put("display", mediakey.startsWith("mobile")? "block":"none");
         }
         
         return stylesheet;
