@@ -51,7 +51,9 @@ public class DefaultStyle {
                 new String[][] {
                     {"float", "unset"}},
                 new String[][] {
-                    {"width", "100%"}}
+                    {"width", "100%"}},
+                new String[][] {
+                    {"display", "block"}}
             }
         });
         resolutions.put("mobile1", new Object[][] {
@@ -72,7 +74,9 @@ public class DefaultStyle {
                 new String[][] {
                     {"float", "right"}},
                 new String[][] {
-                    {"width", "unset"}}
+                    {"width", "unset"}},
+                new String[][] {
+                    {"display", "none"}}
             }
         });
         resolutions.put("default", new Object[][] {
@@ -93,7 +97,9 @@ public class DefaultStyle {
                 new String[][] {
                     {"float", "right"}},
                 new String[][] {
-                    {"width", "unset"}}
+                    {"width", "unset"}},
+                new String[][] {
+                    {"display", "none"}}
             }
         });
         resolutions.put("screen1230", new Object[][] {
@@ -114,7 +120,9 @@ public class DefaultStyle {
                 new String[][] {
                     {"float", "right"}},
                 new String[][] {
-                    {"width", "unset"}}
+                    {"width", "unset"}},
+                new String[][] {
+                    {"display", "none"}}
             }
         });
         resolutions.put("screen1440", new Object[][] {
@@ -135,8 +143,10 @@ public class DefaultStyle {
                 new String[][] {
                     {"float", "right"}},
                 new String[][] {
-                    {"width", "unset"}}
-        }
+                    {"width", "unset"}},
+                new String[][] {
+                    {"display", "none"}}
+            }
         });
         resolutions.put("screen1600", new Object[][] {
             {"screen and (min-width:1600px)", "1540px", null},
@@ -155,7 +165,9 @@ public class DefaultStyle {
                 new String[][] {
                     {"float", "right"}},
                 new String[][] {
-                    {"width", "unset"}}
+                    {"width", "unset"}},
+                new String[][] {
+                    {"display", "none"}}
             }
         });
     }
@@ -657,7 +669,7 @@ public class DefaultStyle {
             style.put("font-size", FONT_SIZE);
             style.put("font-family", FONT_FAMILY);
             style.put("color", FONT_COLOR);
-            style.put("display", mediakey.startsWith("mobile")? "block":"none");
+            fillstyle(style, values[1][5]);
         }
         
         return stylesheet;
