@@ -16,6 +16,8 @@ public class PortalTilesConfig extends AbstractViewConfig {
         PortalContext extcontext;
         PortalPageTiles pagetiles;
         
+        getNavControl().setTitle(context.view.getPageName());
+        
         nodes = getElement("viewport");
         nodes.setStyleClass("portal_viewport");
         nodes.setItemsStyle("portal_viewport_node");
