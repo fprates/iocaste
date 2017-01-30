@@ -166,6 +166,9 @@
     	<!-- root -->
     	<ant antfile="${basedir}/src/ROOT/build.xml"/>
         
+    	<!-- examples -->
+    	<ant antfile="${basedir}/src/examples/build.xml"/>
+    	
         <!-- app runtime -->
         <ant antfile="${basedir}/src/runtime/build.xml"/>
     	
