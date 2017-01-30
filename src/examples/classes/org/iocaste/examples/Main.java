@@ -4,7 +4,10 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.portal.AbstractPortalBuilder;
 import org.iocaste.appbuilder.common.portal.PortalContext;
+import org.iocaste.examples.dataformuse.DataFormUseInstall;
+import org.iocaste.examples.dataformuse.DataFormUsePage;
 import org.iocaste.examples.helloworld.HelloWorldPage;
+import org.iocaste.examples.main.MainInstall;
 import org.iocaste.examples.main.MainPage;
 
 public class Main extends AbstractPortalBuilder {
@@ -22,6 +25,7 @@ public class Main extends AbstractPortalBuilder {
         context.messages = new Messages();
         instance("main", new MainPage());
         instance("hello-world", new HelloWorldPage());
+        instance("dataform-use", new DataFormUsePage());
     }
 
     @Override
@@ -30,7 +34,8 @@ public class Main extends AbstractPortalBuilder {
         installctx.addToTaskGroup("EXAMPLES", "EXAMPLES");
         installctx.setProfile("EXAMPLES");
         installctx.setProgramAuthorization("EXAMPLES.EXECUTE");
-        installObject("dictionary", new DictionaryInstall());
+        installObject("main", new MainInstall());
+        installObject("dataformuse", new DataFormUseInstall());
     }
 
 }

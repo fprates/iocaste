@@ -1,4 +1,4 @@
-package org.iocaste.examples;
+package org.iocaste.examples.main;
 
 import org.iocaste.appbuilder.common.AbstractInstallObject;
 import org.iocaste.appbuilder.common.ModelInstall;
@@ -6,7 +6,7 @@ import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 
-public class DictionaryInstall extends AbstractInstallObject {
+public class MainInstall extends AbstractInstallObject {
 
     @Override
     protected void execute(StandardInstallContext context) throws Exception {
