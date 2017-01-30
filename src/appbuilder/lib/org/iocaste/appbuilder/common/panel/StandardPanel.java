@@ -35,7 +35,9 @@ public class StandardPanel {
         AbstractExtendedValidator validator;
         Map<String, Validator> validators;
         AbstractPanelPage ncdesign;
-        
+
+        if (context.view == null)
+            return;
         view = context.instance(name);
         view.set(new StandardPanelSpec());
         view.set(new StandardPanelConfig());
