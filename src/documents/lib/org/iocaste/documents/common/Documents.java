@@ -510,8 +510,12 @@ public class Documents extends AbstractServiceInterface {
     
     public static final boolean isInitialIgnoring(
             ExtendedObject object, Set<String> ignore) {
-        DocumentModel model = object.getModel();
+        DocumentModel model;
         
+        if (object == null)
+            return true;
+        
+        model = object.getModel();
         for (DocumentModelItem item : model.getItens()) {
             if ((ignore != null) && ignore.contains(item.getName()))
                 continue;
