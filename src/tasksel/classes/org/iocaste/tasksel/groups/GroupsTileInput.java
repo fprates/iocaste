@@ -8,7 +8,7 @@ public class GroupsTileInput extends AbstractViewInput {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        ExtendedObject object = tilesobjectget("items");
+        ExtendedObject object = tilesobjectget();
         
         textset("name", object.getst("GROUP"));
         textset("tileitem", "");

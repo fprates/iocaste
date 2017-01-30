@@ -10,7 +10,7 @@ public class ProjectsTileInput extends AbstractViewInput {
 
     @Override
     protected void init(PageBuilderContext context) {
-        ProjectInfo project = tilesobjectget("projects");
+        ProjectInfo project = tilesobjectget();
         textset("item", "");
         textset("name", project.name);
         textset("title", project.title);

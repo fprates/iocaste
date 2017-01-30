@@ -8,7 +8,7 @@ public class TasksTileInput extends AbstractViewInput {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        ExtendedObject object = tilesobjectget("items");
+        ExtendedObject object = tilesobjectget();
         
         textset("text", object.getst("TEXT"));
         textset("tileitem", "");

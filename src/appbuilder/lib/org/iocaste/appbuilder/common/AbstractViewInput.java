@@ -310,16 +310,15 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     @SuppressWarnings("unchecked")
-    protected final <T> T tilesobjectget(String tiles) {
-        return (T)getExtendedContext().tilesobjectget(tiles);
+    protected final <T> T tilesobjectget() {
+        ExtendedContext extcontext = getExtendedContext();
+        return (T)extcontext.tilesobjectget(extcontext.parentget(prefix));
     }
     
-    protected final String tileactionget(String tiles) {
-        return getExtendedContext().tilesactionget(tiles);
-    }
-    
-    protected final void tileactionset(String tiles, Object action) {
-        getExtendedContext().tilesactionset(tiles, action.toString());
+    protected final void tileactionset(Object action) {
+        ExtendedContext extcontext = getExtendedContext();
+        extcontext.tilesactionset(
+                extcontext.parentget(prefix), action.toString());
     }
     
     protected final void tilesset(String name, Object[] objects) {

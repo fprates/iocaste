@@ -38,6 +38,14 @@ public interface ExtendedContext {
     public abstract void pageInstance();
     
     public abstract void pageInstance(String page);
+    
+    public abstract String parentget(String name);
+    
+    public abstract String parentget(String page, String name);
+    
+    public abstract void parentput(String parent, String name);
+    
+    public abstract void parentput(String page, String parent, String name);
 
     public abstract void remove(String ttname, ExtendedObject object);
     

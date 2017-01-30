@@ -97,6 +97,14 @@ public abstract class AbstractViewConfig implements ViewConfig {
     
     /**
      * 
+     * @return
+     */
+    protected final String getPrefix() {
+        return prefix;
+    }
+    
+    /**
+     * 
      * @param tab
      * @param name
      * @return

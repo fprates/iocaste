@@ -5,9 +5,11 @@ import java.util.Map;
 
 public class PageContext {
     private Map<String, ContextEntry> tools;
+    private Map<String, String> parents;
     
     public PageContext() {
         tools = new HashMap<>();
+        parents = new HashMap<>();
     }
     
     public final boolean contains(String name) {
@@ -21,6 +23,14 @@ public class PageContext {
     
     public final Map<String, ContextEntry> getTools() {
         return tools;
+    }
+    
+    public final String parentget(String name) {
+        return parents.get(name);
+    }
+    
+    public final void parentput(String parent, String name) {
+        parents.put(name, parent);
     }
     
     public final void put(String name, ContextEntry entry) {

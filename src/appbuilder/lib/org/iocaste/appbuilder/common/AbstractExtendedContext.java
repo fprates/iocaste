@@ -122,6 +122,26 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     }
     
     @Override
+    public final String parentget(String name) {
+        return parentget(context.view.getPageName(), name);
+    }
+    
+    @Override
+    public final String parentget(String page, String name) {
+        return pages.get(page).parentget(name);
+    }
+
+    @Override
+    public final void parentput(String parent, String name) {
+        parentput(context.view.getPageName(), parent, name);
+    }
+    
+    @Override
+    public final void parentput(String page, String parent, String name) {
+        pages.get(page).parentput(name, parent);
+    }
+    
+    @Override
     public final void remove(String ttname, ExtendedObject object) {
         remove(context.view.getPageName(), ttname, object);
     }

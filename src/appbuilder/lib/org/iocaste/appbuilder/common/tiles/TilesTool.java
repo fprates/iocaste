@@ -39,7 +39,7 @@ public class TilesTool extends AbstractComponentTool {
 
     @Override
     public void run() {
-        String linkname, pagename;
+        String linkname, pagename, tilename;
         Tile tile;
         BuilderCustomView builder;
         ViewSpecItem itemspec, tilesspec;
@@ -82,8 +82,9 @@ public class TilesTool extends AbstractComponentTool {
                 itemspec = tile.specItemInstance();
             if (extcontext != null)
                 extcontext.tilesobjectset(data.name, tile.get());
-            builder.execute(
-                    data.context, itemspec, tile.getName(), data.action);
+            tilename = tile.getName();
+            extcontext.parentput(tilename, data.name);
+            builder.execute(data.context, itemspec, tilename, data.action);
             if (!data.action)
                 continue;
             linkname = Tile.getLinkName(tile);
