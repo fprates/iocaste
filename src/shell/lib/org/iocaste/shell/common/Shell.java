@@ -10,6 +10,7 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.GenericService;
@@ -282,6 +283,16 @@ public class Shell extends AbstractServiceInterface {
         
         return toString(value, element.getType(), element.getDecimals(), locale,
                 boolconvert);
+    }
+    
+    public static final String toString(
+            View view, ExtendedObject object, String field) {
+        Object value = object.get(field);
+        DataElement element = object.getModel().getModelItem(field).
+                getDataElement();
+        Locale locale = view.getLocale();
+        
+        return toString(value, element, locale, false);
     }
     
     public static final String toString(Object value, int type, int dec,
