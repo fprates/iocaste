@@ -80,8 +80,7 @@ public abstract class AbstractPanelPage {
     }
     
     protected final void run(String action) throws Exception {
-        PageBuilderContext context = getExtendedContext().getContext();
-        context.run(context.view.getPageName(), action);
+        getExtendedContext().getContext().run(name, action);
     }
     
     protected void set(ViewConfig config) {

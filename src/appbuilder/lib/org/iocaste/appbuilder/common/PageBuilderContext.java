@@ -78,7 +78,8 @@ public class PageBuilderContext extends AbstractContext {
     
     public final void run(String page, String action) throws Exception {
         this.action = action;
-        getView(page).getActionHandler(action).run(this);
+        getView(page).getActionHandler(action).run(
+                this, page, AbstractActionHandler.REDIRECT);
     }
     
     public final void storeStyle() {

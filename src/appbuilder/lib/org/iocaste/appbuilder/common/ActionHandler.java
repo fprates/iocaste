@@ -8,4 +8,7 @@ public interface ActionHandler {
     
     public abstract void run(AbstractContext context, boolean redirectflag)
             throws Exception;
+    
+    public abstract void run(AbstractContext context, String page,
+            boolean redirectflag) throws Exception;
 }

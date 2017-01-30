@@ -37,8 +37,8 @@ import org.iocaste.texteditor.common.TextEditorTool;
 public abstract class AbstractActionHandler implements ActionHandler {
     public static final boolean REDIRECT = true;
     private PageBuilderContext context;
-    private ViewComponents components;
     private Documents documents;
+    private String page;
     
     protected final void back() {
         context.function.back();
@@ -93,7 +93,7 @@ public abstract class AbstractActionHandler implements ActionHandler {
     private DataForm dfget(String name) {
         ComponentEntry entry;
         
-        entry = components.entries.get(name);
+        entry = getComponents().entries.get(name);
         if (entry == null)
             throw new RuntimeException(name.concat(
                     " is an invalid dataform."));
@@ -113,8 +113,7 @@ public abstract class AbstractActionHandler implements ActionHandler {
     }
     
     protected final void execute(String action) throws Exception {
-        String view = context.view.getPageName();
-        context.getView(view).getActionHandler(action).run(context, !REDIRECT);
+        context.getView(page).getActionHandler(action).run(context, !REDIRECT);
     }
     
     protected abstract void execute(PageBuilderContext context)
@@ -139,8 +138,12 @@ public abstract class AbstractActionHandler implements ActionHandler {
         return fileentryget(fileentry).get();
     }
     
+    private final ViewComponents getComponents() {
+        return context.getView(page).getComponents();
+    }
+    
     protected ExtendedObject getdf(String name) {
-        DataFormTool dftool = components.getComponent(name);
+        DataFormTool dftool = getComponents().getComponent(name);
         return dftool.getObject();
     }
     
@@ -167,7 +170,7 @@ public abstract class AbstractActionHandler implements ActionHandler {
     }
     
     private final InputComponent getdfinputkey(String dataform) {
-        DataFormToolData data = components.getComponentData(dataform);
+        DataFormToolData data = getComponents().getComponentData(dataform);
         for (DocumentModelKey key : data.custommodel.getKeys())
             return getdfinput(dataform, key.getModelItemName());
 
@@ -217,7 +220,6 @@ public abstract class AbstractActionHandler implements ActionHandler {
     
     @SuppressWarnings("unchecked")
     protected final <T extends ExtendedContext> T getExtendedContext() {
-        String page = context.view.getPageName();
         return (T)context.getView(page).getExtendedContext();
     }
 
@@ -376,26 +378,30 @@ public abstract class AbstractActionHandler implements ActionHandler {
         else
             context.function.keepView();
     }
-    
-    protected void refresh() { };
-    
+
+    @Override
     public final void run(AbstractContext context) throws Exception {
         run(context, REDIRECT);
     }
     
+    @Override
     public final void run(AbstractContext context, boolean redirectflag)
             throws Exception {
+        run(context, context.view.getPageName(), redirectflag);
+    }
+    
+    @Override
+    public final void run(AbstractContext context, String page,
+            boolean redirectflag) throws Exception {
         ViewContext viewctx;
-        String view = context.view.getPageName();
         
         this.context = (PageBuilderContext)context;
-        viewctx = this.context.getView(view);
+        this.page = page;
+        viewctx = this.context.getView(page);
         if (viewctx.getActionHandler(context.action) == null)
             return;
-        
-        components = viewctx.getComponents();
-        documents = new Documents(context.function);
-        refresh();
+        if (documents == null)
+            documents = new Documents(context.function);
         execute(this.context);
         if (redirectflag)
             redirectContext(this.context, viewctx);
@@ -443,14 +449,14 @@ public abstract class AbstractActionHandler implements ActionHandler {
     }
     
     protected final void setFocus(String container, String field) {
-        DataForm dataform = components.getComponent(container).getElement();
+        DataForm dataform=getComponents().getComponent(container).getElement();
         context.view.setFocus(dataform.get(field));
     }
     
     protected final void setFocus(String table, String column, int line) {
         TableItem titem;
         int i = 0;
-        TableTool component = components.getComponent(table);
+        TableTool component = getComponents().getComponent(table);
         Set<Element> elements = ((Table)component.getElement()).getElements();
         for (Element element : elements) {
             titem = (TableItem)element;
@@ -483,14 +489,14 @@ public abstract class AbstractActionHandler implements ActionHandler {
     }
     
     protected final ExtendedObject[] tableitemsget(String tabletool) {
-        TableToolData ttdata = components.getComponentData(tabletool);
+        TableToolData ttdata = getComponents().getComponentData(tabletool);
         return tableitemsget(ttdata);
     }
     
     protected final List<ExtendedObject> tableselectedget(String tabletool) {
         List<ExtendedObject> objects;
         TableToolItem item;
-        Map<Integer, TableToolItem> items = ((TableToolData)components.
+        Map<Integer, TableToolItem> items = ((TableToolData)getComponents().
                 getComponentData(tabletool)).getItems();
         
         if (items == null)
@@ -530,7 +536,7 @@ public abstract class AbstractActionHandler implements ActionHandler {
     
     protected final void texteditorsave(String name, String id, String page) {
         TextEditorTool editortool = new TextEditorTool(context);
-        TextEditor editor = components.editors.get(name);
+        TextEditor editor = getComponents().editors.get(name);
         
         editortool.commit(editor, page);
         editortool.update(editor, id);
