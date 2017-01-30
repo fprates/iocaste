@@ -1,14 +1,14 @@
 package org.iocaste.tasksel.groups;
 
+import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.tiles.AbstractTileInput;
 import org.iocaste.documents.common.ExtendedObject;
 
-public class GroupsTileInput extends AbstractTileInput {
+public class GroupsTileInput extends AbstractViewInput {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        ExtendedObject object = get();
+        ExtendedObject object = tilesobjectget("items");
         
         textset("name", object.getst("GROUP"));
         textset("tileitem", "");

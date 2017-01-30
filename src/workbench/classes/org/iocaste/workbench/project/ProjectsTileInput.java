@@ -1,16 +1,16 @@
 package org.iocaste.workbench.project;
 
+import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.tiles.AbstractTileInput;
 
-public class ProjectsTileInput extends AbstractTileInput {
+public class ProjectsTileInput extends AbstractViewInput {
 
     @Override
     protected void execute(PageBuilderContext context) { }
 
     @Override
     protected void init(PageBuilderContext context) {
-        ProjectInfo project = get();
+        ProjectInfo project = tilesobjectget("projects");
         textset("item", "");
         textset("name", project.name);
         textset("title", project.title);

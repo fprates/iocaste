@@ -309,6 +309,19 @@ public abstract class AbstractViewInput implements ViewInput {
         element.setText(text, args);
     }
     
+    @SuppressWarnings("unchecked")
+    protected final <T> T tilesobjectget(String tiles) {
+        return (T)getExtendedContext().tilesobjectget(tiles);
+    }
+    
+    protected final String tileactionget(String tiles) {
+        return getExtendedContext().tilesactionget(tiles);
+    }
+    
+    protected final void tileactionset(String tiles, Object action) {
+        getExtendedContext().tilesactionset(tiles, action.toString());
+    }
+    
     protected final void tilesset(String name, Object[] objects) {
         ((TilesData)getComponentData(name)).objects = objects;
     }

@@ -5,7 +5,6 @@ import java.util.Collection;
 import org.iocaste.appbuilder.common.dataformtool.DataFormContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
-import org.iocaste.appbuilder.common.tiles.Tile;
 import org.iocaste.appbuilder.common.tiles.TilesContextEntry;
 import org.iocaste.documents.common.ExtendedObject;
 
@@ -45,8 +44,6 @@ public interface ExtendedContext {
     public abstract void remove(
             String pane, String ttname, ExtendedObject object);
     
-    public abstract void set(Tile tile);
-    
     public abstract void set(String dfname, ExtendedObject object);
     
     public abstract void set(String page, String dfname, ExtendedObject object);
@@ -73,6 +70,10 @@ public interface ExtendedContext {
     public abstract void setDataHandler(ContextDataHandler handler,
             String... tools);
     
+    public abstract String tilesactionget(String tiles);
+    
+    public abstract void tilesactionset(String tiles, String action);
+    
     public abstract TableToolContextEntry tableInstance(String ttname);
     
     public abstract TableToolContextEntry tableInstance(
@@ -82,5 +83,11 @@ public interface ExtendedContext {
     
     public abstract TilesContextEntry tilesInstance(String page, String tiles);
 
-    public abstract <T> T tileobjectget();
+    public abstract <T> T tilesobjectget(String tiles);
+    
+    public abstract <T> T tilesobjectget(String page, String tiles);
+    
+    public abstract void tilesobjectset(String tiles, Object value);
+    
+    public abstract void tilesobjectset(String page,String tiles,Object value);
 }

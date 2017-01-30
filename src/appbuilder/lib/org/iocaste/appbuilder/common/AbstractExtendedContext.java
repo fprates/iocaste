@@ -8,14 +8,12 @@ import org.iocaste.appbuilder.common.dataformtool.DataFormContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
-import org.iocaste.appbuilder.common.tiles.Tile;
 import org.iocaste.appbuilder.common.tiles.TilesContextEntry;
 import org.iocaste.documents.common.ExtendedObject;
 
 public abstract class AbstractExtendedContext implements ExtendedContext {
     private PageBuilderContext context;
     private Map<String, PageContext> pages;
-    private Tile tile;
     
     public AbstractExtendedContext(PageBuilderContext context) {
         this.context = context;
@@ -153,11 +151,6 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     }
     
     @Override
-    public final void set(Tile tile) {
-        this.tile = tile;
-    }
-    
-    @Override
     public final void set(String ttname, ExtendedObject[] objects) {
         set(context.view.getPageName(), ttname, objects);
     }
@@ -273,6 +266,20 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     }
     
     @Override
+    public final String tilesactionget(String tiles) {
+        TilesContextEntry entry;
+        entry = pages.get(context.view.getPageName()).get(tiles);
+        return entry.action;
+    }
+    
+    @Override
+    public final void tilesactionset(String tiles, String action) {
+        TilesContextEntry entry;
+        entry = pages.get(context.view.getPageName()).get(tiles);
+        entry.action = action;
+    }
+    
+    @Override
     public final TilesContextEntry tilesInstance(String tiles) {
         return tilesInstance(context.view.getPageName(), tiles);
     }
@@ -311,6 +318,29 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         pages.get(page).get(tiles).clear();
     }
     
+    @Override
+    @SuppressWarnings("unchecked")
+    public final <T> T tilesobjectget(String page, String tiles) {
+        TilesContextEntry entry = pages.get(page).get(tiles);
+        return (T)entry.value;
+    }
+    
+    @Override
+    public final <T> T tilesobjectget(String tiles) {
+        return tilesobjectget(context.view.getPageName(), tiles);
+    }
+    
+    @Override
+    public final void tilesobjectset(String page, String tiles, Object value) {
+        TilesContextEntry entry = pages.get(page).get(tiles);
+        entry.value = value;
+    }
+    
+    @Override
+    public final void tilesobjectset(String tiles, Object value) {
+        tilesobjectset(context.view.getPageName(), tiles, value);
+    }
+    
     public final void tilesset(String tiles, ExtendedObject[] objects) {
         tilesset(context.view.getPageName(), tiles, objects);
     }
@@ -323,12 +353,6 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         entry.clear();
         for (ExtendedObject object : objects)
             entry.add(object);
-    }
-    
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T> T tileobjectget() {
-        return (T)tile.get();
     }
     
 }

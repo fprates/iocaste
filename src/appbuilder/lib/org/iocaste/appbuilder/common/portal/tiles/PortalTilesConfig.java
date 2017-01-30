@@ -3,7 +3,6 @@ package org.iocaste.appbuilder.common.portal.tiles;
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.portal.PortalContext;
-import org.iocaste.appbuilder.common.tiles.AbstractTileInput;
 import org.iocaste.appbuilder.common.tiles.TilesData;
 import org.iocaste.shell.common.NodeList;
 
@@ -27,7 +26,7 @@ public class PortalTilesConfig extends AbstractViewConfig {
         tiles = getTool("items");
         tiles.spec = pagetiles.spec;
         tiles.config = pagetiles.config;
-        tiles.input = (AbstractTileInput)pagetiles.input;
+        tiles.input = pagetiles.input;
     }
     
 }

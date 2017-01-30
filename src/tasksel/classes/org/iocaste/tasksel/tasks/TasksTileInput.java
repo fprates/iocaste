@@ -1,14 +1,14 @@
 package org.iocaste.tasksel.tasks;
 
+import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.tiles.AbstractTileInput;
 import org.iocaste.documents.common.ExtendedObject;
 
-public class TasksTileInput extends AbstractTileInput {
+public class TasksTileInput extends AbstractViewInput {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        ExtendedObject object = get();
+        ExtendedObject object = tilesobjectget("items");
         
         textset("text", object.getst("TEXT"));
         textset("tileitem", "");

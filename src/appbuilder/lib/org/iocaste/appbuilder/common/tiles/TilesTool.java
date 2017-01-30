@@ -74,15 +74,14 @@ public class TilesTool extends AbstractComponentTool {
         }
         
         extcontext = view.getExtendedContext();
+        extcontext.tilesInstance(data.name);
         for (int i = 0; i < data.objects.length; i++) {
-            if (data.input != null)
-                data.input.set(data.objects[i]);
             tile = new Tile(data.name, i);
             tile.set(data.objects[i]);
             if (data.action)
                 itemspec = tile.specItemInstance();
             if (extcontext != null)
-                extcontext.set(tile);
+                extcontext.tilesobjectset(data.name, tile.get());
             builder.execute(
                     data.context, itemspec, tile.getName(), data.action);
             if (!data.action)
@@ -91,7 +90,8 @@ public class TilesTool extends AbstractComponentTool {
             link = data.context.view.getElement(linkname);
             link.setText("");
             link.setStyleClass("nc_tiles_link");
-            view.put(linkname, new TilesAction(data.input.getAction()));
+            view.put(linkname,
+                    new TilesAction(extcontext.tilesactionget(data.name)));
             function.register(pagename, linkname, view);
         }
     }
