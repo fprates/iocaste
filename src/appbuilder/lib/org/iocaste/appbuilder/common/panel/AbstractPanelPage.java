@@ -79,6 +79,11 @@ public abstract class AbstractPanelPage {
         view.put(name, validator);
     }
     
+    protected final void run(String action) throws Exception {
+        PageBuilderContext context = getExtendedContext().getContext();
+        context.run(context.view.getPageName(), action);
+    }
+    
     protected void set(ViewConfig config) {
         this.config = config;
     }
