@@ -57,7 +57,7 @@ public class GetLists extends AbstractActionHandler {
                 messages.put(packagename, _messages);
             }
             
-            if (_messages.containsKey(groupname))
+            if ((_messages != null) && _messages.containsKey(groupname))
                 groups.put(groupname, getText(_messages, groupname));
             
             entry = instance("TASK_TILE_ENTRY");
