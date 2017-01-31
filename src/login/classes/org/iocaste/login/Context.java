@@ -1,5 +1,8 @@
 package org.iocaste.login;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AbstractExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.DataElement;
@@ -9,10 +12,17 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class Context extends AbstractExtendedContext {
+    public static final Map<String, Object> LANGUAGES;
     private DataElement username, secret;
     public DocumentModel loginmodel, chgscrtmodel;
     public String uname;
     public ExtendedObject object;
+    
+    static {
+        LANGUAGES = new LinkedHashMap<>();
+        LANGUAGES.put("Português (Brasil)", "pt_BR");
+        LANGUAGES.put("English (US)", "en_US");
+    }
     
     public Context(PageBuilderContext context) {
         super(context);

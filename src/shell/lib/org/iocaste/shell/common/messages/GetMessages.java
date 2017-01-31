@@ -41,8 +41,10 @@ public class GetMessages extends AbstractHandler {
         if (this.messages.containsKey(locale))
             return this.messages.get(locale);
         
-        if (messagesrc != null)
-            return load(locale, messagesrc.getMessages(locale));
+        if (messagesrc != null) {
+            messages = messagesrc.getMessages(locale);
+            return (messages == null)? null : load(locale, messages);
+        }
         
         function = getFunction();
         context = function.configOnly();
@@ -50,7 +52,7 @@ public class GetMessages extends AbstractHandler {
             return null;
         context.messages.entries();
         messages = context.messages.getMessages(locale);
-        return load(locale, messages);
+        return (messages == null)? null : load(locale, messages);
     }
     
     public final void set(MessageSource messagesrc) {

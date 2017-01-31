@@ -147,14 +147,13 @@ public class ProcessHttpRequisition extends AbstractHandler {
             PageContext expagectx, Exception exception) throws Exception {
         PageContext pagectx;
         ContextData contextdata = new ContextData();
-        Function function = getFunction();
         
         contextdata.sessionid = sessionid;
-        contextdata.appname = getConfiguration(function, "EXCEPTION_HANDLER");
+        contextdata.appname = getConfiguration("EXCEPTION_HANDLER");
         if (contextdata.appname == null)
             contextdata.appname = "iocaste-exhandler";
         if (contextdata.locale == null)
-            contextdata.locale = getLocale(contextdata, function);
+            contextdata.locale = getLocale(contextdata);
         
         contextdata.pagename = "main";
         contextdata.logid = expagectx.getLogid();
@@ -229,18 +228,17 @@ public class ProcessHttpRequisition extends AbstractHandler {
         Enumeration<String> parameternames;
         String key, startpage;
         ContextData contextdata;
-        Function function = getFunction();
         
         contextdata = new ContextData();
         contextdata.appname = context.req.getParameter("login-manager");
         if (contextdata.appname == null)
-            contextdata.appname = getConfiguration(function, "LOGIN_MANAGER");
+            contextdata.appname = getConfiguration("LOGIN_MANAGER");
         if (contextdata.appname == null)
             contextdata.appname = "iocaste-login";
         contextdata.sessionid = context.sessionid;
         contextdata.logid = logid;
         contextdata.initialize = true;
-        contextdata.locale = getLocale(contextdata, function);
+        contextdata.locale = getLocale(contextdata);
         
         startpage = context.req.getParameter("start-page");
         if (startpage == null)
@@ -281,7 +279,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
         contextdata.logid = logid;
         contextdata.sessionid = context.sessionid;
         contextdata.initialize = true;
-        contextdata.locale = getLocale(contextdata, getFunction());
+        contextdata.locale = getLocale(contextdata);
         
         pagectx = createPageContext(contextdata);
         pagectx.parameters.put("username", ticket.getUsername());
@@ -416,7 +414,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
     }
 
     @SuppressWarnings("unchecked")
-    private final String getConfiguration(Function function, String name) {
+    private final String getConfiguration(String name) {
         Object[] objects;
         CheckedSelect select;
         
@@ -433,9 +431,13 @@ public class ProcessHttpRequisition extends AbstractHandler {
         }
     }
     
-    private final String getLocale(ContextData ctxdata, Function function) {
-        return (isConnected(ctxdata))?
-                getConfiguration(function, "DEFAULT_LANGUAGE") : "pt_BR";
+    private final String getLocale(ContextData ctxdata) {
+        String locale;
+        
+        if (isConnected(ctxdata))
+            return new Iocaste(getFunction()).getLocale().toString();
+        locale = getConfiguration("DEFAULT_LANGUAGE");
+        return (locale == null)? "pt_BR" : locale;
     }
     
     /**
@@ -680,6 +682,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
     private final PageContext processController(RendererContext context,
             PageContext pagectx) throws Exception {
         long sequence;
+        boolean connected;
         ControllerData config;
         ContextData contextdata;
         ControlComponent action;
@@ -788,7 +791,10 @@ public class ProcessHttpRequisition extends AbstractHandler {
         contextdata.appname = appname;
         contextdata.pagename = pagename;
         contextdata.logid = config.logid;
-        contextdata.locale = pagectx.getViewData().getLocale().toString();
+
+        connected = isConnected(contextdata);
+        contextdata.locale = (connected)? getLocale(contextdata) :
+            pagectx.getViewData().getLocale().toString();
         
         pagectx_ = getPageContext(contextdata);
         if (pagectx_ == null) {
@@ -809,7 +815,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
                 config.state.messageargs);
         pagectx_.setPopupControl(config.popupcontrol);
         
-        if (isConnected(contextdata)) {
+        if (connected) {
             execute(appname, config.sessionid);
             pagectx_.setUsername(getUsername(contextdata));
         } else {
