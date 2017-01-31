@@ -15,9 +15,6 @@ public class PortalStyle extends AbstractViewConfigStyle {
         FONT_COLOR = constant(Shell.FONT_COLOR);
         FONT_SIZE = constant(Shell.FONT_SIZE);
         
-        load(".nc_login");
-        put("display", "none");
-        
         instance(".portal_viewport");
         put("list-style-type", "none");
         put("margin-left", "auto");
