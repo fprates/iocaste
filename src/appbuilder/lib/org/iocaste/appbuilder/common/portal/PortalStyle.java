@@ -66,7 +66,7 @@ class PortalStyleMedia extends AbstractViewConfigStyle {
         boolean ismobile = getMediaKey().startsWith("mobile");
         
         instance(".portal_tile_frame");
-        put("width", ismobile? "calc(100% - 10px)" : "calc((100% / 3) - 20px)");
+        put("width", ismobile? "calc(100% - 35px)" : "calc((100% / 3) - 35px)");
         put("border-bottom-style", "solid");
         put("border-bottom-width", "1px");
         put("border-bottom-color", FRAME_COLOR);
