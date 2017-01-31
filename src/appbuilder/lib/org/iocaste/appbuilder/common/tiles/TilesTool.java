@@ -74,14 +74,17 @@ public class TilesTool extends AbstractComponentTool {
         }
         
         extcontext = view.getExtendedContext();
+        if (extcontext == null)
+            throw new RuntimeException(String.
+                    format("tiles %s demand valid ExtendedContext", data.name));
+        
         extcontext.tilesInstance(data.name);
         for (int i = 0; i < data.objects.length; i++) {
             tile = new Tile(data.name, i);
             tile.set(data.objects[i]);
             if (data.action)
                 itemspec = tile.specItemInstance();
-            if (extcontext != null)
-                extcontext.tilesobjectset(data.name, tile.get());
+            extcontext.tilesobjectset(data.name, tile.get());
             tilename = tile.getName();
             extcontext.parentput(tilename, data.name);
             builder.execute(data.context, itemspec, tilename, data.action);
