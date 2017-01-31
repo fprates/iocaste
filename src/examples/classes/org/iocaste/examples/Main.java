@@ -9,6 +9,8 @@ import org.iocaste.examples.dataformuse.DataFormUsePage;
 import org.iocaste.examples.helloworld.HelloWorldPage;
 import org.iocaste.examples.main.MainInstall;
 import org.iocaste.examples.main.MainPage;
+import org.iocaste.examples.tabletooluse.TableToolUseInstall;
+import org.iocaste.examples.tabletooluse.TableToolUsePage;
 
 public class Main extends AbstractPortalBuilder {
 
@@ -26,6 +28,7 @@ public class Main extends AbstractPortalBuilder {
         instance("main", new MainPage());
         instance("hello-world", new HelloWorldPage());
         instance("dataform-use", new DataFormUsePage());
+        instance("tabletool-use", new TableToolUsePage());
     }
 
     @Override
@@ -36,6 +39,7 @@ public class Main extends AbstractPortalBuilder {
         installctx.setProgramAuthorization("EXAMPLES.EXECUTE");
         installObject("main", new MainInstall());
         installObject("dataformuse", new DataFormUseInstall());
+        installObject("tabletooluse", new TableToolUseInstall());
     }
 
 }

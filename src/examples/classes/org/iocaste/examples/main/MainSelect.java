@@ -8,7 +8,8 @@ import org.iocaste.examples.Context;
 public class MainSelect extends AbstractActionHandler {
     private static final String[][] entries = {
         {"hello-world", "Olá, Mundo"},
-        {"dataform-use", "Preenchimento de dataform"}
+        {"dataform-use", "Utilização de dataform"},
+        {"tabletool-use", "Utilização de tabletool"}
     };
     
     @Override
