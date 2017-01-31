@@ -8,4 +8,11 @@ public class PortalPageTiles {
     public ViewSpec spec;
     public ViewConfig config;
     public ViewInput input;
+    public String title;
+    public Object[] titleargs;
+    
+    public final void setTitle(String title, Object... args) {
+        this.title = title;
+        this.titleargs = args;
+    }
 }

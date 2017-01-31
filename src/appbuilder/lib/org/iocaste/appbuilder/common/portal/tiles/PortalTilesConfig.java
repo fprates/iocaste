@@ -15,14 +15,14 @@ public class PortalTilesConfig extends AbstractViewConfig {
         PortalContext extcontext;
         PortalPageTiles pagetiles;
         
-        getNavControl().setTitle(context.view.getPageName());
-        
         nodes = getElement("viewport");
         nodes.setStyleClass("portal_viewport");
         nodes.setItemsStyle("portal_viewport_node");
         
         extcontext = getExtendedContext();
         pagetiles = extcontext.pagetiles.get(context.view.getPageName());
+        getNavControl().setTitle(pagetiles.title, pagetiles.titleargs);
+        
         tiles = getTool("items");
         tiles.spec = pagetiles.spec;
         tiles.config = pagetiles.config;

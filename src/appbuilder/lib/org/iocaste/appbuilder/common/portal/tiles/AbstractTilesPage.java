@@ -15,13 +15,15 @@ public abstract class AbstractTilesPage extends AbstractPanelPage {
     @Override
     public final void execute() throws Exception {
         PortalContext extcontext;
+        PortalPageTiles tilesdata;
         
         super.set((spec != null)? spec : new PortalTilesSpec());
         super.set((config != null)? config : new PortalTilesConfig());
         super.set((input != null)? input : new StandardViewInput());
         
         extcontext = getExtendedContext();
-        extcontext.pagetiles.put(getName(), new PortalPageTiles());
+        extcontext.pagetiles.put(getName(), tilesdata = new PortalPageTiles());
+        tilesdata.setTitle(getName());
         entry();
     }
 
