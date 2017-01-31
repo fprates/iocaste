@@ -60,20 +60,18 @@ public class GetLists extends AbstractActionHandler {
                 messages.put(packagename, _messages);
             }
             
-            if (_messages != null) {
-                if (groups.containsKey(groupname)) {
-                    entry = groups.get(groupname);
-                } else {
-                    entry = instance("TASK_TILE_ENTRY");
-                    entry.set("GROUP", groupname);
-                    groups.put(groupname, entry);
-                    extcontext.tilesadd("main", "items", entry);
-                }
-                
-                if (_messages.containsKey(groupname) &&
-                        (entry.getst("TEXT") == null))
-                    entry.set("TEXT", getText(_messages, groupname));
+            if (groups.containsKey(groupname)) {
+                entry = groups.get(groupname);
+            } else {
+                entry = instance("TASK_TILE_ENTRY");
+                entry.set("GROUP", groupname);
+                groups.put(groupname, entry);
+                extcontext.tilesadd("main", "items", entry);
             }
+
+            if ((_messages != null) && (_messages.containsKey(groupname) &&
+                        (entry.getst("TEXT") == null)))
+                entry.set("TEXT", getText(_messages, groupname));
             
             entry = instance("TASK_TILE_ENTRY");
             entry.set("GROUP", groupname);
