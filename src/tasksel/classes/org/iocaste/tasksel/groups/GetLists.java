@@ -1,7 +1,6 @@
 package org.iocaste.tasksel.groups;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
@@ -20,12 +19,12 @@ public class GetLists extends AbstractActionHandler {
         ExtendedObject entry;
         ExtendedObject[] result;
         String groupname, language, taskname, username, packagename;
-        Map<String, String> _messages, groups;
+        Map<String, String> _messages;
+        Map<String, ExtendedObject> groups;
         Map<String, Map<String, String>> messages;
         Iocaste iocaste = new Iocaste(context.function);
         Context extcontext = getExtendedContext();
         
-        extcontext.entries = null;
         username = iocaste.getUsername();
         query = new Query();
         query.addColumns(
@@ -42,9 +41,13 @@ public class GetLists extends AbstractActionHandler {
             return;
         
         language = context.view.getLocale().toString();
-        extcontext.entries = new LinkedHashSet<>();
         messages = new HashMap<>();
         groups = new HashMap<>();
+        
+        init("main", extcontext);
+        extcontext.tasks.clear();
+        extcontext.tilesInstance("main", "items");
+        extcontext.tilesclear("main", "items");
         for (ExtendedObject object : result) {
             groupname = object.get("GROUP");
             taskname = object.getst("NAME");
@@ -57,20 +60,26 @@ public class GetLists extends AbstractActionHandler {
                 messages.put(packagename, _messages);
             }
             
-            if ((_messages != null) && _messages.containsKey(groupname))
-                groups.put(groupname, getText(_messages, groupname));
+            if (_messages != null) {
+                if (groups.containsKey(groupname)) {
+                    entry = groups.get(groupname);
+                } else {
+                    entry = instance("TASK_TILE_ENTRY");
+                    entry.set("GROUP", groupname);
+                    groups.put(groupname, entry);
+                    extcontext.tilesadd("main", "items", entry);
+                }
+                
+                if (_messages.containsKey(groupname) &&
+                        (entry.getst("TEXT") == null))
+                    entry.set("TEXT", getText(_messages, groupname));
+            }
             
             entry = instance("TASK_TILE_ENTRY");
             entry.set("GROUP", groupname);
             entry.set("NAME", taskname);
             entry.set("TEXT", getText(_messages, taskname));
-            extcontext.entries.add(entry);
-        }
-        
-        for (ExtendedObject object : extcontext.entries) {
-            groupname = groups.get(object.getst("GROUP"));
-            if (groupname != null)
-                object.set("GROUP", groupname);
+            extcontext.tasks.add(entry);
         }
     }
     

@@ -1,14 +1,14 @@
 package org.iocaste.tasksel;
 
-import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.portal.AbstractPortalBuilder;
+import org.iocaste.appbuilder.common.portal.PortalContext;
 import org.iocaste.tasksel.groups.GroupsPanelPage;
 import org.iocaste.tasksel.tasks.TasksPanelPage;
 
-public class Main extends AbstractPageBuilder {
+public class Main extends AbstractPortalBuilder {
     public GroupsPanelPage page;
-    private Context extcontext;
     
     public Main() {
         export("task_redirect", new Redirect());
@@ -16,16 +16,21 @@ public class Main extends AbstractPageBuilder {
     }
 
     @Override
-    public final void config(PageBuilderContext context) {
-        context.messages = new Messages();
-        context.add("main", page = new GroupsPanelPage(),
-                extcontext = new Context(context));
-        context.add("tasks", new TasksPanelPage(), extcontext);
+    protected final PortalContext contextInstance(PageBuilderContext context) {
+        return new Context(context);
+    }
+    
+    @Override
+    public final void config(PortalContext portalctx) {
+        portalctx.getContext().messages = new Messages();
+        portalctx.nologin = true;
+        instance("main", page = new GroupsPanelPage());
+        instance("tasks", new TasksPanelPage());
     }
     
     @Override
     protected final void installConfig(PageBuilderDefaultInstall defaultinstall)
-            throws Exception {
+    {
         defaultinstall.setProfile("BASE");
         defaultinstall.setProgramAuthorization("TASKSEL.EXECUTE");
         installObject("main", new InstallObject());
