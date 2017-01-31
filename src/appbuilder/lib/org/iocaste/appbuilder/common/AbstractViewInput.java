@@ -207,7 +207,7 @@ public abstract class AbstractViewInput implements ViewInput {
         area.commit();
     }
     
-    protected final void print(String[] lines) {
+    protected final void print(String... lines) {
         PrintArea area = getElement("printarea");
         
         if (lines == null) {
