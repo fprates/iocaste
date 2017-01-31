@@ -193,7 +193,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
         PageContext pagectx;
         List<SessionContext> sessions;
         SessionContext sessionctx;
-        String[] locale;
         
         if (!apps.containsKey(contextdata.sessionid)) {
             sessions = new ArrayList<>();
@@ -216,15 +215,11 @@ public class ProcessHttpRequisition extends AbstractHandler {
         else
             appctx = new AppContext(contextdata.appname);
         
-        locale = contextdata.locale.split("_");
         pagectx = new PageContext(contextdata.pagename);
         pagectx.setAppContext(appctx);
         pagectx.setLogid(contextdata.logid);
         pagectx.setInitialize(contextdata.initialize);
-        if (locale.length == 2)
-            pagectx.locale = new Locale(locale[0], locale[1]);
-        else
-            pagectx.locale = new Locale(locale[0]);
+        pagectx.locale = localeInstance(contextdata.locale);
         appctx.put(contextdata.pagename, pagectx);
         sessionctx.put(contextdata.appname, appctx);
         
@@ -492,7 +487,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
         if (contextdata.locale == null)
             return pagectx;
         if (!pagectx.locale.toString().equals(contextdata.locale))
-            pagectx.locale = new Locale(contextdata.locale);
+            pagectx.locale = localeInstance(contextdata.locale);
         return pagectx;
     }
     
@@ -681,6 +676,12 @@ public class ProcessHttpRequisition extends AbstractHandler {
                 append(Iocaste.SERVERNAME).toString();
         service = new StandardService(complexid, url);
         return (Boolean)service.call(message);
+    }
+    
+    private final Locale localeInstance(String localeid) {
+        String[] locale = localeid.split("_");
+        return (locale.length == 2)?
+                new Locale(locale[0], locale[1]) : new Locale(locale[0]);
     }
     
     /**
