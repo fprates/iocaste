@@ -195,14 +195,33 @@ public abstract class AbstractViewInput implements ViewInput {
         }
     }
     
-    protected final void print(String line) {
-        PrintArea area;
+    protected final void print(Collection<String> lines) {
+        PrintArea area = getElement("printarea");
         
-        if (line == null)
+        if (lines == null) {
+            area.clear();
             return;
+        }
+        for (String line : lines)
+            area.add(line);
+        area.commit();
+    }
+    
+    protected final void print(String[] lines) {
+        PrintArea area = getElement("printarea");
         
-        area = getElement("printarea");
-        area.add(line);
+        if (lines == null) {
+            area.clear();
+            return;
+        }
+        for (String line : lines)
+            area.add(line);
+        area.commit();
+    }
+    
+    protected final void printclear() {
+        PrintArea area = getElement("printarea");
+        area.clear();
     }
     
     protected final void reportlistset(

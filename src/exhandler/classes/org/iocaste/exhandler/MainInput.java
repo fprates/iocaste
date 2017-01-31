@@ -1,5 +1,8 @@
 package org.iocaste.exhandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.shell.common.Container;
@@ -35,39 +38,41 @@ public class MainInput extends AbstractViewInput {
     protected void execute(PageBuilderContext context) {
         Container[] containers;
         Context extcontext;
+        List<String> text = new ArrayList<>();
         
         extcontext = getExtendedContext();
-        print(extcontext.messages.get("exception"));
-        printException(extcontext.ex);
+        text.add(extcontext.messages.get("exception"));
+        printException(text, extcontext.ex);
         
         /*
          * dados do programa interrompido
          */
-        print(extcontext.messages.get("view-info"));
+        text.add(extcontext.messages.get("view-info"));
         if (extcontext.exview == null)
-            print(extcontext.messages.get("no.view.information"));
+            text.add(extcontext.messages.get("no.view.information"));
         else
-            printOffensiveView(extcontext);
+            printOffensiveView(text, extcontext);
         
         /*
          * pilha de chamadas
          */
-        print(extcontext.messages.get("stack-trace"));
-        printStackTrace(extcontext.ex);
+        text.add(extcontext.messages.get("stack-trace"));
+        printStackTrace(text, extcontext.ex);
         
         /*
          * elementos da visão
          */
-        print(extcontext.messages.get("view-elements"));
+        text.add(extcontext.messages.get("view-elements"));
         if (extcontext.exview == null) {
-            print(extcontext.messages.get("no.view.information"));
+            text.add(extcontext.messages.get("no.view.information"));
         } else {
             containers = extcontext.exview.getContainers();
             if (containers.length > 0)
                 for (Container container : containers)
-                    printViewContainer(container, "-");
+                    printViewContainer(text, container, "-");
         }
         
+        print(text);
         context.view.setTitle(extcontext.messages.get("exception-handler"));
     }
 
@@ -81,7 +86,7 @@ public class MainInput extends AbstractViewInput {
      * @param view
      * @param ex
      */
-    private void printException(Throwable ex) {
+    private void printException(List<String> text, Throwable ex) {
         String message;
         StringBuilder sb;
         
@@ -93,8 +98,8 @@ public class MainInput extends AbstractViewInput {
         if (message != null)
             sb.append(": ").append(message);
         
-        print(sb.toString());
-        print("");
+        text.add(sb.toString());
+        text.add("");
     }
     
     /**
@@ -102,12 +107,12 @@ public class MainInput extends AbstractViewInput {
      * @param view
      * @param exview
      */
-    private void printOffensiveView(Context extcontext) {
-        print(concatenate(extcontext.messages.get("module"), ": ",
+    private void printOffensiveView(List<String> text, Context extcontext) {
+        text.add(concatenate(extcontext.messages.get("module"), ": ",
                 checkunknown(extcontext, extcontext.exview.getAppName())));
-        print(concatenate(extcontext.messages.get("page"), ": ",
+        text.add(concatenate(extcontext.messages.get("page"), ": ",
                 checkunknown(extcontext, extcontext.exview.getPageName())));
-        print("");
+        text.add("");
     }
     
     /**
@@ -115,47 +120,42 @@ public class MainInput extends AbstractViewInput {
      * @param view
      * @param ex
      */
-    private void printStackTrace(Throwable ex) {
+    private void printStackTrace(List<String> text, Throwable ex) {
         while (ex.getCause() != null)
             ex = ex.getCause();
         
         for (StackTraceElement element : ex.getStackTrace())
-            print(element.toString());
+            text.add(element.toString());
         
-        print("");
+        text.add("");
     }
     
-    /**
-     * 
-     * @param view
-     * @param container
-     * @param level
-     */
-    private void printViewContainer(Container container, String level) {
+    private void printViewContainer(
+            List<String> text, Container container, String level) {
         InputComponent input;
         String level_ = level + "-";
         
-        print(concatenate(level, " ", container.getName()));
+        text.add(concatenate(level, " ", container.getName()));
         
         for (Element element : container.getElements()) {
             if (element == null) {
-                print("null element");
+                text.add("null element");
                 continue;
             }
             
             if (element.isContainable()) {
-                printViewContainer((Container)element, level_);
+                printViewContainer(text, (Container)element, level_);
                 continue;
             }
             
             if (element.isDataStorable()) {
                 input = (InputComponent)element;
-                print(concatenate(level_, " ", input.getName(), ": ",
+                text.add(concatenate(level_, " ", input.getName(), ": ",
                         (input.isSecret())? "***" : input.get()));
                 continue;
             }
             
-            print(concatenate(level_, " ", element.getName()));
+            text.add(concatenate(level_, " ", element.getName()));
         }
     }
 
