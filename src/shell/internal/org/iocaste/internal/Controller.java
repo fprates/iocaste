@@ -320,8 +320,7 @@ public class Controller {
     private static final void message(
             ControllerData config, Const type, String text, Object... args) {
         config.state.messagetype = type;
-        config.state.messagetext = msgsource.
-                get(config.state.view.getLocale().toString()).get(text);
+        config.state.messagetext = getMessage(config.state.view, text);
         config.state.messageargs = args;
     }
     

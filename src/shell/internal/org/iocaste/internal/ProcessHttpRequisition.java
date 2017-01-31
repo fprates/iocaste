@@ -100,6 +100,22 @@ public class ProcessHttpRequisition extends AbstractHandler {
         }
     }
     
+    private final Object callIocaste(String complexid, String functionid) {
+        String url;
+        Message message;
+        Service service;
+        AbstractRenderer function;
+        
+        message = new Message(functionid);
+        message.setSessionid(complexid);
+        
+        function = getFunction();
+        url = new StringBuilder(function.getServerName()).
+                append(Iocaste.SERVERNAME).toString();
+        service = new StandardService(complexid, url);
+        return service.call(message);
+    }
+    
     /**
      * 
      * @param app
@@ -435,7 +451,8 @@ public class ProcessHttpRequisition extends AbstractHandler {
         String locale;
         
         if (isConnected(ctxdata))
-            return new Iocaste(getFunction()).getLocale().toString();
+            return ((Locale)callIocaste(getComplexId(
+                ctxdata.sessionid, ctxdata.logid), "get_locale")).toString();
         locale = getConfiguration("DEFAULT_LANGUAGE");
         return (locale == null)? "pt_BR" : locale;
     }
@@ -458,6 +475,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
      */
     private final PageContext getPageContext(ContextData contextdata) {
         AppContext appctx;
+        PageContext pagectx;
         List<SessionContext> sessions = apps.get(contextdata.sessionid);
         
         if ((sessions == null) || (contextdata.logid >= sessions.size()))
@@ -468,7 +486,14 @@ public class ProcessHttpRequisition extends AbstractHandler {
         if (appctx == null)
             return null;
         
-        return appctx.getPageContext(contextdata.pagename);
+        pagectx = appctx.getPageContext(contextdata.pagename);
+        if (pagectx == null)
+            return null;
+        if (contextdata.locale == null)
+            return pagectx;
+        if (!pagectx.locale.toString().equals(contextdata.locale))
+            pagectx.locale = new Locale(contextdata.locale);
+        return pagectx;
     }
     
     /**
@@ -564,6 +589,18 @@ public class ProcessHttpRequisition extends AbstractHandler {
     
     /**
      * 
+     * @param sessionid
+     * @return
+     */
+    public final PageStackItem[] getPagesPositions(String sessionid) {
+        String[] complexid = sessionid.split(":");
+        int logid = Integer.parseInt(complexid[1]);
+        
+        return apps.get(complexid[0]).get(logid).getPagesNames();
+    }
+    
+    /**
+     * 
      * @param complexid
      * @return
      */
@@ -586,18 +623,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
     
     /**
      * 
-     * @param sessionid
-     * @return
-     */
-    public final PageStackItem[] getPagesPositions(String sessionid) {
-        String[] complexid = sessionid.split(":");
-        int logid = Integer.parseInt(complexid[1]);
-        
-        return apps.get(complexid[0]).get(logid).getPagesNames();
-    }
-    
-    /**
-     * 
      * @param req
      * @return
      */
@@ -616,8 +641,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
      * @return
      */
     private boolean isConnected(ContextData ctxdata) {
-        String complexid = ProcessHttpRequisition.
-                getComplexId(ctxdata.sessionid, ctxdata.logid);
+        String complexid = getComplexId(ctxdata.sessionid, ctxdata.logid);
         return isConnected(complexid);
     }
     
@@ -627,19 +651,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
      * @return
      */
     private boolean isConnected(String complexid) {
-        String url;
-        Message message;
-        Service service;
-        AbstractRenderer function;
-        
-        message = new Message("is_connected");
-        message.setSessionid(complexid);
-        
-        function = getFunction();
-        url = new StringBuilder(function.getServerName()).
-                append(Iocaste.SERVERNAME).toString();
-        service = new StandardService(complexid, url);
-        return (boolean)service.call(message);
+        return (boolean)callIocaste(complexid, "is_connected");
     }
     
     /**
@@ -682,7 +694,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
     private final PageContext processController(RendererContext context,
             PageContext pagectx) throws Exception {
         long sequence;
-        boolean connected;
         ControllerData config;
         ContextData contextdata;
         ControlComponent action;
@@ -791,10 +802,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
         contextdata.appname = appname;
         contextdata.pagename = pagename;
         contextdata.logid = config.logid;
-
-        connected = isConnected(contextdata);
-        contextdata.locale = (connected)? getLocale(contextdata) :
-            pagectx.getViewData().getLocale().toString();
+        contextdata.locale = getLocale(contextdata);
         
         pagectx_ = getPageContext(contextdata);
         if (pagectx_ == null) {
@@ -815,7 +823,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
                 config.state.messageargs);
         pagectx_.setPopupControl(config.popupcontrol);
         
-        if (connected) {
+        if (isConnected(contextdata)) {
             execute(appname, config.sessionid);
             pagectx_.setUsername(getUsername(contextdata));
         } else {
