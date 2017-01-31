@@ -56,6 +56,10 @@ public class ContextMenu {
         add(ContextMenuButtonRenderer.render(htmlname, config, messages, text));
     }
     
+    private final String getMessage(String id) {
+        return (messages == null)? title : messages.get(title);
+    }
+    
     private final void renderCloseMenuButton(XMLElement button,
             String menu, String name) {
         String open = name.concat("_openmenu");
@@ -90,7 +94,7 @@ public class ContextMenu {
                 append(setElementDisplay(open, "none")).
                 append(setElementDisplay(close, "inline")).toString());
         if (title != null)
-            button.add("title", messages.get(title));
+            button.add("title", getMessage(title));
         button.addInner("+");
     }
     

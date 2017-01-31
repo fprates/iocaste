@@ -777,8 +777,8 @@ public class ProcessHttpRequisition extends AbstractHandler {
                 (config.state.rapp != null) &&
                     isConnected(config.sessionid)) {
             pagectx.setError(AUTHORIZATION_ERROR);
-            pagectx.message(Const.ERROR,
-                    Controller.messages.get("user.not.authorized"), null);
+            pagectx.message(Const.ERROR, Controller.getMessage(
+                    pagectx.getViewData(), "user.not.authorized"), null);
             
             return pagectx;
         }

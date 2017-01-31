@@ -63,6 +63,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         Source source;
         boolean required;
         int length;
+        View view;
         
         if (!input.isVisible())
             return get(Const.PARAMETER).run(input, config);
@@ -139,12 +140,13 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
             return tagt;
         }
         
+        view = config.getView();
         tag.add("style", "display:inline;float:left;");
-        ctxmenu = new ContextMenu(Controller.messages,
+        ctxmenu = new ContextMenu(Controller.msgsource.get(view),
                 "input.options", tagt, name);
         required = input.isObligatory();
         if (required)
-            ctxmenu.add(Controller.messages.get("required"));
+            ctxmenu.add(Controller.getMessage(view, "required"));
 
         popupcontrol = config.getPopupControl();
         calendar = input.getCalendar();
@@ -178,7 +180,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
 
         tftext = input.getText();
         if (tftext != null) {
-            text = new Text(config.getView(), "");
+            text = new Text(view, "");
             text.setTag("li");
             text.setStyleClass("tftext");
             text.setText(tftext);

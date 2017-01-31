@@ -33,11 +33,15 @@ public class Controller {
     private static final int EINVALID_REFERENCE = 3;
     private static final int LOW_RANGE = 3;
     private static final int HIGH_RANGE = 4;
-    public static Map<String, String> messages;
+    public static Map<String, Map<String, String>> msgsource;
     private static Map<Integer, String> msgconv;
     
     static {
-        messages = new HashMap<>();
+        Map<String, String> messages;
+        
+        msgsource = new HashMap<>();
+        
+        msgsource.put("pt_BR", messages = new HashMap<>());
         messages.put("calendar", "Calendário");
         messages.put("field.is.obligatory", "Campo é obrigatório (%s).");
         messages.put("field.type.mismatch",
@@ -50,6 +54,19 @@ public class Controller {
         messages.put("select", "Selecionar");
         messages.put("user.not.authorized", "Usuário não autorizado.");
         messages.put("values", "Valores possíveis");
+        
+        msgsource.put("en_US", messages = new HashMap<>());
+        messages.put("calendar", "Calendar");
+        messages.put("field.is.obligatory", "Input field is required (%s).");
+        messages.put("field.type.mismatch", "Input value type mismatch.");
+        messages.put("grid.options", "Grid options");
+        messages.put("input.options", "Input options");
+        messages.put("invalid.value", "Invalid value (%s).");
+        messages.put("not.connected", "Not connected");
+        messages.put("required", "Obligatory");
+        messages.put("select", "Select");
+        messages.put("user.not.authorized", "User not authorized.");
+        messages.put("values", "Suggested values");
         
         msgconv= new HashMap<>();
         msgconv.put(Controller.EINITIAL, "field.is.obligatory");
@@ -303,8 +320,15 @@ public class Controller {
     private static final void message(
             ControllerData config, Const type, String text, Object... args) {
         config.state.messagetype = type;
-        config.state.messagetext = messages.get(text);
+        config.state.messagetext = msgsource.
+                get(config.state.view.getLocale().toString()).get(text);
         config.state.messageargs = args;
+    }
+    
+    public static final String getMessage(View view, String id) {
+        Map<String, String> messages;
+        messages = msgsource.get(view.getLocale().toString());
+        return (messages == null)? id : messages.get(id);
     }
     
     /**

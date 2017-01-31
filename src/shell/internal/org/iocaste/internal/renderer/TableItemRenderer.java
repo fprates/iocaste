@@ -48,7 +48,7 @@ public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
         trtag.add("class",
                 (style == null)? table.getStyleClass(Table.TABLE_LINE) : style);
         tdstyle = table.getStyleClass(Table.TABLE_CELL);
-        select = Controller.messages.get("select");
+        select = Controller.getMessage(config.getView(), "select");
         for (Element element : item.getElements()) {
             column = columns[i++];
             mark = column.isMark();

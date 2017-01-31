@@ -29,6 +29,7 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
         Map<String, TableContextItem> ctxitems;
         XMLElement tag, trtag, thtag, divtag;
         TableItemRenderer itemrenderer;
+        Map<String, String> messages;
         XMLElement tabletag = new XMLElement("table");
         List<InputComponent> hidden = new ArrayList<>();
         List<XMLElement> tags = new ArrayList<>();
@@ -52,6 +53,7 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
             tag.addChild(trtag);
             tabletag.addChild(tag);
             style = table.getStyleClass(Table.HEADER_CELL);
+            messages = Controller.msgsource.get(config.getView());
             for (TableColumn column: table.getColumns()) {
                 if ((column.isMark() && !table.hasMark()) ||
                         !column.isVisible())
@@ -63,8 +65,8 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
                     tag = new XMLElement("ul");
                     tag.add("style",
                             "margin:0px;padding:0px;list-style-type:none");
-                    ctxmenu = new ContextMenu(Controller.messages,
-                            "grid.options", tag, "mark");
+                    ctxmenu = new ContextMenu(
+                            messages, "grid.options", tag, "mark");
                     ctxitems = table.getContextItems();
                     for (String itemname : ctxitems.keySet()) {
                         ctxitem = ctxitems.get(itemname);
