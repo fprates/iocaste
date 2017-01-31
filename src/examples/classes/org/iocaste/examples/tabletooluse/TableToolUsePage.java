@@ -12,7 +12,7 @@ public class TableToolUsePage extends AbstractPanelPage {
         set(new TableToolUseInput());
         set(new PortalStyle());
         action("update", new TableToolUsePrint());
-        put("start", new TableToolUseStart());
+        put("start", new TableToolUseStart("tabletool-use"));
         
         run("start");
     }

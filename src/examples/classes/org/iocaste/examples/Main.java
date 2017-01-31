@@ -11,6 +11,7 @@ import org.iocaste.examples.main.MainInstall;
 import org.iocaste.examples.main.MainPage;
 import org.iocaste.examples.tabletooluse.TableToolUseInstall;
 import org.iocaste.examples.tabletooluse.TableToolUsePage;
+import org.iocaste.examples.tabsuse.TabsUsePage;
 
 public class Main extends AbstractPortalBuilder {
 
@@ -29,6 +30,7 @@ public class Main extends AbstractPortalBuilder {
         instance("hello-world", new HelloWorldPage());
         instance("dataform-use", new DataFormUsePage());
         instance("tabletool-use", new TableToolUsePage());
+        instance("tabs-use", new TabsUsePage());
     }
 
     @Override

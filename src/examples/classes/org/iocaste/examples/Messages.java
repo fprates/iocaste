@@ -14,7 +14,9 @@ public class Messages extends MessageSource {
                 "Tenho um(a) %s para %s, a pessoa mais %s do mundo!");
         put("EXAMPLES", "Exemplos");
         put("GIFT", "Presente");
+        put("header_tab", "Cabeçalho");
         put("hello", "Olá, enfermeira!");
+        put("items_tab", "Ítens");
         put("main", "Selecione seu exemplo");
         put("MARRIED_ON", "Casado em");
         put("NAME", "Nome");

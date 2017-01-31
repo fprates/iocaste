@@ -9,7 +9,8 @@ public class MainSelect extends AbstractActionHandler {
     private static final String[][] entries = {
         {"hello-world", "Olá, Mundo"},
         {"dataform-use", "Utilização de dataform"},
-        {"tabletool-use", "Utilização de tabletool"}
+        {"tabletool-use", "Utilização de tabletool"},
+        {"tabs-use", "Utilização de tabbedpane"}
     };
     
     @Override
