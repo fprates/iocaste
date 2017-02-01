@@ -47,9 +47,8 @@ public class ExecAction extends AbstractHandler {
                 try {
                     method = page.getClass().getMethod(context.action);
                 } catch (Exception e) {
-                    throw new IocasteException(new StringBuilder(
-                            "no defined element for \"").append(context.action).
-                            append("\".").toString());
+                    throw new IocasteException("no defined element for \"%s\".",
+                            context.action);
                 }
                 method.invoke(page);
                 state.messagetext = getMessage(context, state.messagetext);
