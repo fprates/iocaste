@@ -53,7 +53,8 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
             tag.addChild(trtag);
             tabletag.addChild(tag);
             style = table.getStyleClass(Table.HEADER_CELL);
-            messages = Controller.msgsource.get(config.getView());
+            messages = Controller.msgsource.
+                    get(config.getView().getLocale().toString());
             for (TableColumn column: table.getColumns()) {
                 if ((column.isMark() && !table.hasMark()) ||
                         !column.isVisible())

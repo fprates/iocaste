@@ -57,7 +57,7 @@ public class ContextMenu {
     }
     
     private final String getMessage(String id) {
-        return (messages == null)? title : messages.get(title);
+        return (messages == null)? id : messages.get(id);
     }
     
     private final void renderCloseMenuButton(XMLElement button,

@@ -50,20 +50,15 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
     @Override
     protected final XMLElement execute(InputComponent input, Config config) {
         Container container;
-        PopupControl popupcontrol;
         StringBuilder sb;
-        String tftext, calname, shname, name, value, label, cellstyle;
+        String tftext, name, value, label, cellstyle;
         Text text;
-        SearchHelp search;
-        Calendar calendar;
         XMLElement tagt, inputtag, tag;
         DataElement dataelement;
-        ContextMenu ctxmenu;
         EventHandler handler;
         Source source;
-        boolean required;
+        boolean enabled;
         int length;
-        View view;
         
         if (!input.isVisible())
             return get(Const.PARAMETER).run(input, config);
@@ -99,7 +94,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         source.set("style", getStyle(input));
         cellstyle = (String)source.run();
         
-        if (!input.isEnabled()) {
+        if (!(enabled = input.isEnabled())) {
             sb.append("_disabled");
             inputtag.add("readonly", "readonly");
         }
@@ -140,10 +135,36 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
             return tagt;
         }
         
-        view = config.getView();
+        if (enabled)
+            renderContext(config, input, tagt, tag);
+
+        tftext = input.getText();
+        if (tftext != null) {
+            text = new Text(config.getView(), "");
+            text.setTag("li");
+            text.setStyleClass("tftext");
+            text.setText(tftext);
+            tag = get(Const.TEXT).run(text, config);
+            tagt.addChild(tag);
+        }
+        
+        return tagt;
+    }
+    
+    private final void renderContext(Config config, InputComponent input,
+            XMLElement tagt, XMLElement tag) {
+        ContextMenu ctxmenu;
+        boolean required;
+        SearchHelp search;
+        Calendar calendar;
+        PopupControl popupcontrol;
+        String calname, shname;
+        View view = config.getView();
+        String locale = view.getLocale().toString();
+        
         tag.add("style", "display:inline;float:left;");
-        ctxmenu = new ContextMenu(Controller.msgsource.get(view),
-                "input.options", tagt, name);
+        ctxmenu = new ContextMenu(Controller.msgsource.get(locale),
+                "input.options", tagt, input.getHtmlName());
         required = input.isObligatory();
         if (required)
             ctxmenu.add(Controller.getMessage(view, "required"));
@@ -177,18 +198,6 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
                 }
             }
         }
-
-        tftext = input.getText();
-        if (tftext != null) {
-            text = new Text(view, "");
-            text.setTag("li");
-            text.setStyleClass("tftext");
-            text.setText(tftext);
-            tag = get(Const.TEXT).run(text, config);
-            tagt.addChild(tag);
-        }
-        
-        return tagt;
     }
     
     private final List<XMLElement> renderPopup(Config config) {
