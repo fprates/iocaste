@@ -204,12 +204,13 @@ public class TableTool extends AbstractComponentTool {
         
         for (String name : extcontext.data.get().keySet()) {
             column = extcontext.data.get(name);
-            if (column.validator == null)
+            if (column.validators.size() == 0)
                 continue;
             
             for (TableItem item : table.getItems()) {
                 input = item.get(name);
-                viewctx.validate(input, column.validator);
+                for (String validator : column.validators)
+                    viewctx.validate(input, validator);
             }
         }
     }
