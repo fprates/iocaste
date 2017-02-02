@@ -196,9 +196,9 @@ public class Documents extends Module {
         insertModel(docs001, docs005,
                 "FOREIGN_KEY", "DOCS006", null);
         insertModelKey(docs001, docs002, docs004,
-                "ITEM_NAME", "ITREF", "MODELITEM.ID", "itemName");
+                "ITEM_NAME", "ITMID", "MODELITEM.ID", "itemName");
         insertModelItem(docs001, docs002, docs006,
-                "REFERENCE", "ITMID", "MODELITEM.ID", "reference",
+                "REFERENCE", "ITREF", "MODELITEM.ID", "reference",
                 context.itemname);
 
         /*
