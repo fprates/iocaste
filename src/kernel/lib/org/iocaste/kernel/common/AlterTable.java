@@ -104,6 +104,12 @@ public class AlterTable extends AbstractTableOperation {
             statements.add(sb.toString());   
         }
         
+        for (String fk : data.fks) {
+            sb.setLength(0);
+            sb.append(altertable).append(" add ").append(fk);
+            statements.add(sb.toString());
+        }
+        
         if (data.primarykey == null)
             return;
         sb.setLength(0);

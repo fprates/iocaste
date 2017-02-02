@@ -122,8 +122,16 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
     protected final void addTableColumnReference(
             UpdateData data, DocumentModelItem reference) {
         String constraint, tableref;
+        DocumentModel model;
         
-        tableref = reference.getDocumentModel().getTableName();
+        if (reference.isDummy()) {
+            model = data.documents.cache.models.
+                    get(reference.getDocumentModel().getName());
+            reference = model.getModelItem(reference.getName());
+        } else {
+            model = reference.getDocumentModel();
+        }
+        tableref = model.getTableName();
         constraint = getColumnReferenceName(tableref, data);
         data.table.constraint(
                 constraint,

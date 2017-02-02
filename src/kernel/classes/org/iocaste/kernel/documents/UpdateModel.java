@@ -307,22 +307,24 @@ public class UpdateModel extends AbstractDocumentsHandler {
     
     private final void updateTable(UpdateData data) throws Exception {
         DocumentModelItem oldreference;
+        boolean addref, changeref, removeref;
         data.table.update(
                 data.fieldname,
                 data.element.getType(),
                 data.element.getLength(),
                 data.element.getDecimals());
-        
-        if (data.reference != null) {
-            addTableColumnReference(data, data.reference);
-            return;
-        }
-        
+
         oldreference = data.olditem.getReference();
-        if (oldreference == null)
-            return;
+        changeref = (data.reference != null) && (oldreference != null) &&
+                !data.reference.equals(oldreference);
+        removeref = (data.reference == null) && (oldreference != null);
+        if (changeref || removeref)
+            removeTableColumnReference(data, oldreference);
         
-        removeTableColumnReference(data, oldreference);
+        addref = (data.reference != null) &&
+                !data.reference.equals(oldreference);
+        if (addref)
+            addTableColumnReference(data, data.reference);
     }
 }
 
