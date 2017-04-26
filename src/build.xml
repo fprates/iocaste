@@ -43,6 +43,9 @@
     	<!-- appbuilder -->
     	<ant antfile="${basedir}/src/appbuilder/build.xml"/>
     	
+    	<!-- runtime -->
+    	<ant antfile="${basedir}/src/runtime/build-lib.xml"/>
+    	
     	<!-- log -->
     	<ant antfile="${basedir}/src/log/build.xml"/>
     	
@@ -70,6 +73,7 @@
             <fileset dir="${builddir}/external/lib/" excludes="*.jar"/>
             <fileset dir="${builddir}/mail/lib/" excludes="*.jar"/>
             <fileset dir="${builddir}/report/lib" excludes="*.jar"/>
+        	<fileset dir="${builddir}/runtime/lib" excludes="*.jar"/>
         </copy>
         
         <jar basedir="${basedir}/ext/common"
