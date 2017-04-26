@@ -13,7 +13,7 @@ public class ExternCall extends AbstractHandler {
         int port = message.geti("port");
         
         service = new StandardService(new ExternCallStream(address, port));
-        return service.call(message.get("message"));
+        return service.call((Message)message.get("message"));
     }
     
 }

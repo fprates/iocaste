@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import org.iocaste.external.common.MessageExtractor;
-import org.iocaste.protocol.Message;
+import org.iocaste.protocol.AbstractService;
 import org.iocaste.protocol.stream.SocketStream;
 
 public class ExternCallStream extends SocketStream {
@@ -18,26 +18,27 @@ public class ExternCallStream extends SocketStream {
     }
     
     @Override
-    public final Message read() throws Exception {
+    public final Object[] read() throws Exception {
         BufferedReader br;
         InputStream cis;
-        Message response;
+        Object[] response;
         
         cis = getInputStream();
         br = new BufferedReader(new InputStreamReader(cis));
-        response = new MessageExtractor().execute(br);
+        response = AbstractService.
+                disassembly(new MessageExtractor().execute(br));
         br.close();
         return response;
     }
     
     @Override
-    public final void write(Message message) throws Exception {
+    public final void write(Object[] content) throws Exception {
         BufferedWriter bw;
         OutputStream cos;
         
         cos = getOutputStream();
         bw = new BufferedWriter(new OutputStreamWriter(cos));
-        bw.write(message.toString());
+        bw.write(AbstractService.assembly(content).toString());
         bw.flush();
     }
 }
