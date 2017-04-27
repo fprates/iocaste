@@ -24,7 +24,6 @@ public class Main extends AbstractPortalBuilder {
     protected void config(PortalContext portalctx) throws Exception {
         PageBuilderContext context = portalctx.getContext();
         
-        portalctx.nologin = true;
         context.messages = new Messages();
         instance("main", new MainPage());
         instance("hello-world", new HelloWorldPage());

@@ -23,7 +23,6 @@ public class Main extends AbstractPortalBuilder {
     @Override
     public final void config(PortalContext portalctx) {
         portalctx.getContext().messages = new Messages();
-        portalctx.nologin = true;
         instance("main", page = new GroupsPanelPage());
         instance("tasks", new TasksPanelPage());
     }

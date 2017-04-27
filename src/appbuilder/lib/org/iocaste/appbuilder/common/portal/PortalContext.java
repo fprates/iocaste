@@ -14,7 +14,6 @@ public class PortalContext extends CModelViewerContext {
     public String email, secret, userprofile, username;
     public ActionHandler load;
     public Map<String, PortalPageTiles> pagetiles;
-    public boolean nologin;
 
 	public PortalContext(PageBuilderContext context) {
 		super(context);

@@ -21,7 +21,7 @@ public abstract class AbstractPortalBuilder extends AbstractModelViewer {
 		portalctx = contextInstance(context);
 		config(portalctx);
 
-        if (portalctx.nologin)
+        if (context.getView("authentic") == null)
         	return;
         iocaste = new Iocaste(context.function);
         if (!iocaste.isConnected()) {
