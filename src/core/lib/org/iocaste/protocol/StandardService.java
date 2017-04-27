@@ -26,8 +26,8 @@ public class StandardService extends AbstractService {
             ClassNotFoundException {
         BufferedInputStream bis = new BufferedInputStream(getInputStream());
         ObjectInputStream ois = new ObjectInputStream(bis);
-        Message message = (Message)ois.readObject();
+        Object[] content = (Object[])ois.readObject();
         
-        return message;
+        return assembly(content);
     }
 }

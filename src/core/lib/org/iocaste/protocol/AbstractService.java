@@ -9,16 +9,15 @@ import java.io.OutputStream;
 import org.iocaste.protocol.stream.ServiceStream;
 import org.iocaste.protocol.stream.SocketStream;
 import org.iocaste.protocol.stream.URLStream;
+import org.iocaste.protocol.utils.Tools;
 
 public abstract class AbstractService implements Service {
     private InputStream is;
     private OutputStream os;
     private ServiceStream stream;
-    private String sessionid;
     
     public AbstractService(String sessionid, String urlname) {
         this(new URLStream(urlname));
-        this.sessionid = sessionid;
     }
     
     public AbstractService(String address, int port) {
@@ -29,24 +28,35 @@ public abstract class AbstractService implements Service {
         this.stream = stream;
     }
     
+    public static final Message assembly(Object[] content) {
+        Object[][] values = (Object[][])content[3];
+        Message message = new Message((String)content[0]);
+        message.setSessionid((String)content[1]);
+        message.setException((Exception)content[2]);
+        for (int i = 0; i < values.length; i++)
+            message.add((String)values[i][0], values[i][1]);
+        return message;
+    }
+    
     @Override
     public final Object call(Message message) {
         Message response;
         Throwable cause;
+        Object[] content;
         
-        message.setSessionid(sessionid);
-        
+        content = disassembly(message);
         try {
             stream.open();
-            stream.write(message);
-            response = stream.read();
+            stream.write(content);
+            content = stream.read();
             stream.close();
             
             /*
-             * ajuste temporário enquanto ajustamos iocaste-external/gateway,
+             * ajuste tempor�rio enquanto ajustamos iocaste-external/gateway,
              */
-            if (response == null)
+            if (content == null)
                 return null;
+            response = assembly(content);
             if (response.getException() != null)
                 throw response.getException();
             
@@ -55,6 +65,15 @@ public abstract class AbstractService implements Service {
             cause = e.getCause();
             throw new RuntimeException((cause == null)? e : cause);
         }
+    }
+    
+    public static final Object[] disassembly(Message message) {
+        return new Object[] {
+                message.getId(),
+                message.getSessionid(),
+                message.getException(),
+                Tools.toArray(message.getParameters())
+        };
     }
     
     protected final InputStream getInputStream() {
@@ -89,7 +108,7 @@ public abstract class AbstractService implements Service {
         message.add("return", object);
         message.setException(ex);
         
-        oos.writeObject(message);
+        oos.writeObject(disassembly(message));
         oos.flush();
     }
     

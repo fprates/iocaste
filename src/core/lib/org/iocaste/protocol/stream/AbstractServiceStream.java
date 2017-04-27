@@ -7,8 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-import org.iocaste.protocol.Message;
-
 public abstract class AbstractServiceStream implements ServiceStream {
 
     @Override
@@ -22,26 +20,26 @@ public abstract class AbstractServiceStream implements ServiceStream {
     public abstract void open() throws Exception;
 
     @Override
-    public Message read() throws Exception {
+    public Object[] read() throws Exception {
         ObjectInputStream ois;
         InputStream cis;
-        Message response;
+        Object[] response;
         
         cis = getInputStream();
         ois = new ObjectInputStream(new BufferedInputStream(cis));
-        response = (Message)ois.readObject();
+        response = (Object[])ois.readObject();
         ois.close();
         return response;
     }
 
     @Override
-    public void write(Message message) throws Exception {
+    public void write(Object[] content) throws Exception {
         ObjectOutputStream oos;
         OutputStream cos;
         
         cos = getOutputStream();
         oos = new ObjectOutputStream(new BufferedOutputStream(cos));
-        oos.writeObject(message);
+        oos.writeObject(content);
         oos.flush();
     }
 

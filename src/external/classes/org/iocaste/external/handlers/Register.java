@@ -14,7 +14,7 @@ public class Register extends AbstractHandler {
         Services function = getFunction();
         
         if (!function.handlers.containsKey(name))
-            function.handlers.put(name, new HashMap<>());
+            function.handlers.put(name, new HashMap<String, String>());
         return null;
     }
     
