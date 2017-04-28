@@ -17,11 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.iocaste.protocol.Handler;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.utils.Tools;
 import org.iocaste.runtime.common.ActionHandler;
-import org.iocaste.runtime.common.Handler;
-import org.iocaste.runtime.common.Kernel;
+import org.iocaste.runtime.common.Runtime;
 import org.iocaste.runtime.common.IocasteErrorMessage;
 import org.iocaste.runtime.common.navcontrol.StandardNavControlConfig;
 import org.iocaste.runtime.common.navcontrol.StandardNavControlSpec;
@@ -76,7 +76,7 @@ public abstract class AbstractApplication<T extends Context>
         AbstractPage navcontrol;
 		
 		message = new Message("style_data_get");
-        servicedata.serviceurl = Kernel.SERVICE_URL;
+        servicedata.serviceurl = Runtime.SERVICE_URL;
         service = new GenericService(servicedata);
         viewexport = service.invoke(message);
         page.importStyle(viewexport.styleconst, viewexport.stylesheet);
@@ -237,14 +237,14 @@ public abstract class AbstractApplication<T extends Context>
         T context;
         ViewExport outputview;
         ActionHandler<T> handler;
-        Kernel iocaste;
+        Runtime iocaste;
         ServiceInterfaceData servicedata;
         byte[] content;
         
         req.setCharacterEncoding("UTF-8");
         servicedata = new ServiceInterfaceData();
         servicedata.servername = getServerName(req);
-		iocaste = new Kernel(servicedata);
+		iocaste = new Runtime(servicedata);
         transaction = transactionInstance(iocaste);
         servicedata.sessionid = transaction.begin(req);
         if (servicedata.sessionid == null) {
@@ -294,16 +294,16 @@ public abstract class AbstractApplication<T extends Context>
 		
 	}
 	
-    private final Transaction transactionInstance(Kernel iocaste) {
+    private final Transaction transactionInstance(Runtime iocaste) {
     	return new Transaction(iocaste);
     }
 }
 
 class Transaction {
     private String trackid;
-	private Kernel iocaste;
+	private Runtime iocaste;
 	
-    public Transaction(Kernel iocaste) {
+    public Transaction(Runtime iocaste) {
     	this.iocaste = iocaste;
     }
     

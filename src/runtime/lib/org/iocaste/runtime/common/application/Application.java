@@ -1,6 +1,6 @@
 package org.iocaste.runtime.common.application;
 
-import org.iocaste.runtime.common.Function;
+import org.iocaste.protocol.Function;
 
 public interface Application extends Function {
 	

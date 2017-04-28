@@ -8,7 +8,10 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
+import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Handler;
 import org.iocaste.protocol.Message;
+import org.iocaste.protocol.Service;
 
 public abstract class AbstractFunction implements Function {
     private ServletContext context;
@@ -141,5 +144,23 @@ public abstract class AbstractFunction implements Function {
     public final void setServletContext(ServletContext context) {
         this.context = context;
     }
+
+	@Override
+	public void setServerName(String servername) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Service serviceInstance(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setSessionid(String sessionid) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

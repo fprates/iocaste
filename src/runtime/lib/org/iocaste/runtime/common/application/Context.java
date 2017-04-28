@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.runtime.common.ActionHandler;
-import org.iocaste.runtime.common.Kernel;
+import org.iocaste.runtime.common.Runtime;
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.shell.common.MessageSource;
 
@@ -14,7 +14,7 @@ public interface Context {
 
 	public abstract String getAppName();
 	
-	public abstract Kernel getIocaste();
+	public abstract Runtime getIocaste();
 
 	public abstract MessageSource getMessageSource();
 	
@@ -28,7 +28,7 @@ public interface Context {
 	
 	public abstract void set(Application application);
 	
-	public abstract void set(Kernel iocaste);
+	public abstract void set(Runtime iocaste);
 	
 	public abstract void set(String tooldata, ExtendedObject object);
 	

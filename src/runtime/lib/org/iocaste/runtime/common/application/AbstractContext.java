@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.runtime.common.ActionHandler;
-import org.iocaste.runtime.common.Kernel;
+import org.iocaste.runtime.common.Runtime;
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.runtime.common.page.StandardPage;
 import org.iocaste.shell.common.MessageSource;
@@ -14,7 +14,7 @@ public abstract class AbstractContext implements Context {
 	private MessageSource messagesrc;
     private Map<String, AbstractPage> pages;
     private String page, appname;
-	private Kernel iocaste;
+	private Runtime iocaste;
 	
 	public AbstractContext() {
         pages = new HashMap<>();
@@ -43,7 +43,7 @@ public abstract class AbstractContext implements Context {
 	}
 
 	@Override
-	public final Kernel getIocaste() {
+	public final Runtime getIocaste() {
 		return iocaste;
 	}
 
@@ -96,7 +96,7 @@ public abstract class AbstractContext implements Context {
 	}
 	
 	@Override
-	public final void set(Kernel iocaste) {
+	public final void set(Runtime iocaste) {
 		this.iocaste = iocaste;
 	}
 }

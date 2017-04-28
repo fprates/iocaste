@@ -9,10 +9,10 @@ import org.iocaste.runtime.common.protocol.ServiceInterfaceData;
 import org.iocaste.runtime.common.protocol.ServiceUrl;
 
 @ServiceUrl("/iocaste-kernel/service.html")
-public class Kernel extends AbstractRuntimeInterface {
+public class Runtime extends AbstractRuntimeInterface {
 	public static final String SERVICE_URL = "/iocaste-kernel/service.html";
 	
-	public Kernel(ServiceInterfaceData data) {
+	public Runtime(ServiceInterfaceData data) {
 		initService(data);
 	}
     

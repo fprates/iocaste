@@ -10,6 +10,15 @@
     	<!-- documents-common -->
     	<ant antfile="${basedir}/src/documents/build.xml"/>
     	
+    	<!-- kernel-lib -->
+        <ant antfile="${basedir}/src/kernel/build-lib.xml"/>
+        
+        <!-- shell-lib -->
+        <ant antfile="${basedir}/src/shell/build-lib.xml"/>
+    	
+    	<!-- runtime-lib -->
+    	<ant antfile="${basedir}/src/runtime/build-lib.xml"/>
+    	
     	<!-- kernel -->
         <ant antfile="${basedir}/src/kernel/build.xml"/>
         
@@ -42,9 +51,6 @@
     	
     	<!-- appbuilder -->
     	<ant antfile="${basedir}/src/appbuilder/build.xml"/>
-    	
-    	<!-- runtime -->
-    	<ant antfile="${basedir}/src/runtime/build-lib.xml"/>
     	
     	<!-- log -->
     	<ant antfile="${basedir}/src/log/build.xml"/>
@@ -172,9 +178,6 @@
         
     	<!-- examples -->
     	<ant antfile="${basedir}/src/examples/build.xml"/>
-    	
-        <!-- app runtime -->
-        <ant antfile="${basedir}/src/runtime/build.xml"/>
     	
     	<ant antfile="${basedir}/src/transport.xml"/>
         <ant antfile="${basedir}/src/build.xml" target="clean"/>
