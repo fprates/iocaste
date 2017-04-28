@@ -428,9 +428,9 @@ public class Controller {
             }
         }
         
-        if (status.error != 0)
-            return;
-
+        if ((status.error != 0) || config.disconnecteddb)
+        	return;
+        
         documents = new Documents(config.function);
         for (String name : config.values.keySet()) {
             element = config.state.view.getElement(name);

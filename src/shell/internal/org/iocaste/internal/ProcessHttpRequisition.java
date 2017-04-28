@@ -749,6 +749,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
         config.sessionid = getComplexId(context.sessionid, config.logid);
         config.servername = function.getServerName();
         config.pagectx = pagectx;
+        config.disconnecteddb = disconnecteddb;
         
         if (parameters.containsKey("event"))
             config.execonevent(parameters);

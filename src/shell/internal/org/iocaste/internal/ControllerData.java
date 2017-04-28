@@ -18,7 +18,7 @@ public class ControllerData {
     public Function function;
     public String sessionid, contextname, servername, contexturl;
     public int logid;
-    public boolean event;
+    public boolean event, disconnecteddb;
     public PopupControl popupcontrol;
     private Map<String, EventHandler> events;
     
