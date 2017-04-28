@@ -15,9 +15,11 @@ public abstract class AbstractService implements Service {
     private InputStream is;
     private OutputStream os;
     private ServiceStream stream;
+    private String sessionid;
     
     public AbstractService(String sessionid, String urlname) {
         this(new URLStream(urlname));
+        this.sessionid = sessionid;
     }
     
     public AbstractService(String address, int port) {
@@ -44,6 +46,7 @@ public abstract class AbstractService implements Service {
         Throwable cause;
         Object[] content;
         
+        message.setSessionid(sessionid);
         content = disassembly(message);
         try {
             stream.open();
@@ -52,7 +55,7 @@ public abstract class AbstractService implements Service {
             stream.close();
             
             /*
-             * ajuste tempor�rio enquanto ajustamos iocaste-external/gateway,
+             * ajuste temporário enquanto ajustamos iocaste-external/gateway,
              */
             if (content == null)
                 return null;
