@@ -11,6 +11,7 @@ import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.files.FileServices;
 import org.iocaste.kernel.packages.Packages;
 import org.iocaste.kernel.process.ProcessServices;
+import org.iocaste.kernel.runtime.Runtime;
 import org.iocaste.kernel.session.IsConnected;
 import org.iocaste.kernel.session.Session;
 import org.iocaste.kernel.users.Users;
@@ -37,9 +38,11 @@ public class Servlet extends AbstractIocasteServlet {
         ProcessServices process = new ProcessServices();
         FileServices files = new FileServices();
         CompilerService compiler = new CompilerService();
+        Runtime runtime = new Runtime();
         
         session = new Session();
         documents.config = database.config = config = new Config();
+        runtime.documents = documents;
         
         session.database = users.database = config.database = database; 
         auth.database = documents.database = database;
@@ -47,7 +50,6 @@ public class Servlet extends AbstractIocasteServlet {
         compiler.session = users.session;
         process.files = compiler.files = files;
         session.users = users;
-        
         register(database);
         register(users);
         register(session);
@@ -59,6 +61,7 @@ public class Servlet extends AbstractIocasteServlet {
         register(new Packages());
         register(process);
         register(compiler);
+        register(runtime);
         
         authorize("is_connected", null);
         authorize("login", null);

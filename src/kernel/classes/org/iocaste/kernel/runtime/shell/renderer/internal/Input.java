@@ -1,0 +1,265 @@
+package org.iocaste.kernel.runtime.shell.renderer.internal;
+
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
+import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.kernel.runtime.shell.ViewContext;
+import org.iocaste.shell.common.Calendar;
+import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.RangeInputComponent;
+import org.iocaste.shell.common.SearchHelp;
+import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableColumn;
+import org.iocaste.shell.common.TableItem;
+import org.iocaste.shell.common.View;
+
+public class Input {
+    public ViewContext viewctx;
+    public Element element;
+    public Container container;
+    public boolean enablecustom;
+//    private Documents documents;
+    private Map<String, DataElement> des;
+
+    public final void register() {
+        InputData data = new InputData();
+
+        data.container = container;
+        data.element = element;
+        data.viewctx = viewctx;
+        data.enablecustom = enablecustom;
+        
+//        documents = new Documents(viewctx.function);
+        des = new HashMap<>();
+        register(data);
+    }
+    
+    /**
+     * 
+     * @param input
+     * @param inputdata
+     */
+    private final void generateCalendar(InputComponent input,
+            InputData inputdata) {
+        generateCalendar(inputdata.viewctx.view, inputdata.container, input);
+    }
+    
+    public static final void generateCalendar(
+            View view, Container container, InputComponent input) {
+        Calendar master, earlycal, latecal;
+        String htmlname, early, late;
+        Map<String, Element> elements;
+        
+        htmlname = input.getHtmlName().concat(".cal");
+        master = new Calendar(container, htmlname);
+        master.setEarly(early = "early_".concat(htmlname));
+        master.setLate(late = "late_".concat(htmlname));
+        input.setCalendar(master);
+        
+        earlycal = new Calendar(container, early, Calendar.EARLY);
+        earlycal.setMaster(htmlname);
+        earlycal.setText("<");
+        
+        latecal = new Calendar(container, late, Calendar.LATE);
+        latecal.setMaster(htmlname);
+        latecal.setText(">");
+        
+        if (!container.isMultiLine())
+            return;
+        
+        elements = view.getElements();
+        elements.put(htmlname, master);
+        elements.put(early, earlycal);
+        elements.put(late, latecal);
+    }
+    
+    /**
+     * 
+     * @param input
+     * @param inputdata
+     */
+    private final void generateSearchHelp(InputComponent input,
+            InputData inputdata) {
+//        SearchHelp sh, search;
+//        String shname, name, htmlname, nsreference;
+//        SearchHelpData shdata;
+//        
+//        shname = input.getModelItem().getSearchHelp();
+//        shdata = new SHLib(inputdata.viewctx.function).get(shname);
+//        if (shdata == null)
+//            return;
+//        
+//        name = input.getName();
+//        htmlname = input.getHtmlName();
+//        nsreference = input.getNSReference();
+//        
+//        sh = new SearchHelp(inputdata.container, name.concat(".sh"));
+//        sh.setHtmlName(htmlname.concat(".sh"));
+//        sh.setModelName(shdata.getModel());
+//        sh.setExport(shdata.getExport());
+//        sh.setNSReference(nsreference);
+//        sh.setCriteria(shdata.getWhere());
+//        
+//        search = new SearchHelp(inputdata.container, name.concat(".search"));
+//        search.setHtmlName(htmlname.concat(".search"));
+//        search.setMaster(sh.getHtmlName());
+//        search.setNSReference(nsreference);
+//        
+//        sh.setChild(search.getHtmlName());
+//        for (String key : shdata.getItems().keySet())
+//            sh.addModelItemName(key);
+//        
+//        input.setSearchHelp(sh);
+    }
+    
+    /**
+     * 
+     * @param container
+     * @return
+     */
+    private final Set<Element> getMultiLineElements(Container container) {
+        Element element;
+        SearchHelp sh;
+        Table table;
+        TableColumn[] columns;
+        Set<Element> elements;
+        String name, linename, htmlname;
+        int i = 0;
+        
+        if (container.getType() != Const.TABLE)
+            new RuntimeException("Multi-line container not supported.");
+        
+        table = (Table)container;
+        name = table.getName();
+        columns = table.getColumns();
+        elements = new LinkedHashSet<>();
+        
+        for (TableItem item : table.getItems()) {
+            linename = new StringBuilder(name).append(".").append(i++).
+                    append(".").toString();
+            
+            for (TableColumn column: columns) {
+                element = (column.isMark())?
+                        item.get("mark") : item.get(column.getName());
+                
+                if (element == null)
+                    continue;
+                
+                elements.add(element);
+                
+                /*
+                 * ajusta nome de ajuda de pesquisa, se houver
+                 */
+                if (!element.isDataStorable())
+                    continue;
+                
+                sh = ((InputComponent)element).getSearchHelp();
+                if (sh == null)
+                    continue;
+                
+                htmlname = new StringBuilder(linename).
+                        append(sh.getName()).toString();
+                
+                sh.setHtmlName(htmlname);
+                elements.add(sh);
+            }
+        }
+        
+        return elements;
+    }
+    
+    /**
+     * 
+     * @param inputdata
+     */
+    private final void register(InputData inputdata) {
+        String name;
+        DataElement dataelement;
+        RangeInputComponent rinput;
+        Set<Element> elements;
+        InputData inputdata_;
+        Container container;
+        InputComponent input;
+        DocumentModelItem modelitem;
+        
+        if (inputdata.element == null)
+            return;
+        
+        inputdata.element.setView(inputdata.viewctx.view);
+        if (inputdata.element.isContainable()) {
+            container = (Container)inputdata.element;
+            
+            inputdata_ = new InputData();
+            inputdata_.container = container;
+            inputdata_.viewctx = inputdata.viewctx;
+            inputdata_.enablecustom = inputdata.enablecustom;
+            inputdata_.inputdisabled = inputdata.inputdisabled;
+            
+            if (!inputdata_.enablecustom && container.isRemote())
+                inputdata_.inputdisabled = true;
+                
+            elements = (container.isMultiLine())?
+                    getMultiLineElements(container) : container.getElements();
+                    
+            for (Element element : elements) {
+                inputdata_.element = element;
+                register(inputdata_);
+            }
+            
+            return;
+        }
+        
+        if (inputdata.element.isDataStorable()) {
+            input = (InputComponent)inputdata.element;
+            if (!inputdata.inputdisabled)
+                inputdata.viewctx.inputs.add(input.getHtmlName());
+            
+            modelitem = input.getModelItem();
+            if (input.getSearchHelp() == null && modelitem != null &&
+                    modelitem.getSearchHelp() != null)
+                generateSearchHelp(input, inputdata);
+            
+            dataelement = input.getDataElement();
+            if ((dataelement != null) && dataelement.isDummy()) {
+                name = dataelement.getName();
+                dataelement = des.get(name);
+//                if (dataelement == null) {
+//                    dataelement = documents.getDataElement(name);
+//                    des.put(name, dataelement);
+//                }
+                input.setDataElement(dataelement);
+            }
+            
+            container = input.getContainer();
+            if ((dataelement != null) && (input.getCalendar() == null) &&
+                    (dataelement.getType() == DataType.DATE))
+                generateCalendar(input, inputdata);
+            
+            if (input.isValueRangeComponent()) {
+                rinput = (RangeInputComponent)input;
+                inputdata.viewctx.inputs.add(rinput.getHighHtmlName());
+                inputdata.viewctx.inputs.add(rinput.getLowHtmlName());
+            }
+        }
+        
+//        if (inputdata.element.hasMultipartSupport())
+//            inputdata.pagectx.mpelements.add(
+//                    (MultipartElement)inputdata.element);
+    }
+    
+}
+
+class InputData {
+    public ViewContext viewctx;
+    public Element element;
+    public Container container;
+    public boolean enablecustom, inputdisabled;
+}

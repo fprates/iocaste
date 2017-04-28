@@ -49,6 +49,14 @@ public class MessageSource {
         return messages.get(locale);
     }
     
+    public final void importMessages(String locale, String[][] messages) {
+    	instance(locale);
+    	Properties texts = this.messages.get(locale);
+    	texts.clear();
+    	for (int i = 0; i < messages.length; i++)
+    		texts.setProperty(messages[i][0], messages[i][1]);
+    }
+    
     public final void instance(String locale) {
         if (!this.messages.containsKey(locale))
             this.messages.put(locale, new Properties());
