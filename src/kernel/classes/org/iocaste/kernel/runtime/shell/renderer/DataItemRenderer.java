@@ -1,7 +1,5 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
 import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Const;
@@ -11,11 +9,12 @@ import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.kernel.runtime.shell.elements.Text;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 
 public class DataItemRenderer extends AbstractElementRenderer<DataItem> {
     
-    public DataItemRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.DATA_ITEM);
+    public DataItemRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.DATA_ITEM);
     }
 
     @Override

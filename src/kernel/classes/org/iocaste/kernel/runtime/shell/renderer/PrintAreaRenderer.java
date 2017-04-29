@@ -1,15 +1,14 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.PrintArea;
 
 public class PrintAreaRenderer extends AbstractElementRenderer<PrintArea> {
 
-    public PrintAreaRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.PRINT_AREA);
+    public PrintAreaRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.PRINT_AREA);
     }
 
     @Override

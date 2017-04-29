@@ -1,15 +1,14 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.TextArea;
 
 public class TextAreaRenderer extends AbstractElementRenderer<TextArea> {
 
-    public TextAreaRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.TEXT_AREA);
+    public TextAreaRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.TEXT_AREA);
     }
 
     protected final XMLElement execute(TextArea area, Config config) {

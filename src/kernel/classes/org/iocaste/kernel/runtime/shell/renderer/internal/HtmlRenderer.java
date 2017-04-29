@@ -50,7 +50,7 @@ public class HtmlRenderer {
     private String username;
     private List<String> script;
     private ViewContext viewctx;
-    private Map<Const, Renderer<?>> renderers;
+    private Map<Const, Renderer<? extends Element>> renderers;
     
     public HtmlRenderer() {
         String line;
@@ -58,36 +58,36 @@ public class HtmlRenderer {
         InputStream is;
         
         renderers = new HashMap<>();
-        new ButtonRenderer(renderers);
-        new CanvasRenderer(renderers);
-        new CheckBoxRenderer(renderers);
-        new DataFormRenderer(renderers);
-        new DataItemRenderer(renderers);
-        new DummyRenderer(renderers);
-        new DummyRenderer(renderers, Const.RADIO_GROUP);
-        new ExpandBarRenderer(renderers);
-        new FileEntryRenderer(renderers);
-        new FormRenderer(renderers);
-        new FrameRenderer(renderers);
-        new HtmlTagRenderer(renderers);
-        new LinkRenderer(renderers);
-        new ListBoxRenderer(renderers);
-        new MessageRenderer(renderers);
-        new NodeListItemRenderer(renderers);
-        new NodeListRenderer(renderers);
-        new ParameterRenderer(renderers);
-        new PrintAreaRenderer(renderers);
-        new RadioButtonRenderer(renderers);
-        new RangeFieldRenderer(renderers);
-        new StandardContainerRenderer(renderers);
-        new StandardContainerRenderer(renderers, Const.TABBED_PANE_ITEM);
-        new TabbedPaneRenderer(renderers);
-        new TableItemRenderer(renderers);
-        new TableRenderer(renderers);
-        new TextAreaRenderer(renderers);
-        new TextFieldRenderer(renderers);
-        new TextRenderer(renderers);
-        new VirtualControlRenderer(renderers);
+        new ButtonRenderer(this);
+        new CanvasRenderer(this);
+        new CheckBoxRenderer(this);
+        new DataFormRenderer(this);
+        new DataItemRenderer(this);
+        new DummyRenderer(this);
+        new DummyRenderer(this, Const.RADIO_GROUP);
+        new ExpandBarRenderer(this);
+        new FileEntryRenderer(this);
+        new FormRenderer(this);
+        new FrameRenderer(this);
+        new HtmlTagRenderer(this);
+        new LinkRenderer(this);
+        new ListBoxRenderer(this);
+        new MessageRenderer(this);
+        new NodeListItemRenderer(this);
+        new NodeListRenderer(this);
+        new ParameterRenderer(this);
+        new PrintAreaRenderer(this);
+        new RadioButtonRenderer(this);
+        new RangeFieldRenderer(this);
+        new StandardContainerRenderer(this);
+        new StandardContainerRenderer(this, Const.TABBED_PANE_ITEM);
+        new TabbedPaneRenderer(this);
+        new TableItemRenderer(this);
+        new TableRenderer(this);
+        new TextAreaRenderer(this);
+        new TextFieldRenderer(this);
+        new TextRenderer(this);
+        new VirtualControlRenderer(this);
         
         is = getClass().getResourceAsStream("/META-INF/shell.js");
         if (is == null)
@@ -105,6 +105,16 @@ public class HtmlRenderer {
         } catch (IOException e) {
             new RuntimeException(e);
         }
+    }
+
+    public final void add(Renderer<? extends Element> renderer) {
+        renderers.put(renderer.getType(), renderer);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public final <T extends Renderer<? extends Element>> T getRenderer(
+            Const type) {
+        return (T)renderers.get(type);
     }
     
     /**
@@ -325,6 +335,10 @@ public class HtmlRenderer {
         html.add(htmltag.toString());
         
         return html;
+    }
+    
+    public final void set(Renderer<?> renderer) {
+        
     }
     
     /**

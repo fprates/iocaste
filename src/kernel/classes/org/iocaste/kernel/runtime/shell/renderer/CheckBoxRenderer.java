@@ -1,15 +1,14 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 
 public class CheckBoxRenderer extends AbstractElementRenderer<InputComponent> {
     
-    public CheckBoxRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.CHECKBOX);
+    public CheckBoxRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.CHECKBOX);
     }
 
     /**

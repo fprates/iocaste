@@ -1,15 +1,14 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
 import org.iocaste.kernel.runtime.shell.elements.RadioButton;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 
 public class RadioButtonRenderer extends AbstractElementRenderer<RadioButton> {
 
-    public RadioButtonRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.RADIO_BUTTON);
+    public RadioButtonRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.RADIO_BUTTON);
     }
 
     @Override

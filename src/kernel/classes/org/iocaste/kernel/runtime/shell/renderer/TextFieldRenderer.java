@@ -1,11 +1,8 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.iocaste.protocol.utils.Tools;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
@@ -15,14 +12,15 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.SearchHelp;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.View;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
-import org.iocaste.kernel.runtime.Runtime;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
 import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.kernel.runtime.shell.elements.Text;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.TrackingData;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldContainerSource;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldSource;
@@ -30,8 +28,8 @@ import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldTableItemSou
 
 public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
     
-    public TextFieldRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.TEXT_FIELD);
+    public TextFieldRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.TEXT_FIELD);
         put(Const.DATA_ITEM, new TextFieldSource());
         put(Const.TEXT_FIELD, new TextFieldSource());
         put(Const.TABLE_ITEM, new TextFieldTableItemSource());
@@ -67,7 +65,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         source = getSource(input.getType());
         source.set("input", input);
         label = (String)source.run();
-        dataelement = Runtime.getDataElement(input);
+        dataelement = Shell.getDataElement(input);
         length = (dataelement == null)? input.getLength() :
             dataelement.getLength();
         name = input.getHtmlName();

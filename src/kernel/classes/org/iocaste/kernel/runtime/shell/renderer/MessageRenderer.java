@@ -1,8 +1,7 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
 import org.iocaste.kernel.runtime.shell.elements.Text;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
@@ -11,8 +10,8 @@ import org.iocaste.shell.common.Const;
 
 public class MessageRenderer extends AbstractElementRenderer<Component> {
     
-    public MessageRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.MESSAGE);
+    public MessageRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.MESSAGE);
     }
 
     @Override

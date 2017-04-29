@@ -7,26 +7,25 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
-import org.iocaste.kernel.runtime.Runtime;
-import org.iocaste.protocol.utils.Tools;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Shell;
 
 public abstract class AbstractElementRenderer<T extends Element>
         implements Renderer<T> {
-    private Map<Const, Renderer<?>> renderers;
+    private HtmlRenderer renderer;
     private Map<Const, Source> sources;
     private Const type;
     
-    public AbstractElementRenderer(
-            Map<Const, Renderer<?>> renderers, Const type) {
-        renderers.put(type, this);
+    public AbstractElementRenderer(HtmlRenderer renderer, Const type) {
         sources = new HashMap<>();
-        this.renderers = renderers;
+        this.renderer = renderer;
         this.type = type;
+        renderer.add(this);
     }
     
     /**
@@ -42,9 +41,8 @@ public abstract class AbstractElementRenderer<T extends Element>
     
     protected abstract XMLElement execute(T element, Config config);
     
-    @SuppressWarnings("unchecked")
-    protected final <U extends Renderer<? extends Element>> U get(Const type) {
-        return (U)renderers.get(type);
+    protected final <R extends Renderer<? extends Element>> R get(Const type) {
+        return renderer.getRenderer(type);
     }
     
     protected final String getStyle(InputComponent input) {
@@ -63,6 +61,11 @@ public abstract class AbstractElementRenderer<T extends Element>
     protected final Source getSource(Const type) {
         Source source = sources.get(type);
         return (source == null)? sources.get(Const.NONE) : source;
+    }
+    
+    @Override
+    public final Const getType() {
+        return type;
     }
     
     protected final void put(Source source) {
@@ -113,7 +116,7 @@ public abstract class AbstractElementRenderer<T extends Element>
      * @return
      */
     protected final String toString(InputComponent input) {
-        DataElement element = Runtime.getDataElement(input);
+        DataElement element = Shell.getDataElement(input);
         Object value = input.get();
         
         if (element == null || value == null) {
@@ -123,7 +126,7 @@ public abstract class AbstractElementRenderer<T extends Element>
                 return (String)value;
         }
         
-        return Tools.toString(value, element, input.getLocale(),
+        return Shell.toString(value, element, input.getLocale(),
                 input.isBooleanComponent());
     }
 }

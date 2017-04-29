@@ -1,19 +1,18 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 
 public class DummyRenderer extends AbstractElementRenderer<Element> {
 
-    public DummyRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.DUMMY);
+    public DummyRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.DUMMY);
     }
 
-    public DummyRenderer(Map<Const, Renderer<?>> renderers, Const type) {
-        super(renderers, type);
+    public DummyRenderer(HtmlRenderer renderer, Const type) {
+        super(renderer, type);
     }
     
     @Override

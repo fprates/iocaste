@@ -2,7 +2,6 @@ package org.iocaste.kernel.runtime.shell.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
@@ -10,11 +9,12 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.ExpandBar;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 
 public class ExpandBarRenderer extends AbstractElementRenderer<ExpandBar> {
 
-    public ExpandBarRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.EXPAND_BAR);
+    public ExpandBarRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.EXPAND_BAR);
     }
 
     @Override

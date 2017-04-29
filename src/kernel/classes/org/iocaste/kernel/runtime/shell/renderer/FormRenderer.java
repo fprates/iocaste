@@ -1,7 +1,6 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
@@ -9,8 +8,8 @@ import org.iocaste.shell.common.Parameter;
 
 public class FormRenderer extends AbstractElementRenderer<Form> {
     
-    public FormRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.FORM);
+    public FormRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.FORM);
     }
 
     /**

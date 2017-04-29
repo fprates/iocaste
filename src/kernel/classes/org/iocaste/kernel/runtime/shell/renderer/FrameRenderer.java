@@ -1,15 +1,14 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Frame;
 
 public class FrameRenderer extends AbstractElementRenderer<Frame> {
     
-    public FrameRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.FRAME);
+    public FrameRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.FRAME);
     }
 
     /**

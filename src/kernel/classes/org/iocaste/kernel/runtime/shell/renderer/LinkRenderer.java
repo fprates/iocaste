@@ -5,6 +5,7 @@ import java.util.Map;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Link;
@@ -13,8 +14,8 @@ import org.iocaste.shell.common.Parameter;
 
 public class LinkRenderer extends AbstractElementRenderer<Link> {
     
-    public LinkRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.LINK);
+    public LinkRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.LINK);
     }
 
     @Override

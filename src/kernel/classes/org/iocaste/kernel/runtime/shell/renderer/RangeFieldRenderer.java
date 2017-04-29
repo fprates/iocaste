@@ -1,10 +1,9 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Input;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Calendar;
@@ -20,8 +19,8 @@ import org.iocaste.shell.common.View;
 public class RangeFieldRenderer
 		extends AbstractElementRenderer<RangeInputComponent> {
 
-    public RangeFieldRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.RANGE_FIELD);
+    public RangeFieldRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.RANGE_FIELD);
     }
 
     private final void copyCalendar(View view, Calendar to, Calendar from) {

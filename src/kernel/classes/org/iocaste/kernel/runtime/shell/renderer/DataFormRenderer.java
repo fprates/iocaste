@@ -8,12 +8,13 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 
 public class DataFormRenderer extends AbstractElementRenderer<DataForm> {
     
-    public DataFormRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.DATA_FORM);
+    public DataFormRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.DATA_FORM);
     }
 
     @Override

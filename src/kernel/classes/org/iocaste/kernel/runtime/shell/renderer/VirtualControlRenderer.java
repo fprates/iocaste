@@ -1,7 +1,6 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.VirtualControl;
@@ -9,8 +8,8 @@ import org.iocaste.shell.common.VirtualControl;
 public class VirtualControlRenderer
         extends AbstractElementRenderer<VirtualControl> {
 
-    public VirtualControlRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.VIRTUAL_CONTROL);
+    public VirtualControlRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.VIRTUAL_CONTROL);
     }
 
     @Override

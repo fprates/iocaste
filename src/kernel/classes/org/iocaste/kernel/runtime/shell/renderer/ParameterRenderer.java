@@ -1,15 +1,14 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
 
 public class ParameterRenderer extends AbstractElementRenderer<InputComponent> {
     
-    public ParameterRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.PARAMETER);
+    public ParameterRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.PARAMETER);
     }
 
     @Override

@@ -7,14 +7,15 @@ import java.util.Map;
 import javax.swing.text.MaskFormatter;
 
 import org.iocaste.kernel.runtime.shell.elements.Text;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 
 public class TextRenderer extends AbstractElementRenderer<Text> {
     private Map<String, MaskFormatter> formatters;
     
-    public TextRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.TEXT);
+    public TextRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.TEXT);
         formatters = new HashMap<>();
     }
 

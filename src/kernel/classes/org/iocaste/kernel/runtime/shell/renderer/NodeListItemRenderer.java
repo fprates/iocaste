@@ -1,16 +1,15 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
 import org.iocaste.kernel.runtime.shell.elements.NodeList;
 import org.iocaste.kernel.runtime.shell.elements.NodeListItem;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 
 public class NodeListItemRenderer extends AbstractElementRenderer<NodeListItem>
 {
-    public NodeListItemRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.NODE_LIST_ITEM);
+    public NodeListItemRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.NODE_LIST_ITEM);
     }
 
     @Override

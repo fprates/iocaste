@@ -2,9 +2,9 @@ package org.iocaste.kernel.runtime.shell.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.iocaste.kernel.runtime.shell.ProcessInput;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
@@ -17,8 +17,8 @@ import org.iocaste.shell.common.TableItem;
 public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
     private List<InputComponent> hidden;
     
-    public TableItemRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.TABLE_ITEM);
+    public TableItemRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.TABLE_ITEM);
     }
     
     /**

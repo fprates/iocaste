@@ -2,9 +2,9 @@ package org.iocaste.kernel.runtime.shell.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
@@ -16,8 +16,8 @@ import org.iocaste.shell.common.TabbedPaneItem;
 
 public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
     
-    public TabbedPaneRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.TABBED_PANE);
+    public TabbedPaneRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.TABBED_PANE);
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.kernel.runtime.shell.ProcessInput;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
@@ -16,8 +17,8 @@ import org.iocaste.shell.common.TableItem;
 
 public class TableRenderer extends AbstractElementRenderer<Table> {
     
-    public TableRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.TABLE);
+    public TableRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.TABLE);
     }
 
     @Override

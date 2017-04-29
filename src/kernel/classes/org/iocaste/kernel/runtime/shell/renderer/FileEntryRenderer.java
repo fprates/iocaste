@@ -1,15 +1,14 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
 
 public class FileEntryRenderer extends AbstractElementRenderer<InputComponent> {
 
-    public FileEntryRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.FILE_ENTRY);
+    public FileEntryRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.FILE_ENTRY);
     }
     
     @Override

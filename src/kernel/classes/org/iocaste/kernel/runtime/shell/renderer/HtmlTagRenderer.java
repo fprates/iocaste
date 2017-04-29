@@ -1,15 +1,14 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import java.util.Map;
-
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.HtmlTag;
 
 public class HtmlTagRenderer extends AbstractElementRenderer<HtmlTag> {
     
-    public HtmlTagRenderer(Map<Const, Renderer<?>> renderers) {
-        super(renderers, Const.HTML_TAG);
+    public HtmlTagRenderer(HtmlRenderer renderer) {
+        super(renderer, Const.HTML_TAG);
     }
 
     /**
