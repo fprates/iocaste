@@ -10,6 +10,9 @@ import org.iocaste.kernel.runtime.shell.ViewContext;
 
 public abstract class AbstractSpecFactory implements SpecFactory {
     private SpecItemHandler handler;
+
+    @Override
+    public void addEventHandler(ViewContext viewctx, String htmlname) { }
     
     protected void execute(ViewContext viewctx,
     		Container container, String parent, String name) { }

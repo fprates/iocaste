@@ -7,9 +7,14 @@ import org.iocaste.shell.common.VirtualControl;
 public class VirtualControlFactory extends AbstractSpecFactory {
 
     @Override
+    public final void addEventHandler(ViewContext viewctx, String htmlname) {
+        VirtualControl control = viewctx.view.getElement(htmlname);
+        viewctx.addEventHandler("", control.getAction());
+    }
+    
+    @Override
     protected void execute(ViewContext viewctx,
     		Container container, String parent, String name) {
-        VirtualControl control = new VirtualControl(container, name);
-        viewctx.addEventHandler("", control.getAction());
+        new VirtualControl(container, name);
     }
 }

@@ -7,10 +7,13 @@ import org.iocaste.shell.common.TextField;
 public class TextFieldFactory extends AbstractSpecFactory {
 
     @Override
+    public final void addEventHandler(ViewContext viewctx, String htmlname) {
+        viewctx.addEventHandler("focus", htmlname);
+    }
+    
+    @Override
     protected void execute(ViewContext viewctx,
     		Container container, String parent, String name) {
-        TextField textfield = new TextField(container, name);
-        viewctx.addEventHandler("focus", textfield.getHtmlName());
+        new TextField(container, name);
     }
-
 }

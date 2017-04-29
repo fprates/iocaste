@@ -8,16 +8,21 @@ import org.iocaste.shell.common.Form;
 public class FormFactory extends AbstractSpecFactory {
 
     @Override
-    protected void execute(ViewContext viewctx,
-    		Container container, String parent, String name) {
-    	ActionEventHandler handler;
-    	String currentaction;
-        Form form = new Form(viewctx.view, name);
+    public final void addEventHandler(ViewContext viewctx, String htmlname) {
+        ActionEventHandler handler;
+        String currentaction;
+        Form form = viewctx.view.getElement(htmlname);
         
         viewctx.addEventHandler("", currentaction = form.getAction());
         handler = viewctx.getEventHandler(currentaction, "");
         handler.name = currentaction;
         handler.submit = true;
+    }
+    
+    @Override
+    protected void execute(ViewContext viewctx,
+    		Container container, String parent, String name) {
+        new Form(viewctx.view, name);
     }
 
 }

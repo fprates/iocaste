@@ -7,11 +7,15 @@ import org.iocaste.shell.common.ExpandBar;
 public class ExpandBarFactory extends AbstractSpecFactory {
 
     @Override
+    public final void addEventHandler(ViewContext viewctx, String htmlname) {
+        String action = new StringBuilder(htmlname).append(".edge").toString();
+        viewctx.addEventHandler("click", action);
+    }
+    
+    @Override
     protected void execute(ViewContext viewctx,
     		Container container, String parent, String name) {
-        String action = new StringBuilder(name).append(".edge").toString();
         new ExpandBar(container, name);
-        viewctx.addEventHandler("click", action);
     }
 
 }

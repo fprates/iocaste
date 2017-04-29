@@ -7,6 +7,8 @@ import org.iocaste.runtime.common.application.ContextEntry;
 
 public interface SpecFactory {
 
+    public abstract void addEventHandler(ViewContext viewctx, String htmlname);
+
     public abstract void generate(ViewContext viewctx, ComponentEntry entry);
     
     public abstract void generate(ViewContext viewctx,

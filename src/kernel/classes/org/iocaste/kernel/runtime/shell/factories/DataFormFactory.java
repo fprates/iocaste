@@ -4,11 +4,20 @@ import org.iocaste.kernel.runtime.shell.ComponentEntry;
 import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.kernel.runtime.shell.dataformtool.DataFormSpecItemHandler;
 import org.iocaste.kernel.runtime.shell.dataformtool.DataFormTool;
+import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.Element;
 
 public class DataFormFactory extends AbstractSpecFactory {
     
     public DataFormFactory() {
         setHandler(new DataFormSpecItemHandler());
+    }
+    
+    @Override
+    public final void addEventHandler(ViewContext viewctx, String htmlname) {
+        DataForm dataform = viewctx.view.getElement(htmlname);
+        for (Element element : dataform.getElements())
+            viewctx.addEventHandler("focus", element.getHtmlName());
     }
     
     @Override
