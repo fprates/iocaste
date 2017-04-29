@@ -28,22 +28,26 @@ public class ViewContext {
     public List<String> inputs;
     public Map<String, Map<String, ActionEventHandler>> actions;
 	
-	public ViewContext() {
-		view = new View(null, null);
-		tracking = new TrackingData();
-		entries = new LinkedHashMap<>();
-	    inputs = new ArrayList<>();
-	    actions = new HashMap<>();
-	}
-	
-	public final void add(ToolData data) {
-		ComponentEntry entry = new ComponentEntry();
-		entry.data = data;
-		entries.put(data.name, entry);
-	}
+    public ViewContext() {
+        this(new View(null, null));
+    }
     
-    public final ActionEventHandler addEventHandler(String event, String action)
-    {
+    public ViewContext(View view) {
+        this.view = view;
+        tracking = new TrackingData();
+        entries = new LinkedHashMap<>();
+        inputs = new ArrayList<>();
+        actions = new HashMap<>();
+    }
+    
+    public final void add(ToolData data) {
+        ComponentEntry entry = new ComponentEntry();
+        entry.data = data;
+        entries.put(data.name, entry);
+    }
+    
+    public final ActionEventHandler addEventHandler(
+            String event, String action) {
         ActionEventHandler handler;
         Map<String, ActionEventHandler> handlers;
         
@@ -52,15 +56,15 @@ public class ViewContext {
             handlers = new LinkedHashMap<>();
             actions.put(action, handlers);
         }
-
+    
         handler = new ActionEventHandler();
         handler.event = event;
         handlers.put(event, handler);
         return handler;
     }
-	
-	public final ActionEventHandler getEventHandler(String action, String event)
-	{
-		return actions.get(action).get(event);
-	}
+    
+    public final ActionEventHandler getEventHandler(
+            String action, String event) {
+    	return actions.get(action).get(event);
+    }
 }

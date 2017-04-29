@@ -39,6 +39,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
     private static final String NOT_CONNECTED = "not.connected";
     private static final byte AUTHORIZATION_ERROR = 1;
     private static final String STD_CONTENT = "text/html";
+    private static final boolean UNIFIED_RENDERER = false;
     public Map<String, List<SessionContext>> apps;
     public TicketControl tickets;
     protected boolean disconnecteddb;
@@ -101,14 +102,15 @@ public class ProcessHttpRequisition extends AbstractHandler {
     }
     
     private final Object callIocaste(String complexid, String functionid) {
+    	return callIocaste(complexid, new Message(functionid));
+    }
+    
+    private final Object callIocaste(String complexid, Message message) {
         String url;
-        Message message;
         Service service;
         AbstractRenderer function;
         
-        message = new Message(functionid);
         message.setSessionid(complexid);
-        
         function = getFunction();
         url = new StringBuilder(function.getServerName()).
                 append(Iocaste.SERVERNAME).toString();
@@ -497,6 +499,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
      * @param sessionctx
      * @return
      */
+    @SuppressWarnings("unchecked")
     private final PageContext getPageContext(RendererContext context)
             throws Exception {
         PageStackItem pagestackitem;
@@ -896,6 +899,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
      */
     private final boolean render(RendererContext context, HtmlRenderer renderer,
             PageContext pagectx, TrackingData tracking) throws Exception {
+        Message message;
         BufferedOutputStream bos;
         byte[] content;
         OutputStream os;
@@ -938,11 +942,19 @@ public class ProcessHttpRequisition extends AbstractHandler {
         }
         
         configResponse(context.resp, pagectx);
-        text = renderer.run(view, tracking);
-        writer = context.resp.getWriter();
-        if (text != null)
-            for (String line : text)
-                writer.println(line);
+        if (UNIFIED_RENDERER) {
+            message = new Message("legacy_output_process");
+            message.add("view", view);
+            content = (byte[])callIocaste(context.sessionid, message);
+            writer = context.resp.getWriter();
+            writer.write(new String(content));
+        } else {
+            text = renderer.run(view, tracking);
+            writer = context.resp.getWriter();
+            if (text != null)
+                for (String line : text)
+                    writer.println(line);
+        }
         
         writer.flush();
         writer.close();
@@ -1033,6 +1045,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
         hasrendered = render(context, renderer, pagectx, tracking);
         if (hasrendered)
             pagectx.setActions(renderer.getActions());
+        username = pagectx.getUsername();
     }
 
 }

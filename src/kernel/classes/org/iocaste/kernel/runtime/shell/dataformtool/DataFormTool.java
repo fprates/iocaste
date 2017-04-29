@@ -137,10 +137,10 @@ public class DataFormTool extends AbstractComponentTool {
                     setItem(data, (DataItem)element, data.nsitem);
                     break;
                 }
-//        if (data.nsdata != null) {
-//            nsentry = viewctx.entries.get(data.nsdata.name);
-//            df.setNSReference(nsentry.component.getNSField(viewctx));
-//        }
+        if (data.nsdata != null) {
+            nsentry = viewctx.entries.get(data.nsdata.name);
+            df.setNSReference(nsentry.component.getNSField());
+        }
         
         if (data.groups != null) {
             groups = new LinkedHashMap<>();
@@ -169,7 +169,6 @@ public class DataFormTool extends AbstractComponentTool {
                 df.setNSReference(htmlname);
             if ((data.groups != null) && (item.group != null))
                 groups.get(item.group).add(item.name);
-            viewctx.addEventHandler("focus", htmlname);
         }
 
         if (data.internallabel)

@@ -1,18 +1,13 @@
 package org.iocaste.kernel.runtime;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.runtime.common.page.ViewSpecItem;
-import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.View;
-import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.runtime.shell.GetStyleSheet;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
+import org.iocaste.kernel.runtime.shell.ProcessLegacyOutput;
 import org.iocaste.kernel.runtime.shell.ProcessOutput;
 import org.iocaste.kernel.runtime.shell.factories.ButtonFactory;
 import org.iocaste.kernel.runtime.shell.factories.DataFormFactory;
@@ -41,7 +36,6 @@ import org.iocaste.kernel.runtime.shell.factories.TextFieldFactory;
 import org.iocaste.kernel.runtime.shell.factories.TilesFactory;
 import org.iocaste.kernel.runtime.shell.factories.VirtualControlFactory;
 import org.iocaste.protocol.AbstractFunction;
-import org.iocaste.protocol.utils.Tools;
 
 public class Runtime extends AbstractFunction {
     public Map<ViewSpecItem.TYPES, SpecFactory> factories;
@@ -103,29 +97,8 @@ public class Runtime extends AbstractFunction {
         		new VirtualControlFactory());
         
         export("input_process", new ProcessInput());
-		export("output_process", new ProcessOutput());
+        export("legacy_output_process", new ProcessLegacyOutput());
+        export("output_process", new ProcessOutput());
         export("style_data_get", new GetStyleSheet());
 	}
-
-    /**
-     * Retorna elemento de dados de um componente de entrada.
-     * @param input componente de entrada.
-     * @return elemento de dados.
-     */
-    public static final DataElement getDataElement(InputComponent input) {
-        DocumentModelItem modelitem = input.getModelItem();
-        
-        return (modelitem == null)? input.getDataElement() : 
-            modelitem.getDataElement();
-    }
-    
-    public static final String toString(
-            View view, ExtendedObject object, String field) {
-        Object value = object.get(field);
-        DataElement element = object.getModel().getModelItem(field).
-                getDataElement();
-        Locale locale = view.getLocale();
-        
-        return Tools.toString(value, element, locale, false);
-    }
 }

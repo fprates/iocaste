@@ -39,6 +39,7 @@ import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.RangeInputComponent;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.View;
 
 public class ProcessInput extends AbstractHandler {
@@ -159,7 +160,7 @@ public class ProcessInput extends AbstractHandler {
         DataElement dataelement;
         String value = (String)getUniversalInputValue(input, ri);
         
-        dataelement = Runtime.getDataElement(input);
+        dataelement = Shell.getDataElement(input);
         if (dataelement == null) {
             if (input.isBooleanComponent())
                 input.setSelected((value.equals("on")? true : false));
@@ -172,7 +173,7 @@ public class ProcessInput extends AbstractHandler {
     
     private Object convertValue(String value, InputComponent input) {
         Locale locale = input.getLocale();
-        DataElement dataelement = Runtime.getDataElement(input);
+        DataElement dataelement = Shell.getDataElement(input);
         
         switch (dataelement.getType()) {
         case DataType.BOOLEAN:
@@ -181,7 +182,7 @@ public class ProcessInput extends AbstractHandler {
             
             return value;
         default:
-            return Tools.convertValue(value, dataelement, locale);
+            return org.iocaste.documents.common.Documents.convertValue(value, dataelement, locale);
         }
     }
     
@@ -292,7 +293,7 @@ public class ProcessInput extends AbstractHandler {
             RangeInputStatus ri) {
         Object value = getUniversalInputValue(input, ri);
         
-        return isValueInitial(value, Runtime.getDataElement(input),
+        return isValueInitial(value, Shell.getDataElement(input),
                 input.isBooleanComponent());
     }
     
@@ -302,7 +303,7 @@ public class ProcessInput extends AbstractHandler {
             return true;
         
         if (dataelement == null)
-            return Tools.isInitial((String)value);
+            return Shell.isInitial((String)value);
         
         switch (dataelement.getType()) {
         case DataType.NUMC:
@@ -315,7 +316,7 @@ public class ProcessInput extends AbstractHandler {
             return (((Number)value).doubleValue() == 0)? true : false;
 
         default:
-            return Tools.isInitial(value.toString());
+            return Shell.isInitial(value.toString());
         }
     }
     
@@ -333,10 +334,10 @@ public class ProcessInput extends AbstractHandler {
         DataElement dataelement;
         String value = (String)getUniversalInputValue(input, ri);
         
-        if (Tools.isInitial(value))
+        if (Shell.isInitial(value))
             return true;
         
-        dataelement = Runtime.getDataElement(input);
+        dataelement = Shell.getDataElement(input);
         if (dataelement == null)
             return true;
 
@@ -530,7 +531,7 @@ public class ProcessInput extends AbstractHandler {
                 continue;
             
             input = (InputComponent)element;
-            dataelement = Runtime.getDataElement(input);
+            dataelement = Shell.getDataElement(input);
             if (input.get() == null || dataelement == null)
                 continue;
             
@@ -625,7 +626,7 @@ public class ProcessInput extends AbstractHandler {
         String name, value;
         ValueRange range;
         ValueRangeItem rangeitem = null;
-        DataElement dataelement = Runtime.getDataElement(input);
+        DataElement dataelement = Shell.getDataElement(input);
 
         name = input.getMaster();
         if (name == null)
