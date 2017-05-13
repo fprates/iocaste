@@ -29,8 +29,7 @@ public class Commit extends AbstractHandler {
             return;
         
         connection.commit();
-        connection.close();
-        database.removeDBConnection(sessionid);
+        database.freeConnection(sessionid);
     }
 
 }

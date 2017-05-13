@@ -45,7 +45,7 @@ public class CheckedSelect extends AbstractHandler {
         select = database.get("select");
         results = select.run(connection, query, 0, criteria);
         connection.commit();
-        connection.close();
+        database.free(connection);
         
         return results;
     }

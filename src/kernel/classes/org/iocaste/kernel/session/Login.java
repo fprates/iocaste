@@ -86,10 +86,11 @@ public class Login extends AbstractHandler {
             
             instance(session, user, sessionid, username, locale);
             connection.commit();
-            connection.close();
         } catch (Exception e) {
             connection.rollback();
-            connection.close();
+            throw e;
+        } finally {
+            session.database.free(connection);
         }
         return true;
     }

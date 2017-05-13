@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.iocaste.kernel.config.Config;
 import org.iocaste.kernel.session.Session;
@@ -17,6 +19,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 public class Database extends AbstractFunction {
     private Map<String, Connection> connections;
+    private Set<Connection> pool;
     public DBConfig dbconfig;
     public Config config;
     public Session session;
@@ -24,6 +27,7 @@ public class Database extends AbstractFunction {
     public Database() {
         dbconfig = new DBConfig();
         connections = new HashMap<>();
+        pool = new HashSet<>();
         export("call_procedure", new CallProcedure());
         export("checked_select", new CheckedSelect());
         export("commit", new Commit());
@@ -50,6 +54,15 @@ public class Database extends AbstractFunction {
         Class.forName(driver);
     }
     
+    public final void free(Connection connection) {
+        pool.add(connection);
+    }
+    
+    public final void freeConnection(String sessionid) {
+        free(connections.get(sessionid));
+        connections.remove(sessionid);
+    }
+    
     /**
      * 
      * @param sessionid
@@ -74,7 +87,16 @@ public class Database extends AbstractFunction {
      * @throws Exception
      */
     public final Connection instance() throws Exception {
-        Connection connection;
+        Connection connection = null;
+        for (Connection conn : pool) {
+            connection = conn;
+            break;
+        }
+        
+        if (connection != null) {
+            pool.remove(connection);
+            return connection;
+        }
         
         try {
             connection = DriverManager.getConnection(
@@ -93,10 +115,6 @@ public class Database extends AbstractFunction {
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
-    }
-    
-    public final void removeDBConnection(String sessionid) {
-        connections.remove(sessionid);
     }
 }
 
