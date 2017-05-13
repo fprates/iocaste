@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import org.iocaste.protocol.Handler;
 import org.iocaste.protocol.Message;
+import org.iocaste.protocol.Service;
 import org.iocaste.protocol.utils.Tools;
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.Runtime;
@@ -281,18 +282,32 @@ public abstract class AbstractApplication<T extends Context>
         transaction.finish(resp);
         print(resp, content);
 	}
-	
-	@Override
-	public void setAuthorizedCall(boolean authorized) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void setServletContext(ServletContext context) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public Service serviceInstance(String path) {
+        // unused in AbstractApplication. Compatibility only.
+        return null;
+    }
+    
+    @Override
+    public void setAuthorizedCall(boolean authorized) {
+        // unused in AbstractApplication. Compatibility only.
+    }
+
+    @Override
+    public void setServerName(String servername) {
+        // unused in AbstractApplication. Compatibility only.
+    }
+    
+    @Override
+    public void setServletContext(ServletContext context) {
+        // unused in AbstractApplication. Compatibility only.
+    }
+
+    @Override
+    public void setSessionid(String sessionid) {
+        // unused in AbstractApplication. Compatibility only.
+    }
 	
     private final Transaction transactionInstance(Runtime iocaste) {
     	return new Transaction(iocaste);
