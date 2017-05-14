@@ -12,11 +12,11 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.Handler;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
@@ -39,7 +39,7 @@ import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.MessageSource;
 
 public abstract class AbstractApplication<T extends Context>
-		extends HttpServlet implements Application {
+		extends AbstractIocasteServlet implements Application<T> {
 	private static final long serialVersionUID = 1890996994514012046L;
 	private Map<String, T> ctxentries;
 	
@@ -56,9 +56,9 @@ public abstract class AbstractApplication<T extends Context>
         for (String key : pages.keySet())
             factory.instance(key, pages.get(key));
     }
-	
-	@Override
-	public abstract T config();
+    
+    @Override
+    protected void config() { }
     
 	private final void configOutputStyleData(AbstractPage page) {
 		String csslink;
@@ -98,8 +98,16 @@ public abstract class AbstractApplication<T extends Context>
     	}
 	}
 
+	@Override
 	protected final void doPost(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException {
+        String servletpath = req.getServletPath();
+	    
+        if (servletpath.equals("/view.html")) {
+            super.doPost(req, resp);
+            return;
+        }
+        
         try {
         	run(req, resp);
     	} catch (Exception e) {
@@ -126,12 +134,6 @@ public abstract class AbstractApplication<T extends Context>
 	public Set<String> getMethods() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-	
-	private final String getServerName(HttpServletRequest req) {
-        return new StringBuffer(req.getScheme()).
-        		append("://127.0.0.1:").
-                append(req.getLocalPort()).toString();
 	}
 	
 	private final ViewExport getView(
@@ -181,7 +183,7 @@ public abstract class AbstractApplication<T extends Context>
 			input.run(context, true);
 		return page.outputview;
 	}
-
+	
 	@Override
 	public boolean isAuthorizedCall() {
 		// TODO Auto-generated method stub
@@ -241,7 +243,7 @@ public abstract class AbstractApplication<T extends Context>
         Runtime iocaste;
         ServiceInterfaceData servicedata;
         byte[] content;
-        
+
         req.setCharacterEncoding("UTF-8");
         servicedata = new ServiceInterfaceData();
         servicedata.servername = getServerName(req);
@@ -253,7 +255,7 @@ public abstract class AbstractApplication<T extends Context>
         } else {
             context = ctxentries.get(servicedata.sessionid);
             if (context == null) {
-            	ctxentries.put(servicedata.sessionid, context = config());
+            	ctxentries.put(servicedata.sessionid, context = execute());
             	context.set(iocaste);
             	context.set(this);
                 if (context.getPages().size() > 0)

@@ -8,25 +8,7 @@ import org.iocaste.protocol.StandardService;
 
 public abstract class AbstractRuntimeInterface {
     private Service service;
-    private ServiceInterfaceData data;
-    
-    /**
-     * 
-     * @param function
-     * @param path
-     */
-    protected final void initService(ServiceInterfaceData data) {
-        ServiceUrl serviceurl;
-        
-        this.data = data;
-        if (data.serviceurl == null) {
-        	serviceurl = (ServiceUrl)getClass().getAnnotation(ServiceUrl.class);
-        	data.serviceurl = serviceurl.value();
-        }
-        if (data.serviceurl == null)
-        	throw new RuntimeException("undefined service url");
-        service = serviceInstance();
-    }
+    protected ServiceInterfaceData data;
     
     /**
      * 
@@ -52,6 +34,24 @@ public abstract class AbstractRuntimeInterface {
             message.add(key, params.get(key));
         
         return call(message);
+    }
+    
+    /**
+     * 
+     * @param function
+     * @param path
+     */
+    protected final void initService(ServiceInterfaceData data) {
+        ServiceUrl serviceurl;
+        
+        this.data = data;
+        if (data.serviceurl == null) {
+            serviceurl = (ServiceUrl)getClass().getAnnotation(ServiceUrl.class);
+            data.serviceurl = serviceurl.value();
+        }
+        if (data.serviceurl == null)
+            throw new RuntimeException("undefined service url");
+        service = serviceInstance();
     }
 
 	protected Service serviceInstance() {

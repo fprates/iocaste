@@ -48,7 +48,7 @@ public class Runtime extends AbstractRuntimeInterface {
 	}
 	
 	public final String newContext() {
-		return call(new Message("context_new"));
+		return data.sessionid = call(new Message("context_new"));
 	}
 	
 	public final ViewExport processInput(ViewExport view) {
