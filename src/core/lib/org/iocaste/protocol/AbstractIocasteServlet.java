@@ -71,7 +71,7 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
      *     javax.servlet.http.HttpServletResponse)
      */
     @Override
-    protected final void doPost(
+    protected void doPost(
             HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         Message message;
@@ -104,9 +104,8 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
                 function = sfunctions.get(complexid).get(functionid);
             
             if (function == null)
-                throw new Exception(new StringBuilder("Function \"").
-                        append(functionid).
-                        append("\" not registered.").toString());
+                throw new IocasteException(
+                        "Function \"%s\" not registered.", functionid);
             
             function.setServletContext(getServletContext());
             function.setServerName(getServerName(req));

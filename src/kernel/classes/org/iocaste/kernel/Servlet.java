@@ -67,6 +67,7 @@ public class Servlet extends AbstractIocasteServlet {
         authorize("login", null);
         authorize("output_process", null);
         authorize("legacy_output_process", null);
+        authorize("context_new", null);
         
         parameters = new HashMap<>();
         parameters.put("from",
