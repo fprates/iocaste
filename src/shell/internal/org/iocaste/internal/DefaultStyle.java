@@ -351,7 +351,15 @@ public class DefaultStyle {
         style.put("float", "left");
         style.put("display", "block");
         
-        stylesheet.newElement(".form_content").put("height", "100%");
+        style = stylesheet.newElement(".form_content");
+        style.put("background-repeat", "no-repeat");
+        style.put("top", "0px");
+        style.put("left", "0px");
+        style.put("width", "100%");
+        style.put("position", "absolute");
+        style.put("background-image",
+                "linear-gradient(to bottom, #a0d0ff, #ffffff)");
+        style.put("height", "100%");
         
         style = stylesheet.newElement(".frame");
         style.put("border-color", FRAME_COLOR);
@@ -441,13 +449,15 @@ public class DefaultStyle {
         style.put("font-style", "normal");
         style.put("font-size", FONT_SIZE);
         style.put("border-style", "solid");
-        style.put("border-width", "1px");
+        style.put("border-width", "0px");
         style.put("border-color", BACKGROUND_COLOR);
         style.put("border-radius", "3px");
 
         style = stylesheet.clone(".table_cell_content_disabled",
                 ".table_cell_content");
         style.put("color", DISABLED_FONT_COLOR);
+        style.put("background-color", "transparent");
+        style.put("border-style", "none");
 
         style = stylesheet.clone(".table_cell_content_right",
                 ".table_cell_content");
@@ -639,6 +649,7 @@ public class DefaultStyle {
             style.put("padding-right", "1.5em");
             style.put("margin", "0px");
             style.put("color", FONT_COLOR);
+            style.put("background-color", "transparent");
             fillstyle(style, values[1][4]);
             
             style = stylesheet.clone(
@@ -647,12 +658,10 @@ public class DefaultStyle {
             style.put("border-bottom-style", "solid");
             style.put("border-bottom-color", CLICKABLE_COLOR);
             style.put("border-bottom-width", "1px");
-            style.put("background-color", FRAME_COLOR);
 
             style = stylesheet.clone(mediakey,
                     ".tp_button_unfocused", ".tp_button_focused");
-            style.put("background-color", BACKGROUND_COLOR);
-            style.put("border-bottom-color", FONT_COLOR);
+            style.put("border-bottom-style", "none");
             
             style = stylesheet.clone(mediakey,
                     ".tp_button_unfocused:hover", ".tp_button_unfocused");

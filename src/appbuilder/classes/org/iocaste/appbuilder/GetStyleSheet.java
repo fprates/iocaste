@@ -65,7 +65,7 @@ public class GetStyleSheet extends AbstractHandler {
     }
     
     private Object[][] getStyleSheet(Map<Integer, String> constants) {
-        Map<String, String> style;
+        Map<String, String> style, buttonstyle;
         String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
         String FRAME_COLOR, SHADOW;
         Object[][] width;
@@ -81,7 +81,9 @@ public class GetStyleSheet extends AbstractHandler {
         CLICKABLE_COLOR = constants.get(Shell.CLICKABLE_COLOR);
         FRAME_COLOR = constants.get(Shell.FRAME_COLOR);
         SHADOW = constants.get(Shell.SHADOW);
-        
+
+        defaultstyle = DefaultStyle.instance(null);
+        buttonstyle = defaultstyle.get(".button");
         for (String mediakey : DefaultStyle.resolutions.keySet()) {
             mobile = mediakey.startsWith("mobile");
             
@@ -107,35 +109,13 @@ public class GetStyleSheet extends AbstractHandler {
             style.put("list-style-type", "none");
             
             style = stylesheet.newElement(mediakey, ".nc_button");
-            style.put("padding-top", "0px");
-            style.put("padding-bottom", "0px");
-            style.put("padding-left", "1em");
-            style.put("padding-right", "1em");
-            style.put("margin", "0px");
-            style.put("color", CLICKABLE_COLOR);
-            style.put("background",
-                    "linear-gradient(to bottom, #ffffff, #cfefff)");
-            style.put("font-weight", "normal");
-            style.put("font-size", "10pt");
-            style.put("display", "inline");
-            style.put("border-color", CLICKABLE_COLOR);
-            style.put("border-radius", ROUND);
-            style.put("border-width", "1px");
-            style.put("border-style", "solid");
-            style.put("text-align", "center");
-            style.put("vertical-align", "middle");
-            style.put("height", "36px");
-            style.put("box-shadow", SHADOW);
-            style.put("transition-property", "opacity");
-            style.put("transition-duration", "0.2s");
-            style.put("opacity", "1");
+            style.putAll(buttonstyle);
             if (mobile) {
                 style.put("width", "100%");
                 style.put("margin-bottom", "2px");
             }
             
-            style = stylesheet.clone(mediakey,".nc_button:hover", ".nc_button");
-            style.put("opacity", "0.8");
+            stylesheet.clone(mediakey,".nc_button:hover", ".nc_button");
             
             style = stylesheet.newElement(mediakey, "#nc_inner_logo");
             style.put("display", !mobile? "inline-block" : "none");
@@ -183,9 +163,8 @@ public class GetStyleSheet extends AbstractHandler {
         style.put("width", "100%");
         style.put("height", "60px");
         style.put("top", "0px");
-        style.put("background", "linear-gradient(to bottom, #298eea, #29afff)");
+        style.put("background", "#000000");
         style.put("position", "fixed");
-        style.put("box-shadow", SHADOW);
         
         style = stylesheet.newElement(".nc_nav_buttonbar");
         style.put("width", "100%");
@@ -246,7 +225,6 @@ public class GetStyleSheet extends AbstractHandler {
         style.put("text-decoration", "none");
         style.put("cursor", "pointer");
         
-        defaultstyle = DefaultStyle.instance(null);
         style = defaultstyle.get(".button");
         stylesheet.put(".portal_button", style);
         style.put("width", "100%");
