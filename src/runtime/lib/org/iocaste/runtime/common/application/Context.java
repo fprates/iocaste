@@ -26,7 +26,7 @@ public interface Context {
 	
 	public abstract Map<String, AbstractPage> getPages();
 	
-	public abstract void set(Application application);
+	public abstract void set(Application<?> application);
 	
 	public abstract void set(Runtime iocaste);
 	

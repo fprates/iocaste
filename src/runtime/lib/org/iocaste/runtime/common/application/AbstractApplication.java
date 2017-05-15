@@ -58,7 +58,9 @@ public abstract class AbstractApplication<T extends Context>
     }
     
     @Override
-    protected void config() { }
+    protected final void config() {
+        register(new Services<T>(this));
+    }
     
 	private final void configOutputStyleData(AbstractPage page) {
 		String csslink;
