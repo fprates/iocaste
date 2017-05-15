@@ -22,9 +22,6 @@
         
         <!-- pacote .war -->
         <war destfile="${warfilename}" needxmlfile="false">
-            <webinf dir="${basedir}/src/${ant.project.name}/web/">
-                <include name="**/*"/>
-            </webinf>
 <!--            <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/> -->
             <lib file="${basedir}/ext/iocaste.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
