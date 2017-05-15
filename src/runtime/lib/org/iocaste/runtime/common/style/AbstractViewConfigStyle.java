@@ -2,6 +2,8 @@ package org.iocaste.runtime.common.style;
 
 import java.util.Map;
 
+import org.iocaste.shell.common.StyleSheet;
+
 public abstract class AbstractViewConfigStyle implements ViewConfigStyle {
     private StyleSheet stylesheet;
     private Map<String, String> style;

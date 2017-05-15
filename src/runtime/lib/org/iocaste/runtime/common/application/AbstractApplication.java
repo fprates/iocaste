@@ -34,9 +34,9 @@ import org.iocaste.runtime.common.page.ViewSpec;
 import org.iocaste.runtime.common.page.ViewSpecItem;
 import org.iocaste.runtime.common.protocol.GenericService;
 import org.iocaste.runtime.common.protocol.ServiceInterfaceData;
-import org.iocaste.runtime.common.style.StyleSheet;
 import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.MessageSource;
+import org.iocaste.shell.common.StyleSheet;
 
 public abstract class AbstractApplication<T extends Context>
 		extends AbstractIocasteServlet implements Application<T> {

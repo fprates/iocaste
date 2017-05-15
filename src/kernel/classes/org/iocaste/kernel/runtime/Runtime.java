@@ -3,10 +3,13 @@ package org.iocaste.kernel.runtime;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.runtime.common.page.ViewSpecItem;
+import org.iocaste.runtime.common.protocol.GenericService;
+import org.iocaste.runtime.common.protocol.ServiceInterfaceData;
+import org.iocaste.internal.DefaultStyle;
 import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.runtime.session.GetContextId;
-import org.iocaste.kernel.runtime.shell.GetStyleSheet;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
 import org.iocaste.kernel.runtime.shell.ProcessLegacyOutput;
 import org.iocaste.kernel.runtime.shell.ProcessOutput;
@@ -37,6 +40,9 @@ import org.iocaste.kernel.runtime.shell.factories.TextFieldFactory;
 import org.iocaste.kernel.runtime.shell.factories.TilesFactory;
 import org.iocaste.kernel.runtime.shell.factories.VirtualControlFactory;
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.AbstractHandler;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.utils.Tools;
 
 public class Runtime extends AbstractFunction {
     public Map<ViewSpecItem.TYPES, SpecFactory> factories;
@@ -102,6 +108,34 @@ public class Runtime extends AbstractFunction {
         export("legacy_output_process", new ProcessLegacyOutput());
         export("output_process", new ProcessOutput());
         export("style_data_get", new GetStyleSheet());
-
 	}
+}
+
+class GetStyleSheet extends AbstractHandler {
+
+    @Override
+    public Object run(Message message) throws Exception {
+        Object[][] constants;
+        Object[] objects;
+        GenericService service;
+        ViewExport viewexport = new ViewExport();
+        ServiceInterfaceData data = new ServiceInterfaceData();
+        Message _message = new Message("nc_data_get");
+        
+        data.servername = "/appbuilder/services.html";
+        data.sessionid = message.getSessionid();
+        service = new GenericService(data);
+
+        constants = Tools.toArray(DefaultStyle.instance(null).getConstants());
+        _message.add("style_constants", constants);
+        objects = service.invoke(_message);
+        
+        viewexport = new ViewExport();
+        viewexport.stylesheet = (Object[][])objects[0];
+//        viewexport.styleconst = cons;
+        viewexport.ncspec = (Object[][])objects[1];
+        viewexport.ncconfig = (Object[])objects[2];
+        return viewexport;
+    }
+    
 }

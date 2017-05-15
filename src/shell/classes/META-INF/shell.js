@@ -124,9 +124,9 @@ window.onpopstate = function(event) {
 };
 
 window.onclick = function(event) {
-  if (event.target.matches('.nc_login_menu') ||
-      event.target.matches('.ctxmenu') ||
-      event.target.matches('.button_ctxmenu_open'))
+  if ((event.target.className == 'nc_login_menu') ||
+      (event.target.className == 'ctxmenu') ||
+      (event.target.className == 'button_ctxmenu_open'))
      return;
   setElementDisplayOfClass('.button_ctxmenu_close','none');
   setElementDisplayOfClass('.button_ctxmenu_open','inline');

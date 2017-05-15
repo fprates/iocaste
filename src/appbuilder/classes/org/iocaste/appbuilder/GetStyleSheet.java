@@ -13,7 +13,6 @@ import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
 
 public class GetStyleSheet extends AbstractHandler {
-    private static final String ROUND = "3px";
     
     private final Object[] getNavbarConfig() {
         Object[][] config = new Object[12][4];
@@ -66,7 +65,7 @@ public class GetStyleSheet extends AbstractHandler {
     
     private Object[][] getStyleSheet(Map<Integer, String> constants) {
         Map<String, String> style, buttonstyle;
-        String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
+        String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR;
         String FRAME_COLOR, SHADOW;
         Object[][] width;
         StyleSheet stylesheet, defaultstyle;
@@ -78,7 +77,6 @@ public class GetStyleSheet extends AbstractHandler {
         FONT_COLOR = constants.get(Shell.FONT_COLOR);
         FONT_FAMILY = constants.get(Shell.FONT_FAMILY);
         BACKGROUND_COLOR = constants.get(Shell.BACKGROUND_COLOR);
-        CLICKABLE_COLOR = constants.get(Shell.CLICKABLE_COLOR);
         FRAME_COLOR = constants.get(Shell.FRAME_COLOR);
         SHADOW = constants.get(Shell.SHADOW);
 

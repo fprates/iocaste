@@ -1,5 +1,7 @@
 package org.iocaste.runtime.common.style;
 
+import org.iocaste.shell.common.StyleSheet;
+
 public interface ViewConfigStyle {
     
     public abstract void execute();

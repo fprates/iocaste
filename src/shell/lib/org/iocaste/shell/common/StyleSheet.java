@@ -139,6 +139,34 @@ public class StyleSheet {
         return stylesheet;
     }
     
+    @SuppressWarnings("unchecked")
+    public static final StyleSheet instance(
+            Object[][] sheet, Object[][] styleconst) {
+        String mediakey;
+        StyleSheet stylesheet;
+        Media media;
+        Map<Integer, String> constants;
+        
+        stylesheet = new StyleSheet();
+        if (sheet != null)
+            for (int i = 0; i < sheet.length; i++) {
+                mediakey = (String)sheet[i][0];
+                media = stylesheet.instanceMedia(mediakey);
+                media.setRule((String)sheet[i][1]);
+                stylesheet.set(mediakey,
+                        (Map<String, Map<String, String>>)sheet[i][2]);
+            }
+        
+        if (styleconst != null) {
+            constants = new HashMap<>();
+            for (int i = 0; i < styleconst.length; i++)
+                constants.put((int)styleconst[i][0], (String)styleconst[i][1]);
+            stylesheet.setConstants(constants);
+        }
+        
+        return stylesheet;
+    }
+    
     public final Media instanceMedia(String name) {
         Media media;
         
