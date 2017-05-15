@@ -1,4 +1,4 @@
-package org.iocaste.infosis;
+package org.iocaste.infosys;
 
 import org.iocaste.shell.common.MessageSource;
 
