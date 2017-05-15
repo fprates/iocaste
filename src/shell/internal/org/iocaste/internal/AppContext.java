@@ -6,6 +6,7 @@ import java.util.Map;
 public class AppContext {
     private Map<String, PageContext> pages;
     private String name;
+    public String mode;
     
     public AppContext(String name) {
         this.name = name;

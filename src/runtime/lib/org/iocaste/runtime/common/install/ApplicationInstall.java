@@ -12,7 +12,7 @@ import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.UserProfile;
 
 public class ApplicationInstall extends AbstractInstallObject {
-    private Map<String, String> links;
+    private Map<String, Link> links;
     private String pkgname, profilename, programauth;
     private Map<String, TaskGroup> tasksgroups;
     private List<String> dependson;
@@ -43,6 +43,8 @@ public class ApplicationInstall extends AbstractInstallObject {
     
     @Override
     public void execute(InstallContext context) throws Exception {
+        String value;
+        Link link;
         UserProfile profile;
         Authorization authorization;
         InstallData data = context.getInstallData();
@@ -58,14 +60,17 @@ public class ApplicationInstall extends AbstractInstallObject {
         for (TaskGroup taskgroup : tasksgroups.values())
             data.add(taskgroup);
         
-        for (String link : links.keySet()) {
-            authorization = new Authorization(link.concat(".CALL"));
+        for (String key : links.keySet()) {
+            authorization = new Authorization(key.concat(".CALL"));
             authorization.setAction("CALL");
             authorization.setObject("LINK");
-            authorization.add("LINK", link);
+            authorization.add("LINK", key);
             data.add(authorization);
             profile.add(authorization);
-            data.link(link, links.get(link));
+            value = ((link = links.get(key)).execmode == null)?
+                    link.value : new StringBuilder(link.value).
+                        append(" !exec_mode=").append(link.execmode).toString();
+            data.link(key, value); 
         }
         
         if (programauth == null)
@@ -84,7 +89,7 @@ public class ApplicationInstall extends AbstractInstallObject {
     }
     
     public final void setLink(String link, String command) {
-        links.put(link, command);
+        links.put(link, new Link(command, "runtime"));
     }
     
     public final void setProfile(String profile) {
@@ -93,5 +98,14 @@ public class ApplicationInstall extends AbstractInstallObject {
     
     public final void setProgramAuthorization(String programauth) {
         this.programauth = programauth;
+    }
+}
+
+class Link {
+    public String value, execmode;
+    
+    public Link(String value, String execmode) {
+        this.value = value;
+        this.execmode = execmode;
     }
 }
