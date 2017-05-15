@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.iocaste.protocol.AbstractHandler;
+import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.MessageSource;
 
 public class GetMessages extends AbstractHandler {
@@ -33,7 +33,7 @@ public class GetMessages extends AbstractHandler {
     
     @Override
     public Object run(Message message) throws Exception {
-        AbstractPage function;
+        Function function;
         AbstractContext context;
         Properties messages;
         String locale = message.getst("locale");
@@ -47,7 +47,7 @@ public class GetMessages extends AbstractHandler {
         }
         
         function = getFunction();
-        context = function.configOnly();
+        context = ((ApplicationMessageSource)function).configOnly();
         if (context.messages == null)
             return null;
         context.messages.entries();

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
+import org.iocaste.shell.common.messages.ApplicationMessageSource;
 import org.iocaste.shell.common.messages.GetMessages;
 
 /**
@@ -16,7 +17,8 @@ import org.iocaste.shell.common.messages.GetMessages;
  * @author francisco.prates
  *
  */
-public abstract class AbstractPage extends AbstractFunction {
+public abstract class AbstractPage extends AbstractFunction
+        implements ApplicationMessageSource {
     private GetViewData getviewdata;
     
     public AbstractPage() {
@@ -66,12 +68,6 @@ public abstract class AbstractPage extends AbstractFunction {
     public final void clearExports() {
         getviewdata.state.parameters.clear();
     }
-    
-    /**
-     * 
-     * @return
-     */
-    public abstract <T extends AbstractContext> T configOnly() throws Exception;
     
     /**
      * Não salva página na pilha de chamada.
