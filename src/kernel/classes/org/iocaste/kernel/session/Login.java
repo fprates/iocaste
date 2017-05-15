@@ -50,6 +50,7 @@ public class Login extends AbstractHandler {
         context.setUser(null);
         context.setTerminal(terminal);
         session.sessions.put(sessionid, context);
+        session.tracks.put(sessionid, sessionid);
     }
     
     @Override
