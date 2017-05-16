@@ -23,7 +23,7 @@ public class ViewContext {
 	public Map<String, ComponentEntry> entries;
 	public MessageSource messagesrc;
     public Const messagetype;
-    public String messagetext; 
+    public String messagetext, sessionid; 
     public Object[] messageargs;
     public List<String> inputs;
     public Map<String, Map<String, ActionEventHandler>> actions;
