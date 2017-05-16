@@ -2,6 +2,7 @@ package org.iocaste.runtime.common.application;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import org.iocaste.shell.common.Const;
 
 public class ToolData implements Serializable {
 	private static final long serialVersionUID = -4451606721765032982L;
+    private Map<String, Object> properties;
     public Const componenttype;
 	public ToolData nsitem, nsdata;
     public String sh, name, model, style, parent, group, label, actionname;
@@ -21,8 +23,8 @@ public class ToolData implements Serializable {
     public boolean internallabel, action, submit, disabled, secret, ns;
     public boolean invisible, required, focus, container, control, datastore;
     public boolean nolock, cancellable, absolute;
-    public int length, vlength;
-    public String[] groups;
+    public int length, vlength, mode;
+    public String[] groups, ordering;
 	public Object[] objects, textargs;
     public Object value;
     public DocumentModel custommodel;
@@ -32,12 +34,14 @@ public class ToolData implements Serializable {
     public Map<String, ToolData> items;
     public Map<String, Object> values;
     public Map<String, String> attributes;
-    public Set<String> validators;
+    public Set<String> validators, actions;
     
     public ToolData(TYPES type) {
         this.type = type;
         items = new HashMap<>();
         attributes = new HashMap<>();
+        actions = new LinkedHashSet<>();
+        properties = new HashMap<>();
     }
     
     public final Map<String, ToolData> get() {
@@ -46,6 +50,20 @@ public class ToolData implements Serializable {
     
     public final ToolData get(String name) {
         return items.get(name);
+    }
+    
+    public final boolean getbl(String property) {
+        Object value = properties.get(property);
+        return (boolean)((value == null)? false : value);
+    }
+    
+    public final int geti(String property) {
+        Object value = properties.get(property);
+        return (int)((value == null)? 0 : value);
+    }
+    
+    public final String getst(String property) {
+        return (String)properties.get(property);
     }
     
     public final ToolData instance(String name) {
@@ -67,6 +85,10 @@ public class ToolData implements Serializable {
     
     private final void put(String name, ToolData item) {
         items.put(name, item);
+    }
+    
+    public final void set(String property, Object value) {
+        properties.put(property, value);
     }
     
     public final int size() {
