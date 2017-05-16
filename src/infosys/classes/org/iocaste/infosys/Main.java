@@ -2,10 +2,11 @@ package org.iocaste.infosys;
 
 import javax.servlet.annotation.WebServlet;
 
+import org.iocaste.infosys.install.ConnectionsInstall;
+import org.iocaste.infosys.main.MainPage;
 import org.iocaste.runtime.common.application.AbstractApplication;
 import org.iocaste.runtime.common.install.ApplicationInstall;
 import org.iocaste.runtime.common.install.InstallContext;
-import org.iocaste.runtime.common.page.AbstractPage;
 
 @WebServlet(name="iocaste-infosys", urlPatterns={"/index.html",
                                                  "/view.html"})
@@ -16,6 +17,7 @@ public class Main extends AbstractApplication<InfosysContext> {
     public final InfosysContext execute() {
         InfosysContext context = new InfosysContext();
         context.add("main", new MainPage());
+        context.set(new Messages());
         return context;
     }
     
@@ -25,16 +27,7 @@ public class Main extends AbstractApplication<InfosysContext> {
         appinstall.setLink("INFOSYS", "iocaste-infosys");
         appinstall.addToTaskGroup("ADMIN", "INFOSYS");
         appinstall.setProfile("ADMIN");
+        
+        installctx.put("connections", new ConnectionsInstall());
     }
-}
-
-class MainPage extends AbstractPage {
-
-    @Override
-    public void execute() throws Exception {
-        set(new MainSpec());
-        set(new MainConfig());
-        set(new MainInput());
-    }
-    
 }

@@ -1,5 +1,6 @@
-package org.iocaste.infosys;
+package org.iocaste.infosys.main;
 
+import org.iocaste.infosys.InfosysContext;
 import org.iocaste.runtime.common.page.AbstractViewInput;
 
 public class MainInput extends AbstractViewInput<InfosysContext> {
