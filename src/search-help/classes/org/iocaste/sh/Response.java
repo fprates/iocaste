@@ -103,7 +103,7 @@ public class Response {
                     column.setVisible(false);
             }
             
-            SearchHelp.setTableItem(context, table, tableitem, object);
+            SearchHelp.setTableItem(table, tableitem, object);
         }
     }
     

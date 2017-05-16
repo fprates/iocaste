@@ -431,8 +431,7 @@ public class TableTool extends AbstractComponentTool {
      * @param object
      */
     public final void set(TableItem item, ExtendedObject object) {
-        SearchHelp.setTableItem(
-                entry.data.context, getTable(), item, object);
+        SearchHelp.setTableItem(getTable(), item, object);
     }
     
     public final void setLineProperties(
