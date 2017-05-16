@@ -1,6 +1,5 @@
 package org.iocaste.appbuilder;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.ViewSpecItem;
@@ -9,6 +8,7 @@ import org.iocaste.internal.DefaultStyle;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
+import org.iocaste.protocol.utils.Tools;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
 
@@ -257,7 +257,7 @@ public class GetStyleSheet extends AbstractHandler {
             ViewSpecItem.TYPES type, String parent, String name) {
         Object[] spec = new Object[3];
         
-        spec[0] = type;
+        spec[0] = type.name();
         spec[1] = parent;
         spec[2] = name;
         return spec;
@@ -266,16 +266,13 @@ public class GetStyleSheet extends AbstractHandler {
     @Override
     public Object run(Message message) throws Exception {
         Object[][] styleconst = message.get("style_constants");
-        Object[] objects = new Object[3];
-        Map<Integer, String> constants;
-        
-        constants = new HashMap<>();
-        for (int i = 0; i < styleconst.length; i++)
-            constants.put((int)styleconst[i][0], (String)styleconst[i][1]);
-        objects[0] = getStyleSheet(constants);
-        objects[1] = getNavbarSpec();
-        objects[2] = getNavbarConfig();
-        return objects;
+        Map<Integer, String> constants = Tools.
+                toMap(Tools.TYPE.HASH, styleconst);
+        return new Object[] {
+                getStyleSheet(constants),
+                getNavbarSpec(),
+                getNavbarConfig()
+        };
     }
     
     private final String setElementDisplay(String id, String display) {

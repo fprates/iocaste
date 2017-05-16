@@ -5,9 +5,7 @@ import java.util.Map;
 
 import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.runtime.common.page.ViewSpecItem;
-import org.iocaste.runtime.common.protocol.GenericService;
-import org.iocaste.runtime.common.protocol.ServiceInterfaceData;
-import org.iocaste.internal.DefaultStyle;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.runtime.session.GetContextId;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
@@ -41,8 +39,9 @@ import org.iocaste.kernel.runtime.shell.factories.TilesFactory;
 import org.iocaste.kernel.runtime.shell.factories.VirtualControlFactory;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.AbstractHandler;
+import org.iocaste.protocol.Function;
+import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
-import org.iocaste.protocol.utils.Tools;
 
 public class Runtime extends AbstractFunction {
     public Map<ViewSpecItem.TYPES, SpecFactory> factories;
@@ -117,22 +116,21 @@ class GetStyleSheet extends AbstractHandler {
     public Object run(Message message) throws Exception {
         Object[][] constants;
         Object[] objects;
-        GenericService service;
+        Message _message;
         ViewExport viewexport = new ViewExport();
-        ServiceInterfaceData data = new ServiceInterfaceData();
-        Message _message = new Message("nc_data_get");
+        Function function = getFunction();
         
-        data.servername = "/appbuilder/services.html";
-        data.sessionid = message.getSessionid();
-        service = new GenericService(data);
+        constants = new GenericService(function, Shell.SERVER_NAME).
+                invoke(new Message("style_constants_get"));
 
-        constants = Tools.toArray(DefaultStyle.instance(null).getConstants());
+        _message = new Message("nc_data_get");
         _message.add("style_constants", constants);
-        objects = service.invoke(_message);
+        objects = new GenericService(function,
+                "/iocaste-appbuilder/services.html").invoke(_message);
         
         viewexport = new ViewExport();
         viewexport.stylesheet = (Object[][])objects[0];
-//        viewexport.styleconst = cons;
+        viewexport.styleconst = constants;
         viewexport.ncspec = (Object[][])objects[1];
         viewexport.ncconfig = (Object[])objects[2];
         return viewexport;
