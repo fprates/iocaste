@@ -499,7 +499,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
      * @param sessionctx
      * @return
      */
-    @SuppressWarnings("unchecked")
     private final PageContext getPageContext(RendererContext context)
             throws Exception {
         PageStackItem pagestackitem;

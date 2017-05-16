@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.runtime.common.page.ViewSpecItem;
-import org.iocaste.shell.common.Shell;
 import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.runtime.session.GetContextId;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
@@ -114,23 +113,18 @@ class GetStyleSheet extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        Object[][] constants;
         Object[] objects;
         Message _message;
         ViewExport viewexport = new ViewExport();
         Function function = getFunction();
-        
-        constants = new GenericService(function, Shell.SERVER_NAME).
-                invoke(new Message("style_constants_get"));
 
         _message = new Message("nc_data_get");
-        _message.add("style_constants", constants);
         objects = new GenericService(function,
                 "/iocaste-appbuilder/services.html").invoke(_message);
         
         viewexport = new ViewExport();
         viewexport.stylesheet = (Object[][])objects[0];
-        viewexport.styleconst = constants;
+        viewexport.styleconst = (Object[][])objects[3];
         viewexport.ncspec = (Object[][])objects[1];
         viewexport.ncconfig = (Object[])objects[2];
         return viewexport;

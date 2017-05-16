@@ -63,16 +63,13 @@ public class GetStyleSheet extends AbstractHandler {
         return spec;
     }
     
-    private Object[][] getStyleSheet(Map<Integer, String> constants) {
+    private Object[][] getStyleSheet(StyleSheet stylesheet) {
         Map<String, String> style, buttonstyle;
         String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR;
         String FRAME_COLOR, SHADOW;
         Object[][] width;
-        StyleSheet stylesheet, defaultstyle;
         boolean mobile;
-        
-        stylesheet = StyleSheet.instance(null);
-        stylesheet.setConstants(constants);
+        Map<Integer, String> constants = stylesheet.getConstants();
         
         FONT_COLOR = constants.get(Shell.FONT_COLOR);
         FONT_FAMILY = constants.get(Shell.FONT_FAMILY);
@@ -80,8 +77,7 @@ public class GetStyleSheet extends AbstractHandler {
         FRAME_COLOR = constants.get(Shell.FRAME_COLOR);
         SHADOW = constants.get(Shell.SHADOW);
 
-        defaultstyle = DefaultStyle.instance(null);
-        buttonstyle = defaultstyle.get(".button");
+        buttonstyle = stylesheet.get(".button");
         for (String mediakey : DefaultStyle.resolutions.keySet()) {
             mobile = mediakey.startsWith("mobile");
             
@@ -223,18 +219,15 @@ public class GetStyleSheet extends AbstractHandler {
         style.put("text-decoration", "none");
         style.put("cursor", "pointer");
         
-        style = defaultstyle.get(".button");
-        stylesheet.put(".portal_button", style);
+        style = stylesheet.clone(".portal_button", ".button");
         style.put("width", "100%");
 
-        style = defaultstyle.get(".link");
-        stylesheet.put(".portal_login_option", style);
+        style = stylesheet.clone(".portal_login_option", ".link");
         style.put("width", "100%");
         style.put("text-align", "center");
         style.put("display", "block");
         
-        style = defaultstyle.get(".link:hover");
-        stylesheet.put(".portal_login_option:hover", style);
+        style = stylesheet.clone(".portal_login_option:hover", ".link:hover");
         style.put("width", "100%");
         style.put("text-align", "center");
         style.put("display", "block");
@@ -265,13 +258,32 @@ public class GetStyleSheet extends AbstractHandler {
     
     @Override
     public Object run(Message message) throws Exception {
+        Map<Integer, String> constants;
+        StyleSheet stylesheet, defaultsheet;
         Object[][] styleconst = message.get("style_constants");
-        Map<Integer, String> constants = Tools.
-                toMap(Tools.TYPE.HASH, styleconst);
+
+        defaultsheet = DefaultStyle.instance(null);
+        if (styleconst == null) {
+            stylesheet = defaultsheet;
+            styleconst = Tools.toArray(stylesheet.getConstants());
+        } else {
+            constants = Tools.toMap(Tools.TYPE.HASH, styleconst);
+            stylesheet = StyleSheet.instance(null);
+            stylesheet.setConstants(constants);
+            
+            for (String key : new String[] {
+                    ".button",
+                    ".link",
+                    ".link:hover"
+            })
+                stylesheet.put(key, defaultsheet.get(key));
+        }
+        
         return new Object[] {
-                getStyleSheet(constants),
+                getStyleSheet(stylesheet),
                 getNavbarSpec(),
-                getNavbarConfig()
+                getNavbarConfig(),
+                styleconst
         };
     }
     

@@ -415,6 +415,7 @@ public class DefaultStyle {
         style.put("color", FONT_COLOR);
         style.put("padding", "0px");
         style.put("margin", "0px");
+        style.put("width", "100%");
         style.put("font-style", "normal");
         style.put("font-size", FONT_SIZE);
         style.put("border-style", "none");
