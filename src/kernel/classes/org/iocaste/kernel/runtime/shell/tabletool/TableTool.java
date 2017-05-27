@@ -1,30 +1,25 @@
-package org.iocaste.appbuilder.common.tabletool;
+package org.iocaste.kernel.runtime.shell.tabletool;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.appbuilder.common.AbstractComponentData;
-import org.iocaste.appbuilder.common.AbstractComponentDataItem;
-import org.iocaste.appbuilder.common.AbstractComponentTool;
-import org.iocaste.appbuilder.common.ComponentEntry;
-import org.iocaste.appbuilder.common.ViewContext;
-import org.iocaste.appbuilder.common.tabletool.actions.AcceptAction;
-import org.iocaste.appbuilder.common.tabletool.actions.AddAction;
-import org.iocaste.appbuilder.common.tabletool.actions.DeselectAllAction;
-import org.iocaste.appbuilder.common.tabletool.actions.FirstAction;
-import org.iocaste.appbuilder.common.tabletool.actions.LastAction;
-import org.iocaste.appbuilder.common.tabletool.actions.NextAction;
-import org.iocaste.appbuilder.common.tabletool.actions.PreviousAction;
-import org.iocaste.appbuilder.common.tabletool.actions.RemoveAction;
-import org.iocaste.appbuilder.common.tabletool.actions.SelectAllAction;
-import org.iocaste.appbuilder.common.tabletool.actions.TableToolAction;
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.kernel.runtime.shell.AbstractComponentTool;
+import org.iocaste.kernel.runtime.shell.ComponentEntry;
+import org.iocaste.kernel.runtime.shell.ViewContext;
+import org.iocaste.kernel.runtime.shell.tabletool.actions.AcceptAction;
+import org.iocaste.kernel.runtime.shell.tabletool.actions.AddAction;
+import org.iocaste.kernel.runtime.shell.tabletool.actions.DeselectAllAction;
+import org.iocaste.kernel.runtime.shell.tabletool.actions.FirstAction;
+import org.iocaste.kernel.runtime.shell.tabletool.actions.LastAction;
+import org.iocaste.kernel.runtime.shell.tabletool.actions.NextAction;
+import org.iocaste.kernel.runtime.shell.tabletool.actions.PreviousAction;
+import org.iocaste.kernel.runtime.shell.tabletool.actions.RemoveAction;
+import org.iocaste.kernel.runtime.shell.tabletool.actions.SelectAllAction;
+import org.iocaste.kernel.runtime.shell.tabletool.actions.TableToolAction;
 import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
@@ -42,8 +37,7 @@ public class TableTool extends AbstractComponentTool {
     public static final byte CONTINUOUS_DISPLAY = 3;
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;
-    private Context extcontext;
-    private DocumentModel model;
+    private TableContext extcontext;
     private Map<String, TableToolAction> actionsstore;
     private Set<String> actions;
     
@@ -52,9 +46,12 @@ public class TableTool extends AbstractComponentTool {
      * @param context
      * @param data
      */
-    public TableTool(ComponentEntry entry) {
-        super(entry);
-        extcontext = new Context();
+    public TableTool(ViewContext viewctx, ComponentEntry entry) {
+        super(viewctx, entry);
+        extcontext = new TableContext();
+        extcontext.viewctx = viewctx;
+        extcontext.tabletool = this;
+        extcontext.data = entry.data;
         actions = new LinkedHashSet<>();
     }
     
@@ -68,7 +65,7 @@ public class TableTool extends AbstractComponentTool {
         ctxitems.get("accept").visible = false;
         ctxitems.get("add").visible = true;
         ctxitems.get("remove").visible = true;
-        extcontext.data.topline = 0;
+        extcontext.data.set("topline", 0);
     }
     
     /**
@@ -79,7 +76,7 @@ public class TableTool extends AbstractComponentTool {
         
         switch (extcontext.data.mode) {
         case TableTool.CONTINUOUS_UPDATE:
-            extcontext.data.vlines++;
+            extcontext.data.vlength++;
             break;
         default:
             ctxitems = getTable().getContextItems();
@@ -90,24 +87,24 @@ public class TableTool extends AbstractComponentTool {
         }
         
         AddItem.run(this, extcontext.data);
-        installValidators(extcontext);
+        installValidators();
     }
     
     /**
      * 
      */
     public final void additems() {
-        additems(extcontext, null);
+        additems(null);
     }
     
     /**
      * 
      * @param objects
      */
-    private final void additems(Context extcontext, ExtendedObject[] objects) {
-        extcontext.data.add(objects);
-        AddItems.run(this, extcontext.data);
-        installValidators(extcontext);
+    private final void additems(ExtendedObject[] objects) {
+//        extcontext.data.add(objects);
+//        AddItems.run(this, extcontext.data);
+//        installValidators(extcontext);
     }
     
     public final void buildControls(Table table) {
@@ -120,15 +117,13 @@ public class TableTool extends AbstractComponentTool {
      */
     public final void clear() {
         getTable().clear();
-        extcontext.data.last = 0;
+        extcontext.last = 0;
     }
     
     public final void first() {
-        Map<Integer, TableToolItem> items = extcontext.data.getItems();
-
-        save(extcontext, items);
-        extcontext.data.topline = 0;
-        move(extcontext, items);
+        save();
+        extcontext.data.set("topline", 0);
+        move();
     }
     
     /**
@@ -136,17 +131,16 @@ public class TableTool extends AbstractComponentTool {
      * @param item
      * @return
      */
-    public final ExtendedObject get(TableToolData data, TableItem item) {
+    public final ExtendedObject get(TableItem item) {
         Element element;
         InputComponent input;
         DocumentModelItem modelitem;
         TableToolColumn ttcolumn;
-        AbstractComponentDataItem component;
-        ExtendedObject object = new ExtendedObject(model);
+        ExtendedObject object = new ExtendedObject(extcontext.model);
         
-        for (String name : data.get().keySet()) {
+        for (String name : extcontext.data.get().keySet()) {
             element = item.get(name);
-            ttcolumn = data.get(name);
+            ttcolumn = extcontext.columns.get(name);
             if (ttcolumn.tcolumn.isNamespace()) {
                 input = (InputComponent)element;
                 object.setNS(input.get());
@@ -163,21 +157,12 @@ public class TableTool extends AbstractComponentTool {
                 continue;
             }
             
-            component = data.instance(name);
-            if (component.action == null)
+            if (ttcolumn.data.actionname == null)
                 continue;
             object.set(name, ((Component)element).getText());
         }
         
         return object;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final AbstractContext getContext() {
-        return entry.data.context;
     }
     
     /**
@@ -196,44 +181,38 @@ public class TableTool extends AbstractComponentTool {
      * 
      * @param data
      */
-    private final void installValidators(Context extcontext) {
-        InputComponent input;
-        TableToolColumn column;
-        Table table = getTable();
-        ViewContext viewctx = entry.data.context.getView();
-        
-        for (String name : extcontext.data.get().keySet()) {
-            column = extcontext.data.get(name);
-            if (column.validators.size() == 0)
-                continue;
-            
-            for (TableItem item : table.getItems()) {
-                input = item.get(name);
-                for (String validator : column.validators)
-                    viewctx.validate(input, validator);
-            }
-        }
+    private final void installValidators() {
+//        InputComponent input;
+//        ToolData column;
+//        Table table = getTable();
+//        
+//        for (String name : extcontext.data.get().keySet()) {
+//            column = extcontext.data.instance(name);
+//            if (column.validators.size() == 0)
+//                continue;
+//            
+//            for (TableItem item : table.getItems()) {
+//                input = item.get(name);
+//                for (String validator : column.validators)
+//                    viewctx.validate(input, validator);
+//            }
+//        }
     }
     
     public final void last() {
-        int pages;
-        Map<Integer, TableToolItem> items = extcontext.data.getItems();
-        
-        save(extcontext, items);
-        extcontext.data.topline = extcontext.data.vlines;
-        pages = items.size() / extcontext.data.topline;
-        extcontext.data.topline *= pages;
-        move(extcontext, items);
+        int pages, topline;
+        save();
+        pages = extcontext.items.size() / (topline = extcontext.data.vlength);
+        extcontext.data.set("topline", (topline *= pages));
+        move();
     }
     
     @Override
-    public final void load(AbstractComponentData componentdata) {
-        Map<Integer, TableToolItem> ttitems;
+    public final void load() {
         TableToolItem ttitem;
         int startline, i, ttitemssize, itemsdif;
         Set<TableItem> items;
         int itemssize;
-        TableToolData data = (TableToolData)componentdata;
         
         items = getTable().getItems();
         itemssize = items.size();
@@ -241,34 +220,28 @@ public class TableTool extends AbstractComponentTool {
         if (itemssize == 0)
             return;
         
-        ttitems = data.getItems();
-        if (data.vlines > 0) {
-            startline = data.topline;
-        } else {
-            startline = 0;
-        }
-        
-        ttitemssize = ttitems.size();
+        startline = (extcontext.data.vlength > 0)?
+                extcontext.data.geti("topline") : 0;
+        ttitemssize = extcontext.items.size();
         itemsdif = itemssize - ttitemssize;
         if (itemsdif > 0)
             for (int j = 0; j < itemsdif; j++) {
-                ttitem = new TableToolItem(data);
-                ttitem.position += ttitems.size();
-                ttitems.put(ttitem.position, ttitem);
+                ttitem = new TableToolItem(extcontext);
+                ttitem.position += extcontext.items.size();
+                extcontext.items.put(ttitem.position, ttitem);
             }
         i = startline;
         for (TableItem item : items) {
-            ttitem = ttitems.get(i++);
+            ttitem = extcontext.items.get(i++);
             if (ttitem == null)
                 break;
-            ttitem.object = get(data, item);
+            ttitem.object = get(item);
             ttitem.selected = item.isSelected();
             ttitem.set(item);
         }
     }
     
-    private final void move(
-            Context context, Map<Integer, TableToolItem> ttitems) {
+    private final void move() {
         TableToolItem ttitem;
         int l, lastline;
         Set<TableItem> items;
@@ -276,12 +249,12 @@ public class TableTool extends AbstractComponentTool {
         Table table = getTable();
         
         items = table.getItems();
-        l = context.data.vlines - items.size();
+        l = extcontext.data.vlength - items.size();
         if (l > 0)
             for (int i= 0; i < l; i++)
-                items.add(TableRender.additem(this, context, null, -1));
-        l = context.data.topline;
-        lastline = ttitems.size() - 1;
+                items.add(TableRender.additem(extcontext, null, -1));
+        l = extcontext.data.geti("topline");
+        lastline = extcontext.items.size() - 1;
         columns = table.getColumns();
         for (TableItem item : items) {
             if (l > lastline) {
@@ -290,54 +263,48 @@ public class TableTool extends AbstractComponentTool {
                 continue;
             }
 
-            ttitem = ttitems.get(l);
+            ttitem = extcontext.items.get(l);
             ttitem.set(item);
             item.setVisible(true);
             set(item, ttitem.object);
-            setLineProperties(context, columns, ttitem);
+            setLineProperties(columns, ttitem);
             l++;
         }
     }
     
     public final void next() {
-        Map<Integer, TableToolItem> items = extcontext.data.getItems();
-        int topline = extcontext.data.topline + extcontext.data.vlines;
-        
-        if (topline > items.size())
+        int topline = extcontext.data.geti("topline") + extcontext.data.vlength;
+        if (topline > extcontext.items.size())
             return;
-        save(extcontext, items);
-        extcontext.data.topline = topline;
-        move(extcontext, items);
+        save();
+        extcontext.data.set("topline", topline);
+        move();
     }
     
     public final void previous() {
-        Map<Integer, TableToolItem> items = extcontext.data.getItems();
-        int topline = extcontext.data.topline - extcontext.data.vlines;
-        
+        int topline = extcontext.data.geti("topline") - extcontext.data.vlength;
         if (topline < 0)
             return;
-        save(extcontext, items);
-        extcontext.data.topline = topline;
-        move(extcontext, items);
+        save();
+        extcontext.data.set("topline", topline);
+        move();
     }
 
     @Override
     public void refresh() {
-        AbstractTableHandler.setObject(this, (TableToolData)entry.data);
+        AbstractTableHandler.setObject(extcontext);
     }
     
     /**
      * 
      */
     public final void remove() {
-        Map<Integer, TableToolItem> items;
         Table table;
         int index;
         
-        entry.component.load(entry.data);
-        items = extcontext.data.getItems();
+        entry.component.load();
         table = getTable();
-        index = extcontext.data.topline;
+        index = extcontext.data.geti("topline");
         
         for (TableItem item : table.getItems()) {
             if (!item.isSelected()) {
@@ -345,66 +312,64 @@ public class TableTool extends AbstractComponentTool {
                 continue;
             }
             table.remove(item);
-            items.remove(index++);
+            extcontext.items.remove(index++);
         }
-        save(extcontext, items);
+        save();
     }
 
     @Override
-    public void run() {
+    public void run() throws Exception {
         Map<String, TableContextItem> ctxitems;
-        TableToolData data = (TableToolData)entry.data;
-
+        
         if (actionsstore == null) {
             actionsstore = new LinkedHashMap<>();
-            new SelectAllAction(this, data, actionsstore);
-            new DeselectAllAction(this, data, actionsstore);
-            new AcceptAction(this, data, actionsstore);
-            new AddAction(this, data, actionsstore);
-            new RemoveAction(this, data, actionsstore);
-            new FirstAction(this, data, actionsstore);
-            new PreviousAction(this, data, actionsstore);
-            new NextAction(this, data, actionsstore);
-            new LastAction(this, data, actionsstore);
+            new SelectAllAction(extcontext, actionsstore);
+            new DeselectAllAction(extcontext, actionsstore);
+            new AcceptAction(extcontext, actionsstore);
+            new AddAction(extcontext, actionsstore);
+            new RemoveAction(extcontext, actionsstore);
+            new FirstAction(extcontext, actionsstore);
+            new PreviousAction(extcontext, actionsstore);
+            new NextAction(extcontext, actionsstore);
+            new LastAction(extcontext, actionsstore);
         }
         
         actions.clear();
-        if (data.actions != null) {
-            for (String key : data.actions) {
+        if (entry.data.actions != null) {
+            for (String key : entry.data.actions) {
                 actions.add(key);
                 if (!actionsstore.containsKey(key))
-                    new CustomAction(this, data, actionsstore, key);
+                    new CustomAction(extcontext, actionsstore, key);
             }
         } else {
             actions.addAll(actionsstore.keySet());
         }
         
-        extcontext.data = data;
-        extcontext.htmlname = data.name.concat("_table");
-        setHtmlName(extcontext.htmlname);
-        TableRender.run(this, entry.data.context.function, extcontext);
-        installValidators(extcontext);
+        if (entry.data.vlength == 0)
+            entry.data.vlength = 15;
+        if (entry.data.geti("step") == 0)
+            entry.data.set("step", 1);
+        if (entry.data.geti("increment") == 0)
+            entry.data.set("increment", 1);
         
-        if (data.model != null)
-            model = new Documents(
-                    entry.data.context.function).getModel(data.model);
-        else
-            model = data.custommodel;
+        extcontext.htmlname = entry.data.name.concat("_table");
+        setHtmlName(extcontext.htmlname);
+        TableRender.run(extcontext);
+        installValidators();
 
         ctxitems = getTable().getContextItems();
         for (String key : actions)
             if (actionsstore.get(key).isMarkable())
-                ctxitems.get(key).visible = extcontext.data.mark;
+                ctxitems.get(key).visible = extcontext.data.getbl("mark");
     }
 
-    private final void save(
-            Context context, Map<Integer, TableToolItem> ttitems) {
+    private final void save() {
         TableToolItem ttitem;
-        int l = context.data.topline;
+        int l = extcontext.data.geti("topline");
         Set<TableItem> items = getTable().getItems();
         
         for (TableItem item : items) {
-            ttitem = ttitems.get(l);
+            ttitem = extcontext.items.get(l);
             if (ttitem == null)
                 break;
             ttitem.selected = item.isSelected();
@@ -413,13 +378,10 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void selectAll(boolean mark) {
-        Map<Integer, TableToolItem> items;
-
-        entry.component.load(entry.data);
-        items = extcontext.data.getItems();
+        entry.component.load();
         for (TableItem item : getTable().getItems())
             item.setSelected(mark);
-        save(extcontext, items);
+        save();
     }
     
     /**
@@ -435,14 +397,14 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void setLineProperties(
-            Context context, TableColumn[] columns, TableToolItem ttitem) {
+            TableColumn[] columns, TableToolItem ttitem) {
         String name;
         TableToolCell cell;
         TableItem item = ttitem.get();
         
         item.setSelected(ttitem.selected);
         if (ttitem.highlighted)
-            item.setStyleClass(context.data.highlightstyle);
+            item.setStyleClass(extcontext.data.getst("highlightstyle"));
         else
             item.setStyleClass(null);
         for (TableColumn column : columns) {
@@ -458,18 +420,17 @@ public class TableTool extends AbstractComponentTool {
      * @param objects
      */
     public final void setObjects(ExtendedObject[] objects) {
-        extcontext.data.set(objects);
-        AbstractTableHandler.setObject(this, extcontext.data);
-        installValidators(extcontext);
+//        extcontext.data.set(objects);
+//        AbstractTableHandler.setObject(extcontext);
+//        installValidators(extcontext);
     }
     
-    public final void setVisibleNavigation(
-            Context context, Map<Integer, TableToolItem> ttitems) {
+    public final void setVisibleNavigation() {
         Map<String, TableContextItem> ctxitems;
         boolean visible;
         
-        visible = ((ttitems.size() > context.data.vlines) &&
-                (context.data.vlines > 0));
+        visible = ((extcontext.items.size() > extcontext.data.vlength) &&
+                (extcontext.data.vlength > 0));
         
         ctxitems = getTable().getContextItems();
         for (String action : actions)

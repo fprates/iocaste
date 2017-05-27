@@ -39,7 +39,7 @@ public abstract class AbstractComponentTool {
     
     public abstract void refresh();
     
-    public abstract void run();
+    public abstract void run() throws Exception;
     
     protected final void setHtmlName(String htmlname) {
         this.htmlname = htmlname;

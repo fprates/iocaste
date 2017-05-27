@@ -263,16 +263,16 @@ public class ProcessInput extends AbstractHandler {
         if (reference == null)
             return true;
         
-//        nsreference = input.getNSReference();
-//        if (nsreference != null) {
-//            nsinput = config.state.viewctx.view.getElement(nsreference);
-//            ns = nsinput.get();
-//        } else {
-//            ns = input.getNS();
-//        }
-//
+        nsreference = input.getNSReference();
+        if (nsreference != null) {
+            nsinput = config.state.viewctx.view.getElement(nsreference);
+            ns = nsinput.get();
+        } else {
+            ns = input.getNS();
+        }
+
 //        documents = ((Runtime)getFunction()).documents;
-//        connection = documents.database.getDBConnection(config.sessionid);
+//        connection = documents.database.getDBConnection(config.state.viewctx.);
 //        objectget = documents.get("object_get");
 //        object = objectget.run(connection, documents,
 //                reference.getDocumentModel().getName(),
@@ -592,7 +592,7 @@ public class ProcessInput extends AbstractHandler {
 		ProcessOutput outputprocess = getFunction().get("output_process");
 		
         config = new ControllerData();
-		config.state.viewctx = outputprocess.run(view);
+		config.state.viewctx = outputprocess.run(view, message.getSessionid());
 		
         for (String key : parameters.keySet()) {
             if (isAction(key)) {

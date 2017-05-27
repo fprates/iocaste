@@ -170,13 +170,12 @@ public class SearchHelp extends PopupControl {
     
     /**
      * 
-     * @param context
      * @param table
      * @param item
      * @param object
      */
-    public static final void setTableItem(AbstractContext context, Table table,
-            TableItem item, ExtendedObject object) {
+    public static final void setTableItem(
+            Table table, TableItem item, ExtendedObject object) {
         Link link;
         Element element;
         Object value;
