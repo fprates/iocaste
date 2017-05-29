@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.iocaste.kernel.UserContext;
+import org.iocaste.kernel.database.ConnectionState;
 import org.iocaste.kernel.users.GetUserData;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
@@ -59,7 +60,7 @@ public class Login extends AbstractHandler {
         User user;
         GetUserData getuserdata;
         Session session;
-        Connection connection;
+        ConnectionState connstate;
         String[] locale_ = message.getst("locale").split("_");
         String username = message.getst("user");
         String secret = message.getst("secret");
@@ -72,12 +73,13 @@ public class Login extends AbstractHandler {
             return false;
 
         session = getFunction();
-        connection = session.database.instance();
+        connstate = session.database.instance();
         try {
             getuserdata = session.users.get("get_user_data");
-            user = getuserdata.run(session.users, connection, username);
+            user = getuserdata.
+                    run(session.users, connstate.connection, username);
             if ((user == null) || !isSecretOk(
-                    connection, getuserdata, user, secret))
+                    connstate.connection, getuserdata, user, secret))
                 return false;
             
             if (locale_.length == 1)
@@ -86,12 +88,12 @@ public class Login extends AbstractHandler {
                 locale = new Locale(locale_[0], locale_[1]);
             
             instance(session, user, sessionid, username, locale);
-            connection.commit();
+            connstate.connection.commit();
         } catch (Exception e) {
-            connection.rollback();
+            connstate.connection.rollback();
             throw e;
         } finally {
-            session.database.free(connection);
+            session.database.free(connstate);
         }
         return true;
     }
