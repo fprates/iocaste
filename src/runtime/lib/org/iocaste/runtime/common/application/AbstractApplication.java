@@ -235,13 +235,12 @@ public abstract class AbstractApplication<T extends Context>
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void run(HttpServletRequest req, HttpServletResponse resp)
 			throws Exception {
 		Transaction transaction;
         T context;
         ViewExport outputview;
-        ActionHandler<T> handler;
+        ActionHandler handler;
         Runtime iocaste;
         ServiceInterfaceData servicedata;
         byte[] content;
@@ -268,7 +267,7 @@ public abstract class AbstractApplication<T extends Context>
                 outputview = iocaste.processInput(outputview);
         		move(context, outputview);
             	if (outputview.action != null) {
-                	handler = (ActionHandler<T>)
+                	handler = (ActionHandler)
                 			context.getHandler(outputview.action);
                 	try {
                 		handler.run(context);

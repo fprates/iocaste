@@ -2,12 +2,13 @@ package org.iocaste.runtime.common;
 
 import org.iocaste.runtime.common.application.Context;
 
-public interface ActionHandler<C extends Context> {
+public interface ActionHandler {
 	
-	public abstract void run(C context) throws Exception;
+	public abstract void run(Context context) throws Exception;
 
-    public abstract void run(C context, boolean redirectflag) throws Exception;
+    public abstract void run(Context context,
+            boolean redirectflag) throws Exception;
 
-    public abstract void run(C context, String page, boolean redirectflag)
-    		throws Exception;
+    public abstract void run(Context context,
+            String page, boolean redirectflag) throws Exception;
 }

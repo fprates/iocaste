@@ -1,7 +1,5 @@
 package org.iocaste.runtime.common.page;
 
-import java.util.Map;
-
 import org.iocaste.runtime.common.application.Context;
 
 public class StandardPageFactory {
@@ -13,15 +11,17 @@ public class StandardPageFactory {
     
     public final void instance(String name, AbstractPage page) throws Exception
     {
-//        ViewContext view;
+        AbstractPage child;
 //        Documents documents;
 //        AbstractExtendedValidator validator;
 //        Map<String, Validator> validators;
-    	
+        page.set(context);
         page.execute();
-        for (String key : page.getChildren())
-        	page.getChild(key).execute();
-//        
+        for (String key : page.getChildren()) {
+            child = page.getChild(key);
+            child.set(context);
+            child.execute();
+        }
 //        context.pageInstance(name);
 //        documents = new Documents(context.function);
 //        validators = view.getValidators();

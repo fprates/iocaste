@@ -2,6 +2,7 @@ package org.iocaste.runtime.common.application;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -25,11 +26,12 @@ public class ToolData implements Serializable {
     public boolean nolock, cancellable, absolute;
     public int length, vlength, mode;
     public String[] groups, ordering;
-	public Object[] objects, textargs;
+	public Object[] textargs; 
     public Object value;
     public DocumentModel custommodel;
     public ViewSpecItem.TYPES type;
     public ExtendedObject object;
+    public Map<Integer, ExtendedObject> objects;
     public DataElement element;
     public Map<String, ToolData> items;
     public Map<String, Object> values;
@@ -42,6 +44,7 @@ public class ToolData implements Serializable {
         attributes = new HashMap<>();
         actions = new LinkedHashSet<>();
         properties = new HashMap<>();
+        objects = new LinkedHashMap<>();
     }
     
     public final Map<String, ToolData> get() {

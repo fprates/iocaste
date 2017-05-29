@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.runtime.common.ActionHandler;
+import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.runtime.common.navcontrol.NavControl;
@@ -21,7 +22,7 @@ public abstract class AbstractPage {
     public ViewExport outputview;
     private Map<String, String> specalias;
     private Map<String, ToolData> entries;
-    private Map<String, ActionHandler<?>> handlers;
+    private Map<String, ActionHandler> handlers;
     private Set<String> actions;
     private String submit;
     private Map<String, AbstractPage> children;
@@ -33,6 +34,7 @@ public abstract class AbstractPage {
     private StyleSheet stylesheet;
     private ViewTitle title;
     private NavControl navcontrol;
+    private Context context;
     
     public AbstractPage() {
         actions = new HashSet<>();
@@ -46,7 +48,7 @@ public abstract class AbstractPage {
         navcontrol = new NavControl();
     }
     
-    protected void action(String action, ActionHandler<?> handler) {
+    protected void action(String action, ActionHandler handler) {
         actions.add(action);
         put(action, handler);
     }
@@ -75,7 +77,7 @@ public abstract class AbstractPage {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public final <T extends ActionHandler<?>> T getActionHandler(
+    public final <T extends ActionHandler> T getActionHandler(
             String action) {
         return (T)handlers.get(action);
     }
@@ -151,7 +153,7 @@ public abstract class AbstractPage {
      * @param action
      * @param handler
      */
-    public final void put(String action, ActionHandler<?> handler) {
+    public final void put(String action, ActionHandler handler) {
         handlers.put(action, handler);
     }
     
@@ -162,10 +164,10 @@ public abstract class AbstractPage {
 //    protected final void put(String name, AbstractExtendedValidator validator) {
 //        view.put(name, validator);
 //    }
-//    
-//    protected final void run(String action) throws Exception {
-//        context.run(name, action);
-//    }
+    
+    protected final void run(String action) throws Exception {
+        handlers.get(action).run(context);
+    }
     
     protected void set(ViewConfig config) {
         this.config = config;
@@ -187,7 +189,11 @@ public abstract class AbstractPage {
     	this.stylesheet = stylesheet;
     }
     
-    protected final void submit(String action, ActionHandler<?> handler) {
+    public final void set(Context context) {
+        this.context = context;
+    }
+    
+    protected final void submit(String action, ActionHandler handler) {
         submit = action;
         put(action, handler);
     }
