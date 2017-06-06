@@ -67,6 +67,7 @@ class PortalStyleMedia extends AbstractViewConfigStyle {
         put("border-bottom-style", "solid");
         put("border-bottom-width", "1px");
         put("border-bottom-color", FRAME_COLOR);
+        put("border-radius", "5px");
         put("margin", "5px");
         put("padding", "10px");
         put("display", "inline-block");

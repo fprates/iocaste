@@ -10,11 +10,9 @@ import org.iocaste.shell.common.MessageSource;
 
 public interface Context {
 	
-	public abstract ActionHandler<?> getHandler(String action);
+	public abstract ActionHandler getHandler(String action);
 
 	public abstract String getAppName();
-	
-	public abstract Runtime getIocaste();
 
 	public abstract MessageSource getMessageSource();
 	
@@ -25,8 +23,10 @@ public interface Context {
 	public abstract AbstractPage getPage(String name);
 	
 	public abstract Map<String, AbstractPage> getPages();
+    
+    public abstract Runtime runtime();
 	
-	public abstract void set(Application application);
+	public abstract void set(Application<?> application);
 	
 	public abstract void set(Runtime iocaste);
 	

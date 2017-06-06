@@ -1,7 +1,6 @@
 package org.iocaste.kernel.database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,13 +9,15 @@ import java.util.Properties;
 import org.iocaste.kernel.config.Config;
 import org.iocaste.kernel.session.Session;
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.database.ConnectionInfo;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 public class Database extends AbstractFunction {
-    private Map<String, Connection> connections;
+    private Map<String, Integer> connections;
+    private Map<Integer, ConnectionState> pool;
     public DBConfig dbconfig;
     public Config config;
     public Session session;
@@ -24,9 +25,11 @@ public class Database extends AbstractFunction {
     public Database() {
         dbconfig = new DBConfig();
         connections = new HashMap<>();
+        pool = new HashMap<>();
         export("call_procedure", new CallProcedure());
         export("checked_select", new CheckedSelect());
         export("commit", new Commit());
+        export("connection_pool_info_get", new GetConnectionPoolInfo());
         export("disconnected_operation", new DisconnectedOperation());
         export("ext_db_instance", new InstanceExternalDB());
         export("rollback", new Rollback());
@@ -50,6 +53,27 @@ public class Database extends AbstractFunction {
         Class.forName(driver);
     }
     
+    private final void free(int connid) {
+        pool.get(connid).assigned = false;
+    }
+    
+    public final void free(ConnectionState connstate) {
+        free(connstate.connid);
+    }
+    
+    public final void freeConnection(String sessionid) {
+        free(connections.get(sessionid));
+        connections.remove(sessionid);
+    }
+    
+    public final ConnectionInfo[] getConnections() {
+        int i = 0;
+        ConnectionInfo[] connections = new ConnectionInfo[pool.size()];
+        for (int key : pool.keySet())
+            connections[i++] = pool.get(key);
+        return connections;
+    }
+    
     /**
      * 
      * @param sessionid
@@ -58,14 +82,15 @@ public class Database extends AbstractFunction {
      */
     public final Connection getDBConnection(String sessionid)
             throws Exception {
-        Connection connection = connections.get(sessionid);
+        ConnectionState connstate = pool.get(connections.get(sessionid));
         
-        if (connection == null) {
-            connection = instance();
-            connections.put(sessionid, connection);
-        }
+        if (connstate != null)
+            return connstate.connection;
         
-        return connection;
+        connstate = instance();
+        connstate.sessionid = sessionid;
+        connections.put(sessionid, connstate.connid);
+        return connstate.connection;
     }
     
     /**
@@ -73,17 +98,20 @@ public class Database extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    public final Connection instance() throws Exception {
-        Connection connection;
+    public final ConnectionState instance() throws Exception {
+        ConnectionState connstate;
+        for (int key : pool.keySet()) {
+            connstate = pool.get(key);
+            if (connstate.assigned)
+                continue;
+            connstate.assigned = true;
+            return connstate;
+        }
         
         try {
-            connection = DriverManager.getConnection(
-                    dbconfig.url, dbconfig.username, dbconfig.secret);
-            connection.setAutoCommit(false);
-            connection.setTransactionIsolation(
-                    Connection.TRANSACTION_READ_COMMITTED);
-            
-            return connection;
+            connstate = new ConnectionState(pool, dbconfig);
+            connstate.assigned = true;
+            return connstate;
         } catch (SQLServerException e) {
             throw new SQLException(e.getMessage());
         } catch (MySQLSyntaxErrorException e) {
@@ -93,10 +121,6 @@ public class Database extends AbstractFunction {
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
-    }
-    
-    public final void removeDBConnection(String sessionid) {
-        connections.remove(sessionid);
     }
 }
 

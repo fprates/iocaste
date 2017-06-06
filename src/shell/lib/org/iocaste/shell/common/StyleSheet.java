@@ -104,12 +104,7 @@ public class StyleSheet {
         return media;
     }
     
-    @SuppressWarnings("unchecked")
     public static final StyleSheet instance(View view) {
-        String mediakey;
-        StyleSheet stylesheet;
-        Media media;
-        Map<Integer, String> constants;
         Object[][] sheet, styleconst;
         
         if (view != null) {
@@ -118,6 +113,17 @@ public class StyleSheet {
         } else {
             sheet = styleconst = null;
         }
+        
+        return instance(sheet, styleconst);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static final StyleSheet instance(
+            Object[][] sheet, Object[][] styleconst) {
+        String mediakey;
+        StyleSheet stylesheet;
+        Media media;
+        Map<Integer, String> constants;
         
         stylesheet = new StyleSheet();
         if (sheet != null)
@@ -184,8 +190,8 @@ public class StyleSheet {
         stylesheet.put(media, styles);
     }
     
-    public final void setConstants(Map<Integer, String> contants) {
-        this.constants = contants;
+    public final void setConstants(Map<Integer, String> constants) {
+        this.constants = constants;
     }
     
     public final void setLink(String link) {

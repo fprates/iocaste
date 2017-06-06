@@ -1,6 +1,5 @@
 package org.iocaste.kernel.database;
 
-import java.sql.Connection;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractHandler;
@@ -14,7 +13,7 @@ public class CheckedSelect extends AbstractHandler {
         Database database;
         Select select;
         Object[] results;
-        Connection connection;
+        ConnectionState connstate;
         String query, columns = message.getst("columns");
         String from = message.getst("from");
         String where = message.getst("where");
@@ -41,11 +40,11 @@ public class CheckedSelect extends AbstractHandler {
         
         database = getFunction();
         query = sb.toString();
-        connection = database.instance();
+        connstate = database.instance();
         select = database.get("select");
-        results = select.run(connection, query, 0, criteria);
-        connection.commit();
-        connection.close();
+        results = select.run(connstate.connection, query, 0, criteria);
+        connstate.connection.commit();
+        database.free(connstate);
         
         return results;
     }

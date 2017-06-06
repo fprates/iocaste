@@ -46,7 +46,8 @@ public abstract class AbstractService implements Service {
         Throwable cause;
         Object[] content;
         
-        message.setSessionid(sessionid);
+        if (sessionid != null)
+            message.setSessionid(sessionid);
         content = disassembly(message);
         try {
             stream.open();

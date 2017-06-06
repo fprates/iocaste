@@ -1,11 +1,5 @@
 package org.iocaste.runtime.common.application;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
@@ -16,7 +10,7 @@ import org.iocaste.runtime.common.page.ViewSpec;
 import org.iocaste.shell.common.Const;
 
 public abstract class AbstractActionHandler<C extends Context>
-	implements ActionHandler<C> {
+	    implements ActionHandler {
     public static final boolean REDIRECT = true;
     private Context context;
 //    private Documents documents;
@@ -255,9 +249,9 @@ public abstract class AbstractActionHandler<C extends Context>
         spec.setInitialized(false);
     }
     
-//    protected final ExtendedObject instance(String model) {
-//        return new ExtendedObject(documents.getModel(model));
-//    }
+    protected final ExtendedObject instance(String model) {
+        return new ExtendedObject(context.runtime().getModel(model));
+    }
     
     protected final void message(Const type, String text, Object... args) {
         AbstractPage page = context.getPage();
@@ -342,26 +336,28 @@ public abstract class AbstractActionHandler<C extends Context>
 //    }
 //
     @Override
-    public final void run(C context) throws Exception {
+    public final void run(Context context) throws Exception {
         run(context, REDIRECT);
     }
     
     @Override
-    public final void run(C context, boolean redirectflag) throws Exception {
+    public final void run(Context context, boolean redirectflag)
+            throws Exception {
         run(context, context.getPageName(), redirectflag);
     }
     
     @Override
-    public final void run(C context, String page, boolean redirectflag)
+    @SuppressWarnings("unchecked")
+    public final void run(Context context, String page, boolean redirectflag)
     		throws Exception {
 //        ViewContext viewctx;
 //        
-        this.context = (C)context;
+        this.context = context;
 //        this.page = page;
 //        viewctx = this.context.getView(page);
 //        if (viewctx.getActionHandler(context.action) == null)
 //            return;
-        execute(context);
+        execute((C)context);
 //        if (redirectflag)
 //            redirectContext(this.context, viewctx);
 //        if (this.context.downloaddata != null)

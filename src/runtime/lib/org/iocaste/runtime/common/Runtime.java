@@ -1,6 +1,8 @@
 package org.iocaste.runtime.common;
 
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.protocol.Message;
+import org.iocaste.protocol.database.ConnectionInfo;
 import org.iocaste.protocol.utils.ConversionResult;
 import org.iocaste.protocol.utils.ConversionRules;
 import org.iocaste.runtime.common.application.ViewExport;
@@ -27,11 +29,26 @@ public class Runtime extends AbstractRuntimeInterface {
         return call(message);
     }
 	
+    public final ConnectionInfo[] getConnectionPoolInfo() {
+        return call(new Message("connection_pool_info_get"));
+    }
+    
 	public final String getContextId(String trackid) {
 		Message message = new Message("context_id_get");
 		message.add("track_id", trackid);
 		return call(message);
 	}
+    
+    /**
+     * Obtem instância do modelo de documento informado.
+     * @param nome do modelo
+     * @return modelo de documento
+     */
+    public final DocumentModel getModel(String name) {
+        Message message = new Message("get_document_model");
+        message.add("name", name);
+        return call(message);
+    }
 	
 	public final String getTrackId(String trackid) {
 		Message message = new Message("track_id_get");
@@ -48,7 +65,7 @@ public class Runtime extends AbstractRuntimeInterface {
 	}
 	
 	public final String newContext() {
-		return call(new Message("context_new"));
+		return data.sessionid = call(new Message("context_new"));
 	}
 	
 	public final ViewExport processInput(ViewExport view) {

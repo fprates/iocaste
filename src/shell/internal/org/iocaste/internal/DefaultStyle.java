@@ -39,17 +39,12 @@ public class DefaultStyle {
             {"all and (max-width:767px)", "400px", null},
             {"none",
                 new String[][] {
-                    {"border-bottom-style", "solid"},
-                    {"border-bottom-width", "1px"},
-                    {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
-                    {"display", "table-row"}},
-                new String[][] {
                     {"border-bottom-width", "0px"},
                     {"width", "100%"},
                     {"display", "block"},
                     {"float", "left"}},
                 new String[][] {
-                    {"float", "unset"}},
+                    {"float", "none"}},
                 new String[][] {
                     {"width", "100%"}},
                 new String[][] {
@@ -61,15 +56,10 @@ public class DefaultStyle {
                 "708px", null},
             {"table-header-group",
                 new String[][] {
-                    {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
-                    {"border-bottom-style", "solid"},
-                    {"border-bottom-width", "1px"},
-                    {"display", "table-row"}},
-                new String[][] {
                     {"border-bottom-style", "none"},
                     {"border-bottom-width", "0px"},
                     {"width", "inherit"},
-                    {"float", "unset"},
+                    {"float", "none"},
                     {"display", "table-cell"}},
                 new String[][] {
                     {"float", "right"}},
@@ -84,15 +74,10 @@ public class DefaultStyle {
                 "960px", null},
             {"table-header-group",
                 new String[][] {
-                    {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
-                    {"border-bottom-style", "solid"},
-                    {"border-bottom-width", "1px"},
-                    {"display", "table-row"}},
-                new String[][] {
                     {"border-bottom-style", "none"},
                     {"border-bottom-width", "0px"},
                     {"width", "inherit"},
-                    {"float", "unset"},
+                    {"float", "none"},
                     {"display", "table-cell"}},
                 new String[][] {
                     {"float", "right"}},
@@ -107,15 +92,10 @@ public class DefaultStyle {
                 "1170px", null},
             {"table-header-group",
                 new String[][] {
-                    {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
-                    {"border-bottom-style", "solid"},
-                    {"border-bottom-width", "1px"},
-                    {"display", "table-row"}},
-                new String[][] {
                     {"border-bottom-style", "none"},
                     {"border-bottom-width", "0px"},
                     {"width", "inherit"},
-                    {"float", "unset"},
+                    {"float", "none"},
                     {"display", "table-cell"}},
                 new String[][] {
                     {"float", "right"}},
@@ -130,15 +110,10 @@ public class DefaultStyle {
                 "1380px", null},
             {"table-header-group",
                 new String[][] {
-                    {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
-                    {"border-bottom-style", "solid"},
-                    {"border-bottom-width", "1px"},
-                    {"display", "table-row"}},
-                new String[][] {
                     {"border-bottom-style", "none"},
                     {"border-bottom-width", "0px"},
                     {"width", "inherit"},
-                    {"float", "unset"},
+                    {"float", "none"},
                     {"display", "table-cell"}},
                 new String[][] {
                     {"float", "right"}},
@@ -152,15 +127,10 @@ public class DefaultStyle {
             {"screen and (min-width:1600px)", "1540px", null},
             {"table-header-group",
                 new String[][] {
-                    {"border-bottom-color", constants.get(Shell.FRAME_COLOR)},
-                    {"border-bottom-style", "solid"},
-                    {"border-bottom-width", "1px"},
-                    {"display", "table-row"}},
-                new String[][] {
                     {"border-bottom-style", "none"},
                     {"border-bottom-width", "0px"},
                     {"width", "inherit"},
-                    {"float", "unset"},
+                    {"float", "none"},
                     {"display", "table-cell"}},
                 new String[][] {
                     {"float", "right"}},
@@ -247,7 +217,6 @@ public class DefaultStyle {
         style.put("margin-right", "0px");
         style.put("padding", "0px");
         style.put("width", "20px");
-        style.put("height", "20px");
         style.put("float", "left");
         style.put("color", CLICKABLE_COLOR);
         style.put("vertical-align", "middle");
@@ -351,7 +320,15 @@ public class DefaultStyle {
         style.put("float", "left");
         style.put("display", "block");
         
-        stylesheet.newElement(".form_content").put("height", "100%");
+        style = stylesheet.newElement(".form_content");
+        style.put("background-repeat", "no-repeat");
+        style.put("top", "0px");
+        style.put("left", "0px");
+        style.put("width", "100%");
+        style.put("position", "absolute");
+        style.put("background-image",
+                "linear-gradient(to bottom, #a0d0ff, #ffffff)");
+        style.put("height", "100%");
         
         style = stylesheet.newElement(".frame");
         style.put("border-color", FRAME_COLOR);
@@ -438,16 +415,16 @@ public class DefaultStyle {
         style.put("color", FONT_COLOR);
         style.put("padding", "0px");
         style.put("margin", "0px");
+        style.put("width", "100%");
         style.put("font-style", "normal");
         style.put("font-size", FONT_SIZE);
-        style.put("border-style", "solid");
-        style.put("border-width", "1px");
-        style.put("border-color", BACKGROUND_COLOR);
-        style.put("border-radius", "3px");
+        style.put("border-style", "none");
+        style.put("border-width", "0px");
 
         style = stylesheet.clone(".table_cell_content_disabled",
                 ".table_cell_content");
         style.put("color", DISABLED_FONT_COLOR);
+        style.put("background-color", "transparent");
 
         style = stylesheet.clone(".table_cell_content_right",
                 ".table_cell_content");
@@ -459,7 +436,7 @@ public class DefaultStyle {
 
         style = stylesheet.clone(".table_cell_content:focus",
                 ".table_cell_content");
-        style.put("border-color", CLICKABLE_COLOR);
+        style.put("background-color", "#e0e0a0");
 
         style = stylesheet.clone(".table_cell_content_right:focus",
                 ".table_cell_content:focus");
@@ -605,6 +582,11 @@ public class DefaultStyle {
         style.put("font-weight", "bold");
         style.put("font-family", FONT_FAMILY);
         
+        style = stylesheet.newElement(".table_line");
+        style.put("border-bottom-color", constants.get(Shell.FRAME_COLOR));
+        style.put("border-bottom-style", "solid");
+        style.put("border-bottom-width", "1px");
+        
         for (String mediakey : resolutions.keySet()) {
             values = resolutions.get(mediakey);
             stylesheet.instanceMedia(mediakey).setRule((String)values[0][0]);
@@ -612,16 +594,12 @@ public class DefaultStyle {
             style = stylesheet.newElement(mediakey, ".table_head");
             style.put("display", (String)values[1][0]);
             
-            style = stylesheet.newElement(mediakey, ".table_line");
-            fillstyle(style, values[1][1]);
-            
             style = stylesheet.newElement(mediakey, ".table_cell");
             style.put("padding", "0px");
             style.put("margin", "0px");
-            style.put("border-top-width", "0px");
-            style.put("border-right-width", "0px");
-            style.put("border-left-width", "0px");
-            fillstyle(style, values[1][2]);
+            style.put("border-style", "none");
+            style.put("border-width", "0px");
+            fillstyle(style, values[1][1]);
 
             style = stylesheet.newElement(mediakey, ".tp_button");
             style.put("font-size", FONT_SIZE);
@@ -639,7 +617,8 @@ public class DefaultStyle {
             style.put("padding-right", "1.5em");
             style.put("margin", "0px");
             style.put("color", FONT_COLOR);
-            fillstyle(style, values[1][4]);
+            style.put("background-color", "transparent");
+            fillstyle(style, values[1][3]);
             
             style = stylesheet.clone(
                     mediakey, ".tp_button_focused", ".tp_button");
@@ -647,12 +626,10 @@ public class DefaultStyle {
             style.put("border-bottom-style", "solid");
             style.put("border-bottom-color", CLICKABLE_COLOR);
             style.put("border-bottom-width", "1px");
-            style.put("background-color", FRAME_COLOR);
 
             style = stylesheet.clone(mediakey,
                     ".tp_button_unfocused", ".tp_button_focused");
-            style.put("background-color", BACKGROUND_COLOR);
-            style.put("border-bottom-color", FONT_COLOR);
+            style.put("border-bottom-style", "none");
             
             style = stylesheet.clone(mediakey,
                     ".tp_button_unfocused:hover", ".tp_button_unfocused");
@@ -669,7 +646,7 @@ public class DefaultStyle {
             style.put("font-size", FONT_SIZE);
             style.put("font-family", FONT_FAMILY);
             style.put("color", FONT_COLOR);
-            fillstyle(style, values[1][5]);
+            fillstyle(style, values[1][4]);
         }
         
         return stylesheet;

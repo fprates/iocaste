@@ -101,13 +101,11 @@ public class ProcessOutput extends AbstractHandler {
 	@Override
 	public Object run(Message message) throws Exception {
 		StringBuilder content;
-		HtmlRenderer renderer;
 		List<String> lines;
 		ViewExport viewexport = message.get("view");
-		ViewContext viewctx = run(viewexport);
+		ViewContext viewctx = run(viewexport, message.getSessionid());
 		
-		renderer = new HtmlRenderer();
-		lines = renderer.run(viewctx);
+		lines = new HtmlRenderer().run(viewctx);
 		content = new StringBuilder();
 		for (String line : lines)
 			content.append(line);
@@ -123,14 +121,17 @@ public class ProcessOutput extends AbstractHandler {
 		return content.toString().getBytes();
 	}
 	
-	public final ViewContext run(ViewExport viewexport) {
+	public final ViewContext run(
+	        ViewExport viewexport, String sessionid) throws Exception {
 		ComponentEntry entry;
         SpecFactory factory;
         Input input;
 		ViewContext viewctx = new ViewContext();
 		
+		viewctx.sessionid = sessionid;
 		viewctx.function = getFunction();
 		viewctx.title = viewexport.title;
+        viewctx.messagesrc = new MessageSource();
 		
 		for (Object object : viewexport.items)
 			viewctx.add((ToolData)object);
@@ -153,7 +154,6 @@ public class ProcessOutput extends AbstractHandler {
 		if ((viewexport.messages != null) && (viewexport.messages.length > 0))
 		{
 			viewctx.view.setLocale(viewexport.locale);
-			viewctx.messagesrc = new MessageSource();
 			viewctx.messagesrc.importMessages(
 					viewexport.locale.toString(), viewexport.messages);
             fillTranslations(viewctx);

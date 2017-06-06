@@ -1,0 +1,35 @@
+<project name="infosys" default="compile">
+    <property name="warfilename" value="${basedir}/iocaste-${ant.project.name}.war"/>
+	
+    <target name="compile">
+        <mkdir dir="${builddir}/${ant.project.name}/web"/>
+        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
+        <mkdir dir="${builddir}/${ant.project.name}/lib"/>
+        
+        <!-- dependências -->
+        <path id="dependencies">
+            <fileset dir="${basedir}/lib"/>
+            <fileset dir="${basedir}/ext"/>
+        </path>
+        	
+        <!-- compilação classes -->
+        <javac srcdir="${basedir}/src/${ant.project.name}/classes"
+            destdir="${builddir}/${ant.project.name}/classes"
+            debug="${debug.status}">
+            
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <!-- pacote .war -->
+        <war destfile="${warfilename}" needxmlfile="false">
+<!--            <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/> -->
+            <lib file="${basedir}/ext/iocaste.jar"/>
+            <classes dir="${builddir}/${ant.project.name}/classes"/>
+        </war>
+        
+        <ant antfile="${basedir}/src/deploy.xml">
+            <property name="war.file" value="${warfilename}"/>
+            <property name="war.target" value="${war.target}"/>
+        </ant>
+    </target>
+</project>

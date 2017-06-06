@@ -14,7 +14,7 @@ public abstract class AbstractContext implements Context {
 	private MessageSource messagesrc;
     private Map<String, AbstractPage> pages;
     private String page, appname;
-	private Runtime iocaste;
+	private Runtime runtime;
 	
 	public AbstractContext() {
         pages = new HashMap<>();
@@ -25,26 +25,32 @@ public abstract class AbstractContext implements Context {
         pages.put(name, new StandardPage(page));
     }
 	
+    public final void add(String tooldata, ExtendedObject object) {
+        add(page, tooldata, object);
+    }
+    
+    public final void add(
+            String page, String tooldata, ExtendedObject object) {
+        Map<Integer, ExtendedObject> objects = pages.get(page).
+                getToolData(tooldata).objects;
+        objects.put(objects.size(), object);
+    }
+    
     @Override
     public final String getAppName() {
     	return appname;
     }
     
 	@Override
-	public final ActionHandler<?> getHandler(String action) {
+	public final ActionHandler getHandler(String action) {
 		AbstractPage page = getPage();
-		ActionHandler<?> handler = page.getActionHandler(action);
+		ActionHandler handler = page.getActionHandler(action);
 		if (handler != null)
 			return handler;
 		for (String key : page.getChildren())
 			if ((handler = page.getChild(key).getActionHandler(action)) != null)
 				return handler;
 		return null;
-	}
-
-	@Override
-	public final Runtime getIocaste() {
-		return iocaste;
 	}
 
 	@Override
@@ -71,8 +77,13 @@ public abstract class AbstractContext implements Context {
 	public final Map<String, AbstractPage> getPages() {
 		return pages;
 	}
+
+    @Override
+    public final Runtime runtime() {
+        return runtime;
+    }
 	
-	public final void set(Application application) {
+	public final void set(Application<?> application) {
 		appname = application.getAppName();
 	}
 	
@@ -97,6 +108,6 @@ public abstract class AbstractContext implements Context {
 	
 	@Override
 	public final void set(Runtime iocaste) {
-		this.iocaste = iocaste;
+		this.runtime = iocaste;
 	}
 }

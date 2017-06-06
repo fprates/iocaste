@@ -31,8 +31,7 @@ public class Rollback extends AbstractHandler {
         } catch (MySQLNonTransientConnectionException e) {
             throw new SQLException(e.getMessage());
         } finally {
-            connection.close();
-            database.removeDBConnection(sessionid);
+            database.freeConnection(sessionid);
         }
     }
 

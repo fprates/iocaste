@@ -110,8 +110,7 @@ public abstract class AbstractFunction implements Function {
         String methodname = exports.get(id);
         
         if (methodname == null)
-            throw new Exception(new StringBuilder("Method \"").
-                    append(id).append("\" not implemented").toString());
+            throw new IocasteException("Method \"%s\" not implemented", id);
 
         setSessionid(message.getSessionid());
         

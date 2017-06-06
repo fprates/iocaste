@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -687,6 +688,30 @@ public class ProcessHttpRequisition extends AbstractHandler {
                 new Locale(locale[0], locale[1]) : new Locale(locale[0]);
     }
     
+    private final void output(RendererContext context, PageContext pagectx)
+            throws Exception {
+        String mode;
+        Cookie trackidcookie;
+        
+        mode = pagectx.getAppContext().mode;
+        if (mode == null) {
+            startRender(context, pagectx);
+            return;
+        }
+        
+        switch (mode) {
+        case "runtime":
+            trackidcookie = new Cookie("track_id", context.sessionid);
+            trackidcookie.setMaxAge(3600*8);
+            context.resp.addCookie(trackidcookie);
+            runtimeRedirect(context, pagectx);
+            break;
+        default:
+            startRender(context, pagectx);
+            break;
+        }
+    }
+    
     /**
      * 
      * @param req
@@ -834,7 +859,9 @@ public class ProcessHttpRequisition extends AbstractHandler {
         } else {
             pagectx_.setUsername(null);
         }
-        
+
+        pagectx_.getAppContext().mode = (String)pagectx_.parameters.
+                get("!exec_mode");
         return pagectx_;
     }
     
@@ -989,7 +1016,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
             if (pagectx.getViewData() != null)
                 pagectx = processController(context, pagectx);
             
-            startRender(context, pagectx);
+            output(context, pagectx);
         } catch (Exception e) {
             if (pagectx == null)
                 throw e;
@@ -997,6 +1024,13 @@ public class ProcessHttpRequisition extends AbstractHandler {
             context.resp.reset();
             startRender(context, pagectx);
         }
+    }
+    
+    private final void runtimeRedirect(
+            RendererContext context, PageContext pagectx) throws Exception {
+        String url = new StringBuilder("/").
+                append(pagectx.getAppContext().getName()).toString();
+        context.resp.sendRedirect(url);
     }
     
     @Override
