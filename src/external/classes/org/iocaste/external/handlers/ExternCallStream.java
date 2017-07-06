@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 
 import org.iocaste.external.common.MessageExtractor;
 import org.iocaste.protocol.AbstractService;
+import org.iocaste.protocol.Message;
 import org.iocaste.protocol.stream.SocketStream;
 
 public class ExternCallStream extends SocketStream {
@@ -22,11 +23,13 @@ public class ExternCallStream extends SocketStream {
         BufferedReader br;
         InputStream cis;
         Object[] response;
+        Message message;
         
         cis = getInputStream();
         br = new BufferedReader(new InputStreamReader(cis));
-        response = AbstractService.
-                disassembly(new MessageExtractor().execute(br));
+        message = new MessageExtractor().execute(br);
+        response = (message != null)?
+                AbstractService.disassembly(message) : null;
         br.close();
         return response;
     }
