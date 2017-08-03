@@ -4,39 +4,39 @@ import java.util.Map;
 
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.runtime.common.ActionHandler;
-import org.iocaste.runtime.common.Runtime;
+import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.shell.common.MessageSource;
 
 public interface Context {
 	
-	public abstract ActionHandler getHandler(String action);
-
-	public abstract String getAppName();
-
-	public abstract MessageSource getMessageSource();
-	
-	public abstract String getPageName();
-	
-	public abstract AbstractPage getPage();
-	
-	public abstract AbstractPage getPage(String name);
-	
-	public abstract Map<String, AbstractPage> getPages();
+    public abstract ActionHandler getHandler(String action);
     
-    public abstract Runtime runtime();
-	
-	public abstract void set(Application<?> application);
-	
-	public abstract void set(Runtime iocaste);
-	
-	public abstract void set(String tooldata, ExtendedObject object);
-	
-	public abstract void set(
-			String page, String tooldata, ExtendedObject object);
-
-	public abstract void set(MessageSource messagesrc);
-	
-	public abstract void setPageName(String name);
+    public abstract String getAppName();
+    
+    public abstract MessageSource getMessageSource();
+    
+    public abstract String getPageName();
+    
+    public abstract AbstractPage getPage();
+    
+    public abstract AbstractPage getPage(String name);
+    
+    public abstract Map<String, AbstractPage> getPages();
+    
+    public abstract RuntimeEngine runtime();
+    
+    public abstract void set(Application<?> application);
+    
+    public abstract void set(RuntimeEngine iocaste);
+    
+    public abstract void set(String tooldata, ExtendedObject object);
+    
+    public abstract void set(
+    		String page, String tooldata, ExtendedObject object);
+    
+    public abstract void set(MessageSource messagesrc);
+    
+    public abstract void setPageName(String name);
 }
 

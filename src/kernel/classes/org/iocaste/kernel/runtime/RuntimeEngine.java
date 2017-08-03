@@ -7,6 +7,8 @@ import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.runtime.common.page.ViewSpecItem;
 import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.runtime.session.GetContextId;
+import org.iocaste.kernel.runtime.session.IsConnected;
+import org.iocaste.kernel.runtime.session.NewContext;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
 import org.iocaste.kernel.runtime.shell.ProcessLegacyOutput;
 import org.iocaste.kernel.runtime.shell.ProcessOutput;
@@ -36,17 +38,19 @@ import org.iocaste.kernel.runtime.shell.factories.TextFactory;
 import org.iocaste.kernel.runtime.shell.factories.TextFieldFactory;
 import org.iocaste.kernel.runtime.shell.factories.TilesFactory;
 import org.iocaste.kernel.runtime.shell.factories.VirtualControlFactory;
+import org.iocaste.kernel.session.Session;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 
-public class Runtime extends AbstractFunction {
+public class RuntimeEngine extends AbstractFunction {
     public Map<ViewSpecItem.TYPES, SpecFactory> factories;
 	public Documents documents;
+	public Session session;
 	
-	public Runtime() {
+	public RuntimeEngine() {
         factories = new HashMap<>();
         factories.put(ViewSpecItem.TYPES.BUTTON,
         		new ButtonFactory());
@@ -102,7 +106,9 @@ public class Runtime extends AbstractFunction {
         		new VirtualControlFactory());
 
         export("context_id_get", new GetContextId());
+        export("context_new", new NewContext());
         export("input_process", new ProcessInput());
+        export("is_valid_context", new IsConnected());
         export("legacy_output_process", new ProcessLegacyOutput());
         export("output_process", new ProcessOutput());
         export("style_data_get", new GetStyleSheet());

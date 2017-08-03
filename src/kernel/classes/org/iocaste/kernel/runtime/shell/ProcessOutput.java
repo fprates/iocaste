@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.iocaste.kernel.runtime.Runtime;
+import org.iocaste.kernel.runtime.RuntimeEngine;
 import org.iocaste.kernel.runtime.shell.factories.SpecFactory;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Input;
@@ -71,7 +71,7 @@ public class ProcessOutput extends AbstractHandler {
             return;
         handler = factory.getHandler();
         if (handler != null)
-            handler.execute((Runtime)getFunction(), entry.data.name);
+            handler.execute((RuntimeEngine)getFunction(), entry.data.name);
         factory.run(viewctx, entry, prefix);
     }
     
@@ -95,7 +95,7 @@ public class ProcessOutput extends AbstractHandler {
     }
     
     private final SpecFactory getFactory(TYPES type) {
-        return ((Runtime)getFunction()).factories.get(type);
+        return ((RuntimeEngine)getFunction()).factories.get(type);
     }
 
 	@Override

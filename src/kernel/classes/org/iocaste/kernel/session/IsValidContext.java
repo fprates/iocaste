@@ -3,7 +3,7 @@ package org.iocaste.kernel.session;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 
-public class IsConnected extends AbstractHandler {
+public class IsValidContext extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {

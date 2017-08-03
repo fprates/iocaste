@@ -11,10 +11,10 @@ import org.iocaste.runtime.common.protocol.ServiceInterfaceData;
 import org.iocaste.runtime.common.protocol.ServiceUrl;
 
 @ServiceUrl("/iocaste-kernel/service.html")
-public class Runtime extends AbstractRuntimeInterface {
+public class RuntimeEngine extends AbstractRuntimeInterface {
 	public static final String SERVICE_URL = "/iocaste-kernel/service.html";
 	
-	public Runtime(ServiceInterfaceData data) {
+	public RuntimeEngine(ServiceInterfaceData data) {
 		initService(data);
 	}
     
@@ -54,6 +54,10 @@ public class Runtime extends AbstractRuntimeInterface {
 		Message message = new Message("track_id_get");
 		message.add("track_id", trackid);
 		return call(message);
+	}
+	
+	public final boolean isValidContext() {
+	    return call(new Message("is_valid_context"));
 	}
 	
 	public final boolean login(String username, String secret, String locale) {

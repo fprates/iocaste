@@ -20,7 +20,7 @@ import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
 import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.documents.GetObject;
-import org.iocaste.kernel.runtime.Runtime;
+import org.iocaste.kernel.runtime.RuntimeEngine;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ControllerData;
 import org.iocaste.kernel.runtime.shell.renderer.internal.InputStatus;
@@ -94,7 +94,7 @@ public class ProcessInput extends AbstractHandler {
     		throws Exception {
         InputStatus status;
         ControlComponent control;
-        Runtime shell;
+        RuntimeEngine shell;
         ComponentEntry entry;
         
         status = validate();

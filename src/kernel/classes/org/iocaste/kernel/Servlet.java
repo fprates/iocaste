@@ -11,8 +11,8 @@ import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.files.FileServices;
 import org.iocaste.kernel.packages.Packages;
 import org.iocaste.kernel.process.ProcessServices;
-import org.iocaste.kernel.runtime.Runtime;
-import org.iocaste.kernel.session.IsConnected;
+import org.iocaste.kernel.runtime.RuntimeEngine;
+import org.iocaste.kernel.session.IsValidContext;
 import org.iocaste.kernel.session.Session;
 import org.iocaste.kernel.users.Users;
 import org.iocaste.protocol.AbstractIocasteServlet;
@@ -38,7 +38,7 @@ public class Servlet extends AbstractIocasteServlet {
         ProcessServices process = new ProcessServices();
         FileServices files = new FileServices();
         CompilerService compiler = new CompilerService();
-        Runtime runtime = new Runtime();
+        RuntimeEngine runtime = new RuntimeEngine();
         
         session = new Session();
         documents.config = database.config = config = new Config();
@@ -47,7 +47,7 @@ public class Servlet extends AbstractIocasteServlet {
         session.database = users.database = config.database = database; 
         auth.database = documents.database = database;
         users.session = database.session = auth.session = session;
-        compiler.session = users.session;
+        runtime.session = compiler.session = users.session;
         process.files = compiler.files = files;
         session.users = users;
         register(database);
@@ -68,6 +68,7 @@ public class Servlet extends AbstractIocasteServlet {
         authorize("output_process", null);
         authorize("legacy_output_process", null);
         authorize("context_new", null);
+        authorize("is_valid_context", null);
         
         parameters = new HashMap<>();
         parameters.put("from",
@@ -91,7 +92,7 @@ public class Servlet extends AbstractIocasteServlet {
      */
     @Override
     protected final void preRun(Message message) throws Exception {
-        IsConnected isconnected;
+        IsValidContext isconnected;
         
         if (!isDisconnectedOp(message.getId()) && !config.disconnected &&
                 !config.isInitialized()) {

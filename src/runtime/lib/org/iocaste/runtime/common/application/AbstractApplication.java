@@ -11,10 +11,8 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.Handler;
@@ -22,7 +20,7 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.protocol.utils.Tools;
 import org.iocaste.runtime.common.ActionHandler;
-import org.iocaste.runtime.common.Runtime;
+import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.IocasteErrorMessage;
 import org.iocaste.runtime.common.navcontrol.StandardNavControlConfig;
 import org.iocaste.runtime.common.navcontrol.StandardNavControlSpec;
@@ -79,7 +77,7 @@ public abstract class AbstractApplication<T extends Context>
         AbstractPage navcontrol;
 		
 		message = new Message("style_data_get");
-        servicedata.serviceurl = Runtime.SERVICE_URL;
+        servicedata.serviceurl = RuntimeEngine.SERVICE_URL;
         service = new GenericService(servicedata);
         viewexport = service.invoke(message);
         page.importStyle(viewexport.styleconst, viewexport.stylesheet);
@@ -241,14 +239,15 @@ public abstract class AbstractApplication<T extends Context>
         T context;
         ViewExport outputview;
         ActionHandler handler;
-        Runtime iocaste;
+        RuntimeEngine iocaste;
         ServiceInterfaceData servicedata;
         byte[] content;
 
         req.setCharacterEncoding("UTF-8");
         servicedata = new ServiceInterfaceData();
         servicedata.servername = getServerName(req);
-		iocaste = new Runtime(servicedata);
+        servicedata.sessionid = req.getSession().getId();
+		iocaste = new RuntimeEngine(servicedata);
         transaction = transactionInstance(iocaste);
         servicedata.sessionid = transaction.begin(req);
         if (servicedata.sessionid == null) {
@@ -312,50 +311,7 @@ public abstract class AbstractApplication<T extends Context>
         // unused in AbstractApplication. Compatibility only.
     }
 	
-    private final Transaction transactionInstance(Runtime iocaste) {
-    	return new Transaction(iocaste);
+    private final Transaction transactionInstance(RuntimeEngine runtime) {
+    	return new Transaction(runtime);
     }
-}
-
-class Transaction {
-    private String trackid;
-	private Runtime iocaste;
-	
-    public Transaction(Runtime iocaste) {
-    	this.iocaste = iocaste;
-    }
-    
-	public final String begin(HttpServletRequest req) {
-		Cookie[] cookies;
-		String contextid;
-		HttpSession session = req.getSession();
-		
-		if (session.isNew()) {
-			try {
-				contextid = iocaste.newContext();
-			} catch (Exception e) {
-				session.invalidate();
-				throw e;
-			}
-	        trackid = iocaste.getTrackId(contextid);
-		} else {
-	        trackid = null;
-	        cookies = req.getCookies();
-	        if (cookies != null)
-		        for (Cookie cookie : cookies)
-		        	if (cookie.getName().equals("track_id")) {
-		        		trackid = cookie.getValue();
-		        		break;
-		        	}
-	        contextid = iocaste.getContextId(trackid);
-		}
-		
-        return contextid;
-	}
-	
-	public final void finish(HttpServletResponse resp) {
-		Cookie trackidcookie = new Cookie("track_id", trackid);
-        trackidcookie.setMaxAge(3600*8);
-        resp.addCookie(trackidcookie);
-	}
 }

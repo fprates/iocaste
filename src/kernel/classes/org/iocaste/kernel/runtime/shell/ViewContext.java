@@ -11,13 +11,13 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewTitle;
-import org.iocaste.kernel.runtime.Runtime;
+import org.iocaste.kernel.runtime.RuntimeEngine;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.TrackingData;
 
 public class ViewContext {
 	public View view;
-	public Runtime function;
+	public RuntimeEngine function;
 	public TrackingData tracking;
 	public ViewTitle title;
 	public Map<String, ComponentEntry> entries;
