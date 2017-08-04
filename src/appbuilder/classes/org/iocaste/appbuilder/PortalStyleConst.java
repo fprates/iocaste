@@ -13,6 +13,11 @@ public class PortalStyleConst {
             {"margin-bottom", "0px", null},
             {"padding", "5px", null} }
         },
+        {new String[] {".portal_mini_viewport", ".portal_viewport"},
+            new Object[][] {
+                {"width", "calc((100% / 3) - 35px)"} }
+        },
+        {new String[] {".portal_viewport_node", null}, new Object[][] { } },
         {new String[] {".portal_tile_text", null}, new Object[][] {
             {"margin", "0px", null},
             {"padding", "0px", null},
@@ -41,10 +46,7 @@ public class PortalStyleConst {
                 {"border-bottom-color", "transparent", null},
                 {"border-image",
                     "linear-gradient(to right, #298eea, #ffffff) 1", null} }
-            }
-    };
-    
-    public static final Object[][] PORTAL_STYLE_MEDIA = {
+        },
         {new String[] {".portal_tile_frame", null}, new Object[][] {
             {"border-bottom-style", "solid", null},
             {"border-bottom-width", "1px", null},

@@ -129,7 +129,10 @@ public class GetStyleSheet extends AbstractHandler {
                     "calc(100% - 35px)" : "calc((100% / 3) - 35px)";
             
             move(stylesheet, constants, mediakey,
-                    PortalStyleConst.PORTAL_STYLE_MEDIA);
+                    PortalStyleConst.PORTAL_STYLE_DATA);
+            
+            style = stylesheet.get(mediakey, ".portal_viewport");
+            style.put("width", portalwidth);
             
             style = stylesheet.get(mediakey, ".portal_tile_frame");
             style.put("width", portalwidth);
@@ -242,9 +245,6 @@ public class GetStyleSheet extends AbstractHandler {
         style.put("width", "100%");
         style.put("text-align", "center");
         style.put("display", "block");
-        
-        move(stylesheet, constants, "default",
-                PortalStyleConst.PORTAL_STYLE_DATA);
         
         return StyleSheet.convertStyleSheet(stylesheet);
     }
