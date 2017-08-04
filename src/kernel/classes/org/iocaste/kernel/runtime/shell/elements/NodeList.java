@@ -16,7 +16,6 @@ public class NodeList extends ToolDataElement {
     public static final byte UNORDERED = 1;
     public static final byte DEFINITION = 2;
     private byte type;
-    private String itemsstyle;
     
     public NodeList(ViewContext viewctx, String name) {
         super(viewctx, Const.NODE_LIST, name);
@@ -35,7 +34,7 @@ public class NodeList extends ToolDataElement {
     }
     
     public final String getItemsStyle() {
-        return itemsstyle;
+        return tooldata.itemstyle;
     }
     
     /**
@@ -44,10 +43,6 @@ public class NodeList extends ToolDataElement {
      */
     public final byte getListType() {
         return type;
-    }
-    
-    public final void setItemsStyle(String style) {
-        itemsstyle = style;
     }
     
     /**
