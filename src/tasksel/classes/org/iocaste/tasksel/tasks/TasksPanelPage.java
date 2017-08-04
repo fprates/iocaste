@@ -1,6 +1,5 @@
 package org.iocaste.tasksel.tasks;
 
-import org.iocaste.appbuilder.common.portal.PortalStyle;
 import org.iocaste.appbuilder.common.portal.tiles.AbstractTilesPage;
 import org.iocaste.appbuilder.common.portal.tiles.PortalTileItemConfig;
 import org.iocaste.appbuilder.common.portal.tiles.PortalTileItemData;
@@ -21,7 +20,6 @@ public class TasksPanelPage extends AbstractTilesPage {
         set(new PortalTileItemSpec(tiledata));
         set(new PortalTileItemConfig(tiledata));
         set(new PortalTileItemInput(tiledata));
-        set(new PortalStyle());
         put("pick", new Call());
         update();
     }

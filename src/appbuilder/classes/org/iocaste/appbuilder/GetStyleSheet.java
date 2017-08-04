@@ -66,7 +66,7 @@ public class GetStyleSheet extends AbstractHandler {
     private Object[][] getStyleSheet(StyleSheet stylesheet) {
         Map<String, String> style, buttonstyle;
         String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR;
-        String FRAME_COLOR, SHADOW;
+        String FRAME_COLOR, SHADOW, portalwidth;
         Object[][] width;
         boolean mobile;
         Map<Integer, String> constants = stylesheet.getConstants();
@@ -125,6 +125,17 @@ public class GetStyleSheet extends AbstractHandler {
             style.put("padding-top", "12px");
             style.put("padding-bottom", "12px");
             style.put("float", "left");
+            portalwidth = mobile?
+                    "calc(100% - 35px)" : "calc((100% / 3) - 35px)";
+            
+            move(stylesheet, constants, mediakey,
+                    PortalStyleConst.PORTAL_STYLE_MEDIA);
+            
+            style = stylesheet.get(mediakey, ".portal_tile_frame");
+            style.put("width", portalwidth);
+            
+            style = stylesheet.get(mediakey, ".portal_tile_frame:hover");
+            style.put("width", portalwidth);
         }
         
         style = stylesheet.newElement(".nc_title");
@@ -232,7 +243,33 @@ public class GetStyleSheet extends AbstractHandler {
         style.put("text-align", "center");
         style.put("display", "block");
         
+        move(stylesheet, constants, "default",
+                PortalStyleConst.PORTAL_STYLE_DATA);
+        
         return StyleSheet.convertStyleSheet(stylesheet);
+    }
+    
+    private void move(StyleSheet stylesheet, Map<Integer, String> constants,
+            String mediakey, Object[][] styleconst) {
+        Map<String, String> style;
+        String[] stylename;
+        Object[][] properties;
+        String name, value;
+        
+        for (int i = 0; i < styleconst.length; i++) {
+            stylename = (String[])styleconst[i][0];
+            if (stylename[1] == null)
+                style = stylesheet.newElement(mediakey, stylename[0]);
+            else
+                style = stylesheet.clone(mediakey, stylename[0], stylename[1]);
+            properties = (Object[][])styleconst[i][1];
+            for (int j = 0; j < properties.length; j++) {
+                name = (String)properties[j][0];
+                value = (String)properties[j][1];
+                style.put(name, (value == null)?
+                        constants.get((int)properties[j][2]) : value);
+            }
+        }
     }
     
     private final Object[] ncconfig(String name, String style, String action,
