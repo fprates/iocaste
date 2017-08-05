@@ -84,10 +84,10 @@ public abstract class AbstractActionHandler<C extends Context>
 //    protected final ComplexDocument documentInstance(ComplexModel cmodel) {
 //        return new ComplexDocument(cmodel);
 //    }
-//    
-//    protected final void execute(String action) throws Exception {
-//        context.getView(page).getActionHandler(action).run(context, !REDIRECT);
-//    }
+    
+    protected final void execute(String action) throws Exception {
+        context.getHandler(action).run(context, !REDIRECT);
+    }
     
     protected abstract void execute(C context) throws Exception;
     
@@ -114,10 +114,6 @@ public abstract class AbstractActionHandler<C extends Context>
 //        return context.getView(page).getComponents();
 //    }
     
-    protected ExtendedObject getobject(String tooldata) {
-    	return gettool(tooldata).object;
-    }
-    
 	protected <T> T get(String tooldata, String field) {
     	return gettool(tooldata).object.get(field);
     }
@@ -132,6 +128,15 @@ public abstract class AbstractActionHandler<C extends Context>
     
     protected final double getd(String tooldata) {
     	return (double)gettool(tooldata).value;
+    }
+    
+    protected final ExtendedObject getextobj(String model, Object key) {
+        return getextobj(model, null, key);
+    }
+    
+    protected final ExtendedObject getextobj(
+            String model, Object ns, Object key) {
+        return context.runtime().getObject(model, ns, key);
     }
 
     protected final int geti(String tooldata) {
@@ -168,6 +173,10 @@ public abstract class AbstractActionHandler<C extends Context>
     
     protected final Object getns(String tooldata) {
         return gettool(tooldata).object.getNS();
+    }
+    
+    protected ExtendedObject getobject(String tooldata) {
+        return gettool(tooldata).object;
     }
     
     protected final String getst(String tooldata) {
@@ -209,16 +218,6 @@ public abstract class AbstractActionHandler<C extends Context>
 //    
 //    protected final long getNextNumber(String range, Object ns) {
 //        return documents.getNSNextNumber(range, ns);
-//    }
-//    
-//    protected final ExtendedObject getObject(String model, Object key) {
-//        return getObject(model, null, key);
-//    }
-//    
-//    protected final ExtendedObject getObject(
-//            String model, Object ns, Object key) {
-//        return documents.getObject(model, ns, key);
-//        
 //    }
 //    
 //    protected final Map<Object, ExtendedObject> getRelated(

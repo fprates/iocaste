@@ -1,6 +1,7 @@
 package org.iocaste.runtime.common;
 
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.database.ConnectionInfo;
 import org.iocaste.protocol.utils.ConversionResult;
@@ -47,6 +48,32 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     public final DocumentModel getModel(String name) {
         Message message = new Message("get_document_model");
         message.add("name", name);
+        return call(message);
+    }
+    
+    /**
+     * Retorna entrada de dados especificada por modelo e chave.
+     * @param modelname nome do modelo
+     * @param key identificador (chave)
+     * @return objeto encontrado ou null, se não encontrado.
+     */
+    public final ExtendedObject getObject(String modelname, Object key) {
+        return getObject(modelname, null, key);
+    }
+    
+    /**
+     * Retorna entrada de dados especificada por modelo e chave.
+     * @param modelname nome do modelo
+     * @param ns namespace
+     * @param key identificador (chave)
+     * @return objeto encontrado ou null, se não encontrado.
+     */
+    public final ExtendedObject getObject(
+            String modelname, Object ns, Object key) {
+        Message message = new Message("get_object");
+        message.add("modelname", modelname);
+        message.add("ns", ns);
+        message.add("key", key);
         return call(message);
     }
 	
