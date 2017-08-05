@@ -103,40 +103,40 @@ public class ProcessOutput extends AbstractHandler {
 		StringBuilder content;
 		List<String> lines;
 		ViewExport viewexport = message.get("view");
-		ViewContext viewctx = run(viewexport, message.getSessionid());
-		
-		lines = new HtmlRenderer().run(viewctx);
-		content = new StringBuilder();
-		for (String line : lines)
-			content.append(line);
-		
-		viewexport.items = null;
-		viewexport.links = null;
-		viewexport.locale = null;
-		viewexport.messages = null;
-		viewexport.prefix = null;
-		viewexport.reqparameters = null;
-		viewexport.styleconst = null;
-		viewexport.stylesheet = null;
-		return content.toString().getBytes();
-	}
-	
-	public final ViewContext run(
-	        ViewExport viewexport, String sessionid) throws Exception {
-		ComponentEntry entry;
+    	ViewContext viewctx = run(viewexport, message.getSessionid());
+    	
+    	lines = new HtmlRenderer().run(viewctx);
+    	content = new StringBuilder();
+    	for (String line : lines)
+    		content.append(line);
+    	
+    	viewexport.items = null;
+    	viewexport.links = null;
+    	viewexport.locale = null;
+    	viewexport.messages = null;
+    	viewexport.prefix = null;
+    	viewexport.reqparameters = null;
+    	viewexport.styleconst = null;
+    	viewexport.stylesheet = null;
+    	return content.toString().getBytes();
+    }
+    
+    public final ViewContext run(
+            ViewExport viewexport, String sessionid) throws Exception {
+        ComponentEntry entry;
         SpecFactory factory;
         Input input;
-		ViewContext viewctx = new ViewContext();
-		
-		viewctx.sessionid = sessionid;
-		viewctx.function = getFunction();
-		viewctx.title = viewexport.title;
+        ViewContext viewctx = new ViewContext();
+        
+        viewctx.sessionid = sessionid;
+        viewctx.function = getFunction();
+        viewctx.title = viewexport.title;
         viewctx.messagesrc = new MessageSource();
-		
-		for (Object object : viewexport.items)
-			viewctx.add((ToolData)object);
-		
-		for (String key : viewctx.entries.keySet()) {
+        
+        for (Object object : viewexport.items)
+        	viewctx.add((ToolData)object);
+        
+        for (String key : viewctx.entries.keySet()) {
             entry = viewctx.entries.get(key);
             build(viewctx, entry, null);
             factory = viewctx.function.factories.get(entry.data.type);
@@ -147,23 +147,23 @@ public class ProcessOutput extends AbstractHandler {
                 continue;
             entry.component.run();
             entry.component.refresh();
-		}
-
-		addEventHandlers(viewctx);
-		
-		if ((viewexport.messages != null) && (viewexport.messages.length > 0))
-		{
-			viewctx.view.setLocale(viewexport.locale);
-			viewctx.messagesrc.importMessages(
-					viewexport.locale.toString(), viewexport.messages);
+        }
+        
+        addEventHandlers(viewctx);
+        viewctx.view.setLocale(viewexport.locale);
+        
+        if ((viewexport.messages != null) && (viewexport.messages.length > 0))
+        {
+        	viewctx.messagesrc.importMessages(
+        			viewexport.locale.toString(), viewexport.messages);
             fillTranslations(viewctx);
-		}
-		
-		viewctx.view.setStyleSheet(viewexport.stylesheet);
-		viewctx.view.setStyleConst(viewexport.styleconst);
-		for (HeaderLink link : viewexport.links)
-			viewctx.view.add(link);
-
+        }
+        
+        viewctx.view.setStyleSheet(viewexport.stylesheet);
+        viewctx.view.setStyleConst(viewexport.styleconst);
+        for (HeaderLink link : viewexport.links)
+        	viewctx.view.add(link);
+        
         input = new Input();
         input.viewctx = viewctx;
         input.container = null;
@@ -176,7 +176,7 @@ public class ProcessOutput extends AbstractHandler {
             input.element = container;
             input.register();
         }
-		
-		return viewctx;
-	}
+    	
+    	return viewctx;
+    }
 }
