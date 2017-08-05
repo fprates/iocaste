@@ -126,12 +126,24 @@ public class ProcessOutput extends AbstractHandler {
         ComponentEntry entry;
         SpecFactory factory;
         Input input;
+        Map<String, String> messages;
+        String locale;
         ViewContext viewctx = new ViewContext();
         
         viewctx.sessionid = sessionid;
         viewctx.function = getFunction();
         viewctx.title = viewexport.title;
         viewctx.messagesrc = new MessageSource();
+        locale = viewexport.locale.toString();
+        viewctx.messagesrc.instance(locale);
+        messages = ProcessInput.msgsource.get(locale);
+        for (String key : messages.keySet())
+            viewctx.messagesrc.put(key, messages.get(key));
+        if (viewexport.message != null)
+            viewctx.messagetext = viewctx.messagesrc.get(
+                    viewexport.message, viewexport.message);
+        viewctx.messageargs = viewexport.msgargs;
+        viewctx.messagetype = viewexport.msgtype;
         
         for (Object object : viewexport.items)
         	viewctx.add((ToolData)object);
@@ -150,12 +162,11 @@ public class ProcessOutput extends AbstractHandler {
         }
         
         addEventHandlers(viewctx);
-        viewctx.view.setLocale(viewexport.locale);
         
+        viewctx.view.setLocale(viewexport.locale);
         if ((viewexport.messages != null) && (viewexport.messages.length > 0))
         {
-        	viewctx.messagesrc.importMessages(
-        			viewexport.locale.toString(), viewexport.messages);
+        	viewctx.messagesrc.importMessages(locale, viewexport.messages);
             fillTranslations(viewctx);
         }
         

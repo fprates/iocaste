@@ -859,7 +859,7 @@ public abstract class ToolDataElement
      */
     @Override
     public final void setStyleClass(String style) {
-//        this.style = style;
+        tooldata.style = style;
     }
     
     /*

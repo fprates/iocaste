@@ -2,7 +2,7 @@ package org.iocaste.appbuilder;
 
 import org.iocaste.shell.common.MessageSource;
 
-class Messages extends MessageSource {
+public class Messages extends MessageSource {
     
     public final void entries() {
         instance("pt_BR");
