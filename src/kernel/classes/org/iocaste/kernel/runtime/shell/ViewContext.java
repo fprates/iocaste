@@ -58,7 +58,7 @@ public class ViewContext {
         }
     
         handler = new ActionEventHandler();
-        handler.event = event;
+        handler.event = (event.equals(""))? null : event;
         handlers.put(event, handler);
         return handler;
     }
