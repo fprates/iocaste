@@ -11,31 +11,31 @@ import org.iocaste.protocol.Message;
 
 public class GetNextNumber extends AbstractDocumentsHandler {
 
-    @SuppressWarnings("unchecked")
     @Override
-    public Object run(Message message) throws Exception {
+    public final Object run(Message message) throws Exception {
+        String range = message.getst("range");
+        String serie = message.getst("serie");
+        Object ns = message.get("ns");
+        Documents documents = getFunction();
+        Connection connection = documents.database.
+                getDBConnection(message.getSessionid());
+        return run(connection, documents, range, serie, ns);
+    }
+
+    @SuppressWarnings("unchecked")
+    public final long run(Connection connection, Documents documents,
+            String range, String serie, Object ns) throws Exception {
         long current;
         Select select;
         Update update;
         Object[] lines;
         Map<String, Object> columns;
-        Documents documents;
-        Connection connection;
-        String serie;
-        Object ns;
-        String range = message.getst("range");
         
         if (range == null)
             throw new IocasteException("Numeric range not specified.");
 
-        documents = getFunction();
         select = documents.database.get("select");
-        connection = documents.database.getDBConnection(message.getSessionid());
-        
-        serie = message.getst("serie");
-        ns = message.get("ns");
         ns = (ns != null)? ns = ns.toString() : "";
-        
         if (serie == null) {
             lines = select.run(connection, QUERIES[RANGE], 1, range, ns);
         } else {
@@ -44,8 +44,7 @@ public class GetNextNumber extends AbstractDocumentsHandler {
         }
         
         if (lines == null)
-            throw new IocasteException(new StringBuilder("Range \"").
-                    append(range).append("\" not found.").toString());
+            throw new IocasteException("Range \"%s\" not found.", range);
         
         columns = (Map<String, Object>)lines[0];
         current = ((BigDecimal)columns.get("CRRNT")).longValue() + 1;

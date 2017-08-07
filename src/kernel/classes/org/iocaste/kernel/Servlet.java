@@ -42,10 +42,10 @@ public class Servlet extends AbstractIocasteServlet {
         
         session = new Session();
         documents.config = database.config = config = new Config();
-        runtime.documents = documents;
+        auth.documents = runtime.documents = documents;
         
         session.database = users.database = config.database = database; 
-        auth.database = documents.database = database;
+        documents.database = database;
         users.session = database.session = auth.session = session;
         runtime.session = compiler.session = users.session;
         process.files = compiler.files = files;

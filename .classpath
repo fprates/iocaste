@@ -13,7 +13,6 @@
 	<classpathentry kind="src" output="output/install/classes" path="src/install/classes"/>
 	<classpathentry kind="src" output="output/setup/classes" path="src/setup/classes"/>
 	<classpathentry kind="src" output="output/exhandler/classes" path="src/exhandler/classes"/>
-	<classpathentry kind="src" output="output/authority/classes" path="src/authority/classes"/>
 	<classpathentry kind="src" output="output/usereditor/classes" path="src/usereditor/classes"/>
 	<classpathentry kind="src" output="output/packagetool/classes" path="src/packagetool/classes"/>
 	<classpathentry kind="src" output="output/datadict/classes" path="src/datadict/classes"/>

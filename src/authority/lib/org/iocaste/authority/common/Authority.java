@@ -9,14 +9,14 @@ import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.UserProfile;
 
 public class Authority extends AbstractServiceInterface {
-    private static final String SERVER = "/iocaste-authority/services.html";
+    public static final String SERVICE = "/iocaste-kernel/service.html";
     
     /**
      * 
      * @param function
      */
     public Authority(Function function) {
-        initService(function, SERVER);
+        initService(function, SERVICE);
     }
     
     /**

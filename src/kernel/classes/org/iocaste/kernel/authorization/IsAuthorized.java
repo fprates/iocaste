@@ -48,7 +48,7 @@ public class IsAuthorized extends AbstractHandler {
         Auth auth;
         
         auth = getFunction();
-        select = auth.database.get("select");
+        select = auth.documents.database.get("select");
         profiles = select.run(connection, QUERIES[USER_AUTHORITY], 0, username);
         
         if (profiles == null)
@@ -132,7 +132,7 @@ public class IsAuthorized extends AbstractHandler {
         usrauthorizations = context.getAuthorizations();
         username = user.getUsername();
         if (usrauthorizations == null) {
-            connection = auth.database.getDBConnection(sessionid);
+            connection = auth.documents.database.getDBConnection(sessionid);
             usrauthorizations = getAuthorizations(connection, username);
             context.setAuthorizations(usrauthorizations);
         }

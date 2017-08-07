@@ -9,25 +9,27 @@ import org.iocaste.protocol.Message;
 public class UpdateMultiple extends AbstractDocumentsHandler {
 
     @Override
-    public Object run(Message message) throws Exception {
-        Documents documents;
-        UpdateDocument update;
-        Connection connection;
-        int err, c = -1;
+    public final Object run(Message message) throws Exception {
         Query[] queries = message.get("queries");
+        Documents documents = getFunction();
+        Connection connection = documents.database.
+                getDBConnection(message.getSessionid());
+        return run(connection, documents, queries);
+    }
+    
+    public final int run(Connection connection,
+            Documents documents, Query[] queries) throws Exception {
+        UpdateDocument update;
+        int err, c = -1;
         
-        documents = getFunction();
-        connection = documents.database.getDBConnection(message.getSessionid());
         update = documents.get("update_document");
         for (Query query : queries) {
             c++;
             err = update.run(connection, documents, query);
             if (err > 0 || query.mustSkipError())
                 continue;
-            
             throw new IocasteException(
-                    new StringBuilder("multiple update error for query ").
-                    append(c).toString());
+                    "multiple update error for query %s", c);
         }
         
         return 1;
