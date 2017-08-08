@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.iocaste.kernel.UserContext;
-import org.iocaste.kernel.database.ConnectionState;
 import org.iocaste.kernel.users.GetUserData;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
@@ -42,8 +41,9 @@ public class Login extends AbstractHandler {
         sessionslist.add(sessionid);
         composed = sessionid.split(":");
         sessionid = composed[0];
-        terminal = Integer.parseInt(composed[1]);
+        terminal = (composed.length > 1)? Integer.parseInt(composed[1]) : 0;
         context.setTerminal(terminal);
+        
         if (session.sessions.containsKey(sessionid))
             return;
         
@@ -60,7 +60,7 @@ public class Login extends AbstractHandler {
         User user;
         GetUserData getuserdata;
         Session session;
-        ConnectionState connstate;
+        Connection connection;
         String[] locale_ = message.getst("locale").split("_");
         String username = message.getst("user");
         String secret = message.getst("secret");
@@ -73,13 +73,12 @@ public class Login extends AbstractHandler {
             return false;
 
         session = getFunction();
-        connstate = session.database.instance();
+        connection = session.database.getDBConnection(sessionid);
         try {
             getuserdata = session.users.get("get_user_data");
-            user = getuserdata.
-                    run(session.users, connstate.connection, username);
+            user = getuserdata.run(session.users, connection, username);
             if ((user == null) || !isSecretOk(
-                    connstate.connection, getuserdata, user, secret))
+                    connection, getuserdata, user, secret))
                 return false;
             
             if (locale_.length == 1)
@@ -88,12 +87,12 @@ public class Login extends AbstractHandler {
                 locale = new Locale(locale_[0], locale_[1]);
             
             instance(session, user, sessionid, username, locale);
-            connstate.connection.commit();
+            connection.commit();
         } catch (Exception e) {
-            connstate.connection.rollback();
+            connection.rollback();
             throw e;
         } finally {
-            session.database.free(connstate);
+            session.database.freeConnection(sessionid);
         }
         return true;
     }
