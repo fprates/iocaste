@@ -11,7 +11,8 @@ public class PortalStyleConst {
             {"margin-right", "auto", null},
             {"margin-top", "0px", null},
             {"margin-bottom", "0px", null},
-            {"padding", "5px", null} }
+            {"padding", "5px", null},
+            {"width", "calc(100% - 35px)"} }
         },
         {new String[] {".portal_mini_viewport", ".portal_viewport"},
             new Object[][] {

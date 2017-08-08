@@ -131,9 +131,6 @@ public class GetStyleSheet extends AbstractHandler {
             move(stylesheet, constants, mediakey,
                     PortalStyleConst.PORTAL_STYLE_DATA);
             
-            style = stylesheet.get(mediakey, ".portal_viewport");
-            style.put("width", portalwidth);
-            
             style = stylesheet.get(mediakey, ".portal_tile_frame");
             style.put("width", portalwidth);
             
