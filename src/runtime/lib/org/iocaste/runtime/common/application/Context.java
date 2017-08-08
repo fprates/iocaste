@@ -24,6 +24,12 @@ public interface Context {
     
     public abstract Map<String, AbstractPage> getPages();
     
+    public abstract void popPage();
+    
+    public abstract void popPage(String name);
+    
+    public abstract void pushPage();
+    
     public abstract RuntimeEngine runtime();
     
     public abstract void set(Application<?> application);

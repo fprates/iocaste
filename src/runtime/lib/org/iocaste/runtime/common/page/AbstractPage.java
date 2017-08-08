@@ -46,6 +46,8 @@ public abstract class AbstractPage {
         title = new ViewTitle();
         specalias = new HashMap<>();
         navcontrol = new NavControl();
+        
+        handlers.put("back", new Back());
     }
     
     protected void action(String action, ActionHandler handler) {

@@ -1,7 +1,9 @@
 package org.iocaste.runtime.common.application;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Stack;
 
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.runtime.common.ActionHandler;
@@ -15,10 +17,12 @@ public abstract class AbstractContext implements Context {
     private Map<String, AbstractPage> pages;
     private String page, appname;
     private RuntimeEngine runtime;
+    private Stack<String> pagestack;
     
     public AbstractContext() {
         pages = new HashMap<>();
         page = "main";
+        pagestack = new Stack<>();
     }
     
     public final void add(String name, AbstractPage page) {
@@ -79,10 +83,31 @@ public abstract class AbstractContext implements Context {
     }
     
     @Override
+    public final void popPage() {
+        page = pagestack.pop();
+    }
+    
+    @Override
+    public final void popPage(String name) {
+        Iterator<String> it = pagestack.iterator();
+        while (it.hasNext()) {
+            page = pagestack.pop();
+            if (it.next().equals(name))
+                return;
+        }
+    }
+    
+    @Override
+    public final void pushPage() {
+        pagestack.push(page);
+    }
+    
+    @Override
     public final RuntimeEngine runtime() {
         return runtime;
     }
     
+    @Override
     public final void set(Application<?> application) {
     	appname = application.getAppName();
     }
@@ -97,6 +122,7 @@ public abstract class AbstractContext implements Context {
     	pages.get(page).getToolData(tooldata).object = object;
     }
     
+    @Override
     public final void set(MessageSource messagesrc) {
     	this.messagesrc = messagesrc;
     }

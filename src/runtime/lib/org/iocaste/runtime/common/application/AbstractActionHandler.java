@@ -15,10 +15,10 @@ public abstract class AbstractActionHandler<C extends Context>
     private Context context;
 //    private Documents documents;
 //    private String page;
-//    
-//    protected final void back() {
-//        context.function.back();
-//    }
+    
+    protected final void back() {
+        context.popPage();
+    }
 //
 //    protected final ComplexDocument clone(ComplexDocument document) {
 //        Map<String, ComplexModelItem> models;
@@ -171,6 +171,14 @@ public abstract class AbstractActionHandler<C extends Context>
         return gettool(tooldata).object.getl(field);
     }
     
+    protected final long getNextNumber(String range) {
+        return context.runtime().getNextNumber(range);
+    }
+    
+    protected final long getNextNumber(String range, Object ns) {
+        return context.runtime().getNSNextNumber(range, ns);
+    }
+    
     protected final Object getns(String tooldata) {
         return gettool(tooldata).object.getNS();
     }
@@ -209,17 +217,9 @@ public abstract class AbstractActionHandler<C extends Context>
         for (DocumentModelKey key : tooldata.custommodel.getKeys())
             return tooldata.get(key.getModelItemName());
 
-        throw new IocasteException(name, " isn't a valid key.");
+        throw new IocasteException("%s isn't a valid key.", name);
     }
     
-//    protected final long getNextNumber(String range) {
-//        return documents.getNextNumber(range);
-//    }
-//    
-//    protected final long getNextNumber(String range, Object ns) {
-//        return documents.getNSNextNumber(range, ns);
-//    }
-//    
 //    protected final Map<Object, ExtendedObject> getRelated(
 //            ComplexDocument document, String itemsname, String field) {
 //        return getRelated(document, null, itemsname, field);
@@ -230,14 +230,14 @@ public abstract class AbstractActionHandler<C extends Context>
 //    {
 //        return Documents.getRelated(documents, document, ns, itemsname, field);
 //    }
-//    
-//    protected final void home() {
-//        context.function.home(null);
-//    }
-//    
-//    protected final void home(String page) {
-//        context.function.home(page);
-//    }
+    
+    protected final void home() {
+        context.popPage(null);
+    }
+    
+    protected final void home(String page) {
+        context.popPage(page);
+    }
     
     protected final void init(String view) {
         AbstractPage page = context.getPage(view);
@@ -286,6 +286,7 @@ public abstract class AbstractActionHandler<C extends Context>
 //    }
     
     protected final void redirect(String page) {
+        context.pushPage();
         context.setPageName(page);
     }
     
@@ -381,23 +382,23 @@ public abstract class AbstractActionHandler<C extends Context>
 //            }
 //        }
 //    }
-//    
-//    protected final void save(ExtendedObject object) {
-//        documents.save(object);
-//    }
-//    
+    
+    protected final void save(ExtendedObject object) {
+        context.runtime().save(object);
+    }
+    
 //    protected final ExtendedObject[] select(Query query) {
 //        return documents.select(query);
 //    }
-//    
-//    protected final ExtendedObject select(String model, Object key) {
-//        return select(model, null, key);
-//    }
-//    
-//    protected final ExtendedObject select(String model, Object ns, Object key) {
-//        return documents.getObject(model, ns, key);
-//    }
-//    
+    
+    protected final ExtendedObject select(String model, Object key) {
+        return select(model, null, key);
+    }
+    
+    protected final ExtendedObject select(String model, Object ns, Object key) {
+        return context.runtime().getObject(model, ns, key);
+    }
+    
 //    protected final void setFocus(String element) {
 //        context.view.setFocus(context.view.getElement(element));
 //    }
