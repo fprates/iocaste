@@ -1,9 +1,13 @@
 package org.iocaste.runtime.common;
 
+import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.database.ConnectionInfo;
 import org.iocaste.protocol.user.Authorization;
@@ -114,6 +118,33 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
      */
     public final UserProfile getAuthorizationProfile(String name) {
         Message message = new Message("get_auth_profile");
+        message.add("name", name);
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param ns
+     * @param id
+     * @return
+     */
+    public final ComplexDocument getComplexDocument(
+            String name, Object ns, Object id) {
+        Message message = new Message("get_complex_document");
+        message.add("name", name);
+        message.add("id", id);
+        message.add("ns", ns);
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final ComplexModel getComplexModel(String name) {
+        Message message = new Message("get_complex_model");
         message.add("name", name);
         return call(message);
     }
@@ -350,6 +381,54 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     public final int save(ExtendedObject[] objects) {
         Message message = new Message("save_documents");
         message.add("objects", objects);
+        return call(message);
+    }
+    
+    /**
+     * Seleciona itens de tabela através de query.
+     * @param query seleção
+     * @param criteria critérios da seleção
+     * @return resultados
+     */
+    public final Object[] select(String query, Object... criteria) {
+        return selectUpTo(query, 0, criteria);
+    }
+    
+    /**
+     * Seleciona itens de tabela através de query.
+     * @param query seleção
+     * @param criteria critérios da seleção
+     * @return resultados
+     */
+    public final Object[] selectUpTo(
+            String query, int rows, Object... criteria) {
+        Message message = new Message("select");
+        message.add("query", query);
+        message.add("criteria", criteria);
+        message.add("rows", rows);
+        return call(message);
+    }
+    
+    /**
+     * Seleciona entradas de tabela a partir de query.
+     * 
+     * @param query Query SQL
+     * @return entradas encontradas.
+     */
+    public final ExtendedObject[] select(Query query) {
+        Message message = new Message("select_document");
+        message.add("query", query);
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @param query
+     * @return
+     */
+    public final Map<Object, ExtendedObject> selectToMap(Query query) {
+        Message message = new Message("select_to_map");
+        message.add("query", query);
         return call(message);
     }
     
