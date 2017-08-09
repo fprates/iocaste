@@ -1,7 +1,11 @@
 package org.iocaste.runtime.common.application;
 
+import java.util.Map;
+
+import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.IocasteErrorMessage;
@@ -363,33 +367,33 @@ public abstract class AbstractActionHandler<C extends Context>
 //        if (this.context.downloaddata != null)
 //            context.function.download();
     }
-//    
-//    protected final void save(ComplexDocument document) {
-//        Map<Object, ComplexDocument> documents;
-//        Map<Object, ExtendedObject> objects;
-//        ComplexDocument newdoc = this.documents.save(document);
-//        
-//        document.remove();
-//        for (String name : newdoc.getModel().getItems().keySet()) {
-//            documents = newdoc.get(name).documents;
-//            if (documents != null) {
-//                for (Object key : documents.keySet())
-//                    document.add(documents.get(key));
-//            } else {
-//                objects = newdoc.get(name).objects;
-//                for (Object key : objects.keySet())
-//                    document.add(objects.get(key));
-//            }
-//        }
-//    }
+    
+    protected final void save(ComplexDocument document) {
+        Map<Object, ComplexDocument> documents;
+        Map<Object, ExtendedObject> objects;
+        ComplexDocument newdoc = context.runtime().save(document);
+        
+        document.remove();
+        for (String name : newdoc.getModel().getItems().keySet()) {
+            documents = newdoc.get(name).documents;
+            if (documents != null) {
+                for (Object key : documents.keySet())
+                    document.add(documents.get(key));
+            } else {
+                objects = newdoc.get(name).objects;
+                for (Object key : objects.keySet())
+                    document.add(objects.get(key));
+            }
+        }
+    }
     
     protected final void save(ExtendedObject object) {
         context.runtime().save(object);
     }
     
-//    protected final ExtendedObject[] select(Query query) {
-//        return documents.select(query);
-//    }
+    protected final ExtendedObject[] select(Query query) {
+        return context.runtime().select(query);
+    }
     
     protected final ExtendedObject select(String model, Object key) {
         return select(model, null, key);

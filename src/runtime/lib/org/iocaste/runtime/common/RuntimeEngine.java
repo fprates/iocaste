@@ -385,6 +385,18 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     }
     
     /**
+     * 
+     * @param document
+     * @return retorna código do documento, ou 
+     * 0, se erro na criação do documento;
+     */
+    public final ComplexDocument save(ComplexDocument document) {
+        Message message = new Message("save_complex_document");
+        message.add("document", document);
+        return call(message);
+    }
+    
+    /**
      * Seleciona itens de tabela através de query.
      * @param query seleção
      * @param criteria critérios da seleção
