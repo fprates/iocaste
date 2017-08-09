@@ -10,7 +10,7 @@ public class StandardPage extends AbstractPage {
 	}
 	
 	@Override
-	public void execute() throws Exception {
+	protected void execute() throws Exception {
 		set(new StandardPanelSpec());
 		set(new StandardPageConfig());
 		set(new StandardPageInput());

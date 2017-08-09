@@ -1,17 +1,18 @@
 package org.iocaste.runtime.common.portal.signup;
 
-import org.iocaste.runtime.common.portal.AbstractPortalPage;
+import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.runtime.common.portal.login.PortalConnect;
 
-public class PortalSignUpPage extends AbstractPortalPage {
+public class PortalSignUpPage extends AbstractPage {
     
-    public PortalSignUpPage() {
-        context.spec = new PortalSignUpSpec();
-        context.config = new PortalSignUpConfig();
-        context.style = new PortalSignupStyle();
+    @Override
+    protected void execute() {
+        set(new PortalSignUpSpec());
+        set(new PortalSignUpConfig());
+        set(new PortalSignupStyle());
 //        set(new PortalSignUpInput());
-        context.handlers.put("record", new PortalSignUpSave());
-        context.handlers.put("connect", new PortalConnect());
+        put("record", new PortalSignUpSave());
+        put("connect", new PortalConnect());
     }
 
 }

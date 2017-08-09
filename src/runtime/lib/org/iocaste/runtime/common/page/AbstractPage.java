@@ -35,19 +35,17 @@ public abstract class AbstractPage {
     private ViewTitle title;
     private NavControl navcontrol;
     private Context context;
+    private AbstractPage parent;
     
     public AbstractPage() {
         actions = new HashSet<>();
 		outputview = new ViewExport();
         entries = new LinkedHashMap<>();
-        handlers = new HashMap<>();
         links = new ArrayList<>();
         children = new LinkedHashMap<>();
         title = new ViewTitle();
         specalias = new HashMap<>();
         navcontrol = new NavControl();
-        
-        handlers.put("back", new Back());
     }
     
     protected void action(String action, ActionHandler handler) {
@@ -71,7 +69,7 @@ public abstract class AbstractPage {
     	entries.clear();
     }
     
-    public abstract void execute() throws Exception;
+    protected abstract void execute() throws Exception;
     
     /**
      * 
@@ -108,8 +106,8 @@ public abstract class AbstractPage {
      * 
      * @return
      */
-    public final Set<String> getHandlers() {
-        return handlers.keySet();
+    public final Map<String, ActionHandler> getHandlers() {
+        return handlers;
     }
     
     public final ViewInput getInput() {
@@ -160,15 +158,25 @@ public abstract class AbstractPage {
     }
     
     public final void put(String name, AbstractPage page) {
-    	children.put(name, page);
+        page.set(this);
+        children.put(name, page);
     }
-//    
+    
 //    protected final void put(String name, AbstractExtendedValidator validator) {
 //        view.put(name, validator);
 //    }
     
+    public final void run() throws Exception {
+        handlers = (parent == null)? new HashMap<>() : parent.getHandlers();
+        execute();
+    }
+    
     protected final void run(String action) throws Exception {
         handlers.get(action).run(context);
+    }
+    
+    public final void set(AbstractPage parent) {
+        this.parent = parent; 
     }
     
     protected void set(ViewConfig config) {

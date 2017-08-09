@@ -16,11 +16,13 @@ public class StandardPageFactory {
 //        AbstractExtendedValidator validator;
 //        Map<String, Validator> validators;
         page.set(context);
-        page.execute();
+        page.run();
+        if (page.getActionHandler("back") == null)
+            page.put("back", new Back());
         for (String key : page.getChildren()) {
             child = page.getChild(key);
             child.set(context);
-            child.execute();
+            child.run();
         }
 //        context.pageInstance(name);
 //        documents = new Documents(context.function);
