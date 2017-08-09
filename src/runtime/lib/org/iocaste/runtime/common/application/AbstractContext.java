@@ -84,7 +84,8 @@ public abstract class AbstractContext implements Context {
     
     @Override
     public final void popPage() {
-        page = pagestack.pop();
+        if (pagestack.size() > 1)
+            page = pagestack.pop();
     }
     
     @Override
