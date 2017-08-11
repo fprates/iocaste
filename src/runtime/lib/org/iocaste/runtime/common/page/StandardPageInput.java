@@ -23,7 +23,7 @@ public class StandardPageInput extends AbstractViewInput<Context> {
         
         for (String key : page.getChildren()) {
             input = page.getChild(key).getInput();
-            if (input != null)
+            if (!page.isSubPage(key) && (input != null))
                 input.run(context, true);
         }
     }

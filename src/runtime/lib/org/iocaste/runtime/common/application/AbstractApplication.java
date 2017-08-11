@@ -40,19 +40,63 @@ public abstract class AbstractApplication<T extends Context>
 		extends AbstractIocasteServlet implements Application<T> {
 	private static final long serialVersionUID = 1890996994514012046L;
 	private Map<String, T> ctxentries;
-	
+    private StandardPageFactory factory;
+    
 	public AbstractApplication() {
 		ctxentries = new HashMap<>();
+        factory = new StandardPageFactory();
 	}
 	
     private final void buildPages(T context) throws Exception {
-        StandardPageFactory factory;
         Map<String, AbstractPage> pages;
         
-        factory = new StandardPageFactory(context);
         pages = context.getPages();
         for (String key : pages.keySet())
-            factory.instance(key, pages.get(key));
+            factory.instance(context, key, pages.get(key));
+    }
+    
+    private final void buildView(
+            AbstractPage page, T context, ServiceInterfaceData servicedata) {
+        Collection<ViewSpecItem> items;
+        int i;
+        ToolData data;
+        MessageSource messagesrc;
+        ViewSpec spec = page.getSpec();
+        ViewConfig config = page.getConfig();
+        ViewInput input = page.getInput();
+        
+        if (!spec.isInitialized()) {
+            if (servicedata != null)
+                configPageStyleData(page, servicedata);
+            spec.run(context);
+            i = 0;
+            items = spec.getItems();
+            page.outputview.items = new Object[items.size()];
+            for (ViewSpecItem item : items) {
+                page.outputview.items[i++] =
+                        data = new ToolData(item.getType());
+                data.name = item.getName();
+                data.parent = item.getParent();
+                page.add(data);
+            }
+            
+            if (config != null) {
+                config.run(context);
+                page.outputview.links = page.getLinks();
+            }
+            
+            if (servicedata != null)
+                configOutputStyleData(page);
+            
+            page.outputview.locale = new Locale("pt", "BR");
+            page.outputview.title = page.getTitle();
+            messagesrc = context.getMessageSource();
+            if (messagesrc != null)
+                prepareMessages(page, messagesrc);
+        }
+        
+        if (input != null)
+            input.run(context, true);
     }
     
     @Override
@@ -137,50 +181,26 @@ public abstract class AbstractApplication<T extends Context>
 	}
 	
 	private final ViewExport getView(
-			ServiceInterfaceData servicedata, T context) {
-		Collection<ViewSpecItem> items;
-		int i;
-		ViewSpec spec;
-		ViewConfig config;
-		ViewInput input;
-		ToolData data;
-		MessageSource messagesrc;
-		AbstractPage page = context.getPage();
-		
-		spec = page.getSpec();
-		config = page.getConfig();
-		input = page.getInput();
-		
-		if (!spec.isInitialized()) {
-        	configPageStyleData(page, servicedata);
-			spec.run(context);
-			i = 0;
-			items = spec.getItems();
-			page.outputview.items = new Object[items.size()];
-			for (ViewSpecItem item : items) {
-				page.outputview.items[i++] =
-						data = new ToolData(item.getType());
-				data.name = item.getName();
-				data.parent = item.getParent();
-				page.add(data);
-			}
-			
-			if (config != null) {
-				config.run(context);
-				page.outputview.links = page.getLinks();
-			}
-			configOutputStyleData(page);
-			
-			page.outputview.locale = new Locale("pt", "BR");
-			page.outputview.title = page.getTitle();
-			messagesrc = context.getMessageSource();
-			if (messagesrc != null)
-				prepareMessages(page, messagesrc);
-			spec.setInitialized(true);
-		}
-		
-		if (input != null)
-			input.run(context, true);
+			ServiceInterfaceData servicedata, T context) throws Exception {
+        int i;
+        AbstractPage child;
+        AbstractPage page = context.getPage();
+        
+        buildView(page, context, servicedata);
+        if ((i = page.getSubPagesSize()) > 0) {
+            page.outputview.subpages = new Object[i][2];
+            i = 0;
+            for (String key : page.getChildren()) {
+                child = page.getChild(key);
+                if (!page.isSubPage(key))
+                    continue;
+                if (child.getSpec() == null)
+                    factory.instance(context, key, child);
+                buildView(child, context, null);
+                page.outputview.subpages[i][0] = key;
+                page.outputview.subpages[i++][1] = child.outputview;
+            }
+        }
 		return page.outputview;
 	}
 	

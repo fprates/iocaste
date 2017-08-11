@@ -25,7 +25,7 @@ public abstract class AbstractPage {
     private Map<String, ActionHandler> handlers;
     private Set<String> actions;
     private String submit;
-    private Map<String, AbstractPage> children;
+    private Map<String, ChildPage> children;
     private ViewSpec spec;
     private ViewConfig config;
     private ViewInput input;
@@ -35,7 +35,8 @@ public abstract class AbstractPage {
     private ViewTitle title;
     private NavControl navcontrol;
     private Context context;
-    private AbstractPage parent;
+    private AbstractPage parent, root;
+    private int subpagessize;
     
     public AbstractPage() {
         actions = new HashSet<>();
@@ -46,6 +47,7 @@ public abstract class AbstractPage {
         title = new ViewTitle();
         specalias = new HashMap<>();
         navcontrol = new NavControl();
+        root = this;
     }
     
     protected void action(String action, ActionHandler handler) {
@@ -87,7 +89,7 @@ public abstract class AbstractPage {
     }
     
     public final AbstractPage getChild(String name) {
-    	return children.get(name);
+    	return children.get(name).page;
     }
     
     public final Set<String> getChildren() {
@@ -122,6 +124,10 @@ public abstract class AbstractPage {
     	return navcontrol;
     }
     
+    public final AbstractPage getRoot() {
+        return root;
+    }
+    
     public final ViewSpec getSpec() {
         return spec;
     }
@@ -137,7 +143,11 @@ public abstract class AbstractPage {
     public final String getSubmit() {
         return submit;
     }
-	
+    
+    public final int getSubPagesSize() {
+        return subpagessize;
+    }
+    
     public final ViewTitle getTitle() {
     	return title;
     }
@@ -148,6 +158,10 @@ public abstract class AbstractPage {
 				tooldata : entries.get(specalias.get(name));
 	}
     
+	public final boolean isSubPage(String name) {
+	    return children.get(name).subpage;
+	}
+	
     /**
      * 
      * @param action
@@ -159,7 +173,7 @@ public abstract class AbstractPage {
     
     public final void put(String name, AbstractPage page) {
         page.set(this);
-        children.put(name, page);
+        children.put(name, new ChildPage(page, false));
     }
     
 //    protected final void put(String name, AbstractExtendedValidator validator) {
@@ -176,7 +190,8 @@ public abstract class AbstractPage {
     }
     
     public final void set(AbstractPage parent) {
-        this.parent = parent; 
+        this.parent = parent;
+        this.root = parent.getRoot();
     }
     
     protected void set(ViewConfig config) {
@@ -207,6 +222,16 @@ public abstract class AbstractPage {
         submit = action;
         put(action, handler);
     }
+    
+    public final void subpage(String name, AbstractPage page) {
+        if (root == this) {
+            page.set(this);
+            children.put(name, new ChildPage(page, true));
+            subpagessize++;
+        } else {
+            root.subpage(name, page);
+        }
+    }
 //    
 //    protected final void task(String action, String task) {
 //        put(action, new TaskCall(task));
@@ -215,6 +240,16 @@ public abstract class AbstractPage {
 //    protected final void update() {
 //        view.setUpdate(true);
 //    }
+}
+
+class ChildPage {
+    public AbstractPage page;
+    public boolean subpage;
+    
+    public ChildPage(AbstractPage page, boolean subpage) {
+        this.page = page;
+        this.subpage = subpage;
+    }
 }
 //
 //class TaskCall extends AbstractActionHandler<Context> {

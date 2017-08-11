@@ -12,7 +12,7 @@ public class ViewExport implements Serializable {
 	public Object[] items, msgargs, ncconfig;
 	public HeaderLink[] links;
 	public String[][] messages;
-	public Object[][] stylesheet, styleconst, ncspec, reqparameters;
+	public Object[][] stylesheet, styleconst, ncspec, reqparameters, subpages;
 	public Locale locale;
 	public String action, prefix, message;
     public Const msgtype;

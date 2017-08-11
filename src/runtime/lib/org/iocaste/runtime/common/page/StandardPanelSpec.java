@@ -19,10 +19,9 @@ public class StandardPanelSpec extends AbstractViewSpec {
         page = context.getPage();
         for (String key : page.getChildren()) {
             extspec = page.getChild(key).getSpec();
-            if (extspec == null)
-            	continue;
-            spec(key.equals("navcontrol")?
-            		"navcontrol_cntnr" : "content", extspec);
+            if (!page.isSubPage(key) && (extspec != null))
+                spec(key.equals("navcontrol")?
+                		"navcontrol_cntnr" : "content", extspec);
         }
     }
 }

@@ -27,7 +27,7 @@ public class StandardPageConfig extends AbstractViewConfig<Context> {
         
         for (String key : page.getChildren()) {
             extconfig = (child = page.getChild(key)).getConfig();
-            if (extconfig == null)
+            if (page.isSubPage(key) || (extconfig == null))
             	continue;
             style = child.getConfigStyle();
             if (style != null) {

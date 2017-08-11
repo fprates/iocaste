@@ -131,6 +131,7 @@ public abstract class AbstractViewSpec implements ViewSpec {
         }
         this.context = context;
         execute(context);
+        setInitialized(true);
     }
 
     @Override

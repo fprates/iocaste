@@ -3,14 +3,9 @@ package org.iocaste.runtime.common.page;
 import org.iocaste.runtime.common.application.Context;
 
 public class StandardPageFactory {
-    private Context context;
     
-    public StandardPageFactory(Context context) {
-        this.context = context;
-    }
-    
-    public final void instance(String name, AbstractPage page) throws Exception
-    {
+    public final void instance(Context context, String name, AbstractPage page)
+            throws Exception {
         AbstractPage child;
 //        Documents documents;
 //        AbstractExtendedValidator validator;
