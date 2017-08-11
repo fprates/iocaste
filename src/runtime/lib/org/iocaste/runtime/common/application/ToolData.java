@@ -1,6 +1,7 @@
 package org.iocaste.runtime.common.application;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -45,6 +46,23 @@ public class ToolData implements Serializable {
         actions = new LinkedHashSet<>();
         properties = new HashMap<>();
         objects = new LinkedHashMap<>();
+    }
+    
+    public final ToolData clone(String prefix, ToolData parent)
+            throws Exception {
+        Object valuefrom;
+        ToolData data = new ToolData(type);
+        Class<?> _class = getClass();
+        
+        for (Field field : _class.getFields()) {
+            valuefrom = field.get(this);
+            field.set(data, valuefrom);
+        }
+        
+        data.name = String.format("%s_%s", prefix, data.name);
+        data.parent = (this.parent == null)? parent.name :
+            String.format("%s_%s", prefix, this.parent);
+        return data;
     }
     
     public final Map<String, ToolData> get() {

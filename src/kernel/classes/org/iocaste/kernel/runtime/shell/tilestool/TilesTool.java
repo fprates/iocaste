@@ -5,8 +5,14 @@ import org.iocaste.kernel.runtime.shell.AbstractComponentTool;
 import org.iocaste.kernel.runtime.shell.ComponentEntry;
 import org.iocaste.kernel.runtime.shell.ProcessOutput;
 import org.iocaste.kernel.runtime.shell.ViewContext;
+import org.iocaste.kernel.runtime.shell.elements.StandardContainer;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.application.AbstractActionHandler;
 import org.iocaste.runtime.common.application.Context;
+import org.iocaste.runtime.common.application.ViewExport;
+import org.iocaste.runtime.common.page.ViewSpecItem;
+import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.Link;
 
 public class TilesTool extends AbstractComponentTool {
     
@@ -20,42 +26,39 @@ public class TilesTool extends AbstractComponentTool {
     }
     
     @Override
-    public final void load() {
-//        TilesData data = (TilesData)componentdata;
-//        
-//        for (Tile tile : tiles) {
-//            
-//        }
-    }
+    public final void load() { }
 
     @Override
-    public void refresh() {
+    public void refresh() { }
+
+    @Override
+    public void run() throws Exception {
+        String linkname, pagename, tilename;
+        Tile tile;
+        ViewContext subpagectx;
+        ViewSpecItem itemspec, tilesspec;
+        ViewExport viewexport;
+        Link link;
+        ProcessOutput output;
+        Container container;
+//        
+//        pagename = data.context.view.getPageName();
+//        view = data.context.getView(pagename);
+//        tilesspec = view.getSpec().get(entry.data.name);
+//        builder = new BuilderCustomView();
+//        builder.setView(pagename);
+//        builder.setViewSpec(data.spec);
+//        builder.setViewConfig(data.config);
+//        builder.setViewInput(data.input);
+//        
+//        if (entry.data.style != null)
+//            entry.data.context.view.getElement(tilesspec.getName()).
+//                    setStyleClass(data.style);
+//        
+        if (entry.data.objects == null)
+            return;
         
-    }
-
-    @Override
-    public void run() {
-//    	ProcessOutput processoutput;
-//        String linkname, tilename;
-//        Tile tile;
-//        ViewSpecItem itemspec, tilesspec;
-//        ViewContext viewctx;
-//        Link link;
-//        AbstractPageBuilder function;
-//        Shell shell;
-//        TilesData data = (TilesData)entry.data;
-//        
-//        viewctx = data.context.getView(view.page);
-//        tilesspec = viewctx.getSpec().get(entry.data.name);
-//        processoutput = shell.get("process_output");
-//        
-//        if (data.style != null)
-//            getElement(tilesspec.getName()).setStyleClass(data.style);
-//        
-//        if (data.objects == null)
-//            return;
-//        
-//        if (data.action) {
+//        if (entry.data.action) {
 //            itemspec = null;
 //            function = (AbstractPageBuilder)data.context.function;
 //        } else {
@@ -63,26 +66,37 @@ public class TilesTool extends AbstractComponentTool {
 //            function = null;
 //        }
 //        
-//        shell = getFunction();
-//        tiles = shell.factories.get(TYPES.TILES).instance(data.name);
-//        for (int i = 0; i < data.objects.length; i++) {
-//            tile = new Tile(data.name, i);
-//            tile.set(data.objects[i]);
-//            if (data.action)
-//                itemspec = tile.specItemInstance();
-//            tiles.objectset(data.name, tile.get());
-//            tilename = tile.getName();
-//            tiles.parentput(tilename, data.name);
-//            processoutput.run(itemspec, tilename, data.action);
-//            if (!data.action)
-//                continue;
+//        extcontext = view.getExtendedContext();
+//        if (extcontext == null)
+//            throw new IocasteException(
+//                    "tiles %s demand valid ExtendedContext", data.name);
+//        
+//        extcontext.tilesInstance(data.name);
+
+        container = new StandardContainer(viewctx, entry.data.name);
+        setHtmlName(container.getHtmlName());
+        output = viewctx.function.get("output_process");
+        viewexport = viewctx.subpages.get(entry.data.subpage);
+        for (int key : entry.data.objects.keySet()) {
+            tile = new Tile(entry.data.name, key);
+            tile.set(entry.data.objects.get(key));
+            if (entry.data.action)
+                itemspec = tile.specItemInstance();
+            viewexport.prefix = tilename = tile.getName();
+//            extcontext.tilesobjectset(data.name, tile.get());
+//            extcontext.parentput(tilename, data.name);
+            subpagectx = output.run(viewexport, viewctx.sessionid, entry);
+//            builder.execute(data.context, itemspec, tilename, data.action);
+            if (!entry.data.action)
+                continue;
 //            linkname = Tile.getLinkName(tile);
-//            link = getElement(linkname);
+//            link = subpagectx.view.getElement(linkname);
 //            link.setText("");
 //            link.setStyleClass("nc_tiles_link");
-//            viewctx.put(linkname, new TilesAction(tiles.actionget(data.name)));
+//            viewctx.view.put(linkname,
+//                    new TilesAction(extcontext.tilesactionget(data.name)));
 //            function.register(pagename, linkname, view);
-//        }
+        }
     }
 }
 

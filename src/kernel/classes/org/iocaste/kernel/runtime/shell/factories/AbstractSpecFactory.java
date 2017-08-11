@@ -49,23 +49,8 @@ public abstract class AbstractSpecFactory implements SpecFactory {
         Container container;
         String parent = entry.data.parent;
 
-        if (prefix == null) {
-            name = entry.data.name;
-            container = viewctx.view.getElement(parent);
-        } else {
-            name = new StringBuilder(prefix).
-            		append("_").append(entry.data.name).toString();
-            container = viewctx.view.getElement(parent);
-            if (container == null) {
-                parent = new StringBuilder(prefix).
-                		append("_").append(parent).toString();
-                container = viewctx.view.getElement(parent);
-            }
-            
-            entry.data.name = name;
-            viewctx.add(entry.data);
-        }
-        
+        name = entry.data.name;
+        container = viewctx.view.getElement(parent);
         if (!entry.data.type.isComposed())
         	execute(viewctx, container, parent, name);
     }

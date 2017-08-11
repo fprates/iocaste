@@ -121,22 +121,13 @@ public class ProcessOutput extends AbstractHandler {
     	return content.toString().getBytes();
     }
     
-    public final ViewContext run(
-            ViewExport viewexport, String sessionid) throws Exception {
-        ComponentEntry entry;
-        SpecFactory factory;
-        Input input;
+	private final void moveMessages(
+	        ViewContext viewctx, ViewExport viewexport) {
         Map<String, String> messages;
-        String locale;
-        ViewContext viewctx = new ViewContext();
         
-        viewctx.sessionid = sessionid;
-        viewctx.function = getFunction();
-        viewctx.title = viewexport.title;
         viewctx.messagesrc = new MessageSource();
-        locale = viewexport.locale.toString();
-        viewctx.messagesrc.instance(locale);
-        messages = ProcessInput.msgsource.get(locale);
+        viewctx.messagesrc.instance(viewctx.locale);
+        messages = ProcessInput.msgsource.get(viewctx.locale);
         for (String key : messages.keySet())
             viewctx.messagesrc.put(key, messages.get(key));
         if (viewexport.message != null)
@@ -144,13 +135,46 @@ public class ProcessOutput extends AbstractHandler {
                     viewexport.message, viewexport.message);
         viewctx.messageargs = viewexport.msgargs;
         viewctx.messagetype = viewexport.msgtype;
+	}
+	
+    public final ViewContext run(ViewExport viewexport, String sessionid)
+            throws Exception {
+        return run(viewexport, sessionid, null);
+    }
+    
+    public final ViewContext run(ViewExport viewexport, String sessionid,
+            ComponentEntry parententry) throws Exception {
+        ComponentEntry entry;
+        SpecFactory factory;
+        Input input;
+        ToolData data;
+        ViewContext viewctx = (parententry == null)? new ViewContext() :
+            new ViewContext(parententry.component.viewctx.view);
         
-        for (Object object : viewexport.items)
-        	viewctx.add((ToolData)object);
+        viewctx.sessionid = sessionid;
+        viewctx.function = getFunction();
+        viewctx.title = viewexport.title;
+        viewctx.locale = viewexport.locale.toString();
+        viewctx.parent = parententry;
+        moveMessages(viewctx, viewexport);
+        if (viewexport.subpages != null)
+            for (int i = 0; i < viewexport.subpages.length; i++)
+                viewctx.subpages.put((String)viewexport.subpages[i][0],
+                        (ViewExport)viewexport.subpages[i][1]);
+        
+        for (Object object : viewexport.items) {
+            data = (ToolData)object;
+            if (viewexport.prefix == null) {
+                viewctx.add(data);
+                continue;
+            }
+            data = data.clone(viewexport.prefix, parententry.data);
+            viewctx.add(data);
+        }
         
         for (String key : viewctx.entries.keySet()) {
             entry = viewctx.entries.get(key);
-            build(viewctx, entry, null);
+            build(viewctx, entry, viewexport.prefix);
             factory = viewctx.function.factories.get(entry.data.type);
             if (factory == null)
                 continue;
@@ -166,14 +190,15 @@ public class ProcessOutput extends AbstractHandler {
         viewctx.view.setLocale(viewexport.locale);
         if ((viewexport.messages != null) && (viewexport.messages.length > 0))
         {
-        	viewctx.messagesrc.importMessages(locale, viewexport.messages);
+            viewctx.messagesrc.importMessages(
+                    viewctx.locale, viewexport.messages);
             fillTranslations(viewctx);
         }
         
         viewctx.view.setStyleSheet(viewexport.stylesheet);
         viewctx.view.setStyleConst(viewexport.styleconst);
         for (HeaderLink link : viewexport.links)
-        	viewctx.view.add(link);
+            viewctx.view.add(link);
         
         input = new Input();
         input.viewctx = viewctx;

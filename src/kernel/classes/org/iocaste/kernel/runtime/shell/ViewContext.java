@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.runtime.common.application.ToolData;
+import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
@@ -16,17 +17,19 @@ import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.TrackingData;
 
 public class ViewContext {
-	public View view;
-	public RuntimeEngine function;
-	public TrackingData tracking;
-	public ViewTitle title;
-	public Map<String, ComponentEntry> entries;
-	public MessageSource messagesrc;
+    public View view;
+    public RuntimeEngine function;
+    public TrackingData tracking;
+    public ViewTitle title;
+    public Map<String, ComponentEntry> entries;
+    public MessageSource messagesrc;
     public Const messagetype;
-    public String messagetext, sessionid; 
+    public String messagetext, sessionid, locale;
     public Object[] messageargs;
     public List<String> inputs;
     public Map<String, Map<String, ActionEventHandler>> actions;
+    public Map<String, ViewExport> subpages;
+    public ComponentEntry parent;
 	
     public ViewContext() {
         this(new View(null, null));
@@ -38,6 +41,7 @@ public class ViewContext {
         entries = new LinkedHashMap<>();
         inputs = new ArrayList<>();
         actions = new HashMap<>();
+        subpages = new HashMap<>();
     }
     
     public final void add(ToolData data) {

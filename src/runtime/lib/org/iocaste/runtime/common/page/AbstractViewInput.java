@@ -307,12 +307,19 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
 //        extcontext.tilesactionset(
 //                extcontext.parentget(prefix), action.toString());
 //    }
-//    
-//    protected final void tilesset(String name, Object[] objects) {
-//        ((TilesData)getComponentData(name)).objects = objects;
-//    }
-//    
-//    protected final void tilesset(String name, Collection<?> objects) {
-//        tilesset(name, objects.toArray());
-//    }
+    
+    protected final void tilesset(String name, ExtendedObject[] objects) {
+        ToolData data = getComponentData(name);
+        int i = 0;
+        for (ExtendedObject object : objects)
+            data.objects.put(i++, object);
+    }
+    
+    protected final void tilesset(
+            String name, Collection<ExtendedObject> objects) {
+        ToolData data = getComponentData(name);
+        int i = 0;
+        for (ExtendedObject object : objects)
+            data.objects.put(i++, object);
+    }
 }
