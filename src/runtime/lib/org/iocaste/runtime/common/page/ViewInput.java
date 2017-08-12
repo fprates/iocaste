@@ -5,6 +5,4 @@ import org.iocaste.runtime.common.application.Context;
 public interface ViewInput {
     
     public abstract void run(Context context, boolean init);
-    
-    public abstract void run(Context context, boolean init, String prefix);
 }

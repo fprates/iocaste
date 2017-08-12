@@ -16,6 +16,10 @@ public class Tile {
         return name;
     }
     
+    public final String getName(String field) {
+        return new StringBuilder(name).append("_").append(field).toString();
+    }
+    
     public final Object get() {
         return object;
     }

@@ -18,16 +18,18 @@ public class PortalTileItemConfig extends AbstractViewConfig<PortalContext> {
         getTool("node_item").style = "portal_tile_frame";
         link = getTool("item");
         link.actionname = "pick";
-
+        
         data = context.tilesDataInstance();
         show = PortalTilesData.showset(context, data);
-        for (String name : show)
+        for (String name : show) {
             if ((((data == null) || data.key == null) && first) ||
                     ((data != null) && (data.key.equals(name)))) {
                 getTool(name).style = "portal_tile_key";
+                link.modelitem = name;
                 first = false;
             } else {
                 getTool(name).style = "portal_tile_text";
             }
+        }
     }
 }

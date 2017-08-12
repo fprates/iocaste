@@ -1,10 +1,7 @@
 package org.iocaste.runtime.common.page;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
@@ -15,46 +12,6 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
 {
     private Context context;
     private boolean init;
-    private String prefix;
-//    
-//    private final void addtablearray(
-//            String table, ExtendedObject[] objects) {
-//        ((TableToolData)getComponentData(table)).set(objects);
-//    }
-//    
-//    private final void addtablecollection(
-//            String table, Collection<ExtendedObject> objects) {
-//        ((TableToolData)getComponentData(table)).set(objects);
-//    }
-//    
-//    private final void addtableitems(
-//            String table, List<TableToolItem> items) {
-//        ((TableToolData)getComponentData(table)).set(items);
-//    }
-    
-    protected final void listset(String tooldata,
-    		String item, ExtendedObject[] objects) {
-        listset(tooldata, item, objects, item);
-    }
-    
-    protected final void listset(String tooldata,
-    		String item, ExtendedObject[] objects, String field) {
-        Object value;
-        ToolData toolitem = getComponentData(tooldata).instance(item);
-        
-        if (toolitem.values == null)
-        	toolitem.values = new LinkedHashMap<>();
-        
-        for (ExtendedObject object : objects) {
-            value = object.get(field);
-            toolitem.values.put(value.toString(), value);
-        }
-    }
-    
-    protected final void listset(String tooldata,
-    		String item, Map<String, Object> values) {
-        getComponentData(tooldata).instance(item).values = values;
-    }
     
     protected final void inputset(String tooldata, String item, Object value) {
         getComponentData(tooldata).object.set(item, value);
@@ -63,26 +20,6 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
     protected final void inputset(String tooldata, ExtendedObject object) {
         getComponentData(tooldata).object = object;
     }
-//    
-//    protected final void dfkeyset(String form, Object value) {
-//        DocumentModel model = null;
-//        DataFormToolData df = getComponentData(form);
-//        
-//        if (df.custommodel != null)
-//            model = df.custommodel;
-//        if (df.model != null)
-//            model = new Documents(context.function).getModel(df.model);
-//        
-//        for (DocumentModelKey key : model.getKeys()) {
-//            df.instance(key.getModelItemName()).value = value;
-//            break;
-//        }
-//    }
-//    
-//    protected final void dfnsset(String form, Object ns) {
-//        DataFormToolData df = getComponentData(form);
-//        df.nsItemInstance().value = ns;
-//    }
     
     protected abstract void execute(C context);
     
@@ -92,10 +29,6 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
             return data;
         throw new IocasteException("%s is an invalid tooldata.", name);
     }
-//    
-//    private final ViewComponents getViewComponents() {
-//        return context.getView(context.view.getPageName()).getComponents();
-//    }
     
     protected abstract void init(C context);
 
@@ -107,27 +40,16 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
     	getComponentData(name).value = value;
     }
     
-//    protected void listadd(String name, String text, Object value) {
-//        ListBox input = getElement(name);
-//        input.add(text, value);
-//    }
-//    
-//    protected void linkadd(String name, ExtendedObject object, String field) {
-//        DataElement delement = object.getModel().getModelItem(field).
-//                getDataElement();
-//        Link link = getElement(name);
-//        String pname = new StringBuilder(name).append("_").append(field).
-//                toString();
-//        link.add(pname, object.get(field), delement.getType());
-//    }
-//    
-//    protected void linkadd(String name, String parameter, Object value) {
-//        Link link = getElement(name);
-//        String pname = new StringBuilder(name).append("_").append(parameter).
-//                toString();
-//        
-//        link.add(pname, (value == null)? null : value.toString());
-//    }
+    protected void linkadd(String name, ExtendedObject object, String field) {
+        getComponentData(name).values.put(field, object);
+    }
+    
+    protected void linkadd(String name, String parameter, Object value) {
+        ToolData link = getComponentData(name);
+        String pname = new StringBuilder(name).append("_").append(parameter).
+                toString();
+        link.values.put(pname, (value == null)? null : value.toString());
+    }
     
     protected void listset(String name, Object[][] values) {
     	Map<String, Object> valuesmap = getComponentData(name).values;
@@ -135,6 +57,30 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
     	valuesmap.clear();
         for (int i = 0; i < values.length; i++)
         	valuesmap.put(values[i][0].toString(), values[i][1]);
+    }
+    
+    protected final void listset(String tooldata,
+            String item, ExtendedObject[] objects) {
+        listset(tooldata, item, objects, item);
+    }
+    
+    protected final void listset(String tooldata,
+            String item, ExtendedObject[] objects, String field) {
+        Object value;
+        ToolData toolitem = getComponentData(tooldata).instance(item);
+        
+        if (toolitem.values == null)
+            toolitem.values = new LinkedHashMap<>();
+        
+        for (ExtendedObject object : objects) {
+            value = object.get(field);
+            toolitem.values.put(value.toString(), value);
+        }
+    }
+    
+    protected final void listset(String tooldata,
+            String item, Map<String, Object> values) {
+        getComponentData(tooldata).instance(item).values = values;
     }
 //    
 //    protected void loadInputTexts(PageBuilderContext context) {
@@ -223,19 +169,12 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
 //            String report, Collection<ExtendedObject> items) {
 //        reportset(report, items.toArray(new ExtendedObject[0]));
 //    }
-//    
-    @Override
-    public final void run(Context context, boolean init) {
-        run(context, init, null);
-    }
     
 	@Override
     @SuppressWarnings("unchecked")
-    public final void run(Context context, boolean init,
-            String prefix) {
+    public final void run(Context context, boolean init) {
         this.context = context;
         this.init = init;
-        this.prefix = prefix;
         if (init)
             init((C)context);
         else
@@ -295,32 +234,5 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
     	ToolData tooldata = getComponentData(name);
     	tooldata.text = text;
     	tooldata.textargs = args;
-    }
-    
-//    @SuppressWarnings("unchecked")
-//    protected final <T> T tilesobjectget() {
-//        ExtendedContext extcontext = getExtendedContext();
-//        return (T)extcontext.tilesobjectget(extcontext.parentget(prefix));
-//    }
-//    
-//    protected final void tileactionset(Object action) {
-//        ExtendedContext extcontext = getExtendedContext();
-//        extcontext.tilesactionset(
-//                extcontext.parentget(prefix), action.toString());
-//    }
-    
-    protected final void tilesset(String name, ExtendedObject[] objects) {
-        ToolData data = getComponentData(name);
-        int i = 0;
-        for (ExtendedObject object : objects)
-            data.objects.put(i++, object);
-    }
-    
-    protected final void tilesset(
-            String name, Collection<ExtendedObject> objects) {
-        ToolData data = getComponentData(name);
-        int i = 0;
-        for (ExtendedObject object : objects)
-            data.objects.put(i++, object);
     }
 }
