@@ -30,6 +30,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.protocol.IocasteException;
+
 /**
  * Implementação de camada de visão
  * 
@@ -216,8 +218,8 @@ public class View implements Serializable {
         View view = element.getView();
         
         if ((view != this) && (view != null))
-            throw new RuntimeException(
-                    element.getHtmlName().concat(" view mismatch."));
+            throw new IocasteException(
+                    "%s view mismatch.", element.getHtmlName());
         elements.put(element.getHtmlName(), element);
         element.setView(this);
     }

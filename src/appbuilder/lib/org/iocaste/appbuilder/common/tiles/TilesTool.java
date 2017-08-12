@@ -10,6 +10,7 @@ import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.shell.common.Link;
 
 public class TilesTool extends AbstractComponentTool {
@@ -75,8 +76,8 @@ public class TilesTool extends AbstractComponentTool {
         
         extcontext = view.getExtendedContext();
         if (extcontext == null)
-            throw new RuntimeException(String.
-                    format("tiles %s demand valid ExtendedContext", data.name));
+            throw new IocasteException(
+                    "tiles %s demand valid ExtendedContext", data.name);
         
         extcontext.tilesInstance(data.name);
         for (int i = 0; i < data.objects.length; i++) {
