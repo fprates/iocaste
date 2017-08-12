@@ -166,8 +166,11 @@ public abstract class AbstractPage {
     
     public final ToolData instance(String tooldata) {
         ToolData data = getToolData(tooldata);
-        if (data == null)
+        if (data == null) {
+            if (parent != null)
+                return parent.instance(tooldata);
             add(data = new ToolData(null, tooldata));
+        }
         return data;
     }
     
