@@ -36,7 +36,7 @@ public class ToolData implements Serializable {
     public DataElement element;
     public Map<String, ToolData> items;
     public Map<String, Object> values;
-    public Map<String, String> attributes;
+    public Map<String, String> events, attributes;
     public Set<String> validators, actions;
     
     public ToolData(TYPES type) {
@@ -51,6 +51,7 @@ public class ToolData implements Serializable {
         actions = new LinkedHashSet<>();
         properties = new HashMap<>();
         objects = new LinkedHashMap<>();
+        events = new HashMap<>();
     }
     
     public final ToolData clone(String prefix, ToolData parent)

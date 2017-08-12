@@ -125,6 +125,10 @@ public abstract class ToolDataElement
         return (T)tooldata.value;
     }
     
+    public final String getAction() {
+        return tooldata.actionname;
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#getAttributes()
@@ -241,8 +245,7 @@ public abstract class ToolDataElement
      */
     @Override
     public final Map<String, String> getEvents() {
-//        return events;
-    	return null;
+        return tooldata.events;
     }
     
     /*
@@ -558,6 +561,10 @@ public abstract class ToolDataElement
     @Override
     public boolean isRemote() {
         return false;
+    }
+    
+    public boolean isScreenLockable() {
+        return !tooldata.nolock;
     }
     
     /*

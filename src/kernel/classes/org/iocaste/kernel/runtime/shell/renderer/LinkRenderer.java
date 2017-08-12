@@ -4,11 +4,11 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.kernel.runtime.shell.elements.Link;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.LinkEntry;
 import org.iocaste.shell.common.Parameter;
 
