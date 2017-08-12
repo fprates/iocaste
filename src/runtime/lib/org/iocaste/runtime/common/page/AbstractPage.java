@@ -104,6 +104,11 @@ public abstract class AbstractPage {
         return style;
     }
     
+    @SuppressWarnings("unchecked")
+    protected final <C extends Context> C getContext() {
+        return (C)context;
+    }
+    
     /**
      * 
      * @return
