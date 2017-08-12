@@ -10,6 +10,9 @@ public class StandardPageFactory {
 //        Documents documents;
 //        AbstractExtendedValidator validator;
 //        Map<String, Validator> validators;
+        String defaultpage = context.getPageName();
+        
+        context.setPageName(name);
         page.set(context);
         page.run();
         if (page.getActionHandler("back") == null)
@@ -27,6 +30,7 @@ public class StandardPageFactory {
 //            validator.setDocuments(documents);
 //            validator.setContext(context);
 //        }
+        context.setPageName(defaultpage);
     }
         
 }

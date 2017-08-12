@@ -58,6 +58,7 @@ public abstract class AbstractPage {
     public final void add(ToolData data) {
         entries.put(data.name, data);
     }
+        
     
     public final void add(HeaderLink link) {
     	links.add(link);
@@ -157,11 +158,18 @@ public abstract class AbstractPage {
     	return title;
     }
     
-	public final ToolData getToolData(String name) {
+	private final ToolData getToolData(String name) {
 		ToolData tooldata;
 		return ((tooldata = entries.get(name)) != null)?
 				tooldata : entries.get(specalias.get(name));
 	}
+    
+    public final ToolData instance(String tooldata) {
+        ToolData data = getToolData(tooldata);
+        if (data == null)
+            add(data = new ToolData(null, tooldata));
+        return data;
+    }
     
 	public final boolean isSubPage(String name) {
 	    return children.get(name).subpage;

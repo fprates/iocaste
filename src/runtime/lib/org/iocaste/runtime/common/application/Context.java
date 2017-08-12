@@ -15,6 +15,9 @@ public interface Context {
     public abstract String getAppName();
     
     public abstract MessageSource getMessageSource();
+
+    public abstract ExtendedObject get(
+            String page, String tooldata, int index);
     
     public abstract String getPageName();
     

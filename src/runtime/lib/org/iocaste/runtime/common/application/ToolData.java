@@ -40,7 +40,12 @@ public class ToolData implements Serializable {
     public Set<String> validators, actions;
     
     public ToolData(TYPES type) {
+        this(type, null);
+    }
+    
+    public ToolData(TYPES type, String name) {
         this.type = type;
+        this.name = name;
         items = new HashMap<>();
         attributes = new HashMap<>();
         actions = new LinkedHashSet<>();

@@ -36,7 +36,7 @@ public abstract class AbstractContext implements Context {
     public final void add(
             String page, String tooldata, ExtendedObject object) {
         Map<Integer, ExtendedObject> objects = pages.get(page).
-                getToolData(tooldata).objects;
+                instance(tooldata).objects;
         objects.put(objects.size(), object);
     }
     
@@ -60,6 +60,11 @@ public abstract class AbstractContext implements Context {
     @Override
     public final MessageSource getMessageSource() {
     	return messagesrc;
+    }
+    
+    @Override
+    public final ExtendedObject get(String page, String tooldata, int index) {
+        return pages.get(page).instance(tooldata).objects.get(index);
     }
     
     @Override
@@ -120,7 +125,7 @@ public abstract class AbstractContext implements Context {
     
     @Override
     public final void set(String page, String tooldata, ExtendedObject object) {
-    	pages.get(page).getToolData(tooldata).object = object;
+    	pages.get(page).instance(tooldata).object = object;
     }
     
     @Override

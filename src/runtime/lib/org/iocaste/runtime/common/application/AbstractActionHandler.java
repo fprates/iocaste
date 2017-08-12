@@ -69,14 +69,7 @@ public abstract class AbstractActionHandler<C extends Context>
 //        documents.deleteComplexDocument(document.getModel().getName(),
 //                document.getNS(), document.getKey());
 //    }
-    
-    private ToolData gettool(String name) {
-    	ToolData tooldata = context.getPage().getToolData(name);
-        if (tooldata == null)
-            throw new IocasteException("% is an invalid tooldata.", name);
-        return tooldata;
-    }
-    
+//    
 //    protected final DocumentExtractor documentExtractorInstance(String cmodel) {
 //        return new DocumentExtractor(context, cmodel);
 //    }
@@ -215,6 +208,13 @@ public abstract class AbstractActionHandler<C extends Context>
 //    protected final byte[] getFileContent(String name) {
 //        return ((MultipartElement)context.view.getElement(name)).getContent();
 //    }
+    
+    private ToolData gettool(String name) {
+        ToolData tooldata = context.getPage().instance(name);
+        if (tooldata == null)
+            throw new IocasteException("% is an invalid tooldata.", name);
+        return tooldata;
+    }
     
     private final ToolData gettoolkey(String name) {
         ToolData tooldata = gettool(name);

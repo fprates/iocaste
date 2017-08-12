@@ -45,11 +45,11 @@ public abstract class AbstractViewConfig<C extends Context>
         String toolname = (prefix == null)? name : new StringBuilder(prefix).
         		append("_").append(name).toString();
     	AbstractPage page = context.getPage();
-        tooldata = page.getToolData(toolname);
+        tooldata = page.instance(toolname);
         if (tooldata != null)
         	return tooldata;
         for (String key : page.getChildren())
-            if ((tooldata = page.getChild(key).getToolData(toolname)) != null)
+            if ((tooldata = page.getChild(key).instance(toolname)) != null)
             	return tooldata;
         return null;
     }

@@ -86,7 +86,7 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
     protected abstract void execute(C context);
     
     private final ToolData getComponentData(String name) {
-        ToolData data = context.getPage().getToolData(name);
+        ToolData data = context.getPage().instance(name);
         if (data != null)
             return data;
         throw new RuntimeException(name.concat(" is an invalid tooldata."));

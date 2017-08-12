@@ -74,10 +74,9 @@ public abstract class AbstractApplication<T extends Context>
             page.outputview.items = new Object[items.size()];
             for (ViewSpecItem item : items) {
                 page.outputview.items[i++] =
-                        data = new ToolData(item.getType());
-                data.name = item.getName();
+                        data = page.instance(item.getName());
+                data.type = item.getType();
                 data.parent = item.getParent();
-                page.add(data);
             }
             
             if (config != null) {
