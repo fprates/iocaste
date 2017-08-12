@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.shell.common.AbstractContainer;
 import org.iocaste.shell.common.Const;
@@ -28,6 +30,8 @@ public class Link extends ToolDataElement {
     
     public Link(ViewContext viewctx, String name) {
         super(viewctx, Const.LINK, name);
+        Object value;
+        
         setText((tooldata.text == null)?
                 name : tooldata.text, tooldata.textargs);
         if (tooldata.actionname == null)
@@ -35,6 +39,13 @@ public class Link extends ToolDataElement {
         values = new HashMap<>();
         container = name.concat("_cnt");
         new LinkContainer(this, container);
+        if (tooldata.values != null)
+            for (String key : tooldata.values.keySet()) {
+                if ((value = tooldata.values.get(key)) instanceof ExtendedObject)
+                    add(key, (ExtendedObject)value);
+                else
+                    add(key, tooldata.values.get(key).toString());
+            }
     }
 
     @Override
@@ -59,6 +70,14 @@ public class Link extends ToolDataElement {
         values.put(name, new LinkEntry(value, type));
     }
 
+    public final void add(String name, ExtendedObject object) {
+        DataElement element = object.getModel().getModelItem(name).
+                getDataElement();
+        String pname = new StringBuilder(tooldata.name).append("_").
+                append(name).toString();
+        add(pname, object.get(name), element.getType());
+    }
+    
     @Override
     public void clear() {
         getLinkContainer().clear();
