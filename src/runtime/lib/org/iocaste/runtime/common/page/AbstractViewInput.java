@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.application.ToolData;
 
@@ -89,7 +90,7 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
         ToolData data = context.getPage().instance(name);
         if (data != null)
             return data;
-        throw new RuntimeException(name.concat(" is an invalid tooldata."));
+        throw new IocasteException("%s is an invalid tooldata.", name);
     }
 //    
 //    private final ViewComponents getViewComponents() {

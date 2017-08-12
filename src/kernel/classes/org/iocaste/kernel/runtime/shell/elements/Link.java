@@ -28,7 +28,8 @@ public class Link extends ToolDataElement {
     
     public Link(ViewContext viewctx, String name) {
         super(viewctx, Const.LINK, name);
-        setText(name);
+        setText((tooldata.text == null)?
+                name : tooldata.text, tooldata.textargs);
         if (tooldata.actionname == null)
             tooldata.actionname = tooldata.name;
         values = new HashMap<>();
