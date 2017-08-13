@@ -40,6 +40,8 @@ public class TilesTool extends AbstractComponentTool {
             link = subpagectx.view.getElement(item.name);
             link.add(item.modelitem, object);
             link.setText("");
+            if (item.action)
+                item.actionname = object.get(item.modelitem).toString();
         }
     }
     

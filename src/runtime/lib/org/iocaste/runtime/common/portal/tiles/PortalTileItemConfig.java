@@ -16,10 +16,12 @@ public class PortalTileItemConfig extends AbstractViewConfig<PortalContext> {
         boolean first = true;
         
         getTool("node_item").style = "portal_tile_frame";
-        link = getTool("item");
-        link.actionname = "pick";
         
         data = context.tilesDataInstance();
+        link = getTool("item");
+        link.actionname = data.action;
+        link.action = (data.action == null);
+        
         show = PortalTilesData.showset(context, data);
         for (String name : show) {
             if ((((data == null) || data.key == null) && first) ||
