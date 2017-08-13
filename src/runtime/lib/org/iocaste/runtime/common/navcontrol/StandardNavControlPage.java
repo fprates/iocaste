@@ -9,6 +9,8 @@ public class StandardNavControlPage extends AbstractPage {
         set(new StandardNavControlSpec());
         set(new StandardNavControlConfig());
         set(new StandardNavControlInput());
+        put("logout", new Logout());
+        put("back", new Back());
     }
 
 }

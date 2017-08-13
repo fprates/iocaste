@@ -1,23 +1,27 @@
 package org.iocaste.runtime.common.navcontrol;
 
+import org.iocaste.protocol.user.User;
+import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.runtime.common.page.AbstractViewConfig;
 import org.iocaste.shell.common.HeaderLink;
+import org.iocaste.shell.common.MessageSource;
 
 public class StandardNavControlConfig extends AbstractViewConfig<Context> {
     public Object[][] ncconfig;
     
     @Override
     protected final void execute(Context context) {
-        ToolData text, link, loginitem, back;
-        String name, pagename;
-//        User user;
+        ToolData text, link;
+        String name;
+        User user;
         NavControl navcontrol;
         NavControlButton navbutton;
         AbstractPage page;
-//        Iocaste iocaste;
+        RuntimeEngine runtime;
+        MessageSource messages;
         
         page = context.getPage();
         page.add(new HeaderLink(
@@ -41,39 +45,23 @@ public class StandardNavControlConfig extends AbstractViewConfig<Context> {
             return;
         link.text = "";
         link.absolute = true;
-//        
-//        iocaste = context.getIocaste();
-//        if (!iocaste.isConnected())
-//            return;
-//        
-//        user = iocaste.getUserData(iocaste.getUsername());
-//        getTool("nc_username").tag = "span";
-//        text.setText(user.getFirstname());
-//
-//        getTool("nc_login_options").attributes.put("style", "display:none");
-//        
-//        viewctx.put("logout", new Logout());
-//
-//        getTool("back").cancellable = true;
-//        page = context.getPage();
-//        if (viewctx.getActionHandler("back") == null) {
-//            viewctx.put("back", new Back());
-//            function = (AbstractPageBuilder)context.function;
-//            function.register(page, "logout", viewctx);
-//            function.register(page, "back", viewctx);
+
+        text = getTool("nc_username");
+        text.tag = "span";
+//        runtime = context.runtime();
+//        if (runtime.isConnected()) {
+//            user = runtime.getUserData(runtime.getUsername());
+//            text.text = user.getFirstname();
 //        }
-//        
-//        if (context.messages == null)
-//            context.messages = new MessageSource();
-//        context.messages.instance("pt_BR");
-//        context.messages.put("pt_BR", "nc_logout", "Log out");
+
+        getTool("nc_login_options").attributes.put("style", "display:none");
+        getTool("back").cancellable = true;
+        page = context.getPage();
+        
+        messages = context.getMessageSource();
+        messages.instance("pt_BR");
+        messages.put("pt_BR", "nc_logout", "Log out");
     }
-    
-//    public static String getAddress(PageStackItem position) {
-//        return new StringBuilder(position.getApp()).
-//                append(".").
-//                append(position.getPage()).toString();
-//    }
     
     private final NavControlButton setNavButton(
             NavControl navcontrol, String name) {

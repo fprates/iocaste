@@ -15,8 +15,6 @@ public class StandardPageFactory {
         context.setPageName(name);
         page.set(context);
         page.run();
-        if (page.getActionHandler("back") == null)
-            page.put("back", new Back());
         for (String key : page.getChildren()) {
             child = page.getChild(key);
             child.set(context);

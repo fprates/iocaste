@@ -1,4 +1,4 @@
-package org.iocaste.runtime.common.page;
+package org.iocaste.runtime.common.navcontrol;
 
 import org.iocaste.runtime.common.application.AbstractActionHandler;
 import org.iocaste.runtime.common.application.Context;
