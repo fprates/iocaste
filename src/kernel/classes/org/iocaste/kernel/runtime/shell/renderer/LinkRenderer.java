@@ -7,6 +7,7 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.kernel.runtime.shell.elements.Link;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.LinkEntry;
@@ -51,9 +52,9 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
             for (String name : parameters.keySet()) {
                 entry = parameters.get(name);
                 if (entry == null)
-                    throw new RuntimeException(new StringBuilder(name).
-                            append(" is an unreferenced parameter of ").
-                            append(htmlname).toString());
+                    throw new IocasteException(
+                            "%s is an unreferenced parameter of %s.",
+                            name, htmlname);
                 
                 if (entry.value == null)
                     entry.value = "";
@@ -100,7 +101,8 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
                        append("', '").append(action).
                        append("');");
                 
-                handler = config.viewctx.getEventHandler(action, "click");
+                handler = config.viewctx.
+                        getEventHandler(link.getName(), action, "click");
                 handler.name = htmlname;
                 handler.call = onclick.toString();
             } else {
@@ -113,7 +115,7 @@ public class LinkRenderer extends AbstractElementRenderer<Link> {
         
         events = link.getEvents();
         for (String event : events.keySet()) {
-            handler = config.viewctx.getEventHandler(action, event);
+            handler = config.viewctx.getEventHandler(htmlname, action, event);
             handler.name = htmlname;
             handler.call = events.get(event);
         }

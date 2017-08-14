@@ -12,12 +12,13 @@ public class ButtonFactory extends AbstractSpecFactory {
     public final void addEventHandler(ViewContext viewctx, String htmlname) {
         Button button = viewctx.view.getElement(htmlname);
         String action = button.getAction();
+        String name = button.getName();
         Map<String, String> events = button.getEvents();
 
         if (!events.containsKey("click"))
-            viewctx.addEventHandler("click", action);
+            viewctx.addEventHandler(name, action, "click");
         for (String key : events.keySet())
-            viewctx.addEventHandler(key, action);
+            viewctx.addEventHandler(name, action, key);
     }
     
     @Override

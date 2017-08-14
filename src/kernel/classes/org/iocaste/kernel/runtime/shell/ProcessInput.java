@@ -186,10 +186,12 @@ public class ProcessInput extends AbstractHandler {
         }
     }
     
-    private final boolean isAction(String name) {
-        Map<String, ActionEventHandler> handlers =
-        		config.state.viewctx.actions.get(name);
+    private final boolean isAction(String element, String name) {
+        Map<String, ActionEventHandler> handlers;
         
+        if (!config.state.viewctx.actions.containsKey(element))
+            return false;
+        handlers = config.state.viewctx.actions.get(element).get(name);
         if (handlers == null)
             return false;
         for (String key : handlers.keySet())
@@ -585,17 +587,22 @@ public class ProcessInput extends AbstractHandler {
 
 	@Override
 	public Object run(Message message) throws Exception {
-		String actionname = null;
-		ViewExport view = message.get("view");
-		Map<String, String[]> parameters = Tools.
-				toMap(TYPE.HASH, view.reqparameters);
-		ProcessOutput outputprocess = getFunction().get("output_process");
-		
+        String actionname = null;
+        Map<String, String[]> parameters;
+        ProcessOutputData data = new ProcessOutputData();
+        ProcessOutput outputprocess = getFunction().get("output_process");
+        
+        data.viewexport = message.get("view");
+        data.viewctx = new ViewContext();
+        data.viewctx.sessionid = message.getSessionid();
+        parameters = Tools.toMap(TYPE.HASH, data.viewexport.reqparameters);
+        
         config = new ControllerData();
-		config.state.viewctx = outputprocess.run(view, message.getSessionid());
-		
+        config.state.viewctx = data.viewctx;
+        outputprocess.run(data);
+        
         for (String key : parameters.keySet()) {
-            if (isAction(key)) {
+            if (isAction(key, key)) {
                 if (actionname != null)
                     continue;
                 actionname = parameters.get(key)[0];
@@ -606,14 +613,14 @@ public class ProcessInput extends AbstractHandler {
         }
         
         if (parameters.size() == 0)
-            return view;
+            return data.viewexport;
         
         config.function = getFunction();
 //        if (parameters.containsKey("event"))
 //            config.execonevent(parameters);
-        callController(view);
-        return view;
-	}
+        callController(data.viewexport);
+        return data.viewexport;
+    }
     
     /**
      * 

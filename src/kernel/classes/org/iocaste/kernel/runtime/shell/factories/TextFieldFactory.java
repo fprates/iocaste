@@ -8,7 +8,7 @@ public class TextFieldFactory extends AbstractSpecFactory {
 
     @Override
     public final void addEventHandler(ViewContext viewctx, String htmlname) {
-        viewctx.addEventHandler("focus", htmlname);
+        viewctx.addEventHandler(htmlname, htmlname, "focus");
     }
     
     @Override

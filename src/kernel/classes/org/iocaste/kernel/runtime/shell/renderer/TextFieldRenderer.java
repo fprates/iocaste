@@ -17,11 +17,9 @@ import org.iocaste.shell.common.View;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
-import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.kernel.runtime.shell.elements.Text;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
-import org.iocaste.kernel.runtime.shell.renderer.internal.TrackingData;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldContainerSource;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldSource;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldTableItemSource;
@@ -80,7 +78,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         inputtag.add("maxlength", Integer.toString(length));
         inputtag.add("value", value);
         
-        handler = config.viewctx.getEventHandler(name, "focus");
+        handler = config.viewctx.getEventHandler(name, name, "focus");
         handler.name = name;
         handler.call = new StringBuilder("_send('").append(name).
                 append("', '&event=onfocus', null);").toString();

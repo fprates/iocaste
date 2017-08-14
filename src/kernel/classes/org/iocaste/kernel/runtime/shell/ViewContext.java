@@ -27,7 +27,7 @@ public class ViewContext {
     public String messagetext, sessionid, locale;
     public Object[] messageargs;
     public List<String> inputs;
-    public Map<String, Map<String, ActionEventHandler>> actions;
+    public Map<String, Map<String, Map<String, ActionEventHandler>>> actions;
     public Map<String, ViewExport> subpages;
     public ComponentEntry parent;
 	
@@ -51,15 +51,17 @@ public class ViewContext {
     }
     
     public final ActionEventHandler addEventHandler(
-            String event, String action) {
+            String element, String action, String event) {
         ActionEventHandler handler;
         Map<String, ActionEventHandler> handlers;
+        Map<String, Map<String, ActionEventHandler>> elementhandlers;
         
-        handlers = actions.get(action);
-        if (handlers == null) {
-            handlers = new LinkedHashMap<>();
-            actions.put(action, handlers);
-        }
+        elementhandlers = actions.get(element);
+        if (elementhandlers == null)
+            actions.put(element, elementhandlers = new HashMap<>());
+        handlers = elementhandlers.get(action);
+        if (handlers == null)
+            elementhandlers.put(action, handlers = new LinkedHashMap<>());
     
         handler = new ActionEventHandler();
         handler.event = (event.equals(""))? null : event;
@@ -68,7 +70,7 @@ public class ViewContext {
     }
     
     public final ActionEventHandler getEventHandler(
-            String action, String event) {
-    	return actions.get(action).get(event);
+            String element, String action, String event) {
+    	return actions.get(element).get(action).get(event);
     }
 }

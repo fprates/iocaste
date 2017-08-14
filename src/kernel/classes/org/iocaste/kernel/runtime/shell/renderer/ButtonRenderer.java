@@ -37,13 +37,13 @@ public class ButtonRenderer extends AbstractElementRenderer<Button> {
             onclick.append(config.currentform).
                     append("', '").append(config.currentaction).
                     append("', '").append(htmlname).append("');");
-            handler = config.viewctx.getEventHandler(action, "click");
+            handler = config.viewctx.getEventHandler(name, action, "click");
             handler.name = htmlname;
             handler.call = onclick.toString();
         }
         
         for (String event : events.keySet()) {
-            handler = config.viewctx.getEventHandler(action, event);
+            handler = config.viewctx.getEventHandler(name, action, event);
             handler.name = htmlname;
             handler.call = events.get(event);
         }

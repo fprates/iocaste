@@ -9,7 +9,7 @@ public class VirtualControlFactory extends AbstractSpecFactory {
     @Override
     public final void addEventHandler(ViewContext viewctx, String htmlname) {
         VirtualControl control = viewctx.view.getElement(htmlname);
-        viewctx.addEventHandler("", control.getAction());
+        viewctx.addEventHandler(control.getName(), control.getAction(), "");
     }
     
     @Override

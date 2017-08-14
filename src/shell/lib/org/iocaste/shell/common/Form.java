@@ -30,8 +30,7 @@ package org.iocaste.shell.common;
 public class Form extends AbstractContainer {
     private static final long serialVersionUID = -4049409929220114810L;
     public static final String MULTIPART_ENCODE = "multipart/form-data";
-    private String enctype;
-    private Parameter action;
+    private String enctype, action;
     
     public Form(View view, String name) {
         super(view, Const.FORM, name);
@@ -44,8 +43,8 @@ public class Form extends AbstractContainer {
     }
 
     private final void init(String name) {
-        action = new Parameter(this, "action");
-        action.setHtmlName(name.concat(".action"));
+        Parameter parameter = new Parameter(this, "action");
+        parameter.setHtmlName(action = name.concat(".action"));
     }
     
     /**
@@ -69,6 +68,6 @@ public class Form extends AbstractContainer {
      * @return
      */
     public final String getAction() {
-        return action.getHtmlName();
+        return action;
     }
 }

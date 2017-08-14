@@ -9,7 +9,8 @@ public class ExpandBarFactory extends AbstractSpecFactory {
     @Override
     public final void addEventHandler(ViewContext viewctx, String htmlname) {
         String action = new StringBuilder(htmlname).append(".edge").toString();
-        viewctx.addEventHandler("click", action);
+        viewctx.addEventHandler(
+                viewctx.view.getElement(htmlname).getName(), action, "click");
     }
     
     @Override

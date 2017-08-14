@@ -10,11 +10,12 @@ public class LinkFactory extends AbstractSpecFactory {
     public final void addEventHandler(ViewContext viewctx, String htmlname) {
         Link link = viewctx.view.getElement(htmlname);
         String action = link.getAction();
+        String name = link.getName();
         
         if (!link.isAbsolute() && (action != null))
-            viewctx.addEventHandler("click", action);
+            viewctx.addEventHandler(name, action, "click");
         for (String key : link.getEvents().keySet())
-            viewctx.addEventHandler(key, action);
+            viewctx.addEventHandler(name, action, key);
     }
     
     @Override

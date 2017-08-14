@@ -63,7 +63,8 @@ public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
             selecttag.add("class", style);
         }
         
-        handler = config.viewctx.getEventHandler(name, "focus");
+        handler = config.viewctx.
+                getEventHandler(input.getName(), name, "focus");
         handler.name = name;
         handler.call = new StringBuilder("_send('").append(name).
                 append("', '&event=onfocus', null);").toString();

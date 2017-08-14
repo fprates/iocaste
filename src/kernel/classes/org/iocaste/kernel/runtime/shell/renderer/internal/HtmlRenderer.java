@@ -179,6 +179,7 @@ public class HtmlRenderer {
     private final XMLElement renderJavaScript(List<String> script,
             Config config) {
         StringBuilder sb;
+        Map<String, Map<String, ActionEventHandler>> elements;
         Map<String, ActionEventHandler> handlers;
         HandlerScript handlerscript;
         Map<String, HandlerScript> handlerscripts;
@@ -194,35 +195,38 @@ public class HtmlRenderer {
         scripttag.addInner(script);
 
         handlerscripts = new HashMap<>();
-        for (String name : config.viewctx.actions.keySet()) {
-            handlers = config.viewctx.actions.get(name);
-            for (String key : handlers.keySet()) {
-            	handler = handlers.get(key);
-                if (handler.event == null)
-                    continue;
-                
-                handlerscript = handlerscripts.get(handler.event);
-                if (handlerscript == null) {
-                    handlerscript = new HandlerScript();
-                    handlerscripts.put(handler.event, handlerscript);
+        for (String elementkey : config.viewctx.actions.keySet()) {
+            elements = config.viewctx.actions.get(elementkey);
+            for (String actionkey : elements.keySet()) {
+                handlers = elements.get(actionkey);
+                for (String key : handlers.keySet()) {
+                	handler = handlers.get(key);
+                    if (handler.event == null)
+                        continue;
+                    
+                    handlerscript = handlerscripts.get(handler.event);
+                    if (handlerscript == null) {
+                        handlerscript = new HandlerScript();
+                        handlerscripts.put(handler.event, handlerscript);
+                    }
+                    
+                    sb = new StringBuilder(handler.name).append(handler.event);
+                    handlerscript.function = sb.toString().replace('.', '_');
+    
+                    sb = new StringBuilder("function ").
+                            append(handlerscript.function).append("(e) {");
+                    handlerscript.script.add(sb.toString());
+                    handlerscript.script.add(handler.call);
+                    handlerscript.script.add("}");
+                    
+                    sb = new StringBuilder("document.getElementById('").
+                            append(handler.name).
+                            append("').addEventListener('").
+                            append(handler.event).
+                            append("', ").
+                            append(handlerscript.function).append(");");
+                    handlerscript.handler.add(sb.toString());
                 }
-                
-                sb = new StringBuilder(handler.name).append(handler.event);
-                handlerscript.function = sb.toString().replace('.', '_');
-
-                sb = new StringBuilder("function ").
-                        append(handlerscript.function).append("(e) {");
-                handlerscript.script.add(sb.toString());
-                handlerscript.script.add(handler.call);
-                handlerscript.script.add("}");
-                
-                sb = new StringBuilder("document.getElementById('").
-                        append(handler.name).
-                        append("').addEventListener('").
-                        append(handler.event).
-                        append("', ").
-                        append(handlerscript.function).append(");");
-                handlerscript.handler.add(sb.toString());
             }
         }
 

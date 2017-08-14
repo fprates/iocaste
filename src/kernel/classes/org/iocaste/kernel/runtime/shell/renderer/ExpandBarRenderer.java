@@ -38,7 +38,8 @@ public class ExpandBarRenderer extends AbstractElementRenderer<ExpandBar> {
         edge.setEnabled(container.isEnabled());
         ebarea.addChild(get(Const.BUTTON).run(edge, config));
         
-        handler = config.viewctx.getEventHandler(edge.getAction(), "click");
+        handler = config.viewctx.
+                getEventHandler(name, edge.getAction(), "click");
         handler.name = edge.getHtmlName();
         handler.call = new StringBuilder("revertElementDisplay('").
                 append(name).append("'); send ('").

@@ -13,8 +13,9 @@ public class FormFactory extends AbstractSpecFactory {
         String currentaction;
         Form form = viewctx.view.getElement(htmlname);
         
-        viewctx.addEventHandler("", currentaction = form.getAction());
-        handler = viewctx.getEventHandler(currentaction, "");
+        viewctx.addEventHandler(
+                currentaction = form.getAction(), currentaction, "");
+        handler = viewctx.getEventHandler(currentaction, currentaction, "");
         handler.name = currentaction;
         handler.submit = true;
     }

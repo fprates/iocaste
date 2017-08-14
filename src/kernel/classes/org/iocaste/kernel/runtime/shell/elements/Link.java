@@ -69,13 +69,18 @@ public class Link extends ToolDataElement {
     public final void add(String name, Object value, int type) {
         values.put(name, new LinkEntry(value, type));
     }
-
+    
     public final void add(String name, ExtendedObject object) {
-        DataElement element = object.getModel().getModelItem(name).
-                getDataElement();
         String pname = new StringBuilder(tooldata.name).append("_").
                 append(name).toString();
-        add(pname, object.get(name), element.getType());
+        add(pname, name, object);
+    }
+    
+    public final void add(
+            String name, String field, ExtendedObject object) {
+        DataElement element = object.getModel().getModelItem(field).
+                getDataElement();
+        add(name, object.get(field), element.getType());
     }
     
     @Override

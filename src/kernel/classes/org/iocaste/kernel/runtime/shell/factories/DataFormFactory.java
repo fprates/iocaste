@@ -15,9 +15,11 @@ public class DataFormFactory extends AbstractSpecFactory {
     
     @Override
     public final void addEventHandler(ViewContext viewctx, String htmlname) {
+        String name;
         DataForm dataform = viewctx.view.getElement(htmlname);
         for (Element element : dataform.getElements())
-            viewctx.addEventHandler("focus", element.getHtmlName());
+            viewctx.addEventHandler(
+                    name = element.getHtmlName(), name, "focus");
     }
     
     @Override
