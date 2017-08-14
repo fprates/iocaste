@@ -95,7 +95,15 @@ public abstract class AbstractContext implements Context {
     
     @Override
     public final void popPage(String name) {
-        Iterator<String> it = pagestack.iterator();
+        Iterator<String> it;
+        
+        if (name == null) {
+            page = pagestack.get(0);
+            pagestack.clear();
+            return;
+        }
+        
+        it = pagestack.iterator();
         while (it.hasNext()) {
             page = pagestack.pop();
             if (it.next().equals(name))
