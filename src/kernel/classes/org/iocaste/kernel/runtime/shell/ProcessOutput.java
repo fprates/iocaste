@@ -1,8 +1,10 @@
 package org.iocaste.kernel.runtime.shell;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.kernel.runtime.RuntimeEngine;
 import org.iocaste.kernel.runtime.shell.factories.SpecFactory;
@@ -136,6 +138,7 @@ public class ProcessOutput extends AbstractHandler {
         SpecFactory factory;
         Input input;
         ToolData data;
+        Set<String> elements;
         
         outputdata.viewctx.function = getFunction();
         outputdata.viewctx.title = outputdata.viewexport.title;
@@ -148,7 +151,12 @@ public class ProcessOutput extends AbstractHandler {
                 outputdata.viewctx.subpages.put(
                         (String)outputdata.viewexport.subpages[i][0],
                         (ViewExport)outputdata.viewexport.subpages[i][1]);
-        
+
+        // se for houver prefixo, processa apenas elementos prefixados.
+        if (outputdata.viewexport.prefix == null)
+            elements = outputdata.viewctx.entries.keySet();
+        else
+            elements = new LinkedHashSet<>();
         for (Object object : outputdata.viewexport.items) {
             data = (ToolData)object;
             if (outputdata.viewexport.prefix == null) {
@@ -159,9 +167,10 @@ public class ProcessOutput extends AbstractHandler {
             data = data.clone(
                     outputdata.viewexport.prefix, outputdata.parententry.data);
             outputdata.viewctx.add(data);
+            elements.add(data.name);
         }
         
-        for (String key : outputdata.viewctx.entries.keySet()) {
+        for (String key : elements) {
             entry = outputdata.viewctx.entries.get(key);
             build(outputdata.viewctx, entry, outputdata.viewexport.prefix);
             factory = outputdata.viewctx.function.factories.
