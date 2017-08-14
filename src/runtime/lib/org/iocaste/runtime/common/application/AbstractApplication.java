@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.Handler;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.protocol.utils.Tools;
@@ -257,7 +258,6 @@ public abstract class AbstractApplication<T extends Context>
 		Transaction transaction;
         T context;
         ViewExport outputview;
-        ActionHandler handler;
         RuntimeEngine iocaste;
         ServiceInterfaceData servicedata;
         byte[] content;
@@ -284,17 +284,8 @@ public abstract class AbstractApplication<T extends Context>
                 outputview.reqparameters = Tools.toArray(req.getParameterMap());
                 outputview = iocaste.processInput(outputview);
         		move(context, outputview);
-            	if (outputview.action != null) {
-                	handler = (ActionHandler)
-                			context.getHandler(outputview.action);
-                	try {
-                		handler.run(context);
-                	} catch (IocasteErrorMessage e) {
-                		
-                	} catch (Exception e) {
-                		throw e;
-                	}
-            	}
+            	if (outputview.action != null)
+            	    run(context, outputview.action);
             }
             outputview = getView(servicedata, context);
         }
@@ -304,6 +295,19 @@ public abstract class AbstractApplication<T extends Context>
         print(resp, content);
 	}
 
+	private final void run(T context, String action) throws Exception {
+        ActionHandler handler = context.getHandler(action);
+        if (handler == null)
+            throw new IocasteException("no handler defined for %s.", action);
+        try {
+            handler.run(context);
+        } catch (IocasteErrorMessage e) {
+            
+        } catch (Exception e) {
+            throw e;
+        }
+	}
+	
     @Override
     public Service serviceInstance(String path) {
         // unused in AbstractApplication. Compatibility only.
