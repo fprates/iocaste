@@ -9,7 +9,9 @@ import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.kernel.runtime.shell.elements.Link;
 import org.iocaste.kernel.runtime.shell.elements.StandardContainer;
 import org.iocaste.runtime.common.application.ToolData;
+import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.InputComponent;
 
 public class TilesTool extends AbstractComponentTool {
     
@@ -26,6 +28,7 @@ public class TilesTool extends AbstractComponentTool {
         ToolData item, exportitem;
         Object value;
         Link link;
+        String response;
         ExtendedObject object = (ExtendedObject)tile.get();
         String prefix = tile.getPrefix();
         
@@ -38,8 +41,11 @@ public class TilesTool extends AbstractComponentTool {
                 item.text = (value == null)? "" : value.toString();
                 continue;
             }
+            
+            response = new StringBuilder(prefix).append("_").
+                    append(item.modelitem).toString();
             link = data.viewctx.view.getElement(item.name);
-            link.add(prefix, item.modelitem, object);
+            link.add(response, item.modelitem, object);
             link.setText("");
             if (item.action)
                 item.actionname = object.get(item.modelitem).toString();
@@ -47,7 +53,25 @@ public class TilesTool extends AbstractComponentTool {
     }
     
     @Override
-    public final void load() { }
+    public final void load() {
+        ToolData exportitem;
+        String name;
+        InputComponent input;
+        ViewExport viewexport = viewctx.subpages.get(entry.data.subpage);
+        
+        for (int i = 0; i < viewexport.items.length; i++) {
+            exportitem = (ToolData)viewexport.items[i];
+            if (exportitem.modelitem == null)
+                continue;
+            name = new StringBuilder(entry.data.name).append("_").
+                    append(exportitem.modelitem).toString();
+            input = viewctx.view.getElement(name);
+            if (input == null)
+                continue;
+            entry.data.value = input.get();
+            return;
+        }
+    }
 
     @Override
     public void refresh() { }

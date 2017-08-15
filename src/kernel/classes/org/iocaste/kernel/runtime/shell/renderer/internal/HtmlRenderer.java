@@ -323,6 +323,13 @@ public class HtmlRenderer {
 //        config.setPopupControl(pagectx.getPopupControl());
         config.setTracking(viewctx.tracking);
         
+        if (viewctx.offline) {
+            for (Container container : viewctx.view.getContainers())
+                renderers.get(container.getType()).run(
+                        bodycontent, container, config);
+            return null;
+        }
+        
         html.add("<!DOCTYPE html>");
         bodytag.add("onLoad", "initialize()");
         for (Container container : viewctx.view.getContainers())

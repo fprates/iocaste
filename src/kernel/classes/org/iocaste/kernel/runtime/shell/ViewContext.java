@@ -30,6 +30,7 @@ public class ViewContext {
     public Map<String, Map<String, Map<String, ActionEventHandler>>> actions;
     public Map<String, ViewExport> subpages;
     public ComponentEntry parent;
+    public boolean offline;
 	
     public ViewContext() {
         this(new View(null, null));

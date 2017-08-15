@@ -23,6 +23,7 @@ import org.iocaste.kernel.documents.GetObject;
 import org.iocaste.kernel.runtime.RuntimeEngine;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ControllerData;
+import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.InputStatus;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.IocasteException;
@@ -599,8 +600,10 @@ public class ProcessInput extends AbstractHandler {
         
         config = new ControllerData();
         config.state.viewctx = data.viewctx;
+        config.state.viewctx.offline = true;
         outputprocess.run(data);
         
+        new HtmlRenderer().run(config.state.viewctx);
         for (String key : parameters.keySet()) {
             if (isAction(key, key)) {
                 if (actionname != null)
