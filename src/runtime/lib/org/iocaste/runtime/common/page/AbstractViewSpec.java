@@ -10,7 +10,6 @@ import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 public abstract class AbstractViewSpec implements ViewSpec {
     protected String parent;
     private Map<String, ViewSpecItem> items;
-    private boolean initialized;
     private Context context;
     
     public AbstractViewSpec() {
@@ -56,11 +55,6 @@ public abstract class AbstractViewSpec implements ViewSpec {
     @Override
     public final Collection<ViewSpecItem> getItems() {
         return items.values();
-    }
-
-    @Override
-    public final boolean isInitialized() {
-        return initialized;
     }
     
     protected final void link(String parent, String name) {
@@ -131,12 +125,6 @@ public abstract class AbstractViewSpec implements ViewSpec {
         }
         this.context = context;
         execute(context);
-        setInitialized(true);
-    }
-
-    @Override
-    public final void setInitialized(boolean initialized) {
-        this.initialized = initialized;
     }
     
     protected final void spec(String parent, ViewSpec spec) {

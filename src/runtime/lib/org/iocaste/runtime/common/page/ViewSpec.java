@@ -11,14 +11,10 @@ public interface ViewSpec {
     
     public abstract Collection<ViewSpecItem> getItems();
     
-    public abstract boolean isInitialized();
-    
     public abstract void put(String parent, TYPES type, String name);
     
     public abstract void run(Context context);
     
     public abstract void run(ViewSpecItem item, Context context);
-    
-    public abstract void setInitialized(boolean initialized);
 
 }

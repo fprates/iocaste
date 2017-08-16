@@ -37,6 +37,7 @@ public abstract class AbstractPage {
     private Context context;
     private AbstractPage parent, root;
     private int subpagessize;
+    private boolean ready;
     
     public AbstractPage() {
         actions = new HashSet<>();
@@ -178,6 +179,10 @@ public abstract class AbstractPage {
         return data;
     }
     
+    public final boolean isReady() {
+        return ready;
+    }
+    
 	public final boolean isSubPage(String name) {
 	    return children.get(name).subpage;
 	}
@@ -240,6 +245,10 @@ public abstract class AbstractPage {
     
     public final void setEntity(String entity) {
         this.entity = entity;
+    }
+    
+    public final void setReady(boolean ready) {
+        this.ready = ready;
     }
     
     protected final void submit(String action, ActionHandler handler) {

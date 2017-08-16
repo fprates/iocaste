@@ -74,7 +74,7 @@ public abstract class AbstractApplication<T extends Context>
         ViewConfig config = page.getConfig();
         ViewInput input = page.getInput();
         
-        if (!spec.isInitialized()) {
+        if (!page.isReady()) {
             if (servicedata != null)
                 configPageStyleData(page, servicedata);
             spec.run(context);
@@ -101,6 +101,7 @@ public abstract class AbstractApplication<T extends Context>
             messagesrc = context.getMessageSource();
             if (messagesrc != null)
                 prepareMessages(page, messagesrc);
+            page.setReady(true);
         }
         
         if (input != null)

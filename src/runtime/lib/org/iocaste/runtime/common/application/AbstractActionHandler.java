@@ -244,16 +244,11 @@ public abstract class AbstractActionHandler<C extends Context>
     }
     
     protected final void init(String view) {
-        ViewSpec spec;
         AbstractPage page = context.getPage(view);
         
         if (page == null)
             throw new IocasteException("page %s undefined.", view);
-        
-        spec = page.getSpec();
-        if (spec == null)
-            throw new IocasteException("undefined spec for page %s.", view);
-        spec.setInitialized(false);
+        page.setReady(false);
     }
     
     protected final ExtendedObject instance(String model) {
