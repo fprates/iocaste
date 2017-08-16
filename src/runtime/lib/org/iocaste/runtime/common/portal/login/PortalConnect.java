@@ -6,10 +6,11 @@ import java.util.Map;
 //import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.runtime.common.application.AbstractActionHandler;
+import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.portal.PortalContext;
 import org.iocaste.shell.common.Const;
 
-public class PortalConnect extends AbstractActionHandler<PortalContext> {
+public class PortalConnect extends AbstractActionHandler<Context> {
     private Map<String, String> forms;
     
     public PortalConnect() {
@@ -19,21 +20,22 @@ public class PortalConnect extends AbstractActionHandler<PortalContext> {
     }
     
     @Override
-    protected void execute(PortalContext context) throws Exception {
+    protected void execute(Context context) throws Exception {
 //        ComplexDocument usertree;
         String form, appname, pagename;
         ExtendedObject object;
         boolean connected;
+        PortalContext portalctx = context.portalctx();
         
         pagename = context.getPageName();
         if (pagename.equals("authentic")) {
             form = forms.get(pagename);
-            context.email = getst(form, "EMAIL");
-            context.secret = getst(form, "SECRET");
+            portalctx.email = getst(form, "EMAIL");
+            portalctx.secret = getst(form, "SECRET");
         }
         
         appname = context.getAppName();
-        object = getextobj("PORTAL_USERS", appname, context.email);
+        object = getextobj("PORTAL_USERS", appname, portalctx.email);
         if (object == null)
             message(Const.ERROR, "invalid.user");
 
@@ -44,13 +46,13 @@ public class PortalConnect extends AbstractActionHandler<PortalContext> {
 //            return;
 //        }
 
-        context.username = object.getst("USERNAME");
+        portalctx.username = object.getst("USERNAME");
         connected = context.runtime().
-                login(context.username, context.secret, "pt_BR");
+                login(portalctx.username, portalctx.secret, "pt_BR");
         if (!connected)
             message(Const.ERROR, "invalid.username.password");
         
-        context.secret = null;
+        portalctx.secret = null;
         if (context.getPage().getActionHandler("load") != null)
             execute("load");
         else

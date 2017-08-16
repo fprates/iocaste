@@ -22,6 +22,8 @@ import org.iocaste.protocol.Service;
 import org.iocaste.protocol.utils.Tools;
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.RuntimeEngine;
+import org.iocaste.runtime.common.managedview.ManagedViewContext;
+import org.iocaste.runtime.common.managedview.ManagedViewFactory;
 import org.iocaste.runtime.common.IocasteErrorMessage;
 import org.iocaste.runtime.common.navcontrol.StandardNavControlConfig;
 import org.iocaste.runtime.common.navcontrol.StandardNavControlSpec;
@@ -41,19 +43,25 @@ public abstract class AbstractApplication<T extends Context>
 		extends AbstractIocasteServlet implements Application<T> {
 	private static final long serialVersionUID = 1890996994514012046L;
 	private Map<String, T> ctxentries;
-    private StandardPageFactory factory;
+    private StandardPageFactory pagefactory;
+    private ManagedViewFactory mviewfactory;
     
 	public AbstractApplication() {
 		ctxentries = new HashMap<>();
-        factory = new StandardPageFactory();
+        pagefactory = new StandardPageFactory();
+        mviewfactory = new ManagedViewFactory();
 	}
 	
     private final void buildPages(T context) throws Exception {
         Map<String, AbstractPage> pages;
-        
+        Map<String, ManagedViewContext> entities;
+
+        entities = context.getEntities();
+        for (String key :  entities.keySet())
+            mviewfactory.build(context, entities.get(key));
         pages = context.getPages();
         for (String key : pages.keySet())
-            factory.instance(context, key, pages.get(key));
+            pagefactory.instance(context, key, pages.get(key));
     }
     
     private final void buildView(
@@ -170,7 +178,7 @@ public abstract class AbstractApplication<T extends Context>
 		return getServletName();
 	}
 	
-	private final ViewExport getExceptionView() {
+	private final ViewExport getExceptionView(Exception e) {
 		return new ViewExport();
 	}
 
@@ -195,7 +203,7 @@ public abstract class AbstractApplication<T extends Context>
                 if (!page.isSubPage(key))
                     continue;
                 if (child.getSpec() == null)
-                    factory.instance(context, key, child);
+                    pagefactory.instance(context, key, child);
                 buildView(child, context, null);
                 page.outputview.subpages[i][0] = key;
                 page.outputview.subpages[i++][1] = child.outputview;
@@ -268,10 +276,11 @@ public abstract class AbstractApplication<T extends Context>
         servicedata.sessionid = req.getSession().getId();
 		iocaste = new RuntimeEngine(servicedata);
         transaction = transactionInstance(iocaste);
-        servicedata.sessionid = transaction.begin(req);
-        if (servicedata.sessionid == null) {
-        	outputview = getExceptionView();
-        } else {
+        try {
+            servicedata.sessionid = transaction.begin(req);
+            if (servicedata.sessionid == null)
+                throw new IocasteException("invalid session.");
+            
             context = ctxentries.get(servicedata.sessionid);
             if (context == null) {
             	ctxentries.put(servicedata.sessionid, context = execute());
@@ -290,12 +299,17 @@ public abstract class AbstractApplication<T extends Context>
             	if (outputview.action != null)
             	    run(context, outputview.action);
             }
+            
             outputview = getView(servicedata, context);
+            content = iocaste.processOutput(outputview);
+            print(resp, content);
+        } catch (Exception e) {
+//            outputview = getExceptionView(e);
+//            content = iocaste.processOutput(outputview);
+            throw e;
+        } finally {
+            transaction.finish(resp);
         }
-        
-        content = iocaste.processOutput(outputview);
-        transaction.finish(resp);
-        print(resp, content);
 	}
 
 	private final void run(T context, String action) throws Exception {

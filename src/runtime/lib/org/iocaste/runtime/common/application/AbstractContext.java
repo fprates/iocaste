@@ -8,11 +8,15 @@ import java.util.Stack;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.RuntimeEngine;
+import org.iocaste.runtime.common.managedview.ManagedViewContext;
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.runtime.common.page.StandardPage;
+import org.iocaste.runtime.common.portal.PortalContext;
 import org.iocaste.shell.common.MessageSource;
 
 public abstract class AbstractContext implements Context {
+    private PortalContext portalctx;
+    private Map<String, ManagedViewContext> entities;
     private MessageSource messagesrc;
     private Map<String, AbstractPage> pages;
     private String page, appname;
@@ -23,6 +27,8 @@ public abstract class AbstractContext implements Context {
         pages = new HashMap<>();
         page = "main";
         pagestack = new Stack<>();
+        portalctx = new PortalContext(this);
+        entities = new HashMap<>();
     }
     
     public final void add(String name, AbstractPage page) {
@@ -43,6 +49,11 @@ public abstract class AbstractContext implements Context {
     @Override
     public final String getAppName() {
     	return appname;
+    }
+    
+    @Override
+    public final Map<String, ManagedViewContext> getEntities() {
+        return entities;
     }
     
     @Override
@@ -86,6 +97,19 @@ public abstract class AbstractContext implements Context {
     public final Map<String, AbstractPage> getPages() {
     	return pages;
     }
+
+    @Override
+    public final ManagedViewContext mviewctx(String entity) {
+        ManagedViewContext mviewctx = entities.get(entity);
+        if (mviewctx == null)
+            entities.put(entity, mviewctx = new ManagedViewContext(entity));
+        return mviewctx;
+    }
+    
+    @Override
+    public final ManagedViewContext mviewctx() {
+        return mviewctx(getPage().getEntity());
+    }
     
     @Override
     public final void popPage() {
@@ -109,6 +133,11 @@ public abstract class AbstractContext implements Context {
             if (it.next().equals(name))
                 return;
         }
+    }
+
+    @Override
+    public final PortalContext portalctx() {
+        return portalctx;
     }
     
     @Override

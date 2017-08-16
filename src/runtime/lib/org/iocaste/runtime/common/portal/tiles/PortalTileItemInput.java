@@ -1,17 +1,17 @@
 package org.iocaste.runtime.common.portal.tiles;
 
+import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.page.AbstractViewInput;
-import org.iocaste.runtime.common.portal.PortalContext;
 
-public class PortalTileItemInput extends AbstractViewInput<PortalContext> {
+public class PortalTileItemInput extends AbstractViewInput<Context> {
     
     @Override
-    public final void execute(PortalContext context) {
+    public final void execute(Context context) {
         textset("item", "");
     }
     
     @Override
-    public final void init(PortalContext context) {
+    public final void init(Context context) {
         execute(context);
     }
 }

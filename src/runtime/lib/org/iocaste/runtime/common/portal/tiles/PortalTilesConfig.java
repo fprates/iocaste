@@ -1,13 +1,13 @@
 package org.iocaste.runtime.common.portal.tiles;
 
+import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.AbstractViewConfig;
-import org.iocaste.runtime.common.portal.PortalContext;
 
-public class PortalTilesConfig extends AbstractViewConfig<PortalContext> {
+public class PortalTilesConfig extends AbstractViewConfig<Context> {
 
     @Override
-    protected void execute(PortalContext context) {
+    protected void execute(Context context) {
         ToolData tiles, nodes;
         
         nodes = getTool("viewport");

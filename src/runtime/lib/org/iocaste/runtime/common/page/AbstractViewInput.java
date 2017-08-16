@@ -82,8 +82,8 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
             String item, Map<String, Object> values) {
         getComponentData(tooldata).instance(item).values = values;
     }
-//    
-//    protected void loadInputTexts(PageBuilderContext context) {
+    
+    protected void loadInputTexts() {
 //        Set<Validator> validators;
 //        AbstractExtendedValidator exvalidator;
 //        Element element;
@@ -106,7 +106,7 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
 //                input.setText(exvalidator.getText(input.get()));
 //            }
 //        }
-//    }
+    }
 //    
 //    protected final void print(Collection<String> lines) {
 //        PrintArea area = getElement("printarea");

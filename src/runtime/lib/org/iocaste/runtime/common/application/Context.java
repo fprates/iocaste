@@ -5,14 +5,20 @@ import java.util.Map;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.RuntimeEngine;
+import org.iocaste.runtime.common.managedview.ManagedViewContext;
 import org.iocaste.runtime.common.page.AbstractPage;
+import org.iocaste.runtime.common.portal.PortalContext;
 import org.iocaste.shell.common.MessageSource;
 
 public interface Context {
-	
+
+    public abstract void add(String name, AbstractPage page);
+    
     public abstract ActionHandler getHandler(String action);
     
     public abstract String getAppName();
+    
+    public abstract Map<String, ManagedViewContext> getEntities();
     
     public abstract MessageSource getMessageSource();
 
@@ -27,9 +33,15 @@ public interface Context {
     
     public abstract Map<String, AbstractPage> getPages();
     
+    public abstract ManagedViewContext mviewctx(String entity);
+    
+    public abstract ManagedViewContext mviewctx();
+    
     public abstract void popPage();
     
     public abstract void popPage(String name);
+    
+    public abstract PortalContext portalctx();
     
     public abstract void pushPage();
     

@@ -5,23 +5,25 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.user.User;
 import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.application.AbstractActionHandler;
+import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.portal.PortalContext;
 import org.iocaste.shell.common.Const;
 
-public class PortalSignUpSave extends AbstractActionHandler<PortalContext> {
+public class PortalSignUpSave extends AbstractActionHandler<Context> {
 
     @Override
-    protected void execute(PortalContext context) throws Exception {
+    protected void execute(Context context) throws Exception {
         ExtendedObject object;
         String appname, username;
         User user;
         long userid;
         RuntimeEngine runtime;
+        PortalContext portalctx = context.portalctx();
         
-        context.email = getst("user", "EMAIL");
-        context.secret = getst("user", "SECRET");
+        portalctx.email = getst("user", "EMAIL");
+        portalctx.secret = getst("user", "SECRET");
         appname = context.getAppName();
-        object = select("PORTAL_USERS", appname, context.email);
+        object = select("PORTAL_USERS", appname, portalctx.email);
         if (object != null) {
             message(Const.ERROR, "user.exists");
             return;
@@ -33,11 +35,11 @@ public class PortalSignUpSave extends AbstractActionHandler<PortalContext> {
         user = new User();
         user.setUsername(username);
         runtime.create(user);
-        runtime.setUserPassword(user.getUsername(), context.secret, false);
+        runtime.setUserPassword(user.getUsername(), portalctx.secret, false);
         runtime.assignAuthorization(username, "BASE");
         runtime.assignAuthorization(username, "APPBUILDER");
-        if (context.userprofile != null)
-            runtime.assignAuthorization(username, context.userprofile);
+        if (portalctx.userprofile != null)
+            runtime.assignAuthorization(username, portalctx.userprofile);
         
         object = instance("PORTAL_USERS");
         Documents.move(object, getobject("user"));

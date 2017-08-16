@@ -2,22 +2,24 @@ package org.iocaste.runtime.common.portal.tiles;
 
 import java.util.Set;
 
+import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.AbstractViewConfig;
 import org.iocaste.runtime.common.portal.PortalContext;
 
-public class PortalTileItemConfig extends AbstractViewConfig<PortalContext> {
+public class PortalTileItemConfig extends AbstractViewConfig<Context> {
     
     @Override
-    protected void execute(PortalContext context) {
+    protected void execute(Context context) {
         PortalTilesData data;
         ToolData link;
         Set<String> show;
         boolean first = true;
+        PortalContext portalctx = context.portalctx();
         
         getTool("node_item").style = "portal_tile_frame";
         
-        data = context.tilesDataInstance();
+        data = portalctx.tilesDataInstance();
         link = getTool("item");
         link.actionname = data.action;
         link.action = (data.action == null);

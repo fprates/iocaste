@@ -24,7 +24,7 @@ public abstract class AbstractPage {
     private Map<String, ToolData> entries;
     private Map<String, ActionHandler> handlers;
     private Set<String> actions;
-    private String submit;
+    private String submit, entity;
     private Map<String, ChildPage> children;
     private ViewSpec spec;
     private ViewConfig config;
@@ -108,6 +108,10 @@ public abstract class AbstractPage {
     @SuppressWarnings("unchecked")
     protected final <C extends Context> C getContext() {
         return (C)context;
+    }
+    
+    public final String getEntity() {
+        return entity;
     }
     
     /**
@@ -232,6 +236,10 @@ public abstract class AbstractPage {
     
     public final void set(Context context) {
         this.context = context;
+    }
+    
+    public final void setEntity(String entity) {
+        this.entity = entity;
     }
     
     protected final void submit(String action, ActionHandler handler) {

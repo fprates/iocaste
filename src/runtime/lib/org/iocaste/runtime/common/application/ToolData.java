@@ -24,7 +24,7 @@ public class ToolData implements Serializable {
     public String text, tag, itemstyle, subpage, modelitem;
     public boolean internallabel, action, submit, disabled, secret, ns;
     public boolean invisible, required, focus, container, control, datastore;
-    public boolean nolock, cancellable, absolute;
+    public boolean nolock, cancellable, absolute, mark;
     public int length, vlength, mode;
     public String[] groups, ordering;
 	public Object[] textargs; 
