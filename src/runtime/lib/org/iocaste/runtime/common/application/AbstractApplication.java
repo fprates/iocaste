@@ -275,13 +275,16 @@ public abstract class AbstractApplication<T extends Context>
             context = ctxentries.get(servicedata.sessionid);
             if (context == null) {
             	ctxentries.put(servicedata.sessionid, context = execute());
+            	if (context == null)
+            	  throw new IocasteException("application context undefined.");
             	context.set(iocaste);
             	context.set(this);
                 if (context.getPages().size() > 0)
                     buildPages(context);
             } else {
                 outputview = getView(servicedata, context);
-                outputview.reqparameters = Tools.toArray(req.getParameterMap());
+                outputview.reqparameters = Tools.
+                        toArray(req.getParameterMap());
                 outputview = iocaste.processInput(outputview);
         		move(context, outputview);
             	if (outputview.action != null)
