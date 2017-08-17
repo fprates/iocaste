@@ -19,9 +19,6 @@ public class ManagedViewContext {
     public AbstractPage updateselectpage, displayselectpage;
     public AbstractActionHandler<?> save, validate, updateload, displayload;
     public AbstractActionHandler<?> inputvalidate;
-    public AbstractEntityPage entitypage;
-    public AbstractEntityCustomPage custompage;
-    public AbstractEntityDisplayPage displaypage;
     public Map<String, String> models;
     
     public ManagedViewContext(String entity) {

@@ -18,7 +18,7 @@ public abstract class AbstractEntityCustomPage extends AbstractPage {
     }
     
     @Override
-    public void execute() {
+    protected void execute() {
         ManagedViewContext mviewctx = getContext().mviewctx();
         
         set(spec);
