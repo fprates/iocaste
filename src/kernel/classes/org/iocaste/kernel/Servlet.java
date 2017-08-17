@@ -47,7 +47,7 @@ public class Servlet extends AbstractIocasteServlet {
         session.database = users.database = config.database = database; 
         documents.database = database;
         users.session = database.session = auth.session = session;
-        runtime.session = compiler.session = users.session;
+        compiler.session = users.session;
         process.files = compiler.files = files;
         session.users = users;
         register(database);
@@ -63,24 +63,32 @@ public class Servlet extends AbstractIocasteServlet {
         register(compiler);
         register(runtime);
         
-        authorize("is_connected", null);
         authorize("login", null);
         authorize("output_process", null);
         authorize("legacy_output_process", null);
         authorize("context_new", null);
-        authorize("is_valid_context", null);
-        
-        parameters = new HashMap<>();
-        parameters.put("from",
-                new String[] {"SHELL004", "SHELL005", "SHELL006"});
-        
-        authorize("checked_select", parameters);
+        authorize("is_connected", null);
+        authorize("style_data_get", null);
         authorize("disconnected_operation", null);
         authorize("get_host", null);
         authorize("get_locale", null);
         authorize("commit", null);
         authorize("rollback", null);
         authorize("is_authorized", null);
+        authorize("input_process", null);
+        
+        parameters = new HashMap<>();
+        parameters.put("from",
+                new String[] {"SHELL004", "SHELL005", "SHELL006"});
+        authorize("checked_select", parameters);
+        
+        parameters = new HashMap<>();
+        parameters.put("name", new String[] {"PORTAL_USER_INPUT"});
+        authorize("get_document_model", parameters);
+        
+        parameters = new HashMap<>();
+        parameters.put("modelname", new String[] {"PORTAL_USERS"});
+        authorize("get_object", null);
         
         disconnectedop("disconnected_operation");
     }

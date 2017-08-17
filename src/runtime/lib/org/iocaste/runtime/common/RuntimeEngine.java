@@ -101,6 +101,13 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     }
     
     /**
+     * Desconecta usuário atual da sessão.
+     */
+    public final void disconnect() {
+        call(new Message("disconnect"));
+    }
+    
+    /**
      * 
      * @param name
      * @return
@@ -249,10 +256,23 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
         return call(message);
     }
     
-    public final String getTrackId(String trackid) {
-    	Message message = new Message("track_id_get");
-    	message.add("track_id", trackid);
-    	return call(message);
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final User getUserData(String name) {
+        Message message = new Message("get_user_data");
+        message.add("username", name);
+        return call(message);
+    }
+    
+    /**
+     * Retorna usuário da sessão.
+     * @return
+     */
+    public final String getUsername() {
+        return call(new Message("get_username"));
     }
     
     /**
@@ -264,14 +284,6 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
         Message message = new Message("get_user_profiles");
         message.add("username", username);
         return call(message);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final boolean isValidContext() {
-        return call(new Message("is_valid_context"));
     }
     
     /**
@@ -293,8 +305,8 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
      * 
      * @return
      */
-    public final String newContext() {
-    	return data.sessionid = call(new Message("context_new"));
+    public final void newContext() {
+    	call(new Message("context_new"));
     }
     
     /**

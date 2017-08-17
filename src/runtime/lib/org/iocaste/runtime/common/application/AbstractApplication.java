@@ -179,9 +179,9 @@ public abstract class AbstractApplication<T extends Context>
 		return getServletName();
 	}
 	
-	private final ViewExport getExceptionView(Exception e) {
-		return new ViewExport();
-	}
+//	private final ViewExport getExceptionView(Exception e) {
+//		return new ViewExport();
+//	}
 
 	@Override
 	public Set<String> getMethods() {
@@ -264,10 +264,9 @@ public abstract class AbstractApplication<T extends Context>
 	
 	private void run(HttpServletRequest req, HttpServletResponse resp)
 			throws Exception {
-		Transaction transaction;
         T context;
         ViewExport outputview;
-        RuntimeEngine iocaste;
+        RuntimeEngine runtime;
         ServiceInterfaceData servicedata;
         byte[] content;
 
@@ -275,41 +274,39 @@ public abstract class AbstractApplication<T extends Context>
         servicedata = new ServiceInterfaceData();
         servicedata.servername = getServerName(req);
         servicedata.sessionid = req.getSession().getId();
-		iocaste = new RuntimeEngine(servicedata);
-        transaction = transactionInstance(iocaste);
+		runtime = new RuntimeEngine(servicedata);
         try {
-            servicedata.sessionid = transaction.begin(req);
             if (servicedata.sessionid == null)
                 throw new IocasteException("invalid session.");
             
             context = ctxentries.get(servicedata.sessionid);
             if (context == null) {
+                runtime.newContext();
             	ctxentries.put(servicedata.sessionid, context = execute());
             	if (context == null)
             	  throw new IocasteException("application context undefined.");
-            	context.set(iocaste);
+            	context.set(runtime);
             	context.set(this);
                 if (context.getPages().size() > 0)
                     buildPages(context);
             } else {
                 outputview = getView(servicedata, context);
+                outputview.action = null;
                 outputview.reqparameters = Tools.
                         toArray(req.getParameterMap());
-                outputview = iocaste.processInput(outputview);
+                outputview = runtime.processInput(outputview);
         		move(context, outputview);
             	if (outputview.action != null)
             	    run(context, outputview.action);
             }
             
             outputview = getView(servicedata, context);
-            content = iocaste.processOutput(outputview);
+            content = runtime.processOutput(outputview);
             print(resp, content);
         } catch (Exception e) {
 //            outputview = getExceptionView(e);
 //            content = iocaste.processOutput(outputview);
             throw e;
-        } finally {
-            transaction.finish(resp);
         }
 	}
 
@@ -350,9 +347,5 @@ public abstract class AbstractApplication<T extends Context>
     @Override
     public void setSessionid(String sessionid) {
         // unused in AbstractApplication. Compatibility only.
-    }
-	
-    private final Transaction transactionInstance(RuntimeEngine runtime) {
-    	return new Transaction(runtime);
     }
 }
