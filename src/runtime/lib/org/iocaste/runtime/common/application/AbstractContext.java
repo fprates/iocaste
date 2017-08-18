@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.managedview.ManagedViewContext;
@@ -178,6 +179,8 @@ public abstract class AbstractContext implements Context {
     
     @Override
     public final void setPageName(String name) {
+        if (name == null)
+            throw new IocasteException("can't set current page to null.");
     	this.page = name;
     }
     
