@@ -1,6 +1,7 @@
 package org.iocaste.runtime.common.application;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.runtime.common.ActionHandler;
@@ -24,6 +25,8 @@ public interface Context {
 
     public abstract ExtendedObject get(
             String page, String tooldata, int index);
+    
+    public abstract Set<String> getManagedViews();
     
     public abstract String getPageName();
     

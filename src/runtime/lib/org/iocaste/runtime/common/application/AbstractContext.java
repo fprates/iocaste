@@ -3,6 +3,7 @@ package org.iocaste.runtime.common.application;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import org.iocaste.documents.common.ExtendedObject;
@@ -76,6 +77,11 @@ public abstract class AbstractContext implements Context {
     @Override
     public final ExtendedObject get(String page, String tooldata, int index) {
         return pages.get(page).instance(tooldata).objects.get(index);
+    }
+
+    @Override
+    public final Set<String> getManagedViews() {
+        return entities.keySet();
     }
     
     @Override
