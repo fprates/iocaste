@@ -56,8 +56,6 @@ public class ProcessOutput extends AbstractHandler {
         Element element;
         for (String key : viewctx.view.getElements().keySet()) {
             element = viewctx.view.getElement(key);
-            if (!element.isVisible())
-                continue;
             factory = viewctx.function.factories.
                     get(CONST_TYPES.get(element.getType()));
             if (factory != null)
