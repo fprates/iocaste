@@ -150,6 +150,8 @@ public class ModelInstaller
     public final void remove(ExtendedObject object) {
         String name = getObjectName(object);
         DocumentModel model = documents.getModel(name);
+        if (model == null)
+            return;
         for (DocumentModelItem item : model.getItens())
             if (item.getSearchHelp() != null)
                 shlib.unassign(item);
