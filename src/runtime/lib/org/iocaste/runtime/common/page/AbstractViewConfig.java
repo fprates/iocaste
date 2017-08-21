@@ -11,7 +11,6 @@ import org.iocaste.runtime.common.application.ToolData;
 public abstract class AbstractViewConfig<C extends Context>
 		implements ViewConfig {
 	private C context;
-    private String prefix;
     private Map<String, DocumentModel> models;
     
     public AbstractViewConfig() {
@@ -42,14 +41,12 @@ public abstract class AbstractViewConfig<C extends Context>
     
     protected final ToolData getTool(String name) {
     	ToolData tooldata;
-        String toolname = (prefix == null)? name : new StringBuilder(prefix).
-        		append("_").append(name).toString();
     	AbstractPage page = context.getPage();
-        tooldata = page.instance(toolname);
+        tooldata = page.instance(name);
         if (tooldata != null)
         	return tooldata;
         for (String key : page.getChildren())
-            if ((tooldata = page.getChild(key).instance(toolname)) != null)
+            if ((tooldata = page.getChild(key).instance(name)) != null)
             	return tooldata;
         return null;
     }
@@ -66,24 +63,6 @@ public abstract class AbstractViewConfig<C extends Context>
         models.put(data.model, model);
         return model;
     }
-    
-    /**
-     * 
-     * @return
-     */
-    protected final String getPrefix() {
-        return prefix;
-    }
-    
-//    /**
-//     * 
-//     * @param tab
-//     * @param name
-//     * @return
-//     */
-//    protected final TabbedPaneItem getTabbedItem(String tab, String name) {
-//        return ((TabbedPane)getElement(tab)).getElement(name);
-//    }
     
     protected final void hide(ToolData data, String... fields) {
         setVisible(data, false, fields);
@@ -110,7 +89,6 @@ public abstract class AbstractViewConfig<C extends Context>
     @SuppressWarnings("unchecked")
     public final void run(Context context, String prefix) {
         this.context = (C)context;
-        this.prefix = prefix;
         execute(this.context);
     }
 
