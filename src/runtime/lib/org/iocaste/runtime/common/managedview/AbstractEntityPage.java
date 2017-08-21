@@ -29,7 +29,7 @@ public class AbstractEntityPage extends AbstractPage {
         switch (action) {
         case ManagedViewContext.CREATE:
             setSelectConfig(createselectconfig);
-            action(action, mviewctx.validate);
+            action(action, mviewctx.createvalidate);
             break;
         case ManagedViewContext.EDIT:
             setSelectConfig(updateselectconfig);

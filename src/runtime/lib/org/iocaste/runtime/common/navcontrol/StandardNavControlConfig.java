@@ -12,32 +12,38 @@ import org.iocaste.shell.common.MessageSource;
 public class StandardNavControlConfig extends AbstractViewConfig<Context> {
     public Object[][] ncconfig;
     
+    private final boolean configBar(NavControl navcontrol, AbstractPage page) {
+        String name;
+        NavControlButton navbutton = null;
+        for (String key : page.getActions())
+            navbutton = setNavButton(navcontrol, key);
+        name = page.getSubmit();
+        if (name != null)
+            navbutton = setNavButton(navcontrol, name);
+        return (navbutton != null);
+    }
+    
     @Override
     protected final void execute(Context context) {
         ToolData text, link;
-        String name;
         User user;
         NavControl navcontrol;
-        NavControlButton navbutton;
         AbstractPage page;
         RuntimeEngine runtime;
         MessageSource messages;
+        boolean show = false;
         
         page = context.getPage();
         page.add(new HeaderLink(
                 "shortcut icon", "/iocaste-kernel/images/favicon.ico"));
         
         navcontrol = page.getNavControl();
-        navbutton = null;
-        for (String key : page.getActions())
-            navbutton = setNavButton(navcontrol, key);
-        
-        name = page.getSubmit();
-        if (name != null)
-            navbutton = setNavButton(navcontrol, name);
+        show |= configBar(navcontrol, page);
+        for (String key : page.getChildren())
+            show |= configBar(navcontrol, page.getChild(key));
         
         setNavControlConfig(context);
-        if (navbutton != null)
+        if (show)
             getTool("actionbar").style = "nc_nav_buttonbar";
         
         link = getTool("nc_user");
@@ -48,7 +54,7 @@ public class StandardNavControlConfig extends AbstractViewConfig<Context> {
 
         text = getTool("nc_username");
         text.tag = "span";
-//        runtime = context.runtime();
+        runtime = context.runtime();
 //        if (runtime.isConnected()) {
 //            user = runtime.getUserData(runtime.getUsername());
 //            text.text = user.getFirstname();

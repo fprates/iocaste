@@ -3,6 +3,7 @@ package org.iocaste.runtime.common.managedview;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.runtime.common.application.AbstractActionHandler;
 import org.iocaste.runtime.common.page.AbstractPage;
 
@@ -17,9 +18,11 @@ public class ManagedViewContext {
     public String redirect;
     public AbstractPage maintenancepage, createselectpage;
     public AbstractPage updateselectpage, displayselectpage;
-    public AbstractActionHandler<?> save, validate, updateload, displayload;
-    public AbstractActionHandler<?> inputvalidate;
+    public AbstractActionHandler<?> save, updateload, displayload;
+    public AbstractActionHandler<?> createvalidate, inputvalidate;
     public Map<String, String> models;
+    public Object id, ns;
+    public ComplexDocument document;
     
     public ManagedViewContext(String entity) {
         this.entity = entity;

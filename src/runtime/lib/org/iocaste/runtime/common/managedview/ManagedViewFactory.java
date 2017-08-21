@@ -1,6 +1,7 @@
 package org.iocaste.runtime.common.managedview;
 
 import org.iocaste.runtime.common.application.Context;
+import org.iocaste.runtime.common.managedview.create.CreateValidate;
 import org.iocaste.runtime.common.managedview.display.ManagedDisplayPage;
 import org.iocaste.runtime.common.managedview.edit.ManagedEditPage;
 
@@ -10,6 +11,7 @@ public class ManagedViewFactory {
         AbstractEntityPage entitypage;
         AbstractEntityCustomPage custompage;
         AbstractEntityDisplayPage displaypage;
+        boolean create;
         
         mviewctx.redirect = (mviewctx.number == null)?
                 mviewctx.create1view : mviewctx.edit1view;
@@ -21,9 +23,11 @@ public class ManagedViewFactory {
                 ManagedViewContext.CREATE,
                 ManagedViewContext.DISPLAY,
                 ManagedViewContext.EDIT}) {
-            if ((mviewctx.number != null) &&
-                    action.equals(ManagedViewContext.CREATE))
+            create = action.equals(ManagedViewContext.CREATE);
+            if ((mviewctx.number != null) && create)
                 continue;
+            if (create)
+                mviewctx.createvalidate = new CreateValidate();
             entitypage = new ManagedEntityPage();
             entitypage.action = action;
             if (entitypage.spec == null)

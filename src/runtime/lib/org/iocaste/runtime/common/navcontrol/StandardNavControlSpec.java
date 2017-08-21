@@ -33,9 +33,15 @@ public class StandardNavControlSpec extends AbstractViewSpec {
         }
         
         page = context.getPage();
+        specBar(page);
+        for (String parentkey : page.getChildren())
+            specBar(page.getChild(parentkey));
+    }
+    
+    private final void specBar(AbstractPage page) {
+        String name;
         for (String key : page.getActions())
             button("actionbar", key);
-        
         name = page.getSubmit();
         if (name != null)
             button("actionbar", name);

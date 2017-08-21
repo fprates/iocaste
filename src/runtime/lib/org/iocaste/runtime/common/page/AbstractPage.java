@@ -47,13 +47,13 @@ public abstract class AbstractPage {
         children = new LinkedHashMap<>();
         title = new ViewTitle();
         specalias = new HashMap<>();
-        navcontrol = new NavControl();
         root = this;
     }
     
     protected void action(String action, ActionHandler handler) {
         actions.add(action);
         put(action, handler);
+        navcontrol.add(action);
     }
     
     public final void add(ToolData data) {
@@ -207,6 +207,7 @@ public abstract class AbstractPage {
     
     public final void run() throws Exception {
         handlers = (parent == null)? new HashMap<>() : parent.getHandlers();
+        navcontrol = (parent == null)? new NavControl() : parent.getNavControl();
         execute();
     }
     
@@ -254,6 +255,7 @@ public abstract class AbstractPage {
     protected final void submit(String action, ActionHandler handler) {
         submit = action;
         put(action, handler);
+        navcontrol.submit(action);
     }
     
     public final void subpage(String name, AbstractPage page) {

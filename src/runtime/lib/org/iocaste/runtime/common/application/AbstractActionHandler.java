@@ -10,7 +10,6 @@ import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.IocasteErrorMessage;
 import org.iocaste.runtime.common.page.AbstractPage;
-import org.iocaste.runtime.common.page.ViewSpec;
 import org.iocaste.shell.common.Const;
 
 public abstract class AbstractActionHandler<C extends Context>
@@ -106,10 +105,6 @@ public abstract class AbstractActionHandler<C extends Context>
 //    protected final String filenameget(String fileentry) {
 //        return fileentryget(fileentry).get();
 //    }
-//    
-//    private final ViewComponents getComponents() {
-//        return context.getView(page).getComponents();
-//    }
     
 	protected <T> T get(String tooldata, String field) {
     	return gettool(tooldata).object.get(field);
@@ -121,6 +116,15 @@ public abstract class AbstractActionHandler<C extends Context>
     
     protected final boolean getbl(String tooldata) {
     	return (boolean)gettool(tooldata).value;
+    }
+    
+    protected final ComplexDocument getcdocument(String cmodel, Object id) {
+        return getcdocument(cmodel, null, id);
+    }
+    
+    protected final ComplexDocument getcdocument(
+            String cmodel, Object ns, Object id) {
+        return context.runtime().getComplexDocument(cmodel, ns, id);
     }
     
     protected final double getd(String tooldata) {
@@ -191,15 +195,6 @@ public abstract class AbstractActionHandler<C extends Context>
     protected final String getst(String tooldata, String field) {
         return gettool(tooldata).object.get(field);
     }
-    
-//    protected final ComplexDocument getDocument(String cmodel, Object id) {
-//        return getDocument(cmodel, null, id);
-//    }
-//    
-//    protected final ComplexDocument getDocument(
-//            String cmodel, Object ns, Object id) {
-//        return documents.getComplexDocument(cmodel, ns, id);
-//    }
 //    
 //    protected Const getErrorType() {
 //        return context.function.getMessageType();
