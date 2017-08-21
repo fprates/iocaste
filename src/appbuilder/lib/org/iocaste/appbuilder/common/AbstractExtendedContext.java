@@ -160,7 +160,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         } else {
             index = -1;
             for (int i : entry.items.keySet()) {
-                if (!entry.items.get(i).equals(object))
+                if (!entry.items.get(i).object.equals(object))
                     continue;
                 index = i;
                 break;
