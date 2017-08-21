@@ -69,6 +69,13 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     }
     
     /**
+     * Aplica commit work à uma transação de banco de dados.
+     */
+    public final void commit() {
+        call(new Message("commit"));
+    }
+    
+    /**
      * 
      * @param xml
      * @return
@@ -352,6 +359,13 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
         Message message = new Message("remove_auth_profile");
         message.add("name", name);
         return call(message);
+    }
+    
+    /**
+     * 
+     */
+    public final void rollback() {
+        call(new Message("rollback"));
     }
     
     /**
