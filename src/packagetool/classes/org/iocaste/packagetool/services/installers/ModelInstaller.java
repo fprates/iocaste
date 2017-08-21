@@ -22,7 +22,7 @@ public class ModelInstaller
     private SHLib shlib;
     
     public ModelInstaller(Services services) {
-        super(services, "NAME");
+        super(services, "MODEL");
     }
     
     private static final void extractsh(DocumentModel model, State state) {

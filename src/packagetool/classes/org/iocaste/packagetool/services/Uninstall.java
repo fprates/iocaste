@@ -24,7 +24,7 @@ public class Uninstall extends AbstractHandler {
     
     public final void run(String pkgname, Set<String> types) {
         String objecttype, style;
-        ExtendedObject object;
+        ExtendedObject object, packageobj;
         AbstractServiceInterface[] services;
         Services function = getFunction();
         ExtendedObject[] objects = Registry.getEntries(pkgname, function);
@@ -33,6 +33,7 @@ public class Uninstall extends AbstractHandler {
             return;
         
         style = null;
+        packageobj = null;
         services = new AbstractServiceInterface[4];
         services[DOCS_LIB] = new Documents(function);
         services[AUTH_LIB] = new Authority(function);
@@ -45,12 +46,17 @@ public class Uninstall extends AbstractHandler {
                 continue;
             
             switch (objecttype) {
+            case "PACKAGE":
+                packageobj = object;
+                continue;
             case "STYLE":
                 style = object.getst("NAME");
                 break;
             }
             
             item(object, function, services);
+            if ((i == 1) && (packageobj != null))
+                item(packageobj, function, services);
         }
         
         new Iocaste(function).invalidateAuthCache();

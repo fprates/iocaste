@@ -66,11 +66,13 @@ public class PackageInstaller extends AbstractModuleInstaller<String, String> {
 
     @Override
     public void remove(ExtendedObject object) {
-        Query query = new Query("delete");
+        Query query;
+        
+        documents.delete(object);
+        query = new Query("delete");
         query.setModel("PACKAGE");
         query.andEqual("NAME", getObjectName(object));
         documents.update(query);
-        documents.delete(object);
     }
 
     @Override
