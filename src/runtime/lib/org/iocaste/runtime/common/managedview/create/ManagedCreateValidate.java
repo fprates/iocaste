@@ -7,7 +7,7 @@ import org.iocaste.runtime.common.managedview.ManagedViewContext;
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.shell.common.Const;
 
-public class CreateValidate extends AbstractActionHandler<Context> {
+public class ManagedCreateValidate extends AbstractActionHandler<Context> {
     
     @Override
     protected void execute(Context context) {

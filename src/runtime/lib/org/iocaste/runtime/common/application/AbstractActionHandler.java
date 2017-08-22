@@ -9,6 +9,7 @@ import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.IocasteErrorMessage;
+import org.iocaste.runtime.common.managedview.DocumentExtractor;
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.shell.common.Const;
 
@@ -68,10 +69,10 @@ public abstract class AbstractActionHandler<C extends Context>
 //        documents.deleteComplexDocument(document.getModel().getName(),
 //                document.getNS(), document.getKey());
 //    }
-//    
-//    protected final DocumentExtractor documentExtractorInstance(String cmodel) {
-//        return new DocumentExtractor(context, cmodel);
-//    }
+    
+    protected final DocumentExtractor documentExtractorInstance(String cmodel) {
+        return new DocumentExtractor(context, cmodel);
+    }
 //
 //    protected final ComplexDocument documentInstance(String cmodel) {
 //        return new ComplexDocument(documents.getComplexModel(cmodel));
@@ -149,7 +150,8 @@ public abstract class AbstractActionHandler<C extends Context>
     }
     
     protected final Object getkey(String tooldata) {
-        return gettoolkey(tooldata).get();
+        ToolData hdtool = gettool(tooldata);
+        return hdtool.object.get(gettoolkey(tooldata).name);
     }
     
     protected final int getkeyi(String tooldata) {

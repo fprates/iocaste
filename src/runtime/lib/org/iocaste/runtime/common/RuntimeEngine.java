@@ -108,6 +108,38 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     }
     
     /**
+     * 
+     * @param name
+     */
+    public final void createNumberFactory(String name) {
+        createNumberFactory(name, null, null);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param ns
+     */
+    public final void createNumberFactory(String name, Object ns) {
+        createNumberFactory(name, ns, null);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param ns
+     * @param series
+     */
+    public final void createNumberFactory(
+            String name, Object ns, Map<String, Long> series) {
+        Message message = new Message("create_number_factory");
+        message.add("name", name);
+        message.add("series", series);
+        message.add("ns", ns);
+        call(message);
+    }
+    
+    /**
      * Desconecta usuário atual da sessão.
      */
     public final void disconnect() {

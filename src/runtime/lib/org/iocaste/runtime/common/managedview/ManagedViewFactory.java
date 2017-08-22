@@ -1,7 +1,7 @@
 package org.iocaste.runtime.common.managedview;
 
 import org.iocaste.runtime.common.application.Context;
-import org.iocaste.runtime.common.managedview.create.CreateValidate;
+import org.iocaste.runtime.common.managedview.create.ManagedCreateValidate;
 import org.iocaste.runtime.common.managedview.display.ManagedDisplayPage;
 import org.iocaste.runtime.common.managedview.edit.ManagedEditPage;
 
@@ -19,6 +19,9 @@ public class ManagedViewFactory {
         if (mviewctx.inputvalidate == null)
             mviewctx.inputvalidate = new ManagedInputValidate();
         
+        if (mviewctx.save == null)
+            mviewctx.save = new ManagedViewSave();
+        
         for (String action : new String[] {
                 ManagedViewContext.CREATE,
                 ManagedViewContext.DISPLAY,
@@ -27,7 +30,7 @@ public class ManagedViewFactory {
             if ((mviewctx.number != null) && create)
                 continue;
             if (create)
-                mviewctx.createvalidate = new CreateValidate();
+                mviewctx.createvalidate = new ManagedCreateValidate();
             entitypage = new ManagedEntityPage();
             entitypage.action = action;
             if (entitypage.spec == null)
