@@ -7,6 +7,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.protocol.IocasteException;
 
 public class ModelInstall {
     private DocumentModel model;
@@ -54,7 +55,7 @@ public class ModelInstall {
     
     public final DocumentModelItem item(String name, DocumentModelItem item) {
         if (item.isDummy())
-            throw new RuntimeException(name.concat(" can't use dummy item."));
+            throw new IocasteException("%s can't use dummy item.", name);
         return item(name, null, item.getDataElement());
     }
     
@@ -74,7 +75,11 @@ public class ModelInstall {
     
     public final DocumentModelItem item(
             String name, String field, String element) {
-        return item(name, field, elements.get(element));
+        DataElement delement = elements.get(element);
+        if (delement == null)
+            throw new IocasteException("undefined data element %s in %s.",
+                    element, model.getName());
+        return item(name, field, delement);
     }
     
     public final DocumentModelItem key(
