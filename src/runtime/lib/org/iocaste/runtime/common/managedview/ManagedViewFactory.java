@@ -33,8 +33,6 @@ public class ManagedViewFactory {
                 mviewctx.createvalidate = new ManagedCreateValidate();
             entitypage = new ManagedEntityPage();
             entitypage.action = action;
-            if (entitypage.spec == null)
-                entitypage.spec = new ManagedSelectSpec();
             mviewctx.entitypagename = mviewctx.entity.concat(action);
             context.add(mviewctx.entitypagename, entitypage);
             context.getPage(mviewctx.entitypagename).

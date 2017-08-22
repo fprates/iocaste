@@ -2,11 +2,13 @@ package org.iocaste.runtime.common.managedview;
 
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.runtime.common.page.ViewConfig;
+import org.iocaste.runtime.common.page.ViewInput;
 import org.iocaste.runtime.common.page.ViewSpec;
 
 public class AbstractEntityPage extends AbstractPage {
     public String action;
-    public ViewSpec spec;
+    protected ViewSpec spec;
+    protected ViewInput input;
     private ViewConfig createselectconfig;
     private ViewConfig updateselectconfig;
     private ViewConfig displayselectconfig;
@@ -25,6 +27,7 @@ public class AbstractEntityPage extends AbstractPage {
         ManagedViewContext mviewctx = getContext().mviewctx();
         
         set(spec);
+        set(input);
         
         switch (action) {
         case ManagedViewContext.CREATE:

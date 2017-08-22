@@ -21,6 +21,10 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
         getComponentData(tooldata).object = object;
     }
     
+    protected final void inputsetns(String tooldata, Object value) {
+        getComponentData(tooldata).object.setNS(value);
+    }
+    
     protected abstract void execute(C context);
     
     private final ToolData getComponentData(String name) {
