@@ -265,6 +265,8 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      */
     public final void setNamespace(DocumentModelItem item) {
         namespace = item;
+        if ((item != null) && (item.getDocumentModel() == null))
+            namespace.setDocumentModel(this);
     }
     
     /**

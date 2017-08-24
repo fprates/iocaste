@@ -9,6 +9,7 @@ public class ManagedSelectConfig extends AbstractViewConfig<Context> {
     
     @Override
     protected void execute(Context context) {
+        DocumentModelItem ns;
         ToolData item;
         ToolData head = getTool("head");
         ManagedViewContext mviewctx = context.mviewctx();
@@ -20,6 +21,9 @@ public class ManagedSelectConfig extends AbstractViewConfig<Context> {
         
         head.custommodel = context.runtime().
                 getComplexModel(mviewctx.cmodel).getHeader();
+        ns = head.custommodel.getNamespace();
+        if (mviewctx.nshidden && (ns != null))
+            head.nsItemInstance().invisible = true;
         for (DocumentModelItem mitem : head.custommodel.getItens()) {
             item = head.instance(mitem.getName());
             if (!head.custommodel.isKey(mitem))

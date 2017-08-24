@@ -23,6 +23,8 @@ package org.iocaste.documents.common;
 
 import java.io.Serializable;
 
+import org.iocaste.protocol.IocasteException;
+
 /**
  * Implementação do item do modelo de documento
  * @author francisco.prates
@@ -220,9 +222,8 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      */
     public final void setDocumentModel(DocumentModel document) {
         if ((this.document != null) && !this.document.equals(document))
-            throw new RuntimeException(name.concat(" can't be assigned to "
-                    + "another document model."));
-        
+            throw new IocasteException(
+                    "%s can't be assigned to another document model.", name);
         this.document = document;
     }
     

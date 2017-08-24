@@ -18,6 +18,8 @@ public class Common {
         AbstractPage page = formdata.context.getPage();
         DocumentModel model = formdata.cmodel.getHeader();
         DocumentModelItem[] items = model.getItens();
+        DocumentModelItem ns = model.getNamespace();
+        ManagedViewContext mviewctx = formdata.context.mviewctx();
         
         for (String name : new String[] {"head", "base"}) {
             form = page.instance(name);
@@ -26,6 +28,8 @@ public class Common {
             switch(name) {
             case "head":
                 form.disabled = true;
+                if (mviewctx.nshidden && (ns != null))
+                    form.nsItemInstance().invisible = true;
                 for (DocumentModelItem mitem : items) {
                     key = model.isKey(mitem);
                     if (key)
@@ -38,7 +42,7 @@ public class Common {
                 
                 break;
             case "base":
-                if (model.getNamespace() != null) {
+                if (ns != null) {
                     item = form.nsItemInstance();
                     item.invisible = item.disabled = true;
                 }

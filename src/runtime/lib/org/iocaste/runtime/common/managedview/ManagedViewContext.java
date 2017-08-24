@@ -23,6 +23,7 @@ public class ManagedViewContext {
     public Map<String, String> models;
     public Object id, ns;
     public ComplexDocument document;
+    public boolean nshidden;
     
     public ManagedViewContext(String entity) {
         this.entity = entity;
