@@ -27,6 +27,15 @@ public class InstallContext {
         cmodels = new HashMap<>();
     }
     
+    public final void clear() {
+        objects.clear();
+        elements.clear();
+        data.clear();
+        items.clear();
+        models.clear();
+        cmodels.clear();
+    }
+    
     @SuppressWarnings("unchecked")
     public final <T extends AbstractInstallObject> T get(String name) {
         return (T)objects.get(name);

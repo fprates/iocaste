@@ -23,6 +23,7 @@ public class InstallApplication extends AbstractHandler {
 
         if (installctx.isReady())
             return installctx.getInstallData();
+        installctx.clear();
         installctx.put("default",
                 defaultinstall = new ApplicationInstall(pkgname));
         services.getApplication().install(installctx);

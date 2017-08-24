@@ -170,6 +170,20 @@ public class InstallData implements Serializable {
         tasksgroups.get(taskgroup).add(user);
     }
     
+    public final void clear() {
+        models.clear();
+        values.clear();
+        links.clear();
+        numbers.clear();
+        shds.clear();
+        elements.clear();
+        authorizations.clear();
+        tasksgroups.clear();
+        cmodels.clear();
+        uprofiles.clear();
+        globalcfg.clear();
+    }
+    
     /**
      * 
      * @return

@@ -15,6 +15,18 @@
         
         <!-- shell-lib -->
         <ant antfile="${basedir}/src/shell/build-lib.xml"/>
+        
+        <!-- tasksel-lib -->
+        <ant antfile="${basedir}/src/tasksel/build-lib.xml"/>
+        
+        <!-- authority-lib -->
+        <ant antfile="${basedir}/src/authority/build.xml"/>
+        
+        <!-- globalconfig-lib -->
+        <ant antfile="${basedir}/src/globalconfig/build-lib.xml"/>
+        
+        <!-- packagetool-lib -->
+        <ant antfile="${basedir}/src/packagetool/build-lib.xml"/>
     	
     	<!-- runtime-lib -->
     	<ant antfile="${basedir}/src/runtime/build-lib.xml"/>
@@ -25,17 +37,8 @@
         <!-- shell -->
         <ant antfile="${basedir}/src/shell/build.xml"/>
         
-        <!-- authority -->
-        <ant antfile="${basedir}/src/authority/build.xml"/>
-        
         <!-- globalconfig -->
         <ant antfile="${basedir}/src/globalconfig/build.xml"/>
-    	
-    	<!-- tasksel -->
-    	<ant antfile="${basedir}/src/tasksel/build-lib.xml"/>
-        
-        <!-- packagetool-lib -->
-        <ant antfile="${basedir}/src/packagetool/build-lib.xml"/>
         
     	<!-- calendar -->
     	<ant antfile="${basedir}/src/calendar/build.xml"/>
@@ -171,7 +174,7 @@
         <ant antfile="${basedir}/src/template/build.xml"/>
 
         <!-- sap-connector -->
-        <ant antfile="${basedir}/src/sap-connector/build.xml"/>
+        <!-- <ant antfile="${basedir}/src/sap-connector/build.xml"/> -->
     	
     	<!-- root -->
     	<ant antfile="${basedir}/src/ROOT/build.xml"/>

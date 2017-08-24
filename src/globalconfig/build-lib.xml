@@ -1,4 +1,4 @@
-<project name="runtime" default="compile">
+<project name="globalconfig" default="compile">
 	
     <target name="compile">
         <mkdir dir="${builddir}/${ant.project.name}/lib"/>
@@ -6,9 +6,10 @@
         <!-- dependências -->
         <path id="dependencies">
             <fileset dir="${builddir}/core/lib"/>
-        	<fileset dir="${builddir}/documents/lib"/>
             <fileset dir="${builddir}/shell/lib"/>
-        	<fileset dir="${builddir}/packagetool/lib"/>
+        	<fileset dir="${builddir}/documents/lib"/>
+            <fileset dir="${builddir}/${ant.project.name}/lib"/>
+            <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>
         </path>
         
