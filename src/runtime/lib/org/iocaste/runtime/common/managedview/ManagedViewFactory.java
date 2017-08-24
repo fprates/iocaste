@@ -22,6 +22,12 @@ public class ManagedViewFactory {
         if (mviewctx.save == null)
             mviewctx.save = new ManagedViewSave();
         
+        if (mviewctx.updateload == null)
+            mviewctx.updateload = new ManagedViewLoad();
+        
+        if (mviewctx.displayload == null)
+            mviewctx.displayload = mviewctx.updateload;
+        
         for (String action : new String[] {
                 ManagedViewContext.CREATE,
                 ManagedViewContext.DISPLAY,

@@ -59,6 +59,9 @@ public interface Context {
     public abstract void set(
     		String page, String tooldata, ExtendedObject object);
     
+    public abstract void set(
+            String page, String tooldata, ExtendedObject[] object);
+    
     public abstract void set(MessageSource messagesrc);
     
     public abstract void setPageName(String name);

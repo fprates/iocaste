@@ -171,6 +171,13 @@ public abstract class AbstractContext implements Context {
     public final void set(String page, String tooldata, ExtendedObject object) {
     	pages.get(page).instance(tooldata).object = object;
     }
+
+    @Override
+    public final void set(
+            String page, String tooldata, ExtendedObject[] objects) {
+        for (int i = 0; i < objects.length; i++)
+            pages.get(page).instance(tooldata).objects.put(i, objects[i]);
+    }
     
     @Override
     public final void set(MessageSource messagesrc) {
