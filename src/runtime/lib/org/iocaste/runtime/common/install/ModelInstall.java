@@ -1,6 +1,8 @@
 package org.iocaste.runtime.common.install;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
@@ -12,10 +14,12 @@ import org.iocaste.protocol.IocasteException;
 public class ModelInstall {
     private DocumentModel model;
     private Map<String, DataElement> elements;
+    private Set<String> tablefields;
     private InstallData data;
     
     public ModelInstall(InstallData data, String name, String table) {
         this.data = data;
+        tablefields = new HashSet<>();
         model = data.getModel(name, table, null);
     }
     
@@ -67,6 +71,13 @@ public class ModelInstall {
             String name, String field, DataElement element) {
         DocumentModelItem item = new DocumentModelItem(name);
         
+        if (field != null) {
+            if (tablefields.contains(field))
+                throw new IocasteException(
+                        "%s duplicated in model %s.", field, model.getName());
+            tablefields.add(field);
+        }
+            
         item.setTableFieldName(field);
         item.setDataElement(element);
         model.add(item);
@@ -111,11 +122,14 @@ public class ModelInstall {
     
     public final void namespace(String tablecolumn, DataElement element) {
         DocumentModelItem item;
-        
+        if (tablefields.contains(tablecolumn))
+            throw new IocasteException(
+                   "%s duplicated in model %s.", tablecolumn, model.getName());
         item = new DocumentModelItem("namespace");
         item.setTableFieldName(tablecolumn);
         item.setDataElement(element);
         model.setNamespace(item);
+        tablefields.add(tablecolumn);
     }
     
     public final DocumentModelItem reference(
