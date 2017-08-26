@@ -3,6 +3,7 @@ package org.iocaste.runtime.common.application;
 import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
@@ -73,14 +74,14 @@ public abstract class AbstractActionHandler<C extends Context>
     protected final DocumentExtractor documentExtractorInstance(String cmodel) {
         return new DocumentExtractor(context, cmodel);
     }
-//
-//    protected final ComplexDocument documentInstance(String cmodel) {
-//        return new ComplexDocument(documents.getComplexModel(cmodel));
-//    }
-//    
-//    protected final ComplexDocument documentInstance(ComplexModel cmodel) {
-//        return new ComplexDocument(cmodel);
-//    }
+
+    protected final ComplexDocument documentInstance(String cmodel) {
+        return documentInstance(context.runtime().getComplexModel(cmodel));
+    }
+    
+    protected final ComplexDocument documentInstance(ComplexModel cmodel) {
+        return new ComplexDocument(cmodel);
+    }
     
     protected final void execute(String action) throws Exception {
         context.getHandler(action).run(context, !REDIRECT);
