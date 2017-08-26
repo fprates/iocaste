@@ -106,7 +106,7 @@ public class ModelInstall {
     }
     
     public final void namespace(String tablecolumn, DocumentModelItem item) {
-        model.setNamespace(item);
+        namespace(tablecolumn, item.getDataElement());
     }
     
     public final void namespace(String tablecolumn, DataElement element) {
