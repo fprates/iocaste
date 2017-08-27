@@ -36,6 +36,8 @@ public interface Context {
     
     public abstract Map<String, AbstractPage> getPages();
     
+    public abstract void home();
+    
     public abstract ManagedViewContext mviewctx(String entity);
     
     public abstract ManagedViewContext mviewctx();

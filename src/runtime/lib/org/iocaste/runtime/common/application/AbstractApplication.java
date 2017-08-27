@@ -264,11 +264,11 @@ public abstract class AbstractApplication<T extends Context>
     
     private void run(HttpServletRequest req, HttpServletResponse resp)
     		throws Exception {
-        T context;
         ViewExport outputview;
         RuntimeEngine runtime;
         ServiceInterfaceData servicedata;
         byte[] content;
+        T context = null;
     
         req.setCharacterEncoding("UTF-8");
         servicedata = new ServiceInterfaceData();
@@ -307,6 +307,8 @@ public abstract class AbstractApplication<T extends Context>
         } catch (Exception e) {
     //            outputview = getExceptionView(e);
     //            content = iocaste.processOutput(outputview);
+            if (context != null)
+                context.home();
             runtime.rollback();
             throw e;
         }

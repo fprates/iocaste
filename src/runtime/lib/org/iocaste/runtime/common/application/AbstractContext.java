@@ -105,6 +105,11 @@ public abstract class AbstractContext implements Context {
     	return pages;
     }
 
+    public final void home() {
+        page = pagestack.firstElement();
+        pagestack.clear();
+    }
+    
     @Override
     public final ManagedViewContext mviewctx(String entity) {
         ManagedViewContext mviewctx = entities.get(entity);
