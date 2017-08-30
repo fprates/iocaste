@@ -43,7 +43,6 @@ public class Text extends ToolDataElement {
     }
     
     private final void init() {
-        tooldata.control = tooldata.datastore = false;
         if (tooldata.tag == null)
             tooldata.tag = "p";
     }

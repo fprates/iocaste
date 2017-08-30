@@ -26,7 +26,6 @@ public class RadioGroup extends ToolDataElement {
         super(viewctx, Const.RADIO_GROUP, name);
         items = new LinkedHashSet<>();
         buttonstyle = "radio_button";
-        tooldata.datastore = true;
     }
     
     public final RadioButton button(String name) {
@@ -59,6 +58,11 @@ public class RadioGroup extends ToolDataElement {
         }
         
         return null;
+    }
+    
+    @Override
+    public final boolean isDataStorable() {
+        return true;
     }
     
     public final void rename(String to, String from) {

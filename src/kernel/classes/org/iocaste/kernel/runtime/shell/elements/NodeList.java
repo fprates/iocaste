@@ -20,7 +20,6 @@ public class NodeList extends ToolDataElement {
     public NodeList(ViewContext viewctx, String name) {
         super(viewctx, Const.NODE_LIST, name);
         type = UNORDERED;
-        tooldata.container = true;
     }
     
     public final void add(NodeListItem item) {
@@ -43,6 +42,11 @@ public class NodeList extends ToolDataElement {
      */
     public final byte getListType() {
         return type;
+    }
+    
+    @Override
+    public final boolean isContainable() {
+        return true;
     }
     
     /**

@@ -26,7 +26,6 @@ public class RadioButton extends ToolDataElement {
         
         group.rename(getHtmlName(), name);
         tooldata.value = false;
-        tooldata.datastore = true;
     }
     
     /**
@@ -39,7 +38,8 @@ public class RadioButton extends ToolDataElement {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractInputComponent#getStackComponents()
+     * @see org.iocaste.shell.common.AbstractInputComponent#
+     *    getStackComponents()
      */
     @Override
     public final Set<InputComponent> getStackComponents() {
@@ -56,10 +56,21 @@ public class RadioButton extends ToolDataElement {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractInputComponent#isBooleanComponent()
+     * @see org.iocaste.shell.common.AbstractInputComponent#
+     *   isBooleanComponent()
      */
     @Override
     public final boolean isBooleanComponent() {
+        return true;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.kernel.runtime.shell.elements.ToolDataElement#
+     *   isDataStorable()
+     */
+    @Override
+    public final boolean isDataStorable() {
         return true;
     }
     
@@ -83,8 +94,8 @@ public class RadioButton extends ToolDataElement {
     
     /*
      * (não-Javadoc)
-     * @see org.iocaste.shell.common.AbstractInputComponent#setHtmlName(
-     *    java.lang.String)
+     * @see org.iocaste.shell.common.AbstractInputComponent#
+     *    setHtmlName(java.lang.String)
      */
     @Override
     public final void setHtmlName(String htmlname) {

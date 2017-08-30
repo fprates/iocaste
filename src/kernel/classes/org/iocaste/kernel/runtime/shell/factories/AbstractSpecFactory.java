@@ -3,6 +3,7 @@ package org.iocaste.kernel.runtime.shell.factories;
 import org.iocaste.runtime.common.application.ContextEntry;
 import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.kernel.runtime.shell.ComponentEntry;
 import org.iocaste.kernel.runtime.shell.SpecItemHandler;
@@ -61,12 +62,13 @@ public abstract class AbstractSpecFactory implements SpecFactory {
     
     @Override
     public void update(ViewContext viewctx, String name) {
-    	InputComponent input;
-    	ToolData tooldata = viewctx.entries.get(name).data;
-    	if (!tooldata.datastore)
-    		return;
-    	input = viewctx.view.getElement(name);
-    	tooldata.value = input.get();
+        ToolData tooldata;
+        Element element = viewctx.view.getElement(name);
+        
+        if ((element == null) || !element.isDataStorable())
+            return;
+        tooldata = viewctx.entries.get(name).data;
+        tooldata.value = ((InputComponent)element).get();
     }
 
 }

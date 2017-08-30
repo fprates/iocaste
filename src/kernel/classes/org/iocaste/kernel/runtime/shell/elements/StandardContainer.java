@@ -16,7 +16,10 @@ public class StandardContainer extends ToolDataElement {
 
 	public StandardContainer(ViewContext viewctx, String name) {
         super(viewctx, Const.STANDARD_CONTAINER, name);
-    	tooldata.container = true;
-    	tooldata.action = tooldata.control = tooldata.datastore = false;
     }
+	
+	@Override
+	public final boolean isContainable() {
+	    return true;
+	}
 }

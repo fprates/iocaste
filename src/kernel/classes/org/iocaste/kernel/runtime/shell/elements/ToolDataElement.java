@@ -17,6 +17,7 @@ import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
@@ -25,20 +26,22 @@ import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.View;
 
 public abstract class ToolDataElement
-		implements Component, Container, InputComponent {
+		implements Component, Container, InputComponent, ControlComponent {
 	private static final long serialVersionUID = 4217306786401069911L;
 	protected ToolData tooldata;
 	protected ViewContext viewctx;
     private DocumentModelItem modelitem;
     private Map<String, String> elements;
     private String htmlname, master;
-    private boolean translatable, nohelper;
+    private boolean translatable, nohelper, stacking, multipart;
+    private boolean popup, range;
     private Calendar calendar;
     private byte[] content;
     private SearchHelp search;
     private Object ns;
     
-    public ToolDataElement(ViewContext viewctx, Const type, ToolData tooldata) {
+    public ToolDataElement(ViewContext viewctx, Const type, ToolData tooldata)
+    {
 		this.tooldata = tooldata;
 		this.viewctx = viewctx;
 		htmlname = tooldata.name;
@@ -74,6 +77,11 @@ public abstract class ToolDataElement
     @Override
     public final void addAttribute(String name, String value) {
     	tooldata.attributes.put(name, value);
+    }
+
+    @Override
+    public boolean allowStacking() {
+        return stacking;
     }
 
 	@Override
@@ -477,8 +485,7 @@ public abstract class ToolDataElement
 
 	@Override
 	public boolean hasMultipartSupport() {
-		// TODO Auto-generated method stub
-		return false;
+		return multipart;
 	}
     
     /*
@@ -489,6 +496,11 @@ public abstract class ToolDataElement
     public boolean isBooleanComponent() {
         return false;
     }
+
+    @Override
+    public boolean isCancellable() {
+        return tooldata.cancellable;
+    }
 	
 	/*
 	 * (non-Javadoc)
@@ -496,7 +508,7 @@ public abstract class ToolDataElement
 	 */
 	@Override
 	public boolean isContainable() {
-		return tooldata.container;
+		return false;
 	}
 
 	/*
@@ -505,7 +517,7 @@ public abstract class ToolDataElement
 	 */
 	@Override
 	public boolean isControlComponent() {
-		return tooldata.control;
+		return false;
 	}
 
 	/*
@@ -514,7 +526,7 @@ public abstract class ToolDataElement
 	 */
 	@Override
 	public boolean isDataStorable() {
-		return tooldata.datastore;
+		return false;
 	}
     
     /*
@@ -532,7 +544,6 @@ public abstract class ToolDataElement
      */
 	@Override
 	public boolean isMultiLine() {
-		// TODO Auto-generated method stub
 		return false;
 	}
     
@@ -552,6 +563,11 @@ public abstract class ToolDataElement
     @Override
     public final boolean isObligatory() {
         return tooldata.required;
+    }
+
+    @Override
+    public boolean isPopup() {
+        return popup;
     }
     
     /*
@@ -615,7 +631,7 @@ public abstract class ToolDataElement
      */
     @Override
     public boolean isValueRangeComponent() {
-        return false;
+        return range;
     }
     
     /*
@@ -652,6 +668,16 @@ public abstract class ToolDataElement
         this.ns = ns;
         tooldata.value = value;
     }
+
+    @Override
+    public void setAction(String action) {
+        tooldata.actionname = action;
+    }
+
+    @Override
+    public void setAllowStacking(boolean stacking) {
+        this.stacking = stacking;
+    }
     
     /*
      * (não-Javadoc)
@@ -666,6 +692,11 @@ public abstract class ToolDataElement
             return;
         
         this.calendar.setInputName(getHtmlName());
+    }
+
+    @Override
+    public void setCancellable(boolean cancellable) {
+        tooldata.cancellable = cancellable;
     }
     
     /*
@@ -785,6 +816,11 @@ public abstract class ToolDataElement
     public final void setNoHelper(boolean nohelper) {
         this.nohelper = nohelper;
     }
+
+    @Override
+    public void setNoScreenLock(boolean nolock) {
+        tooldata.nolock = nolock;
+    }
     
     /**
      * 
@@ -801,7 +837,7 @@ public abstract class ToolDataElement
      */
     @Override
     public final void setNSReference(String nsreference) {
-    	
+        
     }
     
     /*
@@ -896,12 +932,12 @@ public abstract class ToolDataElement
      */
     @Override
     public void setView(View view) {
-//        viewctx.view = view;
+        viewctx.view = view;
     }
 
 	@Override
 	public void setVisible(boolean visible) {
-		// TODO Auto-generated method stub
+	    tooldata.invisible = !visible;
 	}
 
 	@Override
