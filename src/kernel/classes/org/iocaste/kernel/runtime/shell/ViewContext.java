@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.application.ViewExport;
+import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
@@ -73,5 +74,11 @@ public class ViewContext {
     public final ActionEventHandler getEventHandler(
             String element, String action, String event) {
     	return actions.get(element).get(action).get(event);
+    }
+    
+    public final ToolData instance(TYPES type, String name) {
+        ToolData tooldata = new ToolData(type, name);
+        add(tooldata);
+        return tooldata;
     }
 }

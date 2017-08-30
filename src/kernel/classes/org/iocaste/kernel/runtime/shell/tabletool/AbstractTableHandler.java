@@ -6,7 +6,8 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.kernel.runtime.shell.ComponentEntry;
-import org.iocaste.shell.common.Button;
+import org.iocaste.kernel.runtime.shell.elements.Button;
+import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
@@ -86,7 +87,8 @@ public abstract class AbstractTableHandler {
                     link.setNoScreenLock(ttcolumn.data.nolock);
                     break;
                 case BUTTON:
-                    element = button = new Button(item, name);
+                    context.viewctx.instance(TYPES.BUTTON, name);
+                    element = button = new Button(context.viewctx, name);
                     button.setAction(ttcolumn.data.actionname);
                     button.setText(ttcolumn.data.text);
                     button.setNoScreenLock(ttcolumn.data.nolock);

@@ -3,7 +3,7 @@ package org.iocaste.kernel.runtime.shell.factories;
 import java.util.Map;
 
 import org.iocaste.kernel.runtime.shell.ViewContext;
-import org.iocaste.shell.common.Button;
+import org.iocaste.kernel.runtime.shell.elements.Button;
 import org.iocaste.shell.common.Container;
 
 public class ButtonFactory extends AbstractSpecFactory {
@@ -24,7 +24,7 @@ public class ButtonFactory extends AbstractSpecFactory {
     @Override
     protected void execute(ViewContext viewctx,
     		Container container, String parent, String name) {
-        new Button(container, name);
+        new Button(viewctx, name);
     }
 
 }

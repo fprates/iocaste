@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.Button;
+import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.ExpandBar;
+import org.iocaste.kernel.runtime.shell.elements.Button;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 
@@ -19,14 +20,16 @@ public class ExpandBarRenderer extends AbstractElementRenderer<ExpandBar> {
 
     @Override
     protected final XMLElement execute(ExpandBar container, Config config) {
+        Button edge;
         XMLElement ebarea, ebtag;
         List<XMLElement> ebtags;
         ActionEventHandler handler;
         String name = container.getName();
         String edgename = new StringBuilder(name).append(".edge").toString();
-        Button edge = new Button(container, edgename);
         String text = container.getText();
-        
+
+        config.viewctx.instance(TYPES.BUTTON, edgename);
+        edge = new Button(config.viewctx, edgename);
         ebarea = new XMLElement("div");
         ebarea.add("class", container.getStyleClass());
         ebarea.add("id", container.getHtmlName().concat("_super"));

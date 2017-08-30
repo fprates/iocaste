@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.iocaste.kernel.runtime.shell.elements.Button;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.Button;
+import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
@@ -23,7 +24,7 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
     @Override
     protected final XMLElement execute(TabbedPane tabbedpane, Config config) {
         Button button;
-        String classname, name, text, current;
+        String classname, name, text, current, btname;
         TabbedPaneItem item;
         List<XMLElement> tags;
         Set<Element> elements;
@@ -48,7 +49,8 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
             classname = current.equals(name)?
                     "tp_button_focused" : "tp_button_unfocused";
             
-            button = new Button(config.viewctx.view, name.concat("_bt"));
+            config.viewctx.instance(TYPES.BUTTON, btname = name.concat("_bt"));
+            button = new Button(config.viewctx, btname);
             button.setText(text);
             button.setStyleClass(classname);
             button.setEventHandler(tabbedpane.getEventHandler());
