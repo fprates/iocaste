@@ -10,6 +10,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.kernel.runtime.shell.AbstractComponentTool;
 import org.iocaste.kernel.runtime.shell.ComponentEntry;
 import org.iocaste.kernel.runtime.shell.ViewContext;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -127,6 +128,10 @@ public class DataFormTool extends AbstractComponentTool {
         else
             data.model = (data.custommodel != null)?
                     data.custommodel.getName() : null;
+
+        if (data.custommodel == null)
+            throw new IocasteException("undefined model for %s.", data.name);
+        
         if (data.style != null)
             df.setStyleClass(data.style);
         
