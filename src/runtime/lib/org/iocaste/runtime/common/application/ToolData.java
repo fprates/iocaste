@@ -3,6 +3,7 @@ package org.iocaste.runtime.common.application;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -52,6 +53,7 @@ public class ToolData implements Serializable {
         properties = new HashMap<>();
         objects = new LinkedHashMap<>();
         events = new HashMap<>();
+        validators = new HashSet<>();
     }
     
     public final ToolData clone(String prefix, ToolData parent)
