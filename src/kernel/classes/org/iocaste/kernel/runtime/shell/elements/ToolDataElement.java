@@ -39,6 +39,7 @@ public abstract class ToolDataElement
     private byte[] content;
     private SearchHelp search;
     private Object ns;
+    private EventHandler evhandler;
     
     public ToolDataElement(ViewContext viewctx, Const type, ToolData tooldata)
     {
@@ -47,6 +48,8 @@ public abstract class ToolDataElement
 		htmlname = tooldata.name;
 		translatable = true;
         elements = new LinkedHashMap<>();
+        if (isControlComponent() && (tooldata.actionname == null))
+            tooldata.actionname = tooldata.name;
 		if (tooldata.componenttype == null)
 			tooldata.componenttype = type;
 		if (tooldata.style == null)
@@ -243,8 +246,7 @@ public abstract class ToolDataElement
      */
     @Override
     public final EventHandler getEventHandler() {
-//        return evhandler;
-    	return null;
+        return evhandler;
     }
     
     /*
@@ -749,7 +751,7 @@ public abstract class ToolDataElement
      */
     @Override
     public final void setEventHandler(EventHandler evhandler) {
-//        this.evhandler = evhandler;
+        this.evhandler = evhandler;
     }
     
     /*

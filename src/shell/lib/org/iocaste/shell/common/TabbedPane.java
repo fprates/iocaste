@@ -73,7 +73,7 @@ class OnClickHandler extends AbstractEventHandler {
      */
     @Override
     public final void onEvent(byte event, String args) {
-        Button button;
+        ControlComponent button;
         TabbedPane pane;
         View view;
         TabbedPaneItem paneitem;
