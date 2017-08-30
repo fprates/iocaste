@@ -104,11 +104,6 @@ public abstract class AbstractContext implements Context {
     public final Map<String, AbstractPage> getPages() {
     	return pages;
     }
-
-    public final void home() {
-        page = pagestack.firstElement();
-        pagestack.clear();
-    }
     
     @Override
     public final ManagedViewContext mviewctx(String entity) {
@@ -134,8 +129,10 @@ public abstract class AbstractContext implements Context {
         Iterator<String> it;
         
         if (name == null) {
-            page = pagestack.get(0);
-            pagestack.clear();
+            if (pagestack.size() > 0) {
+                page = pagestack.get(0);
+                pagestack.clear();
+            }
             return;
         }
         

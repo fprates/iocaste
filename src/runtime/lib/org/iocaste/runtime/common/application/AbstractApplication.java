@@ -308,7 +308,7 @@ public abstract class AbstractApplication<T extends Context>
     //            outputview = getExceptionView(e);
     //            content = iocaste.processOutput(outputview);
             if (context != null)
-                context.home();
+                context.popPage(null);
             runtime.rollback();
             throw e;
         }
