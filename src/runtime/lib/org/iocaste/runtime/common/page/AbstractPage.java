@@ -91,7 +91,8 @@ public abstract class AbstractPage {
     }
     
     public final AbstractPage getChild(String name) {
-    	return children.get(name).page;
+        ChildPage cpage = children.get(name);
+        return (cpage == null)? null : cpage.page;
     }
     
     public final Set<String> getChildren() {

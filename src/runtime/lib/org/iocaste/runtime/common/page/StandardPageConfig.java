@@ -6,13 +6,34 @@ import org.iocaste.runtime.common.style.ViewConfigStyle;
 
 public class StandardPageConfig extends AbstractViewConfig<Context> {
     
+    /**
+     * 
+     * @param context
+     * @param page
+     * @param name
+     */
+    private final void config(
+            Context context, AbstractPage page, String name) {
+        ViewConfig extconfig;
+        ViewConfigStyle style;
+        AbstractPage child;
+        
+        extconfig = (child = page.getChild(name)).getConfig();
+        if (page.isSubPage(name) || (extconfig == null))
+            return;
+        style = child.getConfigStyle();
+        if (style != null) {
+            style.set(page.getStyleSheet());
+            style.execute();
+        }
+        extconfig.run(context);
+    }
+    
     @Override
     protected void execute(Context context) {
-        ViewConfig extconfig;
         NavControl navcontrol;
         String submit;
-        ViewConfigStyle style;
-        AbstractPage page, child;
+        AbstractPage page;
 
         getTool("outercontent").style = "content_area";
         getTool("content").attributes.put("style", "margin-top:3px");
@@ -24,17 +45,7 @@ public class StandardPageConfig extends AbstractViewConfig<Context> {
             navcontrol.submit(submit);
         for (String action : page.getActions())
             navcontrol.add(action);
-        
-        for (String key : page.getChildren()) {
-            extconfig = (child = page.getChild(key)).getConfig();
-            if (page.isSubPage(key) || (extconfig == null))
-            	continue;
-            style = child.getConfigStyle();
-            if (style != null) {
-            	style.set(page.getStyleSheet());
-                style.execute();
-            }
-            config(extconfig);
-        }
+        for (String key : page.getChildren())
+            config(context, page, key);
     }
 }

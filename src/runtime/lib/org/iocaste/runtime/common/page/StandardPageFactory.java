@@ -6,7 +6,6 @@ public class StandardPageFactory {
     
     public final void instance(Context context, String name, AbstractPage page)
             throws Exception {
-        AbstractPage child;
 //        Documents documents;
 //        AbstractExtendedValidator validator;
 //        Map<String, Validator> validators;
@@ -15,11 +14,8 @@ public class StandardPageFactory {
         context.setPageName(name);
         page.set(context);
         page.run();
-        for (String key : page.getChildren()) {
-            child = page.getChild(key);
-            child.set(context);
-            child.run();
-        }
+        for (String key : page.getChildren())
+            instance(context, name, page.getChild(key));
 //        context.pageInstance(name);
 //        documents = new Documents(context.function);
 //        validators = view.getValidators();

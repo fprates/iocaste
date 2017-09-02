@@ -7,6 +7,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.application.ToolData;
+import org.iocaste.runtime.common.style.ViewConfigStyle;
 
 public abstract class AbstractViewConfig<C extends Context>
 		implements ViewConfig {
@@ -21,8 +22,30 @@ public abstract class AbstractViewConfig<C extends Context>
      * 
      * @param viewconfig
      */
-    protected final void config(ViewConfig viewconfig) {
-        viewconfig.run(context);
+    protected final void config(String name) {
+        config(context.getPage(), name);
+    }
+    
+    private final void config(AbstractPage page, String name) {
+        ViewConfig extconfig;
+        ViewConfigStyle style;
+        AbstractPage child = page.getChild(name);
+        
+        if (child == null) {
+            for (String key : page.getChildren())
+                config(page.getChild(key), name);
+            return;
+        }
+        
+        extconfig = child.getConfig();
+        if (page.isSubPage(name) || (extconfig == null))
+            return;
+        style = child.getConfigStyle();
+        if (style != null) {
+            style.set(page.getStyleSheet());
+            style.execute();
+        }
+        extconfig.run(context);
     }
     
     protected final void disable(ToolData data, String... fields) {
