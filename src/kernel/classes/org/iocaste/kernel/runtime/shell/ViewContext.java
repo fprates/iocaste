@@ -23,6 +23,7 @@ public class ViewContext {
     public TrackingData tracking;
     public ViewTitle title;
     public Map<String, ComponentEntry> entries;
+    public Map<Const, TYPES> types;
     public MessageSource messagesrc;
     public Const messagetype;
     public String messagetext, sessionid, locale;
@@ -31,7 +32,7 @@ public class ViewContext {
     public Map<String, Map<String, Map<String, ActionEventHandler>>> actions;
     public Map<String, ViewExport> subpages;
     public ComponentEntry parent;
-    public boolean offline;
+    public boolean offline, noeventhandlers;
 	
     public ViewContext() {
         this(new View(null, null));

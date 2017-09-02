@@ -7,6 +7,11 @@ import org.iocaste.shell.common.ListBox;
 public class ListBoxFactory extends AbstractSpecFactory {
 
     @Override
+    public final void addEventHandler(ViewContext viewctx, String htmlname) {
+        viewctx.addEventHandler(htmlname, htmlname, "focus");
+    }
+
+    @Override
     protected void execute(ViewContext viewctx,
     		Container container, String parent, String name) {
         new ListBox(container, name);

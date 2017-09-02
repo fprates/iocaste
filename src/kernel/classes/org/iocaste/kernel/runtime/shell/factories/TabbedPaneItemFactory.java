@@ -6,13 +6,6 @@ import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
 
 public class TabbedPaneItemFactory extends AbstractSpecFactory {
-
-    @Override
-    public final void addEventHandler(ViewContext viewctx, String htmlname) {
-        String action;
-        viewctx.addEventHandler(
-                action = htmlname.concat("_bt"), action, "click");
-    }
     
     @Override
     protected void execute(ViewContext viewctx,

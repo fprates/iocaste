@@ -51,18 +51,6 @@ public class ProcessOutput extends AbstractHandler {
         CONST_TYPES.put(Const.VIRTUAL_CONTROL, TYPES.VIRTUAL_CONTROL);
     }
     
-    public final void addEventHandlers(ViewContext viewctx) {
-        SpecFactory factory;
-        Element element;
-        for (String key : viewctx.view.getElements().keySet()) {
-            element = viewctx.view.getElement(key);
-            factory = viewctx.function.factories.
-                    get(CONST_TYPES.get(element.getType()));
-            if (factory != null)
-                factory.addEventHandler(viewctx, key);
-        }
-    }
-    
     private void build(
             ViewContext viewctx, ComponentEntry entry, String prefix) {
         SpecFactory factory;
@@ -144,6 +132,8 @@ public class ProcessOutput extends AbstractHandler {
         outputdata.viewctx.title = outputdata.viewexport.title;
         outputdata.viewctx.locale = outputdata.viewexport.locale.toString();
         outputdata.viewctx.parent = outputdata.parententry;
+        outputdata.viewctx.noeventhandlers = outputdata.noeventhandlers;
+        outputdata.viewctx.types = CONST_TYPES;
         if (!outputdata.noinitmessages)
             moveMessages(outputdata);
         if (outputdata.viewexport.subpages != null)
@@ -184,9 +174,6 @@ public class ProcessOutput extends AbstractHandler {
             entry.component.run();
             entry.component.refresh();
         }
-        
-        if (!outputdata.noeventhandlers)
-            addEventHandlers(outputdata.viewctx);
         
         outputdata.viewctx.view.setLocale(outputdata.viewexport.locale);
         if ((outputdata.viewexport.messages != null) &&

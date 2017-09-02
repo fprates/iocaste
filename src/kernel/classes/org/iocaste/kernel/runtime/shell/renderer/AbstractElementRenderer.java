@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
+import org.iocaste.kernel.runtime.shell.factories.SpecFactory;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
@@ -87,6 +88,15 @@ public abstract class AbstractElementRenderer<T extends Element>
     @Override
     @SuppressWarnings("unchecked")
     public final XMLElement run(Element element, Config config) {
+        SpecFactory factory;
+
+        if (!config.viewctx.noeventhandlers && (element != null)) {
+            factory = config.viewctx.function.factories.
+                    get(config.viewctx.types.get(element.getType()));
+            if (factory != null)
+                factory.addEventHandler(config.viewctx, element.getHtmlName());
+        }
+        
         return execute((T)element, config);
     }
     
