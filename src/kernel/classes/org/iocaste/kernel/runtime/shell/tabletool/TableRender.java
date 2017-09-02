@@ -6,7 +6,9 @@ import java.util.Map;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.kernel.documents.GetDocumentModel;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.application.ToolData;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Table;
@@ -40,13 +42,18 @@ public class TableRender extends AbstractTableHandler {
         GetDocumentModel modelget;
         Connection connection;
         
-        if (context.data.model == null)
+        if (context.data.custommodel != null)
             return context.data.custommodel;
+        
+        if (context.data.model == null)
+            throw new IocasteException(
+                    "undefined model for %s.", context.data.name);
             
-        modelget = context.viewctx.function.documents.get("get_document_model");
+        modelget = context.viewctx.function.documents.
+                get("get_document_model");
         connection = context.viewctx.function.documents.database.
                 getDBConnection(context.viewctx.sessionid);
-        return modelget.run(connection,
+        return context.data.custommodel = modelget.run(connection,
                 context.viewctx.function.documents, context.data.model);
     }
     
@@ -87,11 +94,12 @@ public class TableRender extends AbstractTableHandler {
             ttcolumn = columnInstance(context, column, item);
             if (item.getSearchHelp() == null)
                 item.setSearchHelp(column.sh);
-            
             if (column.length > 0)
                 ttcolumn.tcolumn.setLength(column.length);
             if (column.vlength > 0)
                 ttcolumn.tcolumn.setVisibleLength(column.vlength);
+            if (column.componenttype == null)
+                column.componenttype = Const.TEXT_FIELD;
         }
     }
     
