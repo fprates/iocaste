@@ -22,11 +22,12 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
+import org.iocaste.shell.common.MultipageContainer;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.View;
 
-public abstract class ToolDataElement
-		implements Component, Container, InputComponent, ControlComponent {
+public abstract class ToolDataElement implements Component, Container,
+        InputComponent, ControlComponent, MultipageContainer {
 	private static final long serialVersionUID = 4217306786401069911L;
 	protected ToolData tooldata;
 	protected ViewContext viewctx;
@@ -66,11 +67,14 @@ public abstract class ToolDataElement
 
 	@Override
 	public void add(Element element) {
-		String name = element.getHtmlName();
-		tooldata.instance(name);
-        elements.put(name, element.getHtmlName());
-        getView().index(element);
+	    append(element);
 	}
+	
+    public final void add(Element element, Const childtype) {
+        if ((tooldata.pane == null) && (element.getType() == childtype))
+            tooldata.pane = element.getHtmlName();
+        append(element);
+    }
     
     /*
      * (non-Javadoc)
@@ -87,6 +91,13 @@ public abstract class ToolDataElement
         return stacking;
     }
 
+    private final void append(Element element) {
+        String name = element.getHtmlName();
+        tooldata.instance(name);
+        elements.put(name, element.getHtmlName());
+        getView().index(element);
+    }
+    
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
@@ -187,6 +198,11 @@ public abstract class ToolDataElement
 	public Container getContainer() {
 		return viewctx.view.getElement(tooldata.parent);
 	}
+
+    @Override
+    public String getCurrentPage() {
+        return tooldata.pane;
+    }
 
     /*
      * (non-Javadoc)
@@ -713,6 +729,11 @@ public abstract class ToolDataElement
     
     public final void setContent(byte[] content) {
         this.content = content;
+    }
+    
+    @Override
+    public final void setCurrentPage(String page) {
+        tooldata.pane = page;
     }
     
     /*

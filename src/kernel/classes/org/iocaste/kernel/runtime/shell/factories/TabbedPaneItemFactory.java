@@ -1,8 +1,8 @@
 package org.iocaste.kernel.runtime.shell.factories;
 
 import org.iocaste.kernel.runtime.shell.ViewContext;
+import org.iocaste.kernel.runtime.shell.elements.TabbedPane;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
 
 public class TabbedPaneItemFactory extends AbstractSpecFactory {

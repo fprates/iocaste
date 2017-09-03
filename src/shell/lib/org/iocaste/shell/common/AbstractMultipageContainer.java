@@ -31,6 +31,7 @@ public abstract class AbstractMultipageContainer extends AbstractContainer
         return true;
     }
     
+    @Override
     public final void setCurrentPage(String current) {
         this.current = current;
     }

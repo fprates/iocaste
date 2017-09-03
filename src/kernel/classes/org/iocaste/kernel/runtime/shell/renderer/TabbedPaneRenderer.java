@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.iocaste.kernel.runtime.shell.elements.Button;
+import org.iocaste.kernel.runtime.shell.elements.TabbedPane;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
@@ -12,7 +13,6 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
 
 public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {

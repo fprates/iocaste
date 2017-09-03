@@ -10,7 +10,7 @@ public class TabbedPaneItem extends AbstractContainer {
     private static final long serialVersionUID = 6583630385235074815L;
     private String focus, text;
     
-    public TabbedPaneItem(TabbedPane pane, String name) {
+    public TabbedPaneItem(MultipageContainer pane, String name) {
         super(pane, Const.TABBED_PANE_ITEM, name);
     }
     
