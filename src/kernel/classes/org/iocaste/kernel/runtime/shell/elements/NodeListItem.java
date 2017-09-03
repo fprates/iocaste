@@ -9,4 +9,10 @@ public class NodeListItem extends ToolDataElement {
 	public NodeListItem(ViewContext viewctx, String name) {
         super(viewctx, Const.NODE_LIST_ITEM, name);
     }
+	
+	@Override
+	public final boolean isContainable() {
+	    return true;
+	}
+
 }
