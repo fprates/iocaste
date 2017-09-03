@@ -439,41 +439,24 @@ public class ProcessInput extends AbstractHandler {
         DataElement dataelement;
         InputComponent input;
         RangeInputStatus ri;
+        Map<String, Element> elements;
         
         /*
          * Componentes selecionáveis (como checkboxes), só fornecem
          * valor quando marcados. Processa o estado falso deles antes
          * do processamento principal.
          */
-        for (String name : config.state.viewctx.inputs) {
-            value = getString(config.values, name);
-            
-            if ((value != null) && (value.length() > 0))
-                continue;
-            
-            element = config.state.viewctx.view.getElement(name);
+        ri = new RangeInputStatus();
+        elements = config.state.viewctx.view.getElements();
+        for (String name : elements.keySet()) {
+            element = elements.get(name);
             if (!element.isDataStorable())
                 continue;
-            
             input = (InputComponent)element;
-            if (!input.isSelectable())
-                continue;
-            
-            if (!isElementVisible(input))
-                continue;
-            
-            setString(config.values, name, "off");
-        }
-
-        ri = new RangeInputStatus();
-        for (String name : config.values.keySet()) {
-            element = config.state.viewctx.view.getElement(name);
-            
-            if (element == null || !element.isDataStorable())
-                continue;
-            
             value = getString(config.values, name);
-            input = (InputComponent)element;
+            if (input.isSelectable() && isElementVisible(input))
+                if ((value == null) || (value.length() == 0))
+                    setString(config.values, name, "off");
             
             ri.type = 0;
             if (input.isSelectable() && input.isStackable())

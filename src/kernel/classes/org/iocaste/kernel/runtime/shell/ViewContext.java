@@ -1,9 +1,7 @@
 package org.iocaste.kernel.runtime.shell;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.iocaste.runtime.common.application.ToolData;
@@ -28,7 +26,6 @@ public class ViewContext {
     public Const messagetype;
     public String messagetext, sessionid, locale;
     public Object[] messageargs;
-    public List<String> inputs;
     public Map<String, Map<String, Map<String, ActionEventHandler>>> actions;
     public Map<String, ViewExport> subpages;
     public ComponentEntry parent;
@@ -42,7 +39,6 @@ public class ViewContext {
         this.view = view;
         tracking = new TrackingData();
         entries = new LinkedHashMap<>();
-        inputs = new ArrayList<>();
         actions = new HashMap<>();
         subpages = new HashMap<>();
     }

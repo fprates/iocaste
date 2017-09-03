@@ -14,7 +14,6 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
@@ -183,7 +182,6 @@ public class Input {
     private final void register(InputData inputdata) {
         String name;
         DataElement dataelement;
-        RangeInputComponent rinput;
         Set<Element> elements;
         InputData inputdata_;
         Container container;
@@ -219,9 +217,6 @@ public class Input {
         
         if (inputdata.element.isDataStorable()) {
             input = (InputComponent)inputdata.element;
-            if (!inputdata.inputdisabled)
-                inputdata.viewctx.inputs.add(input.getHtmlName());
-            
             modelitem = input.getModelItem();
             if (input.getSearchHelp() == null && modelitem != null &&
                     modelitem.getSearchHelp() != null)
@@ -242,12 +237,6 @@ public class Input {
             if ((dataelement != null) && (input.getCalendar() == null) &&
                     (dataelement.getType() == DataType.DATE))
                 generateCalendar(input, inputdata);
-            
-            if (input.isValueRangeComponent()) {
-                rinput = (RangeInputComponent)input;
-                inputdata.viewctx.inputs.add(rinput.getHighHtmlName());
-                inputdata.viewctx.inputs.add(rinput.getLowHtmlName());
-            }
         }
         
 //        if (inputdata.element.hasMultipartSupport())
