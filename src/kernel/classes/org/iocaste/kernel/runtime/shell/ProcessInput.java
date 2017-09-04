@@ -107,11 +107,10 @@ public class ProcessInput extends AbstractHandler {
         viewexport.msgargs = status.msgargs;
         viewexport.action = null;
         config.event = status.event;
-        if ((status.msgtype == Const.ERROR) || status.event)
+        if (status.msgtype == Const.ERROR)
             return;
         
         shell = getFunction();
-        viewexport.action = getString(config.values, "action");
         for (String key : config.state.viewctx.entries.keySet()) {
             entry = config.state.viewctx.entries.get(key);
             if (entry.component != null) {
@@ -123,6 +122,9 @@ public class ProcessInput extends AbstractHandler {
             		config.state.viewctx, key);
         }
         
+        if (status.event)
+            return;
+        viewexport.action = getString(config.values, "action");
 //        if ((control != null) && control.isPopup()) {
 //            config.popupcontrol = (PopupControl)control;
 //            config.contexturl = composeUrl(
@@ -456,7 +458,7 @@ public class ProcessInput extends AbstractHandler {
             value = getString(config.values, name);
             if (input.isSelectable() && isElementVisible(input))
                 if ((value == null) || (value.length() == 0))
-                    setString(config.values, name, "off");
+                    setString(config.values, name, value = "off");
             
             ri.type = 0;
             if (input.isSelectable() && input.isStackable())
