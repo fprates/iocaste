@@ -805,15 +805,6 @@ public abstract class ToolDataElement implements Component, Container,
         tooldata.length = length;
     }
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#setLocale(java.util.Locale)
-     */
-    @Override
-    public final void setLocale(Locale locale) {
-//        this.locale = locale;
-    }
-    
     /**
      * 
      * @param master

@@ -101,7 +101,6 @@ public class GetViewData extends AbstractHandler {
     private void setLocaleForElement(Element element, Locale locale) {
         Container container;
         
-        element.setLocale(locale);
         if (!element.isContainable())
             return;
         

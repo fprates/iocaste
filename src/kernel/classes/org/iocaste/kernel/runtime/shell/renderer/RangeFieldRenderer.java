@@ -95,7 +95,6 @@ public class RangeFieldRenderer
             tfield.setEnabled(input.isEnabled());
             tfield.setDataElement(dataelement);
             tfield.setSearchHelp(input.getSearchHelp());
-            tfield.setLocale(input.getLocale());
 
             if (calendar != null) {
                 Input.generateCalendar(

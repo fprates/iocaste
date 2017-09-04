@@ -165,12 +165,6 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract void setHtmlName(String name);
     
     /**
-     * Define localização
-     * @param locale localização
-     */
-    public abstract void setLocale(Locale locale);
-    
-    /**
      * Ajusta nome da classe CSS do elemento.
      * @param style nome da classe CSS.
      */

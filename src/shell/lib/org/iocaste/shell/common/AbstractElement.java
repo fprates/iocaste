@@ -42,7 +42,6 @@ public abstract class AbstractElement implements Element {
     private boolean enabled, visible, translatable;
     private View view;
     private Map<String, String> events, attributes;
-    private Locale locale;
     private EventHandler evhandler;
     
     /**
@@ -135,20 +134,20 @@ public abstract class AbstractElement implements Element {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#getLocale()
-     */
-    @Override
-    public final Locale getLocale() {
-        return locale;
-    }
-    
-    /*
-     * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#getHtmlName()
      */
     @Override
     public final String getHtmlName() {
         return htmlname;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#getLocale()
+     */
+    @Override
+    public final Locale getLocale() {
+        return view.getLocale();
     }
     
     /*
@@ -271,15 +270,6 @@ public abstract class AbstractElement implements Element {
     @Override
     public final void setEventHandler(EventHandler evhandler) {
         this.evhandler = evhandler;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#setLocale(java.util.Locale)
-     */
-    @Override
-    public final void setLocale(Locale locale) {
-        this.locale = locale;
     }
     
     /*

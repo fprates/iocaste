@@ -46,7 +46,6 @@ public abstract class AbstractContainer
 
         elements = new LinkedHashMap<>();
         view.add(this);
-        setLocale(view.getLocale());
     }
     
     public AbstractContainer(Container container, Const type, String name) {
@@ -55,7 +54,6 @@ public abstract class AbstractContainer
         elements = new LinkedHashMap<>();
         container.add(this);
         this.container = container.getHtmlName();
-        setLocale(container.getLocale());
     }
     
     /*
@@ -65,7 +63,6 @@ public abstract class AbstractContainer
      */
     @Override
     public void add(Element element) {
-        element.setLocale(getLocale());
         elements.put(element.getName(), element.getHtmlName());
         getView().index(element);
     }
