@@ -15,7 +15,6 @@ public class InstallContext {
     private Map<String, DataElement> elements;
     private Map<String, AbstractInstallObject> objects;
     private InstallData data;
-    private String profile, authorization;
     private boolean ready;
     
     public InstallContext() {
@@ -39,10 +38,6 @@ public class InstallContext {
     @SuppressWarnings("unchecked")
     public final <T extends AbstractInstallObject> T get(String name) {
         return (T)objects.get(name);
-    }
-    
-    public final String getAuthorization() {
-        return authorization;
     }
     
     public final ComplexModelInstall getCModel(String name) {
@@ -69,10 +64,6 @@ public class InstallContext {
         return objects;
     }
     
-    public final String getProfile() {
-        return profile;
-    }
-    
     public final boolean isReady() {
         return ready;
     }
@@ -97,19 +88,11 @@ public class InstallContext {
         cmodels.put(name, cmodel);
     }
     
-    public final void setAuthorization(String name) {
-        authorization = name;
-    }
-    
     public final void setItem(String name, DocumentModelItem item) {
         items.put(name, item);
     }
     
     public final void setModel(String name, ModelInstall model) {
         models.put(name, model);
-    }
-    
-    public final void setProfile(String name) {
-        profile = name;
     }
 }

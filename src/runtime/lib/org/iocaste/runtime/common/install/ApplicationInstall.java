@@ -88,16 +88,16 @@ public class ApplicationInstall extends AbstractInstallObject {
         return pkgname;
     }
     
+    public final void setAuthorization(String programauth) {
+        this.programauth = programauth;
+    }
+    
     public final void setLink(String link, String command) {
         links.put(link, new Link(command, "runtime"));
     }
     
     public final void setProfile(String profile) {
         profilename = profile;
-    }
-    
-    public final void setProgramAuthorization(String programauth) {
-        this.programauth = programauth;
     }
 }
 

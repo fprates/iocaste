@@ -17,18 +17,14 @@ public class InstallApplication extends AbstractHandler {
     @Override
     public Object run(Message message) throws Exception {
         Map<String, AbstractInstallObject> objects;
-        ApplicationInstall defaultinstall;
         Services<Context> services = getFunction();
         String pkgname = message.getst("name");
 
         if (installctx.isReady())
             return installctx.getInstallData();
         installctx.clear();
-        installctx.put("default",
-                defaultinstall = new ApplicationInstall(pkgname));
+        installctx.put("default", new ApplicationInstall(pkgname));
         services.getApplication().install(installctx);
-        defaultinstall.setProfile(installctx.getProfile());
-        defaultinstall.setProgramAuthorization(installctx.getAuthorization());
         
         objects = installctx.getObjects();
         for (String name : objects.keySet())
