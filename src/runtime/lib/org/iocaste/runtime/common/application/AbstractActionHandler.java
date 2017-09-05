@@ -18,8 +18,6 @@ public abstract class AbstractActionHandler<C extends Context>
 	    implements ActionHandler {
     public static final boolean REDIRECT = true;
     private Context context;
-//    private Documents documents;
-//    private String page;
     
     protected final void back() {
         context.popPage();
@@ -191,6 +189,19 @@ public abstract class AbstractActionHandler<C extends Context>
         return gettool(tooldata).object;
     }
     
+    protected ExtendedObject[] getobjects(String tooldata) {
+        ExtendedObject[] objects;
+        Map<Integer, ExtendedObject> items;
+        int size;
+        
+        if ((size = (items = gettool(tooldata).objects).size()) == 0)
+            return null;
+        objects = new ExtendedObject[size];
+        for (int i = 0; i < size; i++)
+            objects[i] = items.get(i);
+        return objects;
+    }
+    
     protected final String getst(String tooldata) {
         return (String)gettool(tooldata).value;
     }
@@ -198,10 +209,6 @@ public abstract class AbstractActionHandler<C extends Context>
     protected final String getst(String tooldata, String field) {
         return gettool(tooldata).object.get(field);
     }
-//    
-//    protected Const getErrorType() {
-//        return context.function.getMessageType();
-//    }
 //
 //    protected final byte[] getFileContent(String name) {
 //        return ((MultipartElement)context.view.getElement(name)).getContent();
@@ -262,10 +269,10 @@ public abstract class AbstractActionHandler<C extends Context>
         	throw new IocasteErrorMessage();
     }
     
-//    protected final int modify(ExtendedObject object) {
-//        return documents.modify(object);
-//    }
-//    
+    protected final int modify(ExtendedObject object) {
+        return context.runtime().modify(object);
+    }
+    
 //    protected static final ExtendedObject readobjects(
 //            ExtendedObject[] objects, String op1, Object op2) {
 //        return Documents.readobjects(objects, op1, op2);
@@ -442,11 +449,6 @@ public abstract class AbstractActionHandler<C extends Context>
 //            objects[i++] = item.object;
 //        
 //        return objects;
-//    }
-//    
-//    protected final ExtendedObject[] tableitemsget(String tabletool) {
-//        TableToolData ttdata = getComponents().getComponentData(tabletool);
-//        return tableitemsget(ttdata);
 //    }
 //    
 //    protected final List<ExtendedObject> tableselectedget(String tabletool) {

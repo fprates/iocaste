@@ -341,6 +341,17 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     }
     
     /**
+     * Atualiza entrada especificada pelo objeto extendido.
+     * @param object objeto a ser atualizado.
+     * @return 1, se a entrada foi atualizada com sucesso.
+     */
+    public final int modify(ExtendedObject object) {
+        Message message = new Message("modify");
+        message.add("object", object);
+        return call(message);
+    }
+    
+    /**
      * 
      * @return
      */
