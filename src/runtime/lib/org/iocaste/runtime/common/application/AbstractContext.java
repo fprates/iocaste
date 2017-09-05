@@ -35,6 +35,7 @@ public abstract class AbstractContext implements Context {
         entities = new HashMap<>();
     }
     
+    @Override
     public final void add(String name, AbstractPage page) {
         pages.put(name, new StandardPage(page));
     }
@@ -180,12 +181,18 @@ public abstract class AbstractContext implements Context {
     public final void set(String page, String tooldata, ExtendedObject object) {
     	pages.get(page).instance(tooldata).object = object;
     }
+    
+    @Override
+    public final void set(String tooldata, ExtendedObject[] objects) {
+        set(page, tooldata, objects);
+    }
 
     @Override
     public final void set(
             String page, String tooldata, ExtendedObject[] objects) {
+        AbstractPage _page = pages.get(page);
         for (int i = 0; i < objects.length; i++)
-            pages.get(page).instance(tooldata).objects.put(i, objects[i]);
+            _page.instance(tooldata).objects.put(i, objects[i]);
     }
     
     @Override

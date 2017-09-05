@@ -62,6 +62,8 @@ public interface Context {
     public abstract void set(
     		String page, String tooldata, ExtendedObject object);
     
+    public abstract void set(String tooldata, ExtendedObject[] objects);
+    
     public abstract void set(
             String page, String tooldata, ExtendedObject[] object);
     
