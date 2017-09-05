@@ -13,25 +13,7 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
 public class FileOperations extends AbstractHandler {
-
-    @Override
-    public Object run(Message message) throws Exception {
-        int option = message.geti("option");
-        String[] args = message.get("args");
-        String sessionid = message.getSessionid();
-        FileServices services = getFunction();
-        
-        switch (option) {
-        case Iocaste.CREATE:
-            return create(services, sessionid, args);
-        case Iocaste.READ:
-            return open(services, sessionid, "r", args);
-        case Iocaste.WRITE:
-            return open(services, sessionid, "rw", args);
-        }
-        
-        return null;
-    }
+    
     public final String create(FileServices services, String sessionid,
             String... args) throws Exception {
         return createabsolute(services, sessionid, FileServices.getPath(args));
@@ -74,5 +56,28 @@ public class FileOperations extends AbstractHandler {
         entry.file = file;
         entry.fchannel = entry.file.getChannel();
         return entry.filename;
+    }
+
+    @Override
+    public Object run(Message message) throws Exception {
+        int option = message.geti("option");
+        String[] args = message.get("args");
+        String sessionid = message.getSessionid();
+        
+        return run(getFunction(), sessionid, option, args);
+    }
+
+    public String run(FileServices services,
+            String sessionid, int option, String[] args) throws Exception {
+        switch (option) {
+        case Iocaste.CREATE:
+            return create(services, sessionid, args);
+        case Iocaste.READ:
+            return open(services, sessionid, "r", args);
+        case Iocaste.WRITE:
+            return open(services, sessionid, "rw", args);
+        }
+        
+        return null;
     }
 }

@@ -1,11 +1,7 @@
 <project name="texteditor" default="compile">
-    <property name="server.class" value="org.iocaste.${ant.project.name}.Servlet"/>
-    <property name="warfilename" value="${basedir}/iocaste-${ant.project.name}.war"/>
 	
     <target name="compile">
-        <mkdir dir="${builddir}/${ant.project.name}/web"/>
         <mkdir dir="${builddir}/${ant.project.name}/lib"/>
-        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
     	
         <!-- dependências -->
         <path id="dependencies">
@@ -19,13 +15,6 @@
             <fileset dir="${basedir}/ext"/>
         </path>
         
-        <!-- substituições -->
-        <copy todir="${builddir}/${ant.project.name}/web"
-            file="${basedir}/src/${ant.project.name}/web/web.xml"/>
-        
-        <replace file="${builddir}/${ant.project.name}/web/web.xml"
-            token="@server.class@" value="${server.class}"/>
-        
         <!-- compilação lib -->
         <javac srcdir="${basedir}/src/${ant.project.name}/lib" 
             destdir="${builddir}/${ant.project.name}/lib"
@@ -38,35 +27,5 @@
 
         <copy todir="${basedir}/ext"
             file="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
-    	
-        <!-- compilação classes -->
-        <javac srcdir="${basedir}/src/${ant.project.name}/classes"
-            destdir="${builddir}/${ant.project.name}/classes"
-        	debug="${debug.status}">
-        	
-            <classpath refid="dependencies"/>
-        </javac>
-        
-        <!-- pacote .war -->
-        <war destfile="${warfilename}"
-            webxml="${builddir}/${ant.project.name}/web/web.xml">
-            <webinf dir="${basedir}/src/${ant.project.name}/web/">
-                <exclude name="web.xml"/>
-                <include name="**/*"/> 
-            </webinf>
-            <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
-            <lib dir="${builddir}/core/lib" includes="*.jar"/>
-            <lib dir="${builddir}/shell/lib" includes="*.jar"/>
-        	<lib dir="${builddir}/documents/lib" includes="*.jar"/>
-            <lib dir="${builddir}/authority/lib" includes="*.jar"/>
-            <lib dir="${builddir}/packagetool/lib" includes="*.jar"/>
-        	<lib dir="${builddir}/globalconfig/lib" includes="*.jar"/>
-            <classes dir="${builddir}/${ant.project.name}/classes"/>
-        </war>
-    	
-    	<ant antfile="${basedir}/src/deploy.xml">
-    		<property name="war.file" value="${warfilename}"/>
-    		<property name="war.target" value="${war.target}"/>
-        </ant>
     </target>
 </project>

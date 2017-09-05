@@ -1,4 +1,4 @@
-package org.iocaste.texteditor;
+package org.iocaste.kernel.texts;
 
 import java.util.Map;
 import java.util.TreeMap;

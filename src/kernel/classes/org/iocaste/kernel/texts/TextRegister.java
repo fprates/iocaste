@@ -1,4 +1,4 @@
-package org.iocaste.texteditor;
+package org.iocaste.kernel.texts;
 
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;

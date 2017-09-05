@@ -31,7 +31,6 @@
 	<classpathentry kind="src" output="output/shell/internal" path="src/shell/internal"/>
 	<classpathentry kind="src" output="output/globalconfig/lib" path="src/globalconfig/lib"/>
 	<classpathentry kind="src" output="output/dataeditor/classes" path="src/dataeditor/classes"/>
-	<classpathentry kind="src" output="output/texteditor/classes" path="src/texteditor/classes"/>
 	<classpathentry kind="src" output="output/texteditor/lib" path="src/texteditor/lib"/>
 	<classpathentry kind="src" output="output/masterdata/classes" path="src/masterdata/classes"/>
 	<classpathentry kind="src" output="output/appbuilder/lib" path="src/appbuilder/lib"/>

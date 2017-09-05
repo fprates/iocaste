@@ -10,6 +10,7 @@ import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.IocasteErrorMessage;
+import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.managedview.DocumentExtractor;
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.shell.common.Const;
@@ -431,26 +432,6 @@ public abstract class AbstractActionHandler<C extends Context>
 //        }
 //    }
 //    
-//    public static final ExtendedObject[] tableitemsget(TableToolData data) {
-//        ExtendedObject[] objects;
-//        int i;
-//        Map<Integer, TableToolItem> items = data.getItems();
-//        
-//        if (items == null)
-//            return null;
-//        
-//        i = items.size();
-//        if (i == 0)
-//            return null;
-//        
-//        objects = new ExtendedObject[i];
-//        i = 0;
-//        for (TableToolItem item : items.values())
-//            objects[i++] = item.object;
-//        
-//        return objects;
-//    }
-//    
 //    protected final List<ExtendedObject> tableselectedget(String tabletool) {
 //        List<ExtendedObject> objects;
 //        TableToolItem item;
@@ -487,37 +468,33 @@ public abstract class AbstractActionHandler<C extends Context>
 //            throw new RuntimeException(task.concat(" is an invalid task."));
 //        }
 //    }
-//    
-//    protected final void textcreate(String name) {
-//        new TextEditorTool(context).create(name);
-//    }
-//    
-//    protected final void texteditorsave(String name, String id, String page) {
-//        TextEditorTool editortool = new TextEditorTool(context);
-//        TextEditor editor = getComponents().editors.get(name);
-//        
-//        editortool.commit(editor, page);
-//        editortool.update(editor, id);
-//    }
-//    
-//    protected final String textget(String name) {
-//        TextArea text = context.view.getElement(name);
-//        return text.getst();
-//    }
-//    
-//    protected final Map<String, String> textget(String name, String id) {
-//        return new TextEditorTool(context).get(name, id);
-//    }
-//    
-//    protected final void textremove(String id, String page) {
-//        TextEditorTool editortool = new TextEditorTool(context);
-//        editortool.remove(id, page);
-//    }
-//    
-//    protected final void textsave(String id, String page, String text) {
-//        TextEditorTool editortool = new TextEditorTool(context);
-//        editortool.update(id, page, text);
-//    }
+    
+    protected final void textcreate(String name) {
+        context.runtime().createText(name);
+    }
+    
+    protected final void texteditorsave(String tooldata, String id, String page) {
+        RuntimeEngine runtime = context.runtime();
+        ToolData _tooldata = context.getPage().instance(tooldata);
+        _tooldata.values.put(id, _tooldata.value);
+        runtime.updateText(_tooldata, id);
+    }
+    
+    protected final String textget(String tooldata) {
+        return (String)context.getPage().instance(tooldata).value;
+    }
+    
+    protected final Map<String, String> textget(String name, String id) {
+        return context.runtime().getText(name, id);
+    }
+    
+    protected final void textremove(String id, String page) {
+        context.runtime().removeText(id, page);
+    }
+    
+    protected final void textsave(String id, String page, String text) {
+        context.runtime().updateText(id, page, text);
+    }
 //    
 //    protected final int update(Query query) {
 //        return documents.update(query);

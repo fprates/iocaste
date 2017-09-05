@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.InputComponent;
@@ -12,17 +13,15 @@ import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.TextArea;
 
 public class TextEditorTool extends AbstractServiceInterface {
-    private static final String TXTEDITOR_SERVERNAME =
-            "/iocaste-texteditor/services.html";
     private AbstractContext context;
     public TextEditorTool tetool;
     
     public TextEditorTool(Function function) {
-        initService(context.function, TXTEDITOR_SERVERNAME);
+        initService(context.function, Iocaste.SERVERNAME);
     }
     
     public TextEditorTool(AbstractContext context) {
-        initService(context.function, TXTEDITOR_SERVERNAME);
+        initService(context.function, Iocaste.SERVERNAME);
         this.context = context;
     }
     
@@ -45,13 +44,13 @@ public class TextEditorTool extends AbstractServiceInterface {
     }
     
     public final void create(String name) {
-        Message message = new Message("register");
+        Message message = new Message("text_register");
         message.add("name", name);
         call(message);
     }
     
     public final Map<String, String> get(String textnm, String id) {
-        Message message = new Message("load");
+        Message message = new Message("text_load");
         message.add("textname", textnm);
         message.add("id", id);
         return call(message);
@@ -79,13 +78,13 @@ public class TextEditorTool extends AbstractServiceInterface {
     }
     
     public final void register(String name) {
-        Message message = new Message("register");
+        Message message = new Message("text_register");
         message.add("name", name);
         call(message);
     }
     
     public final void remove(String textobj, String page) {
-        Message message = new Message("remove_text");
+        Message message = new Message("text_remove");
         message.add("textobj", textobj);
         message.add("id", page);
         call(message);
@@ -102,20 +101,20 @@ public class TextEditorTool extends AbstractServiceInterface {
     }
     
     public final void unregister(String name) {
-        Message message = new Message("unregister");
+        Message message = new Message("text_unregister");
         message.add("name", name);
         call(message);
     }
     
     public final void update(TextEditor editor, String textnm) {
-        Message message = new Message("update");
+        Message message = new Message("text_editor_update");
         message.add("textname", textnm);
         message.add("editor", editor);
         call(message);
     }
     
     public final void update(String textobj, String page, String text) {
-        Message message = new Message("update_text");
+        Message message = new Message("text_update");
         message.add("textobj", textobj);
         message.add("id", page);
         message.add("text", text);

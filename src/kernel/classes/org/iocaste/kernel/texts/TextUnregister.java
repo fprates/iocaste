@@ -1,19 +1,17 @@
-package org.iocaste.texteditor;
+package org.iocaste.kernel.texts;
 
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
-public class TextRemove extends AbstractHandler {
+public class TextUnregister extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String textobj = message.getst("textobj");
-        String page = message.getst("id");
+        String name = message.get("name");
         Iocaste iocaste = new Iocaste(getFunction());
-        
-        iocaste.delete("texteditor", textobj, page);
+        iocaste.rmdir("texteditor", name);
         return null;
     }
-    
+
 }

@@ -14,6 +14,7 @@ import org.iocaste.kernel.process.ProcessServices;
 import org.iocaste.kernel.runtime.RuntimeEngine;
 import org.iocaste.kernel.session.IsValidContext;
 import org.iocaste.kernel.session.Session;
+import org.iocaste.kernel.texts.Texts;
 import org.iocaste.kernel.users.Users;
 import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.IocasteException;
@@ -39,6 +40,7 @@ public class Servlet extends AbstractIocasteServlet {
         FileServices files = new FileServices();
         CompilerService compiler = new CompilerService();
         RuntimeEngine runtime = new RuntimeEngine();
+        Texts texts = new Texts();
         
         session = new Session();
         documents.config = database.config = config = new Config();
@@ -48,8 +50,9 @@ public class Servlet extends AbstractIocasteServlet {
         documents.database = database;
         users.session = database.session = auth.session = session;
         compiler.session = users.session;
-        process.files = compiler.files = files;
+        process.files = compiler.files = texts.files = files;
         session.users = users;
+        
         register(database);
         register(users);
         register(session);
@@ -62,6 +65,7 @@ public class Servlet extends AbstractIocasteServlet {
         register(process);
         register(compiler);
         register(runtime);
+        register(texts);
         
         authorize("login", null);
         authorize("output_process", null);

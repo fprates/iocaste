@@ -15,6 +15,7 @@ import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
 import org.iocaste.protocol.utils.ConversionResult;
 import org.iocaste.protocol.utils.ConversionRules;
+import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.runtime.common.protocol.AbstractRuntimeInterface;
 import org.iocaste.runtime.common.protocol.ServiceInterfaceData;
@@ -136,6 +137,12 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
         message.add("name", name);
         message.add("series", series);
         message.add("ns", ns);
+        call(message);
+    }
+    
+    public final void createText(String name) {
+        Message message = new Message("text_register");
+        message.add("name", name);
         call(message);
     }
     
@@ -295,6 +302,13 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
         return call(message);
     }
     
+    public final Map<String, String> getText(String textnm, String id) {
+        Message message = new Message("text_load");
+        message.add("textname", textnm);
+        message.add("id", id);
+        return call(message);
+    }
+    
     /**
      * 
      * @param name
@@ -402,6 +416,13 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
         Message message = new Message("remove_auth_profile");
         message.add("name", name);
         return call(message);
+    }
+    
+    public final void removeText(String textobj, String page) {
+        Message message = new Message("remove_text");
+        message.add("textobj", textobj);
+        message.add("id", page);
+        call(message);
     }
     
     /**
@@ -525,6 +546,21 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
         message.add("username", username);
         message.add("secret", secret);
         message.add("initial", initial);
+        call(message);
+    }
+    
+    public final void updateText(ToolData tooldata, String textnm) {
+        Message message = new Message("tooldata_text_update");
+        message.add("textname", textnm);
+        message.add("editor", tooldata);
+        call(message);
+    }
+    
+    public final void updateText(String textobj, String page, String text) {
+        Message message = new Message("text_update");
+        message.add("textobj", textobj);
+        message.add("id", page);
+        message.add("text", text);
         call(message);
     }
     

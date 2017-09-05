@@ -1,7 +1,6 @@
-package org.iocaste.texteditor;
+package org.iocaste.kernel.texts;
 
 import org.iocaste.protocol.AbstractHandler;
-import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
 public class TextUpdate extends AbstractHandler {
@@ -11,8 +10,9 @@ public class TextUpdate extends AbstractHandler {
         String textobj = message.get("textobj");
         String id = message.get("id");
         String text = message.get("text");
+        Texts texts = getFunction();
         
-        Services.update(new Iocaste(getFunction()), textobj, id, text);
+        texts.update(message.getSessionid(), textobj, id, text);
         return null;
     }
 
