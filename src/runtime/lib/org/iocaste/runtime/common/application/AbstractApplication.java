@@ -311,8 +311,7 @@ public abstract class AbstractApplication<T extends Context>
         } catch (Exception e) {
     //            outputview = getExceptionView(e);
     //            content = iocaste.processOutput(outputview);
-            if (context != null)
-                context.popPage(null);
+            ctxentries.remove(servicedata.sessionid);
             runtime.rollback();
             throw e;
         }
