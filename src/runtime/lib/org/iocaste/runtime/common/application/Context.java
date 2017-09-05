@@ -1,5 +1,6 @@
 package org.iocaste.runtime.common.application;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,6 +26,8 @@ public interface Context {
 
     public abstract ExtendedObject get(
             String page, String tooldata, int index);
+    
+    public abstract Locale getLocale();
     
     public abstract Set<String> getManagedViews();
     
@@ -63,6 +66,8 @@ public interface Context {
             String page, String tooldata, ExtendedObject[] object);
     
     public abstract void set(MessageSource messagesrc);
+    
+    public abstract void set(Locale locale);
     
     public abstract void setPageName(String name);
 }

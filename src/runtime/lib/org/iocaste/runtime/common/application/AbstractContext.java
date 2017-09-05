@@ -2,6 +2,7 @@ package org.iocaste.runtime.common.application;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -24,6 +25,7 @@ public abstract class AbstractContext implements Context {
     private String page, appname;
     private RuntimeEngine runtime;
     private Stack<String> pagestack;
+    private Locale locale;
     
     public AbstractContext() {
         pages = new HashMap<>();
@@ -71,18 +73,23 @@ public abstract class AbstractContext implements Context {
     }
     
     @Override
-    public final MessageSource getMessageSource() {
-    	return messagesrc;
-    }
-    
-    @Override
     public final ExtendedObject get(String page, String tooldata, int index) {
         return pages.get(page).instance(tooldata).objects.get(index);
     }
 
     @Override
+    public final Locale getLocale() {
+        return locale;
+    }
+    
+    @Override
     public final Set<String> getManagedViews() {
         return entities.keySet();
+    }
+    
+    @Override
+    public final MessageSource getMessageSource() {
+        return messagesrc;
     }
     
     @Override
@@ -187,14 +194,19 @@ public abstract class AbstractContext implements Context {
     }
     
     @Override
-    public final void setPageName(String name) {
-        if (name == null)
-            throw new IocasteException("can't set current page to null.");
-    	this.page = name;
+    public final void set(RuntimeEngine iocaste) {
+    	this.runtime = iocaste;
     }
     
     @Override
-    public final void set(RuntimeEngine iocaste) {
-    	this.runtime = iocaste;
+    public final void set(Locale locale) {
+        this.locale = locale;
+    }
+    
+    @Override
+    public final void setPageName(String name) {
+        if (name == null)
+            throw new IocasteException("can't set current page to null.");
+        this.page = name;
     }
 }

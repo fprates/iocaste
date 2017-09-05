@@ -5,6 +5,7 @@ import java.util.Map;
 
 //import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.application.AbstractActionHandler;
 import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.portal.PortalContext;
@@ -25,6 +26,7 @@ public class PortalConnect extends AbstractActionHandler<Context> {
         String form, appname, pagename;
         ExtendedObject object;
         boolean connected;
+        RuntimeEngine runtime;
         PortalContext portalctx = context.portalctx();
         
         pagename = context.getPageName();
@@ -47,11 +49,12 @@ public class PortalConnect extends AbstractActionHandler<Context> {
 //        }
 
         portalctx.username = object.getst("USERNAME");
-        connected = context.runtime().
-                login(portalctx.username, portalctx.secret, "pt_BR");
+        connected = (runtime = context.runtime()).
+                login(portalctx.username, portalctx.secret, portalctx.locale);
         if (!connected)
             message(Const.ERROR, "invalid.username.password");
         
+        context.set(runtime.getLocale());
         portalctx.secret = null;
         if (context.getPage().getActionHandler("load") != null)
             execute("load");

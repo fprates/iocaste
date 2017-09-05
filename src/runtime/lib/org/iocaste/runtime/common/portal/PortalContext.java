@@ -8,7 +8,7 @@ import org.iocaste.runtime.common.portal.tiles.PortalTilesData;
 
 public class PortalContext {
     private Context context;
-    public String email, secret, userprofile, username;
+    public String email, secret, userprofile, username, locale;
     public Map<String, PortalTilesData> pagetiles;
     
     public PortalContext(Context context) {

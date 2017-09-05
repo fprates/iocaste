@@ -1,5 +1,6 @@
 package org.iocaste.runtime.common;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -219,6 +220,14 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     	Message message = new Message("context_id_get");
     	message.add("track_id", trackid);
     	return call(message);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Locale getLocale() {
+        return call(new Message("get_locale"));
     }
     
     /**

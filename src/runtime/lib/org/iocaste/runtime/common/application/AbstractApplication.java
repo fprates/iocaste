@@ -66,6 +66,7 @@ public abstract class AbstractApplication<T extends Context>
     
     private final void buildView(
             AbstractPage page, T context, ServiceInterfaceData servicedata) {
+        Locale locale;
         Collection<ViewSpecItem> items;
         int i;
         ToolData data;
@@ -96,7 +97,10 @@ public abstract class AbstractApplication<T extends Context>
             if (servicedata != null)
                 configOutputStyleData(page);
             
-            page.outputview.locale = new Locale("pt", "BR");
+            if ((locale = context.getLocale()) == null)
+                page.outputview.locale = new Locale("pt", "BR");
+            else
+                page.outputview.locale = locale;
             page.outputview.title = page.getTitle();
             messagesrc = context.getMessageSource();
             if (messagesrc != null)
