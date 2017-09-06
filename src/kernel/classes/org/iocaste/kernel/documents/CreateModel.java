@@ -27,7 +27,7 @@ public class CreateModel extends AbstractDocumentsHandler {
         GetDocumentModel getmodel;
         DocumentModel refmodel;
         DataElement dataelement;
-        DocumentModelItem reference, namespace;
+        DocumentModelItem reference, namespace, modelns;
         String[] fkc, rfc;
         int size, dec;
         Table table;
@@ -45,12 +45,12 @@ public class CreateModel extends AbstractDocumentsHandler {
         size = items.length - 1;
         tablename = model.getTableName();
         table = new Table(tablename);
-        namespace = model.getNamespace();
-        if (namespace != null) {
-            dataelement = namespace.getDataElement();
+        modelns = model.getNamespace();
+        if (modelns != null) {
+            dataelement = modelns.getDataElement();
             size = dataelement.getLength();
             dec = dataelement.getDecimals();
-            nsfield = namespace.getTableFieldName();
+            nsfield = modelns.getTableFieldName();
             table.key(nsfield, dataelement.getType(), size, dec);
         }
         
@@ -82,7 +82,7 @@ public class CreateModel extends AbstractDocumentsHandler {
                 reference = refmodel.getModelItem(reference.getName());
                 if (reference == null)
                     throw new IocasteException(
-                            "%s: is an invalid reference.", refname);
+                            "%s is an invalid reference.", refname);
             } else {
                 refmodel = reference.getDocumentModel();
             }
@@ -91,10 +91,15 @@ public class CreateModel extends AbstractDocumentsHandler {
                 continue;
             
             namespace = refmodel.getNamespace();
-            if ((nsfield != null) && (namespace != null))
+            if ((nsfield != null) && (namespace != null)) {
+                if (!dataelement.equals(modelns.getDataElement()))
+                    throw new IocasteException(
+                            "%s of %s has incompatible namespace reference.",
+                            item.getName(), model.getName());
                 fkc = new String[] {nsfield, tname};
-            else
+            } else {
                 fkc = new String[] {tname};
+            }
             
             if (namespace != null)
                 rfc = new String[] {

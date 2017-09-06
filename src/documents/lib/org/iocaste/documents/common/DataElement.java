@@ -45,6 +45,24 @@ public class DataElement implements Serializable {
         atype = -1;
     }
     
+    @Override
+    public final boolean equals(Object object) {
+        DataElement element;
+        if (object == null)
+            return false;
+        if (object == this)
+            return true;
+        if (!(object instanceof DataElement))
+            return false;
+        element = (DataElement)object;
+        if ((element.getType() == type) &&
+                (element.getLength() == length) &&
+                (element.getDecimals() == decimals) &&
+                (element.isUpcase() == upcase))
+            return true;
+        return false;
+    }
+    
     /**
      * Get the attribute type. Attribute type is the java primitive
      * correspondent of some Iocaste data types.
@@ -186,5 +204,14 @@ public class DataElement implements Serializable {
      */
     public final void setUpcase(boolean upcase) {
     	this.upcase = upcase;
+    }
+    
+    @Override
+    public final String toString() {
+        return new StringBuilder(name).append(": ").
+                append(getClassType().toString()).append(", ").
+                append(length).append("pos, ").
+                append(decimals).append(" dec, ").
+                append(upcase? "uppercase" : "keepcase").toString();
     }
 }
