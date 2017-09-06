@@ -127,9 +127,27 @@ public abstract class AbstractViewSpec implements ViewSpec {
         execute(context);
     }
     
-    protected final void spec(String parent, ViewSpec spec) {
-        spec.run(items.get(parent), context);
-        for (ViewSpecItem item : spec.getItems())
+    protected final void spec(String parent, String name) {
+        spec(context.getPage(), parent, name);
+    }
+    
+    private final void spec(AbstractPage page, String parent, String name) {
+        ViewSpec extspec;
+        AbstractPage child = page.getChild(name);
+        ViewSpecItem specitem = (this.parent == null)?
+                items.get(parent) : page.getSpec().get(parent);
+        
+        if (child == null) {
+            for (String key : page.getChildren())
+                spec(page.getChild(key), parent, name);
+            return;
+        }
+        
+        extspec = child.getSpec();
+        if (page.isSubPage(name) || (extspec == null))
+            return;
+        extspec.run(specitem, context);
+        for (ViewSpecItem item : extspec.getItems())
             items.put(item.getName(), item);
     }
     

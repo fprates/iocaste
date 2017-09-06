@@ -6,7 +6,6 @@ public class StandardPanelSpec extends AbstractViewSpec {
 
     @Override
     protected final void execute(Context context) {
-        ViewSpec extspec;
         AbstractPage page;
         
         form("main");
@@ -17,11 +16,9 @@ public class StandardPanelSpec extends AbstractViewSpec {
         standardcontainer("outercontent", "content");
         
         page = context.getPage();
-        for (String key : page.getChildren()) {
-            extspec = page.getChild(key).getSpec();
-            if (!page.isSubPage(key) && (extspec != null))
+        for (String key : page.getChildren())
+            if (!page.isSubPage(key))
                 spec(key.equals("navcontrol")?
-                		"navcontrol_cntnr" : "content", extspec);
-        }
+                        "navcontrol_cntnr" : "content", key);
     }
 }
