@@ -92,7 +92,8 @@ public class CreateModel extends AbstractDocumentsHandler {
             
             namespace = refmodel.getNamespace();
             if ((nsfield != null) && (namespace != null)) {
-                if (!dataelement.equals(modelns.getDataElement()))
+                if (!namespace.getDataElement().
+                        equals(modelns.getDataElement()))
                     throw new IocasteException(
                             "%s of %s has incompatible namespace reference.",
                             item.getName(), model.getName());

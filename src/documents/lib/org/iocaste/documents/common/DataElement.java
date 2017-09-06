@@ -209,8 +209,8 @@ public class DataElement implements Serializable {
     @Override
     public final String toString() {
         return new StringBuilder(name).append(": ").
-                append(getClassType().toString()).append(", ").
-                append(length).append("pos, ").
+                append(getClassType().getName()).append(", ").
+                append(length).append(" pos, ").
                 append(decimals).append(" dec, ").
                 append(upcase? "uppercase" : "keepcase").toString();
     }
