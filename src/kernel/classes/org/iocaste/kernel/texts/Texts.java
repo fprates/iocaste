@@ -27,7 +27,7 @@ public class Texts extends AbstractFunction {
         FileWrite write = files.get("write");
         FileOperations fileops = files.get("file");
         FileExists exists = files.get("file_exists");
-        FileClose close = files.get("file_close");
+        FileClose close = files.get("close");
         
         String fd = fileops.run(files, sessionid,
                 (!exists.run(path))? Iocaste.CREATE : Iocaste.WRITE, path);
