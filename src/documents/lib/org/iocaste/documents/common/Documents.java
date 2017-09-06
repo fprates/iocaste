@@ -409,40 +409,6 @@ public class Documents extends AbstractServiceInterface {
         return null;
     }
     
-    public static final Map<Object, ExtendedObject> getRelated(
-            Documents documents, ComplexDocument document, Object ns,
-            String itemsname, String field) {
-        DocumentModelItem item;
-        Query query;
-        ExtendedObject[] objects;
-        DocumentModelItem reference;
-        ComplexModelItem cmodelitem;
-        ComplexModel cmodel = document.getModel();
-        
-        cmodelitem = cmodel.getItems().get(itemsname);
-        if (cmodelitem.model == null)
-            throw new RuntimeException(new StringBuilder("items '").
-                    append(itemsname).
-                    append("' undefined for cmodel ").
-                    append(cmodel.getName()).toString());
-        
-        item = cmodelitem.model.getModelItem(field);
-        reference = item.getReference();
-        if (reference == null)
-            return null;
-        
-        objects = document.getItems(itemsname);
-        if (objects == null || objects.length == 0)
-            return null;
-        
-        query = new Query();
-        query.setModel(reference.getDocumentModel().getName());
-        query.forEntries(objects);
-        query.andEqualEntries(reference.getName(), field);
-        query.setNS(ns);
-        return documents.selectToMap(query);
-    }
-    
     /**
      * Verifica se um campo do objeto extendido é inicial.
      * @param object Objeto extendido

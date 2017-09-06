@@ -57,8 +57,7 @@ public abstract class AbstractReportSelect extends AbstractActionHandler {
     protected String getText(String managername,
             ComplexDocument document, String itemsname, String keyfield,
             String textfield, String key) {
-        Map<Object, ExtendedObject> objects;
-        Map<Object, ExtendedObject> texts;
+        Map<Object, ExtendedObject> objects, texts;
         
         texts = cache.get(managername);
         if (texts == null) {
@@ -67,8 +66,7 @@ public abstract class AbstractReportSelect extends AbstractActionHandler {
         }
         
         if (!texts.containsKey(key)) {
-            objects = getRelated(
-                    document, document.getNS(), itemsname, keyfield);
+            objects = getRelated(document, itemsname, keyfield);
             texts.putAll(objects);
         }
         

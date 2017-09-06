@@ -267,13 +267,8 @@ public abstract class AbstractActionHandler implements ActionHandler {
     
     protected final Map<Object, ExtendedObject> getRelated(
             ComplexDocument document, String itemsname, String field) {
-        return getRelated(document, null, itemsname, field);
-    }
-
-    protected final Map<Object, ExtendedObject> getRelated(
-            ComplexDocument document, Object ns, String itemsname, String field)
-    {
-        return Documents.getRelated(documents, document, ns, itemsname, field);
+        Query query = document.getRelated(itemsname, field);
+        return (query == null)? null : documents.selectToMap(query);
     }
     
     protected final void home() {

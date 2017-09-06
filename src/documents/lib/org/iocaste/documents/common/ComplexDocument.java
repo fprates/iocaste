@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.protocol.IocasteException;
+
 /**
  * <p>This class groups ExtendedObjects in one document, following the
  * ComplexModel contract.</p>
@@ -234,6 +236,35 @@ public class ComplexDocument implements Serializable,
      */
     public final Object getNS() {
         return header.getNS();
+    }
+    
+    public final Query getRelated(String itemsname, String field) {
+        DocumentModelItem item;
+        Query query;
+        ExtendedObject[] objects;
+        DocumentModelItem reference;
+        ComplexModelItem cmodelitem;
+        
+        cmodelitem = cmodel.getItems().get(itemsname);
+        if (cmodelitem.model == null)
+            throw new IocasteException("items '%s' undefined for cmodel %s.",
+                    itemsname, cmodel.getName());
+        
+        item = cmodelitem.model.getModelItem(field);
+        reference = item.getReference();
+        if (reference == null)
+            return null;
+        
+        objects = getItems(itemsname);
+        if (objects == null || objects.length == 0)
+            return null;
+        
+        query = new Query();
+        query.setModel(reference.getDocumentModel().getName());
+        query.forEntries(objects);
+        query.andEqualEntries(reference.getName(), field);
+        query.setNS(header.getNS());
+        return query;        
     }
     
     /**
