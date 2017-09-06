@@ -1,5 +1,6 @@
 package org.iocaste.runtime.common.application;
 
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -62,10 +63,17 @@ public interface Context {
     public abstract void set(
     		String page, String tooldata, ExtendedObject object);
     
-    public abstract void set(String tooldata, ExtendedObject[] objects);
+    public abstract void set(
+            String tooldata, ExtendedObject[] objects);
     
     public abstract void set(
-            String page, String tooldata, ExtendedObject[] object);
+            String page, String tooldata, ExtendedObject[] objects);
+    
+    public abstract void set(
+            String tooldata, Collection<ExtendedObject> objects);
+    
+    public abstract void set(
+            String page, String tooldata, Collection<ExtendedObject> objects);
     
     public abstract void set(MessageSource messagesrc);
     

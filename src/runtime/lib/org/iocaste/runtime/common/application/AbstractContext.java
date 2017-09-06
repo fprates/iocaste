@@ -1,5 +1,6 @@
 package org.iocaste.runtime.common.application;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -193,6 +194,21 @@ public abstract class AbstractContext implements Context {
         AbstractPage _page = pages.get(page);
         for (int i = 0; i < objects.length; i++)
             _page.instance(tooldata).objects.put(i, objects[i]);
+    }
+    
+    @Override
+    public final void set(
+            String tooldata, Collection<ExtendedObject> objects) {
+        set(page, tooldata, objects);
+    }
+    
+    @Override
+    public final void set(
+            String page, String tooldata, Collection<ExtendedObject> objects) {
+        AbstractPage _page = pages.get(page);
+        int i = 0;
+        for (ExtendedObject object : objects)
+            _page.instance(tooldata).objects.put(i++, object);
     }
     
     @Override
