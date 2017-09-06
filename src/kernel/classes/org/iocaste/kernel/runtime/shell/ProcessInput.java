@@ -276,16 +276,16 @@ public class ProcessInput extends AbstractHandler {
             ns = input.getNS();
         }
 
-//        documents = ((Runtime)getFunction()).documents;
-//        connection = documents.database.getDBConnection(config.state.viewctx.);
-//        objectget = documents.get("object_get");
-//        object = objectget.run(connection, documents,
-//                reference.getDocumentModel().getName(),
-//                ns,
-//                getUniversalInputValue(input, ri));
-//        
-//        return (object != null);
-        return true;
+        documents = ((RuntimeEngine)getFunction()).documents;
+        connection = documents.database.
+                getDBConnection(config.state.viewctx.sessionid);
+        objectget = documents.get("get_object");
+        object = objectget.run(connection, documents,
+                reference.getDocumentModel().getName(),
+                ns,
+                getUniversalInputValue(input, ri));
+        
+        return (object != null);
     }
     
     /**
@@ -531,7 +531,6 @@ public class ProcessInput extends AbstractHandler {
             status.msgtype = (input.isEnabled())? Const.ERROR : Const.WARNING;
             status.msgargs = new String[] {getTranslation(input)};
         }
-//        documents.commit();
     }
     
     /**
