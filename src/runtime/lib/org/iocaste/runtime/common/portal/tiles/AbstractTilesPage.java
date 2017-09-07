@@ -13,4 +13,8 @@ public abstract class AbstractTilesPage extends AbstractPage {
         subpage("portaltilesitem", new PortalTileItemPage());
         entry();
     }
+    
+    protected final PortalTilesData instance() {
+        return getContext().portalctx().tilesDataInstance();
+    }
 }

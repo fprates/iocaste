@@ -36,19 +36,19 @@ public class TilesTool extends AbstractComponentTool {
             exportitem = (ToolData)exportobj;
             item = data.viewctx.entries.
                     get(tile.getName(exportitem.name)).data;
-            if (item.modelitem == null) {
+            if (item.indexitem == null) {
                 value = object.get(exportitem.name);
                 item.text = (value == null)? "" : value.toString();
                 continue;
             }
             
             response = new StringBuilder(prefix).append("_").
-                    append(item.modelitem).toString();
+                    append(item.indexitem).toString();
             link = data.viewctx.view.getElement(item.name);
-            link.add(response, item.modelitem, object);
+            link.add(response, item.indexitem, object);
             link.setText("");
             if (item.action)
-                item.actionname = object.get(item.modelitem).toString();
+                item.actionname = object.get(item.indexitem).toString();
         }
     }
     
@@ -61,10 +61,10 @@ public class TilesTool extends AbstractComponentTool {
         
         for (int i = 0; i < viewexport.items.length; i++) {
             exportitem = (ToolData)viewexport.items[i];
-            if (exportitem.modelitem == null)
+            if (exportitem.indexitem == null)
                 continue;
             name = new StringBuilder(entry.data.name).append("_").
-                    append(exportitem.modelitem).toString();
+                    append(exportitem.indexitem).toString();
             input = viewctx.view.getElement(name);
             if (input == null)
                 continue;

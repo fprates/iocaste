@@ -9,7 +9,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.runtime.common.application.Context;
 
 public class PortalTilesData {
-    public String key, action;
+    public String key, action, highlight;
     public Set<String> show;
     
     public PortalTilesData() {

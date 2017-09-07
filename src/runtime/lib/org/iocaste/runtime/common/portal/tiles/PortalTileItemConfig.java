@@ -14,7 +14,6 @@ public class PortalTileItemConfig extends AbstractViewConfig<Context> {
         PortalTilesData data;
         ToolData link;
         Set<String> show;
-        boolean first = true;
         PortalContext portalctx = context.portalctx();
         
         getTool("node_item").style = "portal_tile_frame";
@@ -23,17 +22,12 @@ public class PortalTileItemConfig extends AbstractViewConfig<Context> {
         link = getTool("item");
         link.actionname = data.action;
         link.action = (data.action == null);
+        link.indexitem = data.key;
         
+        getTool(data.highlight).style = "portal_tile_key";
         show = PortalTilesData.showset(context, data);
-        for (String name : show) {
-            if ((((data == null) || data.key == null) && first) ||
-                    ((data != null) && (data.key.equals(name)))) {
-                getTool(name).style = "portal_tile_key";
-                link.modelitem = name;
-                first = false;
-            } else {
+        for (String name : show)
+            if (!name.equals(data.highlight))
                 getTool(name).style = "portal_tile_text";
-            }
-        }
     }
 }
