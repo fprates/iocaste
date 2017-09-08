@@ -280,6 +280,7 @@ public abstract class AbstractApplication<T extends Context>
         T context = null;
     
         req.setCharacterEncoding("UTF-8");
+        setServerName(req);
         servicedata = new ServiceInterfaceData();
         servicedata.servername = getServerName();
         servicedata.sessionid = req.getSession().getId();
