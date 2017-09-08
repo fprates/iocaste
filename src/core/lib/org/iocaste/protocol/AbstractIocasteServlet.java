@@ -81,7 +81,9 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
         Context context;
         String functionid, complexid;
         String sessionid = req.getSession().getId();
-        
+
+        servername = new StringBuffer(req.getScheme()).append("://").
+            append("127.0.0.1:").append(req.getLocalPort()).toString();
         service = serviceInstance(sessionid, getUrl(req));
         context = new Context();
         context.req = req;
@@ -108,8 +110,6 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
                 throw new IocasteException(
                         "Function \"%s\" not registered.", functionid);
             
-            servername = new StringBuffer(req.getScheme()).append("://").
-                append("127.0.0.1:").append(req.getLocalPort()).toString();
             function.setServletContext(getServletContext());
             function.setSessionid(complexid);
             function.setAuthorizedCall(isAuthorized(message));
@@ -227,6 +227,7 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
      * @param function
      */
     protected void register(Function function) {
+        function.set(this);
         for (String method : function.getMethods())
             functions.put(method, function);
     }
@@ -239,6 +240,7 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
     protected void register(String sessionid, Function function) {
         Map<String, Function> functions = new HashMap<>();
         
+        function.set(this);
         for (String method : function.getMethods())
             functions.put(method, function);
         
