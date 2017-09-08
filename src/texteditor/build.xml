@@ -8,6 +8,7 @@
             <fileset dir="${builddir}/core/lib"/>
             <fileset dir="${builddir}/shell/lib"/>
         	<fileset dir="${builddir}/documents/lib"/>
+        	<fileset dir="${builddir}/runtime/lib"/>
             <fileset dir="${builddir}/authority/lib"/>
         	<fileset dir="${builddir}/globalconfig/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>

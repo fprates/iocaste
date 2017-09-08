@@ -1,43 +1,45 @@
 package org.iocaste.texteditor.common;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
+import org.iocaste.runtime.common.application.ToolData;
+import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.TextArea;
 
 public class TextEditor implements Serializable {
     private static final long serialVersionUID = 8099830107603124518L;
-    private String name;
-    private Map<String, String> pages;
+    private ToolData tooldata;
     
     public TextEditor(Container container, AbstractContext context, String name)
     {
-        this.name = name;
+        tooldata = new ToolData(TYPES.TEXT_EDITOR, name);
         new TextArea(container, name);
-        pages = new LinkedHashMap<>();
     }
     
     public final void commit(String id, String text) {
-        pages.put(id, text);
+        tooldata.values.put(id, text);
     }
     
     public final TextArea getElement(AbstractContext context) {
-        return context.view.getElement(name);
+        return context.view.getElement(tooldata.name);
     }
     
     public final String getName() {
-        return name;
+        return tooldata.name;
     }
     
     public final String[] getPages() {
-        return pages.keySet().toArray(new String[0]);
+        return tooldata.values.keySet().toArray(new String[0]);
     }
     
     public final String getString(String id) {
-        return pages.get(id);
+        return (String)tooldata.values.get(id);
+    }
+    
+    public final ToolData getToolData() {
+        return tooldata;
     }
     
     public final void setHeight(AbstractContext context, int height) {

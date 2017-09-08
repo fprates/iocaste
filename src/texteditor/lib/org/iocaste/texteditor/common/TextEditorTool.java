@@ -107,9 +107,9 @@ public class TextEditorTool extends AbstractServiceInterface {
     }
     
     public final void update(TextEditor editor, String textnm) {
-        Message message = new Message("text_editor_update");
+        Message message = new Message("tooldata_text_update");
         message.add("textname", textnm);
-        message.add("editor", editor);
+        message.add("tooldata", editor.getToolData());
         call(message);
     }
     

@@ -15,7 +15,6 @@ public class Texts extends AbstractFunction {
         export("text_load", new TextLoad());
         export("text_remove", new TextRemove());
         export("text_register", new TextRegister());
-        export("text_editor_update", new EditorUpdate());
         export("text_update", new TextUpdate());
         export("text_unregister", new TextUnregister());
         export("tooldata_text_update", new ToolDataTextUpdate());
