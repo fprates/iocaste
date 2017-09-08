@@ -12,6 +12,7 @@
             <fileset dir="${builddir}/core/lib"/>
             <fileset dir="${builddir}/shell/lib"/>
             <fileset dir="${builddir}/shell/internal"/>
+        	<fileset dir="${builddir}/runtime/lib"/>
         	<fileset dir="${builddir}/documents/lib"/>
             <fileset dir="${builddir}/packagetool/lib"/>
         	<fileset dir="${builddir}/tasksel/lib"/>

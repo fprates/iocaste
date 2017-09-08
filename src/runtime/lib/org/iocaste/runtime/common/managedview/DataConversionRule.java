@@ -1,4 +1,4 @@
-package org.iocaste.appbuilder.common;
+package org.iocaste.runtime.common.managedview;
 
 import org.iocaste.documents.common.ExtendedObject;
 

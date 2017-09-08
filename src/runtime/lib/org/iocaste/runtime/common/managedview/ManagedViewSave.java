@@ -1,6 +1,5 @@
 package org.iocaste.runtime.common.managedview;
 
-import org.iocaste.appbuilder.common.DataConversion;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;

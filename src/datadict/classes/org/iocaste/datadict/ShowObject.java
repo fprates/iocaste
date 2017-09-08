@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
-import org.iocaste.appbuilder.common.DataConversion;
-import org.iocaste.appbuilder.common.DataConversionRule;
 import org.iocaste.appbuilder.common.ObjectExtractor;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.tabletool.TableToolContextEntry;
@@ -15,6 +13,8 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.runtime.common.managedview.DataConversion;
+import org.iocaste.runtime.common.managedview.DataConversionRule;
 import org.iocaste.shell.common.Const;
 
 public class ShowObject extends AbstractActionHandler {

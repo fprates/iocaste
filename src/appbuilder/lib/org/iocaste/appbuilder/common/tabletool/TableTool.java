@@ -24,6 +24,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.runtime.common.managedview.edit.ConfigData;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Element;
@@ -37,8 +38,8 @@ import org.iocaste.shell.common.Validator;
 
 public class TableTool extends AbstractComponentTool {
     public static final byte CONTINUOUS_UPDATE = 0;
-    public static final byte UPDATE = 1;
-    public static final byte DISPLAY = 2;
+    public static final byte UPDATE = ConfigData.UPDATE;
+    public static final byte DISPLAY = ConfigData.DISPLAY;
     public static final byte CONTINUOUS_DISPLAY = 3;
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;

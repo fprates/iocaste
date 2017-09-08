@@ -36,8 +36,6 @@ public class Common {
                         formdata.hkey = mitem;
                     item = form.instance(mitem.getName());
                     item.invisible = !key;
-                    if (formdata.fieldproperties != null)
-                        inputConfig(formdata, item);
                 }
                 
                 break;
@@ -54,8 +52,6 @@ public class Common {
                     item.invisible = key;
                     if (!item.focus && !item.disabled)
                         item.focus = true;
-                    if (formdata.fieldproperties != null)
-                        inputConfig(formdata, item);
                 }
                 
                 break;
@@ -90,13 +86,5 @@ public class Common {
             if (ns != null)
                 tabletool.instance(ns.getName()).invisible = true;
         }
-    }
-    
-    private static void inputConfig(ConfigData formdata, ToolData item) {
-//        FieldProperty property;
-//        
-//        property = formdata.fieldproperties.get(item.name);
-//        if ((property != null) && (property.setsecretstate))
-//            item.secret = property.secret;
     }
 }

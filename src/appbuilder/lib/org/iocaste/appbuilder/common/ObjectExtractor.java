@@ -3,6 +3,8 @@ package org.iocaste.appbuilder.common;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.runtime.common.managedview.DataConversion;
+import org.iocaste.runtime.common.managedview.DataConversionRule;
 import org.iocaste.shell.common.AbstractContext;
 
 public class ObjectExtractor {

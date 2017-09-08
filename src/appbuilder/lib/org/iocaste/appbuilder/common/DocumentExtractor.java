@@ -16,6 +16,8 @@ import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.runtime.common.managedview.DataConversion;
+import org.iocaste.runtime.common.managedview.DataConversionRule;
 
 public class DocumentExtractor {
     private PageBuilderContext context;

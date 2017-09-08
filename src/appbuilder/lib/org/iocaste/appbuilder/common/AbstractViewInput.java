@@ -17,6 +17,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.runtime.common.managedview.DataConversion;
 import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;

@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.appbuilder.common.DataConversion;
-import org.iocaste.appbuilder.common.DataConversionRule;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;

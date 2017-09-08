@@ -1,7 +1,6 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
-import org.iocaste.appbuilder.common.DataConversion;
 import org.iocaste.appbuilder.common.DocumentExtractor;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewComponents;
@@ -11,6 +10,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
+import org.iocaste.runtime.common.managedview.DataConversion;
 import org.iocaste.shell.common.Const;
 
 public class Save extends AbstractActionHandler {
