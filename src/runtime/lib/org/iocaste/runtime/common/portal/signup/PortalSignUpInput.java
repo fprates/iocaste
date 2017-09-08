@@ -1,18 +1,18 @@
 package org.iocaste.runtime.common.portal.signup;
 
-import org.iocaste.appbuilder.common.AbstractViewInput;
-import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.runtime.common.application.Context;
+import org.iocaste.runtime.common.page.AbstractViewInput;
 
-public class PortalSignUpInput extends AbstractViewInput {
+public class PortalSignUpInput extends AbstractViewInput<Context> {
 
     @Override
-    protected void execute(PageBuilderContext context) {
+    protected void execute(Context context) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    protected void init(PageBuilderContext context) {
+    protected void init(Context context) {
         // TODO Auto-generated method stub
         
     }
