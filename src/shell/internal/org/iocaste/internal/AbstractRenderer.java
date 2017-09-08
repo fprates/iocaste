@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Handler;
 import org.iocaste.protocol.Message;
@@ -20,7 +21,8 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.View;
 
-public abstract class AbstractRenderer extends HttpServlet implements Function {
+public abstract class AbstractRenderer extends HttpServlet
+        implements Function {
     private static final long serialVersionUID = -7711799346205632679L;
     private static final boolean NEW_SESSION = false;
     private static final boolean KEEP_SESSION = true;
@@ -114,12 +116,13 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         return null;
     }
     
-    /**
-     * 
-     * @return
-     */
     public final String getServerName() {
         return servername;
+    }
+    
+    @Override
+    public final AbstractIocasteServlet getServlet() {
+        return null;
     }
     
     /**
@@ -217,6 +220,9 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         return null;
     }
 
+    @Override
+    public final void set(AbstractIocasteServlet servlet) { }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#setAuthorizedCall(boolean)
@@ -240,13 +246,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         composition = position.split("\\.");
         context.setPagesPosition(composition[0], composition[1]);
     }
-
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#setServerName(java.lang.String)
-     */
-    @Override
-    public final void setServerName(String servername) { }
 
     /*
      * (non-Javadoc)

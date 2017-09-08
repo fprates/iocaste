@@ -1,5 +1,6 @@
 package org.iocaste.kernel.runtime.shell.renderer.internal;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -8,7 +9,8 @@ import java.util.Set;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.kernel.runtime.shell.ViewContext;
+import org.iocaste.kernel.documents.dataelement.GetDataElement;
+import org.iocaste.kernel.runtime.shell.ProcessOutputData;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -21,24 +23,21 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
 
 public class Input {
-    public ViewContext viewctx;
-    public Element element;
-    public Container container;
-    public boolean enablecustom;
-//    private Documents documents;
     private Map<String, DataElement> des;
-
-    public final void register() {
-        InputData data = new InputData();
-
-        data.container = container;
-        data.element = element;
-        data.viewctx = viewctx;
-        data.enablecustom = enablecustom;
+    private ProcessOutputData outputdata;
+    private Container container;
+    private GetDataElement dataelementget;
+    private Connection connection;
+    
+    public Input(ProcessOutputData outputdata, Container container)
+            throws Exception {
+        this.outputdata = outputdata;
+        this.container = container;
         
-//        documents = new Documents(viewctx.function);
+        dataelementget = outputdata.viewctx.function.get("get_data_element");
+        connection = outputdata.viewctx.function.documents.database.
+                getDBConnection(outputdata.viewctx.sessionid);
         des = new HashMap<>();
-        register(data);
     }
     
     /**
@@ -46,9 +45,9 @@ public class Input {
      * @param input
      * @param inputdata
      */
-    private final void generateCalendar(InputComponent input,
-            InputData inputdata) {
-        generateCalendar(inputdata.viewctx.view, inputdata.container, input);
+    private final void generateCalendar(
+            InputComponent input, Container container) {
+        generateCalendar(outputdata.viewctx.view, container, input);
     }
     
     public static final void generateCalendar(
@@ -86,7 +85,7 @@ public class Input {
      * @param inputdata
      */
     private final void generateSearchHelp(InputComponent input,
-            InputData inputdata) {
+            Container container) {
 //        SearchHelp sh, search;
 //        String shname, name, htmlname, nsreference;
 //        SearchHelpData shdata;
@@ -174,69 +173,51 @@ public class Input {
         
         return elements;
     }
-    
-    /**
-     * 
-     * @param inputdata
-     */
-    private final void register(InputData inputdata) {
+ 
+    public final void register(Element element, boolean enablecustom)
+            throws Exception {
         String name;
         DataElement dataelement;
         Set<Element> elements;
-        InputData inputdata_;
         Container container;
         InputComponent input;
         DocumentModelItem modelitem;
         
-        if (inputdata.element == null)
+        if (element == null)
             return;
         
-        inputdata.element.setView(inputdata.viewctx.view);
-        if (inputdata.element.isContainable()) {
-            container = (Container)inputdata.element;
-            
-            inputdata_ = new InputData();
-            inputdata_.container = container;
-            inputdata_.viewctx = inputdata.viewctx;
-            inputdata_.enablecustom = inputdata.enablecustom;
-            inputdata_.inputdisabled = inputdata.inputdisabled;
-            
-            if (!inputdata_.enablecustom && container.isRemote())
-                inputdata_.inputdisabled = true;
-                
+        element.setView(outputdata.viewctx.view);
+        if (element.isContainable()) {
+            container = (Container)element;
             elements = (container.isMultiLine())?
                     getMultiLineElements(container) : container.getElements();
-                    
-            for (Element element : elements) {
-                inputdata_.element = element;
-                register(inputdata_);
-            }
-            
+            for (Element child : elements)
+                register(child, enablecustom);
             return;
         }
         
-        if (inputdata.element.isDataStorable()) {
-            input = (InputComponent)inputdata.element;
+        if (element.isDataStorable()) {
+            input = (InputComponent)element;
             modelitem = input.getModelItem();
             if (input.getSearchHelp() == null && modelitem != null &&
                     modelitem.getSearchHelp() != null)
-                generateSearchHelp(input, inputdata);
+                generateSearchHelp(input, this.container);
             
             dataelement = input.getDataElement();
             if ((dataelement != null) && dataelement.isDummy()) {
                 name = dataelement.getName();
                 dataelement = des.get(name);
-//                if (dataelement == null) {
-//                    dataelement = documents.getDataElement(name);
-//                    des.put(name, dataelement);
-//                }
+                if (dataelement == null) {
+                    dataelement = dataelementget.run(connection, name);
+                    des.put(name, dataelement);
+                }
                 input.setDataElement(dataelement);
             }
             
             container = input.getContainer();
             if ((dataelement != null) && (input.getCalendar() == null) &&
                     (dataelement.getType() == DataType.DATE))
-                generateCalendar(input, inputdata);
+                generateCalendar(input, this.container);
         }
         
 //        if (inputdata.element.hasMultipartSupport())
@@ -244,11 +225,4 @@ public class Input {
 //                    (MultipartElement)inputdata.element);
     }
     
-}
-
-class InputData {
-    public ViewContext viewctx;
-    public Element element;
-    public Container container;
-    public boolean enablecustom, inputdisabled;
 }

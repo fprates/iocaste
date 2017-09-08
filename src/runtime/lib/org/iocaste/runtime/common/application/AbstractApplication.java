@@ -193,6 +193,11 @@ public abstract class AbstractApplication<T extends Context>
     	return null;
     }
     
+    @Override
+    public final AbstractIocasteServlet getServlet() {
+        return this;
+    }
+    
     private final ViewExport getView(
     		ServiceInterfaceData servicedata, T context) throws Exception {
         int i;
@@ -276,7 +281,7 @@ public abstract class AbstractApplication<T extends Context>
     
         req.setCharacterEncoding("UTF-8");
         servicedata = new ServiceInterfaceData();
-        servicedata.servername = getServerName(req);
+        servicedata.servername = getServerName();
         servicedata.sessionid = req.getSession().getId();
     	runtime = new RuntimeEngine(servicedata);
         try {
@@ -337,12 +342,12 @@ public abstract class AbstractApplication<T extends Context>
     }
     
     @Override
-    public void setAuthorizedCall(boolean authorized) {
+    public void set(AbstractIocasteServlet servlet) {
         // unused in AbstractApplication. Compatibility only.
     }
     
     @Override
-    public void setServerName(String servername) {
+    public void setAuthorizedCall(boolean authorized) {
         // unused in AbstractApplication. Compatibility only.
     }
     

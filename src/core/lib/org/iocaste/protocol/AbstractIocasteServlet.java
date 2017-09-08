@@ -18,6 +18,7 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
     private Map<String, Map<String, Object[]>> authorized;
     private Map<String, HttpServletRequest> requests;
     private Set<String> disconnectedops;
+    private String servername;
     private boolean singleton;
     
     public AbstractIocasteServlet() {
@@ -107,8 +108,9 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
                 throw new IocasteException(
                         "Function \"%s\" not registered.", functionid);
             
+            servername = new StringBuffer(req.getScheme()).append("://").
+                append("127.0.0.1:").append(req.getLocalPort()).toString();
             function.setServletContext(getServletContext());
-            function.setServerName(getServerName(req));
             function.setSessionid(complexid);
             function.setAuthorizedCall(isAuthorized(message));
             
@@ -133,20 +135,8 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
      * @param req
      * @return
      */
-    public final String getServerName(HttpServletRequest req) {
-        return new StringBuffer(req.getScheme()).append("://")
-                .append("127.0.0.1:").append(req.getLocalPort()).toString();
-    }
-    
-    /**
-     * 
-     * @param sessionid
-     * @return
-     */
-    protected final String getServerName(String sessionid) {
-        HttpServletRequest req = requests.get(sessionid);
-        
-        return getServerName(req);
+    public final String getServerName() {
+        return servername;
     }
     
     /**
@@ -155,7 +145,7 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
      * @return
      */
     private final String getUrl(HttpServletRequest req) {
-        return new StringBuffer(getServerName(req))
+        return new StringBuffer(getServerName())
             .append(req.getContextPath())
             .append(req.getServletPath()).toString();
     }
@@ -220,8 +210,8 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
         
         sessionid = message.getSessionid();
         test = new Message("is_connected");
-        url = new StringBuffer(getServerName(sessionid))
-            .append(Iocaste.SERVERNAME).toString();
+        url = new StringBuffer(getServerName()).append(Iocaste.SERVERNAME).
+                toString();
         test.add("sessionid", sessionid);
         test.setSessionid(sessionid);
         

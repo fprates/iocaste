@@ -190,17 +190,13 @@ public class ProcessOutput extends AbstractHandler {
         for (HeaderLink link : outputdata.viewexport.links)
             outputdata.viewctx.view.add(link);
         
-        input = new Input();
-        input.viewctx = outputdata.viewctx;
-        input.container = null;
+        input = new Input(outputdata, null);
 //        input.pagectx.mpelements.clear();
         /*
          * deixa registerInputs() antes do commit(),
          * para que a conexão seja encerrada.
          */
-        for (Container container : outputdata.viewctx.view.getContainers()) {
-            input.element = container;
-            input.register();
-        }
+        for (Container container : outputdata.viewctx.view.getContainers())
+            input.register(container, false);
     }
 }

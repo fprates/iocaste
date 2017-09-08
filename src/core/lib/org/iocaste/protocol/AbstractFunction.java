@@ -12,7 +12,7 @@ public abstract class AbstractFunction implements Function {
     private ServletContext context;
     private Map<String, String> exports;
     private Map<String, Handler> handlers;
-    private String servername;
+    private AbstractIocasteServlet servlet;
     private String sessionid;
     private boolean authorized;
     
@@ -79,6 +79,11 @@ public abstract class AbstractFunction implements Function {
         return context.getResourceAsStream(path);
     }
     
+    @Override
+    public final AbstractIocasteServlet getServlet() {
+        return servlet;
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#isAuthorizedCall()
@@ -129,9 +134,15 @@ public abstract class AbstractFunction implements Function {
      */
     @Override
     public final Service serviceInstance(String path) {
+        String servername = servlet.getServerName();
         String url = new StringBuffer(servername).append(path).toString();
         
         return new StandardService(sessionid, url);
+    }
+    
+    @Override
+    public final void set(AbstractIocasteServlet servlet) {
+        this.servlet = servlet;
     }
     
     /*
@@ -141,15 +152,6 @@ public abstract class AbstractFunction implements Function {
     @Override
     public final void setAuthorizedCall(boolean authorized) {
         this.authorized = authorized;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#setServerName(java.lang.String)
-     */
-    @Override
-    public final void setServerName(String servername) {
-        this.servername = servername;
     }
     
     /*

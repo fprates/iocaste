@@ -6,10 +6,8 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
@@ -97,6 +95,7 @@ public class ProcessInput extends AbstractHandler {
         ControlComponent control;
         RuntimeEngine shell;
         ComponentEntry entry;
+        String action;
         
         status = validate();
         if (status.fatal != null)
@@ -124,34 +123,27 @@ public class ProcessInput extends AbstractHandler {
         
         if (status.event)
             return;
-        viewexport.action = getString(config.values, "action");
-//        if ((control != null) && control.isPopup()) {
-//            config.popupcontrol = (PopupControl)control;
-//            config.contexturl = composeUrl(
-//                    config.popupcontrol.getApplication());
-//            return;
-//        }
-//        
-//        function = getFunction();
-//        try {
-//            service = new StandardService(config.sessionid,
-//                    composeUrl(config.contextname));
-//            
-//            config.state = (ViewState)service.call(message);
-//            if (config.state.messagetype == Const.ERROR)
-//                Common.rollback(function.getServerName(),
-//                        config.sessionid, disconnecteddb);
-//            else
-//                Common.commit(function.getServerName(),
-//                        config.sessionid, disconnecteddb);
-//        } catch (Exception e) {
-//            if (getPagesPositions(config.sessionid).length == 1)
-//                AbstractRenderer.pushPage(config.sessionid, config.state.view);
-//            
-//            Common.rollback(function.getServerName(),
-//                    config.sessionid, disconnecteddb);
-//            throw e;
-//        }
+        action = getString(config.values, "action");
+        control = config.state.viewctx.view.getElement(action);
+        if ((control != null) && control.isPopup()) {
+            config.popupcontrol = (PopupControl)control;
+            config.contexturl = composeUrl(
+                    config.popupcontrol.getApplication());
+            return;
+        }
+        
+        viewexport.action = action;
+    }
+    
+    /**
+     * 
+     * @param app
+     * @return
+     */
+    protected final String composeUrl(String app) {
+        String servername = getFunction().getServlet().getServerName();
+        return new StringBuffer(servername).append("/").
+                append(app).append("/view.html").toString();
     }
     
     /**
@@ -747,11 +739,6 @@ public class ProcessInput extends AbstractHandler {
         
         message(Const.NONE, null);
         element = config.state.viewctx.view.getElement(controlname);
-//        if ((element == null) && config.actions.contains(controlname)) {
-//            controlname = config.pagectx.getControlName(controlname);
-//            element = config.state.view.getElement(controlname);
-//        }
-        
         if (element != null)
             processInputsStage(element, status);
         else
