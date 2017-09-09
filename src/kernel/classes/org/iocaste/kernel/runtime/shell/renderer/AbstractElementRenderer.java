@@ -94,8 +94,8 @@ public abstract class AbstractElementRenderer<T extends Element>
         SpecFactory factory;
 
         if (!config.viewctx.noeventhandlers && (element != null)) {
-            factory = config.viewctx.function.factories.
-                    get(config.viewctx.types.get(element.getType()));
+            factory = config.viewctx.factories.get(
+                    config.viewctx.types.get(element.getType()));
             if (factory != null)
                 factory.addEventHandler(config.viewctx, element.getHtmlName());
         }

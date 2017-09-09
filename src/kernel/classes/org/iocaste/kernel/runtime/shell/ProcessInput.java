@@ -93,7 +93,6 @@ public class ProcessInput extends AbstractHandler {
     		throws Exception {
         InputStatus status;
         ControlComponent control;
-        RuntimeEngine shell;
         ComponentEntry entry;
         
         status = validate();
@@ -108,7 +107,6 @@ public class ProcessInput extends AbstractHandler {
         if (status.msgtype == Const.ERROR)
             return;
         
-        shell = getFunction();
         for (String key : config.state.viewctx.entries.keySet()) {
             entry = config.state.viewctx.entries.get(key);
             if (entry.component != null) {
@@ -116,7 +114,7 @@ public class ProcessInput extends AbstractHandler {
             	continue;
             }
             
-            shell.factories.get(entry.data.type).update(
+            config.state.viewctx.factories.get(entry.data.type).update(
             		config.state.viewctx, key);
         }
         

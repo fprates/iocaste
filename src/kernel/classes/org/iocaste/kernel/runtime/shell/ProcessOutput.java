@@ -1,18 +1,45 @@
 package org.iocaste.kernel.runtime.shell;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.kernel.runtime.RuntimeEngine;
+import org.iocaste.kernel.runtime.shell.factories.ButtonFactory;
+import org.iocaste.kernel.runtime.shell.factories.DataFormFactory;
+import org.iocaste.kernel.runtime.shell.factories.ExpandBarFactory;
+import org.iocaste.kernel.runtime.shell.factories.FileUploadFactory;
+import org.iocaste.kernel.runtime.shell.factories.FormFactory;
+import org.iocaste.kernel.runtime.shell.factories.FrameFactory;
+import org.iocaste.kernel.runtime.shell.factories.LinkFactory;
+import org.iocaste.kernel.runtime.shell.factories.ListBoxFactory;
+import org.iocaste.kernel.runtime.shell.factories.NavControlFactory;
+import org.iocaste.kernel.runtime.shell.factories.NodeListFactory;
+import org.iocaste.kernel.runtime.shell.factories.NodeListItemFactory;
+import org.iocaste.kernel.runtime.shell.factories.ParameterFactory;
+import org.iocaste.kernel.runtime.shell.factories.PrintAreaFactory;
+import org.iocaste.kernel.runtime.shell.factories.RadioButtonFactory;
+import org.iocaste.kernel.runtime.shell.factories.RadioGroupFactory;
+import org.iocaste.kernel.runtime.shell.factories.ReportToolFactory;
 import org.iocaste.kernel.runtime.shell.factories.SpecFactory;
+import org.iocaste.kernel.runtime.shell.factories.StandardContainerFactory;
+import org.iocaste.kernel.runtime.shell.factories.TabbedPaneFactory;
+import org.iocaste.kernel.runtime.shell.factories.TabbedPaneItemFactory;
+import org.iocaste.kernel.runtime.shell.factories.TableToolFactory;
+import org.iocaste.kernel.runtime.shell.factories.TextEditorFactory;
+import org.iocaste.kernel.runtime.shell.factories.TextFactory;
+import org.iocaste.kernel.runtime.shell.factories.TextFieldFactory;
+import org.iocaste.kernel.runtime.shell.factories.TilesFactory;
+import org.iocaste.kernel.runtime.shell.factories.VirtualControlFactory;
 import org.iocaste.kernel.runtime.shell.renderer.StandardHtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Input;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.application.ViewExport;
+import org.iocaste.runtime.common.page.ViewSpecItem;
 import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
@@ -20,6 +47,63 @@ import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.MessageSource;
 
 public class ProcessOutput extends AbstractHandler {
+    public Map<ViewSpecItem.TYPES, SpecFactory> factories;
+    
+    public ProcessOutput() {
+        factories = new HashMap<>();
+        factories.put(ViewSpecItem.TYPES.BUTTON,
+                new ButtonFactory());
+        factories.put(ViewSpecItem.TYPES.DATA_FORM,
+                new DataFormFactory());
+        factories.put(ViewSpecItem.TYPES.EXPAND_BAR,
+                new ExpandBarFactory());
+        factories.put(ViewSpecItem.TYPES.FORM,
+                new FormFactory());
+        factories.put(ViewSpecItem.TYPES.FILE_UPLOAD,
+                new FileUploadFactory());
+        factories.put(ViewSpecItem.TYPES.FRAME,
+                new FrameFactory());
+        factories.put(ViewSpecItem.TYPES.LINK,
+                new LinkFactory());
+        factories.put(ViewSpecItem.TYPES.LISTBOX,
+                new ListBoxFactory());
+        factories.put(ViewSpecItem.TYPES.NODE_LIST,
+                new NodeListFactory());
+        factories.put(ViewSpecItem.TYPES.NODE_LIST_ITEM,
+                new NodeListItemFactory());
+        factories.put(ViewSpecItem.TYPES.PAGE_CONTROL,
+                new NavControlFactory());
+        factories.put(ViewSpecItem.TYPES.PRINT_AREA,
+                new PrintAreaFactory());
+        factories.put(ViewSpecItem.TYPES.RADIO_BUTTON,
+                new RadioButtonFactory());
+        factories.put(ViewSpecItem.TYPES.RADIO_GROUP,
+                new RadioGroupFactory());
+        factories.put(ViewSpecItem.TYPES.REPORT_TOOL,
+                new ReportToolFactory());
+        factories.put(ViewSpecItem.TYPES.STANDARD_CONTAINER,
+                new StandardContainerFactory());
+        factories.put(ViewSpecItem.TYPES.TABBED_PANE,
+                new TabbedPaneFactory());
+        factories.put(ViewSpecItem.TYPES.TABBED_PANE_ITEM,
+                new TabbedPaneItemFactory());
+        factories.put(ViewSpecItem.TYPES.TABLE_TOOL,
+                new TableToolFactory());
+        factories.put(ViewSpecItem.TYPES.TEXT,
+                new TextFactory());
+        factories.put(ViewSpecItem.TYPES.TEXT_EDITOR,
+                new TextEditorFactory());
+        factories.put(ViewSpecItem.TYPES.TEXT_FIELD,
+                new TextFieldFactory());
+        factories.put(ViewSpecItem.TYPES.TILES,
+                new TilesFactory());
+        factories.put(ViewSpecItem.TYPES.PARAMETER,
+                new ParameterFactory());
+        factories.put(ViewSpecItem.TYPES.VIEW,
+                null);
+        factories.put(ViewSpecItem.TYPES.VIRTUAL_CONTROL,
+                new VirtualControlFactory());
+    }
     
     private void build(
             ViewContext viewctx, ComponentEntry entry, String prefix) {
@@ -31,7 +115,7 @@ public class ProcessOutput extends AbstractHandler {
             return;
         handler = factory.getHandler();
         if (handler != null)
-            handler.execute((RuntimeEngine)getFunction(), entry.data.name);
+            handler.execute(viewctx, entry.data.name);
         factory.run(viewctx, entry, prefix);
     }
     
@@ -57,7 +141,7 @@ public class ProcessOutput extends AbstractHandler {
     }
     
     private final SpecFactory getFactory(TYPES type) {
-        return ((RuntimeEngine)getFunction()).factories.get(type);
+        return factories.get(type);
     }
     
     private final void moveMessages(ProcessOutputData data) {
@@ -105,6 +189,7 @@ public class ProcessOutput extends AbstractHandler {
         outputdata.viewctx.locale = outputdata.viewexport.locale.toString();
         outputdata.viewctx.noeventhandlers = outputdata.noeventhandlers;
         outputdata.viewctx.types = RuntimeEngine.CONST_TYPES;
+        outputdata.viewctx.factories = factories;
         if (!outputdata.noinitmessages)
             moveMessages(outputdata);
         if (outputdata.viewexport.subpages != null)
@@ -134,8 +219,7 @@ public class ProcessOutput extends AbstractHandler {
         for (String key : elements) {
             entry = outputdata.viewctx.entries.get(key);
             build(outputdata.viewctx, entry, outputdata.viewexport.prefix);
-            factory = outputdata.viewctx.function.factories.
-                    get(entry.data.type);
+            factory = factories.get(entry.data.type);
             if (factory == null)
                 continue;
             factory.generate(

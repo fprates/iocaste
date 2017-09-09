@@ -6,11 +6,13 @@ import java.util.Map;
 
 import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.application.ViewExport;
+import org.iocaste.runtime.common.page.ViewSpecItem;
 import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
 import org.iocaste.kernel.runtime.RuntimeEngine;
+import org.iocaste.kernel.runtime.shell.factories.SpecFactory;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 
 public class ViewContext {
@@ -23,6 +25,7 @@ public class ViewContext {
     public Const messagetype;
     public String messagetext, sessionid, locale;
     public Object[] messageargs;
+    public Map<ViewSpecItem.TYPES, SpecFactory> factories;
     public Map<String, Map<String, Map<String, ActionEventHandler>>> actions;
     public Map<String, ViewExport> subpages;
     public boolean offline, noeventhandlers;
