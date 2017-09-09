@@ -3,6 +3,7 @@ package org.iocaste.kernel.runtime.shell.renderer.legacy;
 import java.util.Map;
 
 import org.iocaste.kernel.runtime.shell.renderer.AbstractElementRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Source;
@@ -34,6 +35,7 @@ public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
         Container container;
         Map<String, Object> values;
         Source source;
+        ActionEventHandler handler;
         XMLElement optiontag = null, selecttag = new XMLElement("select");
         String style, value, name = input.getHtmlName();
         
@@ -45,6 +47,11 @@ public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
         } else {
             values = null;
         }
+        
+        handler = config.viewctx.getEventHandler(name, name, "focus");
+        handler.name = name;
+        handler.call = new StringBuilder("_send('").append(name).
+                append("', '&event=onfocus', null);").toString();
 
         style = null;
         container = input.getContainer();
