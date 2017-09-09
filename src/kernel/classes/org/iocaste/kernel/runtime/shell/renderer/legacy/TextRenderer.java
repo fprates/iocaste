@@ -1,4 +1,4 @@
-package org.iocaste.kernel.runtime.shell.renderer;
+package org.iocaste.kernel.runtime.shell.renderer.legacy;
 
 import java.text.ParseException;
 import java.util.HashMap;
@@ -6,17 +6,18 @@ import java.util.Map;
 
 import javax.swing.text.MaskFormatter;
 
-import org.iocaste.kernel.runtime.shell.elements.Text;
+import org.iocaste.kernel.runtime.shell.renderer.AbstractElementRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Text;
 
 public class TextRenderer extends AbstractElementRenderer<Text> {
     private Map<String, MaskFormatter> formatters;
     
-    public TextRenderer(HtmlRenderer renderer) {
-        super(renderer, Const.TEXT);
+    public TextRenderer(HtmlRenderer renderers) {
+        super(renderers, Const.TEXT);
         formatters = new HashMap<>();
     }
 

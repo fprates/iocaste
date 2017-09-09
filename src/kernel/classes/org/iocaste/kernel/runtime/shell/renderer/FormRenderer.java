@@ -1,10 +1,10 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
+import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.Parameter;
 
 public class FormRenderer extends AbstractElementRenderer<Form> {
     
@@ -20,9 +20,7 @@ public class FormRenderer extends AbstractElementRenderer<Form> {
      */
     protected final XMLElement execute(Form container, Config config) {
         String[] printlines;
-        Parameter parameter;
-        XMLElement hiddentag, content;
-        ParameterRenderer parameterrenderer;
+        XMLElement content;
         XMLElement formtag = new XMLElement("form");
         String enctype = container.getEnctype();
         String htmlname = config.currentform = container.getHtmlName();
@@ -38,12 +36,6 @@ public class FormRenderer extends AbstractElementRenderer<Form> {
         addAttributes(formtag, container);
         if (enctype != null)
             formtag.add("enctype", enctype);
-
-        parameterrenderer = get(Const.PARAMETER);
-        parameter = new Parameter(config.viewctx.view, "pagetrack");
-        parameter.set(config.getPageTrack());
-        hiddentag = parameterrenderer.run(parameter, config);
-        formtag.addChild(hiddentag);
 
         content = new XMLElement("div");
         content.add("class", container.getStyleClass());

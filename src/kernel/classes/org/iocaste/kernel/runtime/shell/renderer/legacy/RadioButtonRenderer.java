@@ -1,15 +1,16 @@
-package org.iocaste.kernel.runtime.shell.renderer;
+package org.iocaste.kernel.runtime.shell.renderer.legacy;
 
-import org.iocaste.kernel.runtime.shell.elements.RadioButton;
+import org.iocaste.kernel.runtime.shell.renderer.AbstractElementRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.RadioButton;
 
 public class RadioButtonRenderer extends AbstractElementRenderer<RadioButton> {
 
-    public RadioButtonRenderer(HtmlRenderer renderer) {
-        super(renderer, Const.RADIO_BUTTON);
+    public RadioButtonRenderer(HtmlRenderer renderers) {
+        super(renderers, Const.RADIO_BUTTON);
     }
 
     @Override

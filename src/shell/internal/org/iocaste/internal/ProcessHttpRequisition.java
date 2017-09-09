@@ -40,7 +40,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
     private static final String NOT_CONNECTED = "not.connected";
     private static final byte AUTHORIZATION_ERROR = 1;
     private static final String STD_CONTENT = "text/html";
-    private static final boolean UNIFIED_RENDERER = false;
     public Map<String, List<SessionContext>> apps;
     public TicketControl tickets;
     protected boolean disconnecteddb;
@@ -924,14 +923,14 @@ public class ProcessHttpRequisition extends AbstractHandler {
      * @param tracking
      * @throws Exception
      */
-    private final boolean render(RendererContext context, HtmlRenderer renderer,
+    private final boolean render(RendererContext context,
             PageContext pagectx, TrackingData tracking) throws Exception {
         Message message;
         BufferedOutputStream bos;
         byte[] content;
         OutputStream os;
-        List<String> text;
         PrintWriter writer;
+        ControlComponent control;
         View view = pagectx.getViewData();
         
         if (view == null)
@@ -969,20 +968,19 @@ public class ProcessHttpRequisition extends AbstractHandler {
         }
         
         configResponse(context.resp, pagectx);
-        if (UNIFIED_RENDERER) {
-            message = new Message("legacy_output_process");
-            message.add("view", view);
-            content = (byte[])callIocaste(context.sessionid, message);
-            writer = context.resp.getWriter();
-            writer.write(new String(content));
-        } else {
-            text = renderer.run(view, tracking);
-            writer = context.resp.getWriter();
-            if (text != null)
-                for (String line : text)
-                    writer.println(line);
-        }
+        control = pagectx.getPopupControl();
         
+        message = new Message("legacy_output_process");
+        message.add("view", view);
+        message.add("logid", tracking.logid);
+        message.add("sequence", tracking.sequence);
+        message.add("username", tracking.username);
+        message.add("pagecontrol",
+                (control == null)? null : control.getHtmlName());
+        content = (byte[])callIocaste(context.sessionid, message);
+        
+        writer = context.resp.getWriter();
+        writer.write(new String(content));
         writer.flush();
         writer.close();
         return true;
@@ -1048,7 +1046,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
     private final void startRender(RendererContext context, PageContext pagectx)
             throws Exception {
         TrackingData tracking;
-        HtmlRenderer renderer;
         String username;
         View view;
         boolean hasrendered;
@@ -1067,19 +1064,15 @@ public class ProcessHttpRequisition extends AbstractHandler {
          * ajusta e chama o renderizador
          */
         username = pagectx.getUsername();
-        renderer = new HtmlRenderer();
-        renderer.setPageContext(pagectx);
-        renderer.setUsername((username == null)? NOT_CONNECTED : username);
-        renderer.setFunction(getFunction());
         tracking = new TrackingData();
         tracking.logid = pagectx.getLogid();
         tracking.sequence = pagectx.getSequence();
         tracking.sessionid = context.sessionid;
         tracking.contexturl = pagectx.getContextUrl();
-        hasrendered = render(context, renderer, pagectx, tracking);
-        if (hasrendered)
-            pagectx.setActions(renderer.getActions());
-        username = pagectx.getUsername();
+        tracking.username = (username == null)? NOT_CONNECTED : username;
+        hasrendered = render(context, pagectx, tracking);
+//        if (hasrendered)
+//            pagectx.setActions(renderer.getActions());
     }
 
 }

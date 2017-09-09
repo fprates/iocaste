@@ -8,7 +8,10 @@ import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.kernel.runtime.shell.factories.SpecFactory;
+import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.internal.Renderer;
+import org.iocaste.kernel.runtime.shell.renderer.internal.Source;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;

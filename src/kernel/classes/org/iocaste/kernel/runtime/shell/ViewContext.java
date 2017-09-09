@@ -10,16 +10,13 @@ import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
-import org.iocaste.shell.common.ViewTitle;
 import org.iocaste.kernel.runtime.RuntimeEngine;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
-import org.iocaste.kernel.runtime.shell.renderer.internal.TrackingData;
 
 public class ViewContext {
     public View view;
+    public ViewExport viewexport;
     public RuntimeEngine function;
-    public TrackingData tracking;
-    public ViewTitle title;
     public Map<String, ComponentEntry> entries;
     public Map<Const, TYPES> types;
     public MessageSource messagesrc;
@@ -28,7 +25,6 @@ public class ViewContext {
     public Object[] messageargs;
     public Map<String, Map<String, Map<String, ActionEventHandler>>> actions;
     public Map<String, ViewExport> subpages;
-    public ComponentEntry parent;
     public boolean offline, noeventhandlers;
 	
     public ViewContext() {
@@ -37,7 +33,6 @@ public class ViewContext {
     
     public ViewContext(View view) {
         this.view = view;
-        tracking = new TrackingData();
         entries = new LinkedHashMap<>();
         actions = new HashMap<>();
         subpages = new HashMap<>();

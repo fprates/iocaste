@@ -25,8 +25,10 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
 import org.iocaste.kernel.runtime.shell.elements.Text;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
+import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
-import org.iocaste.kernel.runtime.shell.renderer.internal.TrackingData;
+import org.iocaste.kernel.runtime.shell.renderer.internal.Source;
+import org.iocaste.kernel.runtime.shell.renderer.legacy.ContextMenu;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldContainerSource;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldSource;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldTableItemSource;
@@ -173,7 +175,8 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         if (required)
             ctxmenu.add(ProcessInput.getMessage(view, "required"));
 
-        popupcontrol = config.getPopupControl();
+        popupcontrol = config.viewctx.view.
+                getElement(config.viewctx.viewexport.popupcontrol);
         calendar = input.getCalendar();
         if (calendar != null) {
             ctxmenu.add(calendar.getHtmlName(), config, "calendar");
@@ -183,7 +186,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
                      calname.equals(calendar.getLate()) ||
                      calname.equals(calendar.getName()))) {
                     tag = new XMLElement("li");
-                    tag.addChildren(renderPopup(config));
+                    tag.addChildren(renderPopup(config, popupcontrol));
                     tagt.addChild(tag);
                 }
             }
@@ -197,28 +200,25 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
                 if (shname.equals(search.getHtmlName()) ||
                     shname.equals(search.getChild())) {
                     tag = new XMLElement("li");
-                    tag.addChildren(renderPopup(config));
+                    tag.addChildren(renderPopup(config, popupcontrol));
                     tagt.addChild(tag);
                 }
             }
         }
     }
     
-    private final List<XMLElement> renderPopup(Config config) {
+    private final List<XMLElement> renderPopup(
+            Config config, PopupControl control) {
         Map<String, Object> parameters;
         Object[] viewreturn;
-        PopupControl control;
         List<XMLElement> tags;
-        TrackingData tracking;
         Service service;
         Message message;
         View view, sourceview;
         StyleSheet stylesheet;
         
-        control = config.getPopupControl();
-        tracking = config.getTracking();
         service = new StandardService(
-                config.viewctx.sessionid, tracking.contexturl);
+            config.viewctx.sessionid, config.viewctx.viewexport.contexturl);
         message = new Message("get_view_data");
 
         sourceview = config.viewctx.view;

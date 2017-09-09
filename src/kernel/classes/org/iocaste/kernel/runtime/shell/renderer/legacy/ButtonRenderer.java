@@ -1,18 +1,19 @@
-package org.iocaste.kernel.runtime.shell.renderer;
+package org.iocaste.kernel.runtime.shell.renderer.legacy;
 
 import java.util.Map;
 
-import org.iocaste.kernel.runtime.shell.elements.Button;
+import org.iocaste.kernel.runtime.shell.renderer.AbstractElementRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 
 public class ButtonRenderer extends AbstractElementRenderer<Button> {
     
-    public ButtonRenderer(HtmlRenderer renderer) {
-        super(renderer, Const.BUTTON);
+    public ButtonRenderer(HtmlRenderer renderers) {
+        super(renderers, Const.BUTTON);
     }
     
     @Override
@@ -33,8 +34,8 @@ public class ButtonRenderer extends AbstractElementRenderer<Button> {
         events = button.getEvents();
         action = button.getAction();
         if (!events.containsKey("click")) {
-        	onclick = new StringBuilder((button.isScreenLockable())?
-        			"formSubmit('" : "formSubmitNoLock('");
+            onclick = new StringBuilder((button.isScreenLockable())?
+                    "formSubmit('" : "formSubmitNoLock('");
             onclick.append(config.currentform).
                     append("', '").append(config.currentaction).
                     append("', '").append(htmlname).append("');");

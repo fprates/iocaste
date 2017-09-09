@@ -8,7 +8,6 @@ import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.AbstractEventHandler;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.EventHandler;
-import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.View;
 
 public class ControllerData {
@@ -17,7 +16,6 @@ public class ControllerData {
     public Function function;
     public String contextname, contexturl;
     public boolean event;
-    public PopupControl popupcontrol;
     private Map<String, EventHandler> events;
     
     public ControllerData() {

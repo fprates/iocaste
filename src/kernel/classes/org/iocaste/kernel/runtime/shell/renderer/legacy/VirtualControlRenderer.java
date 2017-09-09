@@ -1,16 +1,17 @@
-package org.iocaste.kernel.runtime.shell.renderer;
+package org.iocaste.kernel.runtime.shell.renderer.legacy;
 
-import org.iocaste.kernel.runtime.shell.elements.VirtualControl;
+import org.iocaste.kernel.runtime.shell.renderer.AbstractElementRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.VirtualControl;
 
 public class VirtualControlRenderer
         extends AbstractElementRenderer<VirtualControl> {
 
-    public VirtualControlRenderer(HtmlRenderer renderer) {
-        super(renderer, Const.VIRTUAL_CONTROL);
+    public VirtualControlRenderer(HtmlRenderer renderers) {
+        super(renderers, Const.VIRTUAL_CONTROL);
     }
 
     @Override

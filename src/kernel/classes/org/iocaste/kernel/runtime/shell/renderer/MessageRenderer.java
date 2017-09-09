@@ -1,6 +1,7 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
 import org.iocaste.kernel.runtime.shell.elements.Text;
+import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.runtime.common.application.ToolData;

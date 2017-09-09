@@ -6,7 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.kernel.runtime.shell.ProcessInput;
+import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.legacy.ContextMenu;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;

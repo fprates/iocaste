@@ -19,9 +19,9 @@ import org.iocaste.documents.common.ValueRangeItem;
 import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.documents.GetObject;
 import org.iocaste.kernel.runtime.RuntimeEngine;
+import org.iocaste.kernel.runtime.shell.renderer.StandardHtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ControllerData;
-import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.InputStatus;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.IocasteException;
@@ -95,7 +95,6 @@ public class ProcessInput extends AbstractHandler {
         ControlComponent control;
         RuntimeEngine shell;
         ComponentEntry entry;
-        String action;
         
         status = validate();
         if (status.fatal != null)
@@ -104,7 +103,7 @@ public class ProcessInput extends AbstractHandler {
         viewexport.msgtype = status.msgtype;
         viewexport.message = status.message;
         viewexport.msgargs = status.msgargs;
-        viewexport.action = null;
+        viewexport.action = viewexport.popupcontrol = null;
         config.event = status.event;
         if (status.msgtype == Const.ERROR)
             return;
@@ -123,16 +122,15 @@ public class ProcessInput extends AbstractHandler {
         
         if (status.event)
             return;
-        action = getString(config.values, "action");
-        control = config.state.viewctx.view.getElement(action);
-        if ((control != null) && control.isPopup()) {
-            config.popupcontrol = (PopupControl)control;
-            config.contexturl = composeUrl(
-                    config.popupcontrol.getApplication());
+
+        viewexport.action = getString(config.values, "action");
+        control = config.state.viewctx.view.getElement(viewexport.action);
+        if ((control == null) || !control.isPopup())
             return;
-        }
-        
-        viewexport.action = action;
+        viewexport.popupcontrol = viewexport.action;
+        viewexport.action = null;
+        viewexport.contexturl = 
+                composeUrl(((PopupControl)control).getApplication());
     }
     
     /**
@@ -579,7 +577,7 @@ public class ProcessInput extends AbstractHandler {
         config.state.viewctx.offline = true;
         outputprocess.run(data);
         
-        new HtmlRenderer().run(config.state.viewctx);
+        new StandardHtmlRenderer().run(config.state.viewctx);
         for (String key : parameters.keySet()) {
             if (isAction(key, key)) {
                 if (actionname != null)

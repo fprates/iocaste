@@ -217,7 +217,7 @@ public class Input {
             container = input.getContainer();
             if ((dataelement != null) && (input.getCalendar() == null) &&
                     (dataelement.getType() == DataType.DATE))
-                generateCalendar(input, this.container);
+                generateCalendar(input, container);
         }
         
 //        if (inputdata.element.hasMultipartSupport())

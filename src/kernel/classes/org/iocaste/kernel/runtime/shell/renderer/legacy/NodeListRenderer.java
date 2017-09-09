@@ -1,15 +1,16 @@
-package org.iocaste.kernel.runtime.shell.renderer;
+package org.iocaste.kernel.runtime.shell.renderer.legacy;
 
-import org.iocaste.kernel.runtime.shell.elements.NodeList;
+import org.iocaste.kernel.runtime.shell.renderer.AbstractElementRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.NodeList;
 
 public class NodeListRenderer extends AbstractElementRenderer<NodeList> {
 
-    public NodeListRenderer(HtmlRenderer renderer) {
-        super(renderer, Const.NODE_LIST);
+    public NodeListRenderer(HtmlRenderer renderers) {
+        super(renderers, Const.NODE_LIST);
     }
 
     @Override

@@ -1,33 +1,33 @@
-package org.iocaste.kernel.runtime.shell.renderer;
+package org.iocaste.kernel.runtime.shell.renderer.legacy;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.iocaste.kernel.runtime.shell.elements.Button;
-import org.iocaste.kernel.runtime.shell.elements.TabbedPane;
+import org.iocaste.kernel.runtime.shell.renderer.AbstractElementRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
-import org.iocaste.kernel.runtime.shell.renderer.legacy.ParameterRenderer;
-import org.iocaste.kernel.runtime.shell.renderer.legacy.StandardContainerRenderer;
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
+import org.iocaste.shell.common.View;
 
 public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
     
-    public TabbedPaneRenderer(HtmlRenderer renderer) {
-        super(renderer, Const.TABBED_PANE);
+    public TabbedPaneRenderer(HtmlRenderer renderers) {
+        super(renderers, Const.TABBED_PANE);
     }
 
     @Override
     protected final XMLElement execute(TabbedPane tabbedpane, Config config) {
+        View view;
         Button button;
-        String classname, name, text, current, btname;
+        String classname, name, text, current;
         TabbedPaneItem item;
         List<XMLElement> tags;
         Set<Element> elements;
@@ -40,6 +40,7 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
         
         elements = tabbedpane.getElements();
         current = tabbedpane.getCurrentPage();
+        view = config.getView();
         buttonrenderer = get(Const.BUTTON);
         for (Element element : elements) {
             if (element.getType() != Const.TABBED_PANE_ITEM)
@@ -52,8 +53,7 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
             classname = current.equals(name)?
                     "tp_button_focused" : "tp_button_unfocused";
             
-            config.viewctx.instance(TYPES.BUTTON, btname = name.concat("_bt"));
-            button = new Button(config.viewctx, btname);
+            button = new Button(view, name.concat("_bt"));
             button.setText(text);
             button.setStyleClass(classname);
             button.setEventHandler(tabbedpane.getEventHandler());
@@ -95,7 +95,7 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
                 continue;
 
             input = (InputComponent)element;
-            tags.add(renderer.run(input, config));
+            tags.add(renderer.execute(input, config));
         }
     }
 }

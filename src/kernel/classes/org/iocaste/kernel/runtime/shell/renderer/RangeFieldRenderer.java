@@ -3,6 +3,7 @@ package org.iocaste.kernel.runtime.shell.renderer;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
+import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Input;
 import org.iocaste.protocol.utils.XMLElement;

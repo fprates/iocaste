@@ -1,8 +1,8 @@
-package org.iocaste.kernel.runtime.shell.renderer;
+package org.iocaste.kernel.runtime.shell.renderer.legacy;
 
 import java.util.Map;
 
-import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
+import org.iocaste.kernel.runtime.shell.renderer.AbstractElementRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Source;
@@ -19,8 +19,8 @@ import org.iocaste.shell.common.Shell;
 
 public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
     
-    public ListBoxRenderer(HtmlRenderer renderer) {
-        super(renderer, Const.LIST_BOX);
+    public ListBoxRenderer(HtmlRenderer renderers) {
+        super(renderers, Const.LIST_BOX);
         put(Const.DATA_ITEM, new ListBoxDataItemSource());
         put(Const.LIST_BOX, new ListBoxSource());
         put(Const.TABLE_ITEM, new ListBoxTableItemSource());
@@ -31,7 +31,6 @@ public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
     @SuppressWarnings("unchecked")
     @Override
     protected final XMLElement execute(InputComponent input, Config config) {
-    	ActionEventHandler handler;
         Container container;
         Map<String, Object> values;
         Source source;
@@ -64,11 +63,6 @@ public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
         } else {
             selecttag.add("class", style);
         }
-        
-        handler = config.viewctx.getEventHandler(name, name, "focus");
-        handler.name = name;
-        handler.call = new StringBuilder("_send('").append(name).
-                append("', '&event=onfocus', null);").toString();
         
         addAttributes(selecttag, input);
 
