@@ -1009,6 +1009,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
         }
         
         pagectx.setActions(actions);
+        pagectx.setViewData((View)values[2]);
     }
 
     @Override

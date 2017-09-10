@@ -151,7 +151,8 @@ public class ProcessLegacyOutput extends AbstractHandler {
         
         return new Object[] {
                 content.toString().getBytes(),
-                eventslist.toArray(new Object[0])
+                eventslist.toArray(new Object[0]),
+                config.viewctx.view
         };
     }
     
