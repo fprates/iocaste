@@ -29,7 +29,7 @@ public class ToolData implements Serializable {
     public int length, vlength, mode;
     public String[] groups, ordering;
 	public Object[] textargs; 
-    public Object value;
+    public Object nsvalue, value;
     public DocumentModel custommodel;
     public ViewSpecItem.TYPES type;
     public ExtendedObject object;

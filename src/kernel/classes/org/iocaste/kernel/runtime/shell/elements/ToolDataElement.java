@@ -39,7 +39,6 @@ public abstract class ToolDataElement implements Component, Container,
     private Calendar calendar;
     private byte[] content;
     private SearchHelp search;
-    private Object ns;
     private EventHandler evhandler;
     
     public ToolDataElement(ViewContext viewctx, Const type, ToolData tooldata)
@@ -683,7 +682,7 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public void set(Object ns, Object value) {
-        this.ns = ns;
+        tooldata.nsvalue = ns;
         tooldata.value = value;
     }
 
@@ -841,7 +840,7 @@ public abstract class ToolDataElement implements Component, Container,
      * @param ns
      */
     protected final void setNS(Object ns) {
-        this.ns = ns;
+        tooldata.nsvalue = ns;
     }
     
     /*
