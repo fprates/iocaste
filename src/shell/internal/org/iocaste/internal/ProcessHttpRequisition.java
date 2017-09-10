@@ -923,14 +923,19 @@ public class ProcessHttpRequisition extends AbstractHandler {
      * @param tracking
      * @throws Exception
      */
-    private final boolean render(RendererContext context,
-            PageContext pagectx, TrackingData tracking) throws Exception {
+    private final void render(RendererContext context, PageContext pagectx)
+            throws Exception {
         Message message;
         BufferedOutputStream bos;
         byte[] content;
         OutputStream os;
         PrintWriter writer;
         ControlComponent control;
+        Object[] values, incomingevents, incomingevent;
+        EventHandler event;
+        List<EventHandler> events;
+        Map<String, List<EventHandler>> actions;
+        String action, username;
         View view = pagectx.getViewData();
         
         if (view == null)
@@ -964,26 +969,46 @@ public class ProcessHttpRequisition extends AbstractHandler {
             
             bos.flush();
             bos.close();
-            return false;
+            return;
         }
         
         configResponse(context.resp, pagectx);
         control = pagectx.getPopupControl();
-        
+
+        username = pagectx.getUsername();
         message = new Message("legacy_output_process");
         message.add("view", view);
-        message.add("logid", tracking.logid);
-        message.add("sequence", tracking.sequence);
-        message.add("username", tracking.username);
+        message.add("logid", pagectx.getLogid());
+        message.add("sequence", pagectx.getSequence());
+        message.add("username", (username == null)? NOT_CONNECTED : username);
+        message.add("sessionid", context.sessionid);
+        message.add("contexturl", pagectx.getContextUrl());
         message.add("pagecontrol",
                 (control == null)? null : control.getHtmlName());
-        content = (byte[])callIocaste(context.sessionid, message);
+        values = (Object[])callIocaste(context.sessionid, message);
         
         writer = context.resp.getWriter();
-        writer.write(new String(content));
+        writer.write(new String((byte[])values[0]));
         writer.flush();
         writer.close();
-        return true;
+
+        actions = new HashMap<>();
+        incomingevents = (Object[])values[1];
+        for (int i = 0; i < incomingevents.length; i++) {
+            incomingevent = (Object[])incomingevents[i];
+            action = (String)incomingevent[4];
+            events = actions.get(action);
+            if (events == null)
+                actions.put(action, events = new ArrayList<>());
+            event = new EventHandler();
+            event.call = (String)incomingevent[0];
+            event.event = (String)incomingevent[1];
+            event.name = (String)incomingevent[2];
+            event.submit = (boolean)incomingevent[3];
+            events.add(event);
+        }
+        
+        pagectx.setActions(actions);
     }
 
     @Override
@@ -1045,10 +1070,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
      */
     private final void startRender(RendererContext context, PageContext pagectx)
             throws Exception {
-        TrackingData tracking;
-        String username;
         View view;
-        boolean hasrendered;
 
         /*
          * prepara a visão para renderização
@@ -1060,19 +1082,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
             pagectx.setViewData(view);
         }
         
-        /*
-         * ajusta e chama o renderizador
-         */
-        username = pagectx.getUsername();
-        tracking = new TrackingData();
-        tracking.logid = pagectx.getLogid();
-        tracking.sequence = pagectx.getSequence();
-        tracking.sessionid = context.sessionid;
-        tracking.contexturl = pagectx.getContextUrl();
-        tracking.username = (username == null)? NOT_CONNECTED : username;
-        hasrendered = render(context, pagectx, tracking);
-//        if (hasrendered)
-//            pagectx.setActions(renderer.getActions());
+        render(context, pagectx);
     }
 
 }

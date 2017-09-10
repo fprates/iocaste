@@ -3,8 +3,6 @@ package org.iocaste.kernel.runtime.shell.renderer.legacy;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iocaste.kernel.runtime.shell.renderer.FormRenderer;
-import org.iocaste.kernel.runtime.shell.renderer.LinkRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.MessageRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.RangeFieldRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.TableItemRenderer;
