@@ -13,6 +13,8 @@ import org.iocaste.kernel.runtime.shell.factories.FormFactory;
 import org.iocaste.kernel.runtime.shell.factories.FrameFactory;
 import org.iocaste.kernel.runtime.shell.factories.LegacyButtonFactory;
 import org.iocaste.kernel.runtime.shell.factories.LegacyLinkFactory;
+import org.iocaste.kernel.runtime.shell.factories.LegacyTabbedPaneFactory;
+import org.iocaste.kernel.runtime.shell.factories.LegacyTabbedPaneItemFactory;
 import org.iocaste.kernel.runtime.shell.factories.LegacyVirtualControlFactory;
 import org.iocaste.kernel.runtime.shell.factories.ListBoxFactory;
 import org.iocaste.kernel.runtime.shell.factories.NavControlFactory;
@@ -25,8 +27,6 @@ import org.iocaste.kernel.runtime.shell.factories.RadioGroupFactory;
 import org.iocaste.kernel.runtime.shell.factories.ReportToolFactory;
 import org.iocaste.kernel.runtime.shell.factories.SpecFactory;
 import org.iocaste.kernel.runtime.shell.factories.StandardContainerFactory;
-import org.iocaste.kernel.runtime.shell.factories.TabbedPaneFactory;
-import org.iocaste.kernel.runtime.shell.factories.TabbedPaneItemFactory;
 import org.iocaste.kernel.runtime.shell.factories.TableToolFactory;
 import org.iocaste.kernel.runtime.shell.factories.TextEditorFactory;
 import org.iocaste.kernel.runtime.shell.factories.TextFactory;
@@ -79,9 +79,9 @@ public class ProcessLegacyOutput extends AbstractHandler {
         factories.put(ViewSpecItem.TYPES.STANDARD_CONTAINER,
                 new StandardContainerFactory());
         factories.put(ViewSpecItem.TYPES.TABBED_PANE,
-                new TabbedPaneFactory());
+                new LegacyTabbedPaneFactory());
         factories.put(ViewSpecItem.TYPES.TABBED_PANE_ITEM,
-                new TabbedPaneItemFactory());
+                new LegacyTabbedPaneItemFactory());
         factories.put(ViewSpecItem.TYPES.TABLE_TOOL,
                 new TableToolFactory());
         factories.put(ViewSpecItem.TYPES.TEXT,
