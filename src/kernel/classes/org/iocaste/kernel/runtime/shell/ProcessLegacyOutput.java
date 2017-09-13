@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.kernel.runtime.RuntimeEngine;
+import org.iocaste.kernel.runtime.shell.factories.CheckBoxFactory;
 import org.iocaste.kernel.runtime.shell.factories.DataFormFactory;
 import org.iocaste.kernel.runtime.shell.factories.ExpandBarFactory;
 import org.iocaste.kernel.runtime.shell.factories.FileUploadFactory;
@@ -48,6 +49,8 @@ public class ProcessLegacyOutput extends AbstractHandler {
         factories = new HashMap<>();
         factories.put(ViewSpecItem.TYPES.BUTTON,
                 new LegacyButtonFactory());
+        factories.put(ViewSpecItem.TYPES.CHECK_BOX,
+                new CheckBoxFactory());
         factories.put(ViewSpecItem.TYPES.DATA_FORM,
                 new DataFormFactory());
         factories.put(ViewSpecItem.TYPES.EXPAND_BAR,

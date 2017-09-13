@@ -4,6 +4,7 @@ public class ViewSpecItem {
 
 	public enum TYPES {
         BUTTON("button"),
+        CHECK_BOX("checkbox"),
         DATA_FORM("dataform", true),
         EXPAND_BAR("expandbar"),
         FORM("form"),
