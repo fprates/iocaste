@@ -30,6 +30,12 @@ public class TabbedPaneItem extends AbstractContainer {
         return text;
     }
     
+    @Override
+    public final boolean isVisible() {
+        MultipageContainer container = (MultipageContainer)getContainer();
+        return container.getCurrentPage().equals(getName());
+    }
+    
     /**
      * 
      * @param focus

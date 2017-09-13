@@ -173,6 +173,14 @@ public abstract class AbstractContainer
         return false;
     }
     
+    @Override
+    public boolean isVisible() {
+        Container container = getContainer();
+        if (container == null)
+            return super.isVisible();
+        return (super.isVisible() && container.isVisible());
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.Container#remove(

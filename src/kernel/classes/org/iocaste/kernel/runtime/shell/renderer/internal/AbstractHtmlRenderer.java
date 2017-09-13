@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
@@ -142,6 +143,10 @@ public abstract class AbstractHtmlRenderer implements HtmlRenderer {
                         handlerscripts.put(handler.event, handlerscript);
                     }
                     
+                    if (handler.name == null)
+                        throw new IocasteException(
+                                "undefined js event handler for %s at %s.",
+                                        actionkey, elementkey);
                     sb = new StringBuilder(handler.name).append(handler.event);
                     handlerscript.function = sb.toString().replace('.', '_');
     

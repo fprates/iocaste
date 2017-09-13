@@ -1,6 +1,7 @@
 package org.iocaste.kernel.runtime.shell.renderer.legacy;
 
 import org.iocaste.kernel.runtime.shell.renderer.AbstractElementRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
@@ -19,6 +20,7 @@ public class CheckBoxRenderer extends AbstractElementRenderer<InputComponent> {
      * @return
      */
     protected final XMLElement execute(InputComponent input, Config config) {
+        ActionEventHandler handler;
         XMLElement cboxtag = new XMLElement("input");
         String name = input.getHtmlName();
         
@@ -26,6 +28,11 @@ public class CheckBoxRenderer extends AbstractElementRenderer<InputComponent> {
         cboxtag.add("name", name);
         cboxtag.add("id", name);
         cboxtag.add("class", getStyle(input));
+        
+        handler = config.viewctx.getEventHandler(name, name, "focus");
+        handler.name = name;
+        handler.call = new StringBuilder("_send('").append(name).
+                append("', '&event=onfocus', null);").toString();
         
         if (!input.isEnabled())
             cboxtag.add("disabled", "disabled");
