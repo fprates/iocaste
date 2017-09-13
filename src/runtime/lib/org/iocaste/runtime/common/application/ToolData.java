@@ -22,7 +22,7 @@ public class ToolData implements Serializable {
     public Const componenttype;
 	public ToolData nsitem, nsdata;
     public String sh, name, model, style, parent, group, label, actionname;
-    public String text, tag, itemstyle, subpage, indexitem, pane;
+    public String text, tag, itemstyle, subpage, indexitem, pane, mask;
     public boolean internallabel, action, submit, disabled, secret, ns;
     public boolean invisible, required, focus, nolock, cancellable, absolute;
     public boolean mark;

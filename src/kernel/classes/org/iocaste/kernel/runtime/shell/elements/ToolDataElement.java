@@ -24,10 +24,11 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipageContainer;
 import org.iocaste.shell.common.SearchHelp;
+import org.iocaste.shell.common.TextComponent;
 import org.iocaste.shell.common.View;
 
 public abstract class ToolDataElement implements Component, Container,
-        InputComponent, ControlComponent, MultipageContainer {
+        InputComponent, ControlComponent, MultipageContainer, TextComponent {
 	private static final long serialVersionUID = 4217306786401069911L;
 	protected ToolData tooldata;
 	protected ViewContext viewctx;
@@ -333,6 +334,11 @@ public abstract class ToolDataElement implements Component, Container,
         return viewctx.view.getLocale();
     }
     
+    @Override
+    public final String getMask() {
+        return tooldata.mask;
+    }
+    
     /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#getMaster()
@@ -413,6 +419,11 @@ public abstract class ToolDataElement implements Component, Container,
 	public final String getStyleClass() {
 		return tooldata.style;
 	}
+    
+    @Override
+    public final String getTag() {
+        return tooldata.tag;
+    }
 	
     /*
      * (non-Javadoc)
@@ -803,6 +814,11 @@ public abstract class ToolDataElement implements Component, Container,
     public final void setLength(int length) {
         tooldata.length = length;
     }
+
+    @Override
+    public final void setMask(String mask) {
+        tooldata.mask = mask;
+    }
     
     /**
      * 
@@ -916,6 +932,11 @@ public abstract class ToolDataElement implements Component, Container,
     @Override
     public final void setStyleClass(String style) {
         tooldata.style = style;
+    }
+    
+    @Override
+    public final void setTag(String tag) {
+        tooldata.tag = tag;
     }
     
     /*

@@ -10,7 +10,6 @@ import org.iocaste.kernel.runtime.shell.renderer.internal.ScreenLock;
 import org.iocaste.kernel.runtime.shell.renderer.legacy.CanvasRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.legacy.CheckBoxRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.legacy.DataFormRenderer;
-import org.iocaste.kernel.runtime.shell.renderer.legacy.DataItemRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.legacy.DummyRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.legacy.ExpandBarRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.legacy.FileEntryRenderer;

@@ -3,11 +3,13 @@ package org.iocaste.kernel.runtime.shell.renderer.legacy;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.iocaste.kernel.runtime.shell.renderer.DataItemRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.MessageRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.RangeFieldRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.TableItemRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.TableRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.TextFieldRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.TextRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.AbstractHtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ScreenLock;

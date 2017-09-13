@@ -14,7 +14,6 @@ import org.iocaste.shell.common.Const;
  */
 public class Text extends ToolDataElement {
 	private static final long serialVersionUID = -631255089556679788L;
-	private String mask;
     
     public Text(ViewContext viewctx, ToolData tooldata) {
     	super(viewctx, Const.TEXT, tooldata);
@@ -26,40 +25,8 @@ public class Text extends ToolDataElement {
         init();
     }
     
-    /**
-     * 
-     * @return
-     */
-    public final String getMask() {
-        return mask;
-    }
-    
-    /**
-     * Obtem o elemento html do componente. 
-     * @return elemento html
-     */
-    public final String getTag() {
-        return tooldata.tag;
-    }
-    
     private final void init() {
         if (tooldata.tag == null)
             tooldata.tag = "p";
-    }
-    
-    /**
-     * 
-     * @param mask
-     */
-    public final void setMask(String mask) {
-        this.mask = mask;
-    }
-    
-    /**
-     * Ajusta o elemento html para o componente.
-     * @param tag elemento html
-     */
-    public final void setTag(String tag) {
-        tooldata.tag = tag;
     }
 }

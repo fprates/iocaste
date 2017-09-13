@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.kernel.runtime.shell.renderer.AbstractElementRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.DataItemRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;

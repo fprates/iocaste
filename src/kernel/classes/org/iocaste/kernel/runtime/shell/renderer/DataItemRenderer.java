@@ -1,35 +1,35 @@
-package org.iocaste.kernel.runtime.shell.renderer.legacy;
+package org.iocaste.kernel.runtime.shell.renderer;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.kernel.runtime.shell.elements.Text;
 import org.iocaste.kernel.runtime.shell.renderer.AbstractElementRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
-import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.InputComponent;
 
-public class DataItemRenderer extends AbstractElementRenderer<DataItem> {
+public class DataItemRenderer extends AbstractElementRenderer<InputComponent> {
     
     public DataItemRenderer(HtmlRenderer renderers) {
         super(renderers, Const.DATA_ITEM);
     }
 
     @Override
-    protected final XMLElement execute(DataItem dataitem, Config config) {
+    protected final XMLElement execute(InputComponent dataitem, Config config) {
         return null;
     }
     
     public final void execute(
             DataItem dataitem, XMLElement formtag, Config config) {
-        View view;
         Text colname;
         DocumentModelItem modelitem;
         XMLElement labeltag, itemtag;
-        String inputname, text;
+        String inputname, text, labelname;
         DocumentModel model = null;
         DataForm form = (DataForm)dataitem.getContainer();
 
@@ -48,8 +48,9 @@ public class DataItemRenderer extends AbstractElementRenderer<DataItem> {
 //        labeltag = new XMLElement("label");
 //        labeltag.add("for", dataitem.getHtmlName());
         if (!dataitem.hasPlaceHolder()) {
-            view = config.getView();
-            colname = new Text(view, inputname.concat("_form_item_text"));
+            config.viewctx.instance(TYPES.TEXT,
+                    labelname = inputname.concat("_form_item_text"));
+            colname = new Text(config.viewctx, labelname);
             colname.setTag("span");
             colname.setText(text);
             colname.addAttribute("style", "font-weight:bold");

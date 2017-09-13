@@ -6,22 +6,22 @@ import java.util.Map;
 
 import javax.swing.text.MaskFormatter;
 
-import org.iocaste.kernel.runtime.shell.elements.Text;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.TextComponent;
 
-public class TextRenderer extends AbstractElementRenderer<Text> {
+public class TextRenderer extends AbstractElementRenderer<TextComponent> {
     private Map<String, MaskFormatter> formatters;
     
-    public TextRenderer(HtmlRenderer renderer) {
-        super(renderer, Const.TEXT);
+    public TextRenderer(HtmlRenderer renderers) {
+        super(renderers, Const.TEXT);
         formatters = new HashMap<>();
     }
 
     @Override
-    protected final XMLElement execute(Text text, Config config) {
+    protected final XMLElement execute(TextComponent text, Config config) {
         String text_;
         XMLElement ptag;
         
@@ -36,7 +36,7 @@ public class TextRenderer extends AbstractElementRenderer<Text> {
         return ptag;
     }
     
-    private final String mask(Text text, String value) {
+    private final String mask(TextComponent text, String value) {
         MaskFormatter formatter;
         String mask = text.getMask();
         if (mask == null)

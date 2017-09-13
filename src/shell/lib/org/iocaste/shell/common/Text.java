@@ -8,7 +8,7 @@ package org.iocaste.shell.common;
  * @author francisco.prates
  *
  */
-public class Text extends AbstractComponent {
+public class Text extends AbstractComponent implements TextComponent {
     private static final long serialVersionUID = -6584462992412783994L;
     private String tag, mask;
     
@@ -22,18 +22,12 @@ public class Text extends AbstractComponent {
         init();
     }
     
-    /**
-     * 
-     * @return
-     */
+    @Override
     public final String getMask() {
         return mask;
     }
     
-    /**
-     * Obtem o elemento html do componente. 
-     * @return elemento html
-     */
+    @Override
     public final String getTag() {
         return tag;
     }
@@ -63,18 +57,12 @@ public class Text extends AbstractComponent {
         return false;
     }
     
-    /**
-     * 
-     * @param mask
-     */
+    @Override
     public final void setMask(String mask) {
         this.mask = mask;
     }
     
-    /**
-     * Ajusta o elemento html para o componente.
-     * @param tag elemento html
-     */
+    @Override
     public final void setTag(String tag) {
         this.tag = tag;
     }
