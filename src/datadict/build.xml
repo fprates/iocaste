@@ -9,12 +9,6 @@
     	
         <!-- dependências -->
         <path id="dependencies">
-            <fileset dir="${builddir}/core/lib"/>
-            <fileset dir="${builddir}/shell/lib"/>
-            <fileset dir="${builddir}/documents/lib"/>
-            <fileset dir="${builddir}/search-help/lib"/>
-            <fileset dir="${builddir}/packagetool/lib"/>
-        	<fileset dir="${builddir}/appbuilder/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>
@@ -26,16 +20,6 @@
         
         <replace file="${builddir}/${ant.project.name}/web/web.xml"
             token="@server.class@" value="${server.class}"/>
-        
-        <!-- compilação lib -->
-<!--        <javac srcdir="${basedir}/src/${ant.project.name}/lib" 
-            destdir="${builddir}/${ant.project.name}/lib"
-        	debug="${debug.status}">
-            <classpath refid="dependencies"/>
-        </javac>
-        
-        <jar basedir="${builddir}/${ant.project.name}/lib"
-            destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/> -->
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}/classes"
@@ -52,12 +36,7 @@
                 <include name="**/*"/> 
             </webinf>
             <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
-            <lib dir="${builddir}/core/lib" includes="*.jar"/>
-            <lib dir="${builddir}/shell/lib" includes="*.jar"/>
-            <lib dir="${builddir}/documents/lib" includes="*.jar"/>
-            <lib dir="${builddir}/search-help/lib" includes="*.jar"/>
-            <lib dir="${builddir}/packagetool/lib" includes="*.jar"/>
-        	<lib dir="${builddir}/appbuilder/lib" includes="*.jar"/>
+            <lib file="${basedir}/ext/iocaste.jar" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
     	
