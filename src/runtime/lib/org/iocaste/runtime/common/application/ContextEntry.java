@@ -3,7 +3,7 @@ package org.iocaste.runtime.common.application;
 import java.util.Collection;
 
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.runtime.common.page.ViewSpecItem;
+import org.iocaste.shell.common.tooldata.ViewSpecItem;
 
 public interface ContextEntry {
 

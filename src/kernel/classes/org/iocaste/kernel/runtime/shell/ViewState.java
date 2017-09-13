@@ -1,11 +1,9 @@
-package org.iocaste.kernel.runtime.shell.elements;
+package org.iocaste.kernel.runtime.shell;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import org.iocaste.kernel.runtime.shell.ViewContext;
 
 public class ViewState implements Serializable {
     public static final int OK = 0;

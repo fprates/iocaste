@@ -3,10 +3,10 @@ package org.iocaste.kernel.runtime.shell.factories;
 import org.iocaste.kernel.runtime.shell.ComponentEntry;
 import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.kernel.runtime.shell.tabletool.TableTool;
-import org.iocaste.runtime.common.page.ViewSpecItem;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.tooldata.ViewSpecItem;
 
 public class TableToolFactory extends AbstractSpecFactory {
     

@@ -6,9 +6,9 @@ import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.managedview.edit.ConfigData;
 import org.iocaste.runtime.common.page.AbstractPage;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class Common {
 

@@ -6,9 +6,9 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.runtime.common.application.AbstractActionHandler;
 import org.iocaste.runtime.common.application.Context;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class ManagedViewSave extends AbstractActionHandler<Context> {
     

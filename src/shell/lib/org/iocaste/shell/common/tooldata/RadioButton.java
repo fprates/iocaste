@@ -1,8 +1,7 @@
-package org.iocaste.kernel.runtime.shell.elements;
+package org.iocaste.shell.common.tooldata;
 
 import java.util.Set;
 
-import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
 
@@ -18,7 +17,7 @@ public class RadioButton extends ToolDataElement {
     private String group;
     
     public RadioButton(
-    		ViewContext viewctx, RadioGroup group, String name, int index) {
+            Context viewctx, RadioGroup group, String name, int index) {
         super(viewctx, Const.RADIO_BUTTON, name);
         this.group = group.getHtmlName();
         this.index = index;

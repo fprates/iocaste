@@ -1,7 +1,7 @@
 package org.iocaste.kernel.runtime.shell.tilestool;
 
-import org.iocaste.runtime.common.page.ViewSpecItem;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
+import org.iocaste.shell.common.tooldata.ViewSpecItem;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class Tile {
     private String name, tilesname;

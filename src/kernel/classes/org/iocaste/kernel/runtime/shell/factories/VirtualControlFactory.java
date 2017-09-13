@@ -1,8 +1,8 @@
 package org.iocaste.kernel.runtime.shell.factories;
 
 import org.iocaste.kernel.runtime.shell.ViewContext;
-import org.iocaste.kernel.runtime.shell.elements.VirtualControl;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.tooldata.VirtualControl;
 
 public class VirtualControlFactory extends AbstractSpecFactory {
 

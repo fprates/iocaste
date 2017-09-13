@@ -2,7 +2,7 @@ package org.iocaste.kernel.texts;
 
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
-import org.iocaste.runtime.common.application.ToolData;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class ToolDataTextUpdate extends AbstractHandler {
 

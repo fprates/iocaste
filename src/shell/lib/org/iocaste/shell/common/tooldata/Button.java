@@ -1,6 +1,5 @@
-package org.iocaste.kernel.runtime.shell.elements;
+package org.iocaste.shell.common.tooldata;
 
-import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.shell.common.Const;
 
 /**
@@ -15,7 +14,7 @@ import org.iocaste.shell.common.Const;
 public class Button extends ToolDataElement {
     private static final long serialVersionUID = 7733291339094177369L;
     
-    public Button(ViewContext viewctx, String name) {
+    public Button(Context viewctx, String name) {
         super(viewctx, Const.BUTTON, name);
     }
     

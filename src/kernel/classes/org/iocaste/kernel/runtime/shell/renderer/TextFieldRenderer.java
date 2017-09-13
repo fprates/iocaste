@@ -9,8 +9,6 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.protocol.StandardService;
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.runtime.common.application.ToolData;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -20,10 +18,12 @@ import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.tooldata.Text;
+import org.iocaste.shell.common.tooldata.ToolData;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
-import org.iocaste.kernel.runtime.shell.elements.Text;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
@@ -210,41 +210,35 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
     private final List<XMLElement> renderPopup(
             Config config, PopupControl control) {
         Map<String, Object> parameters;
-        Object[] viewreturn;
         List<XMLElement> tags;
-        Service service;
-        Message message;
         View view, sourceview;
         StyleSheet stylesheet;
-        
-        service = new StandardService(
-            config.viewctx.sessionid, config.viewctx.viewexport.contexturl);
-        message = new Message("get_view_data");
 
-        sourceview = config.viewctx.view;
-        stylesheet = StyleSheet.instance(sourceview);
-        view = new View(control.getApplication(), "main");
-        stylesheet.export(view);
-        
-        parameters = new HashMap<>();
-        parameters.put("control", control);
-        parameters.put("msgsource", sourceview.getAppName());
-        parameters.put("action", config.currentaction);
-        parameters.put("form", config.currentform);
-        
-        message.add("view", view);
-        message.add("init", true);
-        message.add("locale", config.viewctx.locale);
-        message.add("parameters", parameters);
-        viewreturn = (Object[])service.call(message);
-        view = (View)viewreturn[0];
-        
-        control.update(view);
-        StyleSheet.instance(view).export(sourceview);
+//        sourceview = config.viewctx.view;
+//        stylesheet = StyleSheet.instance(sourceview);
+//        view = new View(control.getApplication(), "main");
+//        stylesheet.export(view);
+//        
+//        parameters = new HashMap<>();
+//        parameters.put("control", control);
+//        parameters.put("msgsource", sourceview.getAppName());
+//        parameters.put("action", config.currentaction);
+//        parameters.put("form", config.currentform);
+//        
+//        
+//        message.add("view", view);
+//        message.add("init", true);
+//        message.add("locale", config.viewctx.locale);
+//        message.add("parameters", parameters);
+//        viewreturn = (Object[])service.call(message);
+//        view = (View)viewreturn[0];
+//        
+//        control.update(view);
+//        StyleSheet.instance(view).export(sourceview);
         
         tags = new ArrayList<>();
-        for (Container container : view.getContainers())
-            get(container.getType()).run(tags, container, config);
+//        for (Container container : view.getContainers())
+//            get(container.getType()).run(tags, container, config);
         
         return tags;
     }

@@ -3,8 +3,8 @@ package org.iocaste.runtime.common.managedview;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.runtime.common.application.Context;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.AbstractViewInput;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class ManagedSelectInput extends AbstractViewInput<Context> {
 

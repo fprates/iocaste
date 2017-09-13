@@ -3,9 +3,9 @@ package org.iocaste.runtime.common.portal.tiles;
 import java.util.Set;
 
 import org.iocaste.runtime.common.application.Context;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.AbstractViewConfig;
 import org.iocaste.runtime.common.portal.PortalContext;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class PortalTileItemConfig extends AbstractViewConfig<Context> {
     

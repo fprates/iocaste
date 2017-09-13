@@ -1,8 +1,8 @@
 package org.iocaste.kernel.runtime.shell.factories;
 
 import org.iocaste.kernel.runtime.shell.ViewContext;
-import org.iocaste.kernel.runtime.shell.elements.RadioGroup;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.tooldata.RadioGroup;
 
 public class RadioButtonFactory extends AbstractSpecFactory {
 
@@ -14,6 +14,6 @@ public class RadioButtonFactory extends AbstractSpecFactory {
         
         names = name.split("\\.", 2);
         group = viewctx.view.getElement(names[0]);
-        group.button(name);
+        group.button(viewctx, name);
     }
 }

@@ -1,8 +1,8 @@
 package org.iocaste.infosys.main;
 
 import org.iocaste.infosys.InfosysContext;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.AbstractViewConfig;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class MainConfig extends AbstractViewConfig<InfosysContext> {
 

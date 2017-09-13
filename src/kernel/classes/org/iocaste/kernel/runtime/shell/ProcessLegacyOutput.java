@@ -39,8 +39,8 @@ import org.iocaste.kernel.runtime.shell.renderer.legacy.LegacyHtmlRenderer;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 import org.iocaste.runtime.common.application.ViewExport;
-import org.iocaste.runtime.common.page.ViewSpecItem;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.tooldata.ViewSpecItem;
 
 public class ProcessLegacyOutput extends AbstractHandler {
     public Map<ViewSpecItem.TYPES, SpecFactory> factories;

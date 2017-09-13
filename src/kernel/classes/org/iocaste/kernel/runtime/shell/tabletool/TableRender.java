@@ -7,12 +7,12 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.kernel.documents.GetDocumentModel;
 import org.iocaste.protocol.IocasteException;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class TableRender extends AbstractTableHandler {
 

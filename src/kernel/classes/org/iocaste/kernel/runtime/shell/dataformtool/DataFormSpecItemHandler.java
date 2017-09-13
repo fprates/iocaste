@@ -2,7 +2,7 @@ package org.iocaste.kernel.runtime.shell.dataformtool;
 
 import org.iocaste.kernel.runtime.shell.SpecItemHandler;
 import org.iocaste.kernel.runtime.shell.ViewContext;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class DataFormSpecItemHandler implements SpecItemHandler {
     

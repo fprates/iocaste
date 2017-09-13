@@ -1,8 +1,8 @@
 package org.iocaste.kernel.runtime.shell.tabletool;
 
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class AddItem extends AbstractTableHandler {
 

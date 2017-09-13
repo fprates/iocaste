@@ -5,7 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.runtime.common.application.Context;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
+import org.iocaste.shell.common.tooldata.ViewSpecItem;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public abstract class AbstractViewSpec implements ViewSpec {
     protected String parent;

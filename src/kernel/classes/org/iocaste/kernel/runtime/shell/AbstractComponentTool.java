@@ -2,8 +2,8 @@ package org.iocaste.kernel.runtime.shell;
 
 import org.iocaste.kernel.runtime.shell.ComponentEntry;
 import org.iocaste.kernel.runtime.shell.ViewContext;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public abstract class AbstractComponentTool {
     private String htmlname;

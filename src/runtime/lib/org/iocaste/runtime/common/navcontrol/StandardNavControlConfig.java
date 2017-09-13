@@ -3,11 +3,11 @@ package org.iocaste.runtime.common.navcontrol;
 import org.iocaste.protocol.user.User;
 import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.application.Context;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.runtime.common.page.AbstractViewConfig;
 import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.MessageSource;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class StandardNavControlConfig extends AbstractViewConfig<Context> {
     public Object[][] ncconfig;

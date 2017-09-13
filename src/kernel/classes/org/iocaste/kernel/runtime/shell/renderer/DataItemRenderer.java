@@ -2,16 +2,16 @@ package org.iocaste.kernel.runtime.shell.renderer;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.kernel.runtime.shell.elements.Text;
 import org.iocaste.kernel.runtime.shell.renderer.AbstractElementRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.tooldata.Text;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class DataItemRenderer extends AbstractElementRenderer<InputComponent> {
     

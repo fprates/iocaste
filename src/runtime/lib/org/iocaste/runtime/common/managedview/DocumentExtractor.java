@@ -16,8 +16,8 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.application.Context;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.AbstractPage;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class DocumentExtractor {
     private Context context;

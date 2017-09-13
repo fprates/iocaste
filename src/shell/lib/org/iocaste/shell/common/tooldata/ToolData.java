@@ -1,4 +1,4 @@
-package org.iocaste.runtime.common.application;
+package org.iocaste.shell.common.tooldata;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -12,9 +12,8 @@ import java.util.Set;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.runtime.common.page.ViewSpecItem;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class ToolData implements Serializable {
 	private static final long serialVersionUID = -4451606721765032982L;

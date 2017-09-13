@@ -1,6 +1,6 @@
 package org.iocaste.kernel.runtime.shell;
 
-import org.iocaste.runtime.common.application.ToolData;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class ComponentEntry {
 	public AbstractComponentTool component;

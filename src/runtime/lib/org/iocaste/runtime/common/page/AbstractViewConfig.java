@@ -6,8 +6,8 @@ import java.util.Map;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.runtime.common.application.Context;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.style.ViewConfigStyle;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public abstract class AbstractViewConfig<C extends Context>
 		implements ViewConfig {

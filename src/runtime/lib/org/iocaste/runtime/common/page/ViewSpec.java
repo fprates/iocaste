@@ -3,7 +3,8 @@ package org.iocaste.runtime.common.page;
 import java.util.Collection;
 
 import org.iocaste.runtime.common.application.Context;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
+import org.iocaste.shell.common.tooldata.ViewSpecItem;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public interface ViewSpec {
     

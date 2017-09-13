@@ -1,4 +1,4 @@
-package org.iocaste.runtime.common.page;
+package org.iocaste.shell.common.tooldata;
 
 public class ViewSpecItem {
 

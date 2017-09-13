@@ -16,11 +16,11 @@ import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
 import org.iocaste.protocol.utils.ConversionResult;
 import org.iocaste.protocol.utils.ConversionRules;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.runtime.common.protocol.AbstractRuntimeInterface;
 import org.iocaste.runtime.common.protocol.ServiceInterfaceData;
 import org.iocaste.runtime.common.protocol.ServiceUrl;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 @ServiceUrl("/iocaste-kernel/service.html")
 public class RuntimeEngine extends AbstractRuntimeInterface {

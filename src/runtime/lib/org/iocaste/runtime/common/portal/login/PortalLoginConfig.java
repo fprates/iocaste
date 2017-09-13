@@ -1,8 +1,8 @@
 package org.iocaste.runtime.common.portal.login;
 
 import org.iocaste.runtime.common.application.Context;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.page.AbstractViewConfig;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class PortalLoginConfig extends AbstractViewConfig<Context> {
 

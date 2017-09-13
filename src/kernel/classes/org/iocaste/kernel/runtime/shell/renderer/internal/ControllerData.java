@@ -3,7 +3,7 @@ package org.iocaste.kernel.runtime.shell.renderer.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.kernel.runtime.shell.elements.ViewState;
+import org.iocaste.kernel.runtime.shell.ViewState;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.AbstractEventHandler;
 import org.iocaste.shell.common.Element;

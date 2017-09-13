@@ -14,6 +14,7 @@ import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.managedview.DocumentExtractor;
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public abstract class AbstractActionHandler<C extends Context>
 	    implements ActionHandler {

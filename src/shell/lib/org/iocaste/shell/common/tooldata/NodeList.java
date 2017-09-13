@@ -1,6 +1,5 @@
-package org.iocaste.kernel.runtime.shell.elements;
+package org.iocaste.shell.common.tooldata;
 
-import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 
@@ -17,7 +16,7 @@ public class NodeList extends ToolDataElement {
     public static final byte DEFINITION = 2;
     private byte type;
     
-    public NodeList(ViewContext viewctx, String name) {
+    public NodeList(Context viewctx, String name) {
         super(viewctx, Const.NODE_LIST, name);
         type = UNORDERED;
     }

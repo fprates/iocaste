@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.runtime.common.application.AbstractContextEntry;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class TilesContextEntry extends AbstractContextEntry {
     public String action;

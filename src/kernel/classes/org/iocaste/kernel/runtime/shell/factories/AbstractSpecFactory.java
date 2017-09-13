@@ -1,10 +1,10 @@
 package org.iocaste.kernel.runtime.shell.factories;
 
 import org.iocaste.runtime.common.application.ContextEntry;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.tooldata.ToolData;
 import org.iocaste.kernel.runtime.shell.ComponentEntry;
 import org.iocaste.kernel.runtime.shell.SpecItemHandler;
 import org.iocaste.kernel.runtime.shell.ViewContext;

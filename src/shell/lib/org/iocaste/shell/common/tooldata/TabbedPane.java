@@ -1,6 +1,5 @@
-package org.iocaste.kernel.runtime.shell.elements;
+package org.iocaste.shell.common.tooldata;
 
-import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.OnClickHandler;
@@ -14,7 +13,7 @@ import org.iocaste.shell.common.OnClickHandler;
 public class TabbedPane extends ToolDataElement {
     private static final long serialVersionUID = -8260508533459016709L;
     
-    public TabbedPane(ViewContext viewctx, String name) {
+    public TabbedPane(Context viewctx, String name) {
         super(viewctx, Const.TABBED_PANE, name);
         if (tooldata.style == null)
             tooldata.style = "tp_outer";

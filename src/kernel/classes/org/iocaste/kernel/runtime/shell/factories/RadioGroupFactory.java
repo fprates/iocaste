@@ -1,9 +1,9 @@
 package org.iocaste.kernel.runtime.shell.factories;
 
 import org.iocaste.kernel.runtime.shell.ViewContext;
-import org.iocaste.kernel.runtime.shell.elements.RadioGroup;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.tooldata.RadioGroup;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class RadioGroupFactory extends AbstractSpecFactory {
 

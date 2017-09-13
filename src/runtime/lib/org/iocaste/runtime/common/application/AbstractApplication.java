@@ -32,12 +32,13 @@ import org.iocaste.runtime.common.page.StandardPageFactory;
 import org.iocaste.runtime.common.page.ViewConfig;
 import org.iocaste.runtime.common.page.ViewInput;
 import org.iocaste.runtime.common.page.ViewSpec;
-import org.iocaste.runtime.common.page.ViewSpecItem;
 import org.iocaste.runtime.common.protocol.GenericService;
 import org.iocaste.runtime.common.protocol.ServiceInterfaceData;
 import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.StyleSheet;
+import org.iocaste.shell.common.tooldata.ToolData;
+import org.iocaste.shell.common.tooldata.ViewSpecItem;
 
 public abstract class AbstractApplication<T extends Context>
 		extends AbstractIocasteServlet implements Application<T> {

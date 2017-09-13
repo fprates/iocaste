@@ -4,18 +4,19 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.application.ViewExport;
-import org.iocaste.runtime.common.page.ViewSpecItem;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.tooldata.Context;
+import org.iocaste.shell.common.tooldata.ToolData;
+import org.iocaste.shell.common.tooldata.ViewSpecItem;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 import org.iocaste.kernel.runtime.RuntimeEngine;
 import org.iocaste.kernel.runtime.shell.factories.SpecFactory;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 
-public class ViewContext {
+public class ViewContext implements Context {
     public View view;
     public ViewExport viewexport;
     public RuntimeEngine function;
@@ -64,6 +65,16 @@ public class ViewContext {
         handler.event = (event.equals(""))? null : event;
         handlers.put(event, handler);
         return handler;
+    }
+
+    @Override
+    public final ToolData get(String name) {
+        return entries.get(name).data;
+    }
+
+    @Override
+    public final View getView() {
+        return view;
     }
     
     public final ActionEventHandler getEventHandler(

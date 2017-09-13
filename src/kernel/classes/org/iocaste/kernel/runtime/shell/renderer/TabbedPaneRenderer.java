@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.iocaste.kernel.runtime.shell.elements.Button;
-import org.iocaste.kernel.runtime.shell.elements.TabbedPane;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.legacy.ParameterRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.legacy.StandardContainerRenderer;
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.TabbedPaneItem;
+import org.iocaste.shell.common.tooldata.Button;
+import org.iocaste.shell.common.tooldata.TabbedPane;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
     

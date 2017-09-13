@@ -2,11 +2,11 @@ package org.iocaste.texteditor.common;
 
 import java.io.Serializable;
 
-import org.iocaste.runtime.common.application.ToolData;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.TextArea;
+import org.iocaste.shell.common.tooldata.ToolData;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class TextEditor implements Serializable {
     private static final long serialVersionUID = 8099830107603124518L;

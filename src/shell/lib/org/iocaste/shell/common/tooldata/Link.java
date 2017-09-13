@@ -1,4 +1,4 @@
-package org.iocaste.kernel.runtime.shell.elements;
+package org.iocaste.shell.common.tooldata;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +7,6 @@ import java.util.Set;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.shell.common.AbstractContainer;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -28,7 +27,7 @@ public class Link extends ToolDataElement {
     private Map<String, LinkEntry> values;
     private String image, container;
     
-    public Link(ViewContext viewctx, String name) {
+    public Link(Context viewctx, String name) {
         super(viewctx, Const.LINK, name);
         Object value;
         

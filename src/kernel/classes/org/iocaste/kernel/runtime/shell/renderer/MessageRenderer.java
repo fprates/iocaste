@@ -1,13 +1,13 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
-import org.iocaste.kernel.runtime.shell.elements.Text;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.runtime.common.application.ToolData;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.tooldata.Text;
+import org.iocaste.shell.common.tooldata.ToolData;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class MessageRenderer extends AbstractElementRenderer<Component> {
     

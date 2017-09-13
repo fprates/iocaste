@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.runtime.common.application.ViewExport;
-import org.iocaste.runtime.common.page.ViewSpecItem.TYPES;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
 import org.iocaste.kernel.runtime.shell.ProcessLegacyOutput;

@@ -6,7 +6,7 @@ import java.util.Map;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.application.Context;
-import org.iocaste.runtime.common.application.ToolData;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public abstract class AbstractViewInput<C extends Context> implements ViewInput
 {

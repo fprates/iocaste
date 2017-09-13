@@ -1,7 +1,5 @@
-package org.iocaste.kernel.runtime.shell.elements;
+package org.iocaste.shell.common.tooldata;
 
-import org.iocaste.kernel.runtime.shell.ViewContext;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.shell.common.Const;
 
 /**
@@ -15,12 +13,12 @@ import org.iocaste.shell.common.Const;
 public class Text extends ToolDataElement {
 	private static final long serialVersionUID = -631255089556679788L;
     
-    public Text(ViewContext viewctx, ToolData tooldata) {
+    public Text(Context viewctx, ToolData tooldata) {
     	super(viewctx, Const.TEXT, tooldata);
         init();
     }
     
-    public Text(ViewContext viewctx, String name) {
+    public Text(Context viewctx, String name) {
         super(viewctx, Const.TEXT, name);
         init();
     }

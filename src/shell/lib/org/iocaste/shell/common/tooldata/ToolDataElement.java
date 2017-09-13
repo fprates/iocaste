@@ -1,4 +1,4 @@
-package org.iocaste.kernel.runtime.shell.elements;
+package org.iocaste.shell.common.tooldata;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,8 +10,6 @@ import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.kernel.runtime.shell.ViewContext;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.shell.common.AbstractElement;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Component;
@@ -31,7 +29,7 @@ public abstract class ToolDataElement implements Component, Container,
         InputComponent, ControlComponent, MultipageContainer, TextComponent {
 	private static final long serialVersionUID = 4217306786401069911L;
 	protected ToolData tooldata;
-	protected ViewContext viewctx;
+	protected View view;
     private DocumentModelItem modelitem;
     private Map<String, String> elements;
     private String htmlname, master;
@@ -42,10 +40,10 @@ public abstract class ToolDataElement implements Component, Container,
     private SearchHelp search;
     private EventHandler evhandler;
     
-    public ToolDataElement(ViewContext viewctx, Const type, ToolData tooldata)
+    public ToolDataElement(Context viewctx, Const type, ToolData tooldata)
     {
 		this.tooldata = tooldata;
-		this.viewctx = viewctx;
+		view = viewctx.getView();
 		htmlname = tooldata.name;
 		translatable = true;
         elements = new LinkedHashMap<>();
@@ -56,13 +54,13 @@ public abstract class ToolDataElement implements Component, Container,
 		if (tooldata.style == null)
 			tooldata.style = type.style();
         if (tooldata.parent == null)
-        	viewctx.view.add(this);
+        	view.add(this);
         else
         	((Container)getElement(tooldata.parent)).add(this);
     }
     
-	public ToolDataElement(ViewContext viewctx, Const type, String name) {
-		this(viewctx, type, viewctx.entries.get(name).data);
+	public ToolDataElement(Context viewctx, Const type, String name) {
+		this(viewctx, type, viewctx.get(name));
 	}
 
 	@Override
@@ -196,7 +194,7 @@ public abstract class ToolDataElement implements Component, Container,
 
 	@Override
 	public Container getContainer() {
-		return viewctx.view.getElement(tooldata.parent);
+		return view.getElement(tooldata.parent);
 	}
 
     @Override
@@ -236,7 +234,7 @@ public abstract class ToolDataElement implements Component, Container,
 
 	@Override
 	public <T extends Element> T getElement(String name) {
-		return viewctx.view.getElement(name);
+		return view.getElement(name);
 	}
 
     @Override
@@ -331,7 +329,7 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public final Locale getLocale() {
-        return viewctx.view.getLocale();
+        return view.getLocale();
     }
     
     @Override
@@ -473,7 +471,7 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public final View getView() {
-        return viewctx.view;
+        return view;
     }
     
     /*
@@ -791,9 +789,9 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public void setHtmlName(String htmlname) {
-        viewctx.view.remove(this);
+        view.remove(this);
         this.htmlname = htmlname;
-        viewctx.view.index(this);
+        view.index(this);
     }
     
     /*
@@ -966,7 +964,7 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public void setView(View view) {
-        viewctx.view = view;
+        this.view = view;
     }
 
 	@Override

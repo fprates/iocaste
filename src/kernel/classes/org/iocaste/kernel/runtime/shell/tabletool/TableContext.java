@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.kernel.runtime.shell.ViewContext;
-import org.iocaste.runtime.common.application.ToolData;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class TableContext {
     public String htmlname;

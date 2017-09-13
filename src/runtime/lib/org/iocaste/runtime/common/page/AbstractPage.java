@@ -10,13 +10,13 @@ import java.util.Set;
 
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.application.Context;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.runtime.common.navcontrol.NavControl;
 import org.iocaste.runtime.common.style.ViewConfigStyle;
 import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.ViewTitle;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public abstract class AbstractPage {
     public ViewExport outputview;

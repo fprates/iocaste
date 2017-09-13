@@ -11,13 +11,13 @@ import org.iocaste.kernel.runtime.shell.AbstractComponentTool;
 import org.iocaste.kernel.runtime.shell.ComponentEntry;
 import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.protocol.IocasteException;
-import org.iocaste.runtime.common.application.ToolData;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public class DataFormTool extends AbstractComponentTool {
     
