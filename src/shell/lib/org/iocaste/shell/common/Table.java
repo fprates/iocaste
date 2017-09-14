@@ -185,7 +185,7 @@ public class Table extends AbstractContainer {
         seltype = MULTIPLE;
         group = new RadioGroup(this, getName().concat(".mark"));
         
-        column = new TableColumn(this, "");
+        column = new TableColumn(this, "mark");
         column.setMark(true);
         column.setVisible(true);
     }
