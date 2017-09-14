@@ -1,15 +1,20 @@
-package org.iocaste.calendar;
+package org.iocaste.kernel.runtime.shell.calendar;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.kernel.runtime.shell.PopupData;
+
 public class CalendarData {
+    public PopupData popup;
+    public org.iocaste.shell.common.Calendar control;
     public int lastday, weekday, today, first, month, year;
     public int[] weekdays;
     public String[] sweekdays;
     public Map<Integer, String> monthtext;
+    public Date date;
     private Calendar calendar;
 
     public CalendarData() {

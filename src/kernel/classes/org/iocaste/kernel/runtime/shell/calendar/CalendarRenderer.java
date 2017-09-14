@@ -1,4 +1,4 @@
-package org.iocaste.calendar;
+package org.iocaste.kernel.runtime.shell.calendar;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -6,7 +6,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import org.iocaste.kernel.runtime.shell.PopupData;
+import org.iocaste.kernel.runtime.shell.PopupRenderer;
 import org.iocaste.shell.common.Button;
+import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
@@ -19,70 +22,69 @@ import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 
-public class Response {
+public class CalendarRenderer implements PopupRenderer {
     
-    private static final void createCalendarLink(Container container,
-            Context context, String name) {
+    private final void createCalendarLink(Container container,
+            CalendarData data, String name) {
         PopupControl control;
         Link link;
-        String onclick, form, action;
+        String onclick;
         
-        form = context.function.getParameter("form");
-        action = context.function.getParameter("action");
         onclick = new StringBuilder("formSubmit('").
-                append(form).append("', '").
-                append(action).append("', '").
+                append(data.popup.form).append("', '").
+                append(data.popup.action).append("', '").
                 append(name).append("');").toString();
         
-        control = context.control.getView().getElement(name);
+        control = data.control.getView().getElement(name);
         link = new Link(container, "link_".concat(name), null);
         link.setText(control.getText());
         link.setStyleClass("calmonth");
         link.setEvent("click", onclick);
     }
     
-    public static final void main(Context context) throws Exception {
+    private final void response(CalendarData data) throws Exception {
         int weekday;
         Date date;
         DateFormat format, formatdest;
         String compname, action, value;
-        StandardContainer container;
         Link link;
         Text text;
         Table table;
         TableItem item;
         Locale locale;
         
-        Style.execute(context);
+        Style.execute(data);
         
-        context.calendardata.update(context.date);
-        container = new StandardContainer(context.view, "calstdcnt");
-        container.setStyleClass("calcnt");
+        data.update(data.date);
+        data.popup.container =
+                new StandardContainer(data.popup.view, "calstdcnt");
+        data.popup.container.setStyleClass("calcnt");
         
-        createCalendarLink(container, context, context.control.getEarly());
+        createCalendarLink(
+                data.popup.container, data, data.control.getEarly());
 
-        locale = context.view.getLocale();
+        locale = data.popup.view.getLocale();
         format = new SimpleDateFormat("d MMMMM yyyy", locale);
-        value = format.format(context.date);
+        value = format.format(data.date);
         
-        text = new Text(container, "calhead");
+        text = new Text(data.popup.container, "calhead");
         text.setText(value);
         text.setStyleClass("caldate");
 
-        createCalendarLink(container, context, context.control.getLate());
+        createCalendarLink(data.popup.container, data, data.control.getLate());
         
-        new Parameter(container, "value");
+        new Parameter(data.popup.container, "value");
         
-        table = new Table(container, "calendar");
+        table = new Table(data.popup.container, "calendar");
         table.setStyleClass(Table.HEAD, "calthead");
         table.setStyleClass(Table.TABLE_CELL, "caltd");
         
-        for (String name : context.calendardata.sweekdays)
+        for (String name : data.sweekdays)
             new TableColumn(table, name);
         
         item = new TableItem(table);
-        if (context.calendardata.weekday > 1)
-            for (int i = 0; i < (context.calendardata.weekday - 1); i++) {
+        if (data.weekday > 1)
+            for (int i = 0; i < (data.weekday - 1); i++) {
                 text = new Text(item,
                         new StringBuilder("caldummy").append(i).toString());
                 text.setText("");
@@ -90,22 +92,21 @@ public class Response {
             }
         format = new SimpleDateFormat("yyyy-M-d");
         formatdest = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-        for (int day = 1; day <= context.calendardata.lastday; day++) {
-            weekday = context.calendardata.weekday - 1;
-            compname = new StringBuilder(
-                    context.calendardata.sweekdays[weekday]).
+        for (int day = 1; day <= data.lastday; day++) {
+            weekday = data.weekday - 1;
+            compname = new StringBuilder(data.sweekdays[weekday]).
                     append(day).toString();
             
             date = format.parse(new StringBuilder().
-                    append(context.calendardata.year).
+                    append(data.year).
                     append("-").
-                    append(context.calendardata.month + 1).
+                    append(data.month + 1).
                     append("-").
                     append(day).toString());
             
             value = formatdest.format(date);
             action = new StringBuilder("setFieldCal('").
-                    append(context.control.getInputName()).
+                    append(data.control.getInputName()).
                     append("','").
                     append(value).
                     append("')").toString();
@@ -113,33 +114,68 @@ public class Response {
             link = new Link(item, compname, null);
             link.setText(Integer.toString(day));
             link.setEvent("click", action);
-            if (context.calendardata.today == day)
+            if (data.today == day)
                 link.setStyleClass("caltoday");
             else
                 link.setStyleClass("calkey");
             
-            if (context.calendardata.weekday ==
-                    context.calendardata.weekdays.length) {
-                context.calendardata.weekday = context.calendardata.first;
+            if (data.weekday == data.weekdays.length) {
+                data.weekday = data.first;
                 item = new TableItem(table);
                 continue;
             }
             
-            context.calendardata.weekday++;
+            data.weekday++;
         }
 
-        new Button(container, "cancel").
-                setEvent("click","closeCal()");
+        new Button(data.popup.container, "cancel").
+            setEvent("click","closeCal()");
+    }
+    
+    @Override
+    public final void run(PopupData popupdata) throws Exception {
+        Calendar calendar;
+        byte mode;
+        CalendarData data = new CalendarData();
+        
+        data.popup = popupdata;
+        data.control = (Calendar)popupdata.control;
+        mode = data.control.getMode();
+        
+        switch (mode) {
+        case -1:
+        case 1:
+            data.control = data.popup.view.
+                    getElement(data.control.getMaster());
+            data.date = data.calculate(data.control.getDate(), mode);
+            break;
+        default:
+            data.date = new Date();
+            break;
+        }
+        
+        new Parameter(data.popup.view, "p_".concat(data.control.getName())).
+                set(data.date);
+        
+        calendar = data.popup.view.getElement(data.control.getEarly());
+        new Parameter(data.popup.view, "p_".concat(calendar.getName()));
+        
+        calendar = data.popup.view.getElement(data.control.getLate());
+        new Parameter(data.popup.view, "p_".concat(calendar.getName()));
+        
+        response(data);
     }
 }
 
+
 class Style {
-    public static final void execute(Context context) {
+    
+    public static final void execute(CalendarData data) {
         StyleSheet stylesheet;
         Map<String, String> style;
         Map<Integer, String> constants;
         
-        stylesheet = StyleSheet.instance(context.view);
+        stylesheet = StyleSheet.instance(data.popup.view);
         constants = stylesheet.getConstants();
         style = stylesheet.newElement(".calcnt");
         style.put("position", "absolute");

@@ -1,4 +1,4 @@
-package org.iocaste.calendar;
+package org.iocaste.kernel.runtime.shell.calendar;
 
 import org.iocaste.shell.common.MessageSource;
 

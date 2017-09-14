@@ -1,13 +1,8 @@
 package org.iocaste.kernel.runtime.shell.renderer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.iocaste.protocol.Message;
-import org.iocaste.protocol.Service;
-import org.iocaste.protocol.StandardService;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Const;
@@ -16,14 +11,16 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Shell;
-import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.tooldata.Text;
 import org.iocaste.shell.common.tooldata.ToolData;
 import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.kernel.runtime.shell.PopupData;
+import org.iocaste.kernel.runtime.shell.PopupRenderer;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
+import org.iocaste.kernel.runtime.shell.calendar.CalendarRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
@@ -33,7 +30,9 @@ import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldContainerSou
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldSource;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldTableItemSource;
 
-public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
+public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
+{
+    private PopupRenderer calendar, search;
     
     public TextFieldRenderer(HtmlRenderer renderer) {
         super(renderer, Const.TEXT_FIELD);
@@ -41,6 +40,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
         put(Const.TEXT_FIELD, new TextFieldSource());
         put(Const.TABLE_ITEM, new TextFieldTableItemSource());
         put(new TextFieldContainerSource());
+        calendar = new CalendarRenderer();
     }
 
     private final boolean allowContextMenu(InputComponent input) {
@@ -53,7 +53,8 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
     }
     
     @Override
-    protected final XMLElement execute(InputComponent input, Config config) {
+    protected final XMLElement execute(InputComponent input, Config config)
+            throws Exception {
     	ToolData tooldata;
         Container container;
         StringBuilder sb;
@@ -158,7 +159,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
     }
     
     private final void renderContext(Config config, InputComponent input,
-            XMLElement tagt, XMLElement tag) {
+            XMLElement tagt, XMLElement tag) throws Exception {
         ContextMenu ctxmenu;
         boolean required;
         SearchHelp search;
@@ -186,7 +187,8 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
                      calname.equals(calendar.getLate()) ||
                      calname.equals(calendar.getName()))) {
                     tag = new XMLElement("li");
-                    tag.addChildren(renderPopup(config, popupcontrol));
+                    tag.addChildren(
+                            renderPopup(config, this.calendar, popupcontrol));
                     tagt.addChild(tag);
                 }
             }
@@ -200,46 +202,32 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent> {
                 if (shname.equals(search.getHtmlName()) ||
                     shname.equals(search.getChild())) {
                     tag = new XMLElement("li");
-                    tag.addChildren(renderPopup(config, popupcontrol));
+                    tag.addChildren(
+                            renderPopup(config, this.search, popupcontrol));
                     tagt.addChild(tag);
                 }
             }
         }
     }
     
-    private final List<XMLElement> renderPopup(
-            Config config, PopupControl control) {
-        Map<String, Object> parameters;
+    private final List<XMLElement> renderPopup(Config config,
+            PopupRenderer renderer, PopupControl control) throws Exception {
+        PopupData data;
         List<XMLElement> tags;
-        View view, sourceview;
-        StyleSheet stylesheet;
 
-//        sourceview = config.viewctx.view;
-//        stylesheet = StyleSheet.instance(sourceview);
-//        view = new View(control.getApplication(), "main");
-//        stylesheet.export(view);
-//        
-//        parameters = new HashMap<>();
-//        parameters.put("control", control);
-//        parameters.put("msgsource", sourceview.getAppName());
-//        parameters.put("action", config.currentaction);
-//        parameters.put("form", config.currentform);
-//        
-//        
-//        message.add("view", view);
-//        message.add("init", true);
-//        message.add("locale", config.viewctx.locale);
-//        message.add("parameters", parameters);
-//        viewreturn = (Object[])service.call(message);
-//        view = (View)viewreturn[0];
-//        
-//        control.update(view);
-//        StyleSheet.instance(view).export(sourceview);
+        data = new PopupData();
+        data.view = config.viewctx.view;
+        data.control = control;
+        data.appname = data.view.getAppName();
+        data.action = config.currentaction;
+        data.form = config.currentform;
+        data.init = true;
+        renderer.run(data);
         
-        tags = new ArrayList<>();
-//        for (Container container : view.getContainers())
-//            get(container.getType()).run(tags, container, config);
+        control.update(data.view);
         
+        get(data.container.getType()).run(
+                tags = new ArrayList<>(), data.container, config);
         return tags;
     }
 }

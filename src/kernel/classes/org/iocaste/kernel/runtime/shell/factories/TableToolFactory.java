@@ -51,7 +51,7 @@ public class TableToolFactory extends AbstractSpecFactory {
         
         for (Element child : item.getElements()) {
             column = table.getColumn(child.getName());
-            if (!column.isVisible() || (column.isMark() &&
+            if ((column == null) || !column.isVisible() || (column.isMark() &&
                     (!table.hasMark() || isseltype)))
                 continue;
             type = types.get(child.getType());
