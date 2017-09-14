@@ -31,7 +31,8 @@ public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
     }
     
     @Override
-    protected final XMLElement execute(TableItem item, Config config) {
+    protected final XMLElement execute(TableItem item, Config config)
+            throws Exception {
         boolean mark, savemark;
         Component component;
         TableColumn column;

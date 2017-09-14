@@ -20,7 +20,8 @@ public class ExpandBarRenderer extends AbstractElementRenderer<ExpandBar> {
     }
 
     @Override
-    protected final XMLElement execute(ExpandBar container, Config config) {
+    protected final XMLElement execute(ExpandBar container, Config config)
+            throws Exception {
         XMLElement ebarea, ebtag;
         List<XMLElement> ebtags;
         ActionEventHandler handler;

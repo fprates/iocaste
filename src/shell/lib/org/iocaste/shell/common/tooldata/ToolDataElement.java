@@ -19,6 +19,8 @@ import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.LinkComponent;
+import org.iocaste.shell.common.LinkEntry;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipageContainer;
 import org.iocaste.shell.common.SearchHelp;
@@ -26,7 +28,8 @@ import org.iocaste.shell.common.TextComponent;
 import org.iocaste.shell.common.View;
 
 public abstract class ToolDataElement implements Component, Container,
-        InputComponent, ControlComponent, MultipageContainer, TextComponent {
+        InputComponent, ControlComponent, MultipageContainer, TextComponent,
+        LinkComponent {
 	private static final long serialVersionUID = 4217306786401069911L;
 	protected ToolData tooldata;
 	protected View view;
@@ -293,6 +296,11 @@ public abstract class ToolDataElement implements Component, Container,
         return ((BigDecimal)tooldata.value).intValue();
     }
     
+    @Override
+    public final String getImage() {
+        return tooldata.image;
+    }
+    
     /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#getl()
@@ -380,6 +388,11 @@ public abstract class ToolDataElement implements Component, Container,
     @Override
     public final String getNSReference() {
         return tooldata.nsitem.name;
+    }
+    
+    @Override
+    public Map<String, LinkEntry> getParametersMap() {
+        return null;
     }
     
     /*
@@ -514,6 +527,11 @@ public abstract class ToolDataElement implements Component, Container,
 		return multipart;
 	}
     
+	@Override
+	public final boolean isAbsolute() {
+	    return tooldata.absolute;
+	}
+	
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#isBooleanComponent()

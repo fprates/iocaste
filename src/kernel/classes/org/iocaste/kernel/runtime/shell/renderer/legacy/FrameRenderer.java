@@ -19,7 +19,8 @@ public class FrameRenderer extends AbstractElementRenderer<Frame> {
      * @param config
      * @return
      */
-    protected final XMLElement execute(Frame frame, Config config) {
+    protected final XMLElement execute(Frame frame, Config config)
+            throws Exception {
         XMLElement frametag, legendtag;
         String text;
         

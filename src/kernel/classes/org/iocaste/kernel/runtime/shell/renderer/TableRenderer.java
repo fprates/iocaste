@@ -24,7 +24,8 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
     }
 
     @Override
-    protected final XMLElement execute(Table table, Config config) {
+    protected final XMLElement execute(Table table, Config config)
+            throws Exception {
         String title, name, text, style;
         Set<TableItem> items;
         ContextMenu ctxmenu;

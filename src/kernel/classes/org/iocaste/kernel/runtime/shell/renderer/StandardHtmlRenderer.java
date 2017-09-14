@@ -64,7 +64,7 @@ public class StandardHtmlRenderer extends AbstractHtmlRenderer {
      * @param view dados da visão
      * @return código html da visão
      */
-    public final List<String> run(ViewContext viewctx) {
+    public final List<String> run(ViewContext viewctx) throws Exception {
         Config config;
         MessageRenderer messagerenderer;
         List<String> html = new ArrayList<>();

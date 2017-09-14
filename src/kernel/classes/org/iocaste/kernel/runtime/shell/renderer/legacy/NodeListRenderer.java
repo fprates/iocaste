@@ -14,7 +14,8 @@ public class NodeListRenderer extends AbstractElementRenderer<NodeList> {
     }
 
     @Override
-    protected final XMLElement execute(NodeList nodelist, Config config) {
+    protected final XMLElement execute(NodeList nodelist, Config config)
+            throws Exception {
         XMLElement nltag, itemnltag;
         byte type = nodelist.getListType();
         

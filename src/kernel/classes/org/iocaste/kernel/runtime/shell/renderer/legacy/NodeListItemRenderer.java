@@ -15,7 +15,8 @@ public class NodeListItemRenderer extends AbstractElementRenderer<NodeListItem> 
     }
 
     @Override
-    protected final XMLElement execute(NodeListItem item, Config config) {
+    protected final XMLElement execute(NodeListItem item, Config config)
+            throws Exception {
         XMLElement nltag;
         String style;
         NodeList nodelist = (NodeList)item.getContainer();

@@ -40,7 +40,7 @@ public class RangeFieldRenderer
     
     @Override
     protected final XMLElement execute(
-            RangeInputComponent rangeinput, Config config) {
+            RangeInputComponent rangeinput, Config config) throws Exception {
     	View view;
         PopupControl popupcontrol;
         String low, high;

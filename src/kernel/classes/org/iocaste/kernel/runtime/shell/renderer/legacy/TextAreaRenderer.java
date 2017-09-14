@@ -13,7 +13,8 @@ public class TextAreaRenderer extends AbstractElementRenderer<TextArea> {
         super(renderers, Const.TEXT_AREA);
     }
 
-    protected final XMLElement execute(TextArea area, Config config) {
+    protected final XMLElement execute(TextArea area, Config config)
+            throws Exception {
         XMLElement areatag;
         String name, value;
 

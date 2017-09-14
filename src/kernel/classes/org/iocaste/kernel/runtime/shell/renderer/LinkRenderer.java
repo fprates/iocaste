@@ -11,18 +11,19 @@ import org.iocaste.kernel.runtime.shell.renderer.legacy.ParameterRenderer;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.LinkComponent;
 import org.iocaste.shell.common.LinkEntry;
 import org.iocaste.shell.common.Parameter;
-import org.iocaste.shell.common.tooldata.Link;
 
-public class LinkRenderer extends AbstractElementRenderer<Link> {
+public class LinkRenderer extends AbstractElementRenderer<LinkComponent> {
     
     public LinkRenderer(HtmlRenderer renderer) {
         super(renderer, Const.LINK);
     }
 
     @Override
-    protected final XMLElement execute(Link link, Config config) {
+    protected final XMLElement execute(LinkComponent link, Config config)
+            throws Exception {
         ActionEventHandler handler;
         DataElement element;
         LinkEntry entry;

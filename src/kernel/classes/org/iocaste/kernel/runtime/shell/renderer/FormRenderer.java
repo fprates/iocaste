@@ -18,7 +18,8 @@ public class FormRenderer extends AbstractElementRenderer<Form> {
      * @param config
      * @return
      */
-    protected final XMLElement execute(Form container, Config config) {
+    protected final XMLElement execute(Form container, Config config)
+            throws Exception {
         String[] printlines;
         XMLElement content;
         XMLElement formtag = new XMLElement("form");

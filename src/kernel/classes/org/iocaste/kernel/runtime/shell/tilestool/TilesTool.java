@@ -9,7 +9,7 @@ import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.tooldata.Link;
+import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.tooldata.StandardContainer;
 import org.iocaste.shell.common.tooldata.ToolData;
 

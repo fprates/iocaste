@@ -24,8 +24,8 @@ public class DataItemRenderer extends AbstractElementRenderer<InputComponent> {
         return null;
     }
     
-    public final void execute(
-            DataItem dataitem, XMLElement formtag, Config config) {
+    public final void execute(DataItem dataitem,
+            XMLElement formtag, Config config) throws Exception {
         Text colname;
         DocumentModelItem modelitem;
         XMLElement labeltag, itemtag;

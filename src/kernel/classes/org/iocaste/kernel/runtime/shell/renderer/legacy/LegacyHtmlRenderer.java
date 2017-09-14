@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.kernel.runtime.shell.renderer.DataItemRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.LinkRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.MessageRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.RangeFieldRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.TableItemRenderer;
@@ -65,7 +66,7 @@ public class LegacyHtmlRenderer extends AbstractHtmlRenderer {
      * @param view dados da visão
      * @return código html da visão
      */
-    public final List<String> run(Config config) {
+    public final List<String> run(Config config) throws Exception {
         MessageRenderer messagerenderer;
         List<String> html = new ArrayList<>();
         List<XMLElement> tags = new ArrayList<>();

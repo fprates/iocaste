@@ -21,7 +21,8 @@ public class DataFormRenderer extends AbstractElementRenderer<DataForm> {
     }
 
     @Override
-    protected final XMLElement execute(DataForm form, Config config) {
+    protected final XMLElement execute(DataForm form, Config config)
+            throws Exception {
         Map<String, String[]> groups;
         XMLElement formtag;
         Set<Element> elements;
@@ -42,8 +43,8 @@ public class DataFormRenderer extends AbstractElementRenderer<DataForm> {
         return formtag;
     }
     
-    private final XMLElement renderGroup(DataForm form,
-            Set<Element> elements, String groupname, Config config) {
+    private final XMLElement renderGroup(DataForm form, Set<Element> elements,
+            String groupname, Config config) throws Exception {
         DataItem dataitem;
         DataItemRenderer renderer = get(Const.DATA_ITEM);
         XMLElement formtag = new XMLElement("ul");

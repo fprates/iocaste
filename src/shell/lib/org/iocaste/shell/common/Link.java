@@ -4,7 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.shell.common.tooldata.Context;
+import org.iocaste.shell.common.tooldata.ToolData;
+import org.iocaste.shell.common.tooldata.ToolDataElement;
+import org.iocaste.shell.common.tooldata.ViewSpecItem;
 
 /**
  * Implementação de link html.
@@ -15,20 +21,24 @@ import org.iocaste.documents.common.DataType;
  * @author francisco.prates
  *
  */
-public class Link extends AbstractControlComponent implements Container {
+public class Link extends ToolDataElement {
     private static final long serialVersionUID = 667738108271176995L;
-    private boolean absolute;
     private Map<String, LinkEntry> values;
-    private String image, container;
-    
+    private String container;
+
     public Link(View view, String name, String action) {
-        super(view, Const.LINK, name);
-        init(null, name, action);
+        super(new ViewContext(view, null, name), Const.LINK, name);
+        init(name);
     }
     
     public Link(Container container, String name, String action) {
-        super(container, Const.LINK, name);
-        init(container, name, action);
+        super(new ViewContext(null, container, name), Const.LINK, name);
+        init(name);
+    }
+    
+    public Link(Context viewctx, String name) {
+        super(viewctx, Const.LINK, name);
+        init(name);
     }
 
     @Override
@@ -40,7 +50,7 @@ public class Link extends AbstractControlComponent implements Container {
         getLinkContainer().add(element);
     }
 
-    public final void add(String name, String value) {
+    public final void add(String name, Object value) {
         values.put(name, new LinkEntry(value, DataType.CHAR));
     }
     
@@ -52,15 +62,31 @@ public class Link extends AbstractControlComponent implements Container {
     public final void add(String name, Object value, int type) {
         values.put(name, new LinkEntry(value, type));
     }
-
+    
+    public final void add(String name, ExtendedObject object) {
+        String pname = new StringBuilder(tooldata.name).append("_").
+                append(name).toString();
+        add(pname, name, object);
+    }
+    
+    public final void add(
+            String name, String field, ExtendedObject object) {
+        DataElement element = object.getModel().getModelItem(field).
+                getDataElement();
+        add(name, object.get(field), element.getType());
+    }
+    
     @Override
     public void clear() {
         getLinkContainer().clear();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends Element> T getElement(String name) {
-        return getLinkContainer().getElement(name);
+        Element element;
+        return (T)(((element = getLinkContainer()) == null)?
+                super.getElement(name) : element);
     }
 
     @Override
@@ -73,43 +99,34 @@ public class Link extends AbstractControlComponent implements Container {
         return getLinkContainer().getElementsNames();
     }
     
-    /**
-     * Retorna endereço da imagem.
-     * @return endereço.
-     */
-    public final String getImage() {
-        return image;
-    }
-    
     private final LinkContainer getLinkContainer() {
         return (LinkContainer)getView().getElement(container);
     }
     
-    /**
-     * Retorna parâmetros do link.
-     * @return parâmetros.
-     */
+    @Override
     public final Map<String, LinkEntry> getParametersMap() {
         return values;
     }
-    
-    private final void init(Container parent, String name, String action) {
-        setText(name);
-        setAction(action);
-        absolute = false;
+
+    private final void init(String name) {
+        Object value;
+        
+        setText((tooldata.text == null)?
+                name : tooldata.text, tooldata.textargs);
+        if (tooldata.actionname == null)
+            tooldata.actionname = tooldata.name;
         values = new HashMap<>();
         container = name.concat("_cnt");
         new LinkContainer(this, container);
+        if (tooldata.values == null)
+            return;
+        for (String key : tooldata.values.keySet())
+            if ((value = tooldata.values.get(key)) instanceof ExtendedObject)
+                add(key, (ExtendedObject)value);
+            else
+                add(key, tooldata.values.get(key).toString());
     }
     
-    /**
-     * Indica se link é absoluto.
-     * @return true, se link é absoluto.
-     */
-    public final boolean isAbsolute() {
-        return absolute;
-    }
-
     @Override
     public boolean isMultiLine() {
         return false;
@@ -128,7 +145,7 @@ public class Link extends AbstractControlComponent implements Container {
      * @param absolute url.
      */
     public final void setAbsolute(boolean absolute) {
-        this.absolute = absolute;
+        tooldata.absolute = absolute;
     }
     
     /**
@@ -136,7 +153,7 @@ public class Link extends AbstractControlComponent implements Container {
      * @param image endereço.
      */
     public final void setImage(String image) {
-        this.image = image;
+        tooldata.image = image;
     }
 
     @Override
@@ -152,4 +169,29 @@ class LinkContainer extends AbstractContainer {
         super(container, Const.DUMMY, name);
     }
     
+}
+
+class ViewContext implements Context {
+    private View view;
+    private ToolData tooldata;
+    
+    public ViewContext(View view, Container container, String name) {
+        tooldata = new ToolData(ViewSpecItem.TYPES.LINK, name);
+        if (container != null) {
+            this.view = container.getView();
+            tooldata.parent = container.getHtmlName();
+        } else {
+            this.view = view;
+        }
+    }
+
+    @Override
+    public ToolData get(String name) {
+        return tooldata;
+    }
+
+    @Override
+    public View getView() {
+        return view;
+    }
 }

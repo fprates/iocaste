@@ -13,11 +13,11 @@ import org.iocaste.kernel.runtime.shell.factories.FileUploadFactory;
 import org.iocaste.kernel.runtime.shell.factories.FormFactory;
 import org.iocaste.kernel.runtime.shell.factories.FrameFactory;
 import org.iocaste.kernel.runtime.shell.factories.LegacyButtonFactory;
-import org.iocaste.kernel.runtime.shell.factories.LegacyLinkFactory;
 import org.iocaste.kernel.runtime.shell.factories.LegacyTabbedPaneFactory;
 import org.iocaste.kernel.runtime.shell.factories.LegacyTabbedPaneItemFactory;
 import org.iocaste.kernel.runtime.shell.factories.LegacyTextFactory;
 import org.iocaste.kernel.runtime.shell.factories.LegacyVirtualControlFactory;
+import org.iocaste.kernel.runtime.shell.factories.LinkFactory;
 import org.iocaste.kernel.runtime.shell.factories.ListBoxFactory;
 import org.iocaste.kernel.runtime.shell.factories.NavControlFactory;
 import org.iocaste.kernel.runtime.shell.factories.NodeListFactory;
@@ -62,7 +62,7 @@ public class ProcessLegacyOutput extends AbstractHandler {
         factories.put(ViewSpecItem.TYPES.FRAME,
                 new FrameFactory());
         factories.put(ViewSpecItem.TYPES.LINK,
-                new LegacyLinkFactory());
+                new LinkFactory());
         factories.put(ViewSpecItem.TYPES.LISTBOX,
                 new ListBoxFactory());
         factories.put(ViewSpecItem.TYPES.NODE_LIST,

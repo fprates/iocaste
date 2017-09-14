@@ -24,7 +24,8 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
     }
 
     @Override
-    protected final XMLElement execute(TabbedPane tabbedpane, Config config) {
+    protected final XMLElement execute(TabbedPane tabbedpane, Config config)
+            throws Exception {
         View view;
         Button button;
         String classname, name, text, current;

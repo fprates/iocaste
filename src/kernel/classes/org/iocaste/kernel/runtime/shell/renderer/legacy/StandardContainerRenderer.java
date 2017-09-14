@@ -22,7 +22,8 @@ public class StandardContainerRenderer
     }
     
     @Override
-    protected final XMLElement execute(Container container, Config config) {
+    protected final XMLElement execute(Container container, Config config)
+            throws Exception {
         Set<Element> elements;
         XMLElement divtag = new XMLElement("div");
         

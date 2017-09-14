@@ -16,7 +16,8 @@ public class MessageRenderer extends AbstractElementRenderer<Component> {
     }
 
     @Override
-    protected final XMLElement execute(Component component, Config config) {
+    protected final XMLElement execute(Component component, Config config)
+            throws Exception {
     	ToolData tooldata;
         Text text;
         XMLElement xmlmsg = new XMLElement("div");

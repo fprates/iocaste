@@ -25,7 +25,8 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
     }
 
     @Override
-    protected final XMLElement execute(TabbedPane tabbedpane, Config config) {
+    protected final XMLElement execute(TabbedPane tabbedpane, Config config)
+            throws Exception {
         Button button;
         String classname, name, text, current, btname;
         TabbedPaneItem item;
@@ -80,8 +81,8 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
         return tabbedtag;
     }
     
-    private final void renderHiddenInputs(
-            List<XMLElement> tags, Container container, Config config) {
+    private final void renderHiddenInputs(List<XMLElement> tags,
+            Container container, Config config) throws Exception {
         InputComponent input;
         ParameterRenderer renderer = get(Const.PARAMETER);
         

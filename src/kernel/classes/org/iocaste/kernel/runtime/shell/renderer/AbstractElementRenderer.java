@@ -43,7 +43,8 @@ public abstract class AbstractElementRenderer<T extends Element>
             tag.add(name, attributes.get(name));
     }
     
-    protected abstract XMLElement execute(T element, Config config);
+    protected abstract XMLElement execute(T element, Config config)
+            throws Exception;
     
     protected final <R extends Renderer<? extends Element>> R get(Const type) {
         return renderer.getRenderer(type);
@@ -82,7 +83,7 @@ public abstract class AbstractElementRenderer<T extends Element>
     
     @Override
     public final void run(List<XMLElement> parent, Container container,
-            Config config) {
+            Config config) throws Exception {
         XMLElement element = run(container, config);
         if (element != null)
             parent.add(element);
@@ -90,7 +91,8 @@ public abstract class AbstractElementRenderer<T extends Element>
     
     @Override
     @SuppressWarnings("unchecked")
-    public final XMLElement run(Element element, Config config) {
+    public final XMLElement run(Element element, Config config)
+            throws Exception {
         SpecFactory factory;
 
         if (!config.viewctx.noeventhandlers && (element != null)) {
@@ -110,7 +112,7 @@ public abstract class AbstractElementRenderer<T extends Element>
      * @return
      */
     protected final List<XMLElement> renderElements(
-            Set<Element> elements, Config config) {
+            Set<Element> elements, Config config) throws Exception {
         XMLElement xmlelement;
         List<XMLElement> tags = new ArrayList<>();
         
