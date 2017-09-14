@@ -216,15 +216,14 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
         List<XMLElement> tags;
 
         data = new PopupData();
-        data.view = config.viewctx.view;
+        data.viewctx = config.viewctx;
         data.control = control;
-        data.appname = data.view.getAppName();
         data.action = config.currentaction;
         data.form = config.currentform;
         data.init = true;
         renderer.run(data);
         
-        control.update(data.view);
+        control.update(data.viewctx.view);
         
         get(data.container.getType()).run(
                 tags = new ArrayList<>(), data.container, config);

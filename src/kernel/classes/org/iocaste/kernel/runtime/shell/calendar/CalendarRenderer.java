@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import org.iocaste.kernel.runtime.shell.PopupData;
 import org.iocaste.kernel.runtime.shell.PopupRenderer;
@@ -23,6 +24,12 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 
 public class CalendarRenderer implements PopupRenderer {
+    private Messages messages;
+    
+    public CalendarRenderer() {
+        messages = new Messages();
+        messages.entries();
+    }
     
     private final void createCalendarLink(Container container,
             CalendarData data, String name) {
@@ -35,7 +42,7 @@ public class CalendarRenderer implements PopupRenderer {
                 append(data.popup.action).append("', '").
                 append(name).append("');").toString();
         
-        control = data.control.getView().getElement(name);
+        control = data.popup.viewctx.view.getElement(name);
         link = new Link(container, "link_".concat(name), null);
         link.setText(control.getText());
         link.setStyleClass("calmonth");
@@ -52,18 +59,20 @@ public class CalendarRenderer implements PopupRenderer {
         Table table;
         TableItem item;
         Locale locale;
+        Properties texts;
+        Button button;
         
         Style.execute(data);
         
         data.update(data.date);
         data.popup.container =
-                new StandardContainer(data.popup.view, "calstdcnt");
+                new StandardContainer(data.popup.viewctx.view, "calstdcnt");
         data.popup.container.setStyleClass("calcnt");
         
         createCalendarLink(
                 data.popup.container, data, data.control.getEarly());
 
-        locale = data.popup.view.getLocale();
+        locale = data.popup.viewctx.view.getLocale();
         format = new SimpleDateFormat("d MMMMM yyyy", locale);
         value = format.format(data.date);
         
@@ -79,8 +88,9 @@ public class CalendarRenderer implements PopupRenderer {
         table.setStyleClass(Table.HEAD, "calthead");
         table.setStyleClass(Table.TABLE_CELL, "caltd");
         
+        texts = messages.getMessages(data.popup.viewctx.locale);
         for (String name : data.sweekdays)
-            new TableColumn(table, name);
+            new TableColumn(table, name).setText((String)texts.get(name));
         
         item = new TableItem(table);
         if (data.weekday > 1)
@@ -128,8 +138,9 @@ public class CalendarRenderer implements PopupRenderer {
             data.weekday++;
         }
 
-        new Button(data.popup.container, "cancel").
-            setEvent("click","closeCal()");
+        button = new Button(data.popup.container, "cancel");
+        button.setEvent("click","closeCal()");
+        button.setText((String)texts.get("cancel"));
     }
     
     @Override
@@ -145,7 +156,7 @@ public class CalendarRenderer implements PopupRenderer {
         switch (mode) {
         case -1:
         case 1:
-            data.control = data.popup.view.
+            data.control = data.popup.viewctx.view.
                     getElement(data.control.getMaster());
             data.date = data.calculate(data.control.getDate(), mode);
             break;
@@ -154,14 +165,16 @@ public class CalendarRenderer implements PopupRenderer {
             break;
         }
         
-        new Parameter(data.popup.view, "p_".concat(data.control.getName())).
+        new Parameter(data.popup.viewctx.view, "p_".concat(data.control.getName())).
                 set(data.date);
         
-        calendar = data.popup.view.getElement(data.control.getEarly());
-        new Parameter(data.popup.view, "p_".concat(calendar.getName()));
+        calendar = data.popup.viewctx.view.getElement(data.control.getEarly());
+        new Parameter(
+                data.popup.viewctx.view, "p_".concat(calendar.getName()));
         
-        calendar = data.popup.view.getElement(data.control.getLate());
-        new Parameter(data.popup.view, "p_".concat(calendar.getName()));
+        calendar = data.popup.viewctx.view.getElement(data.control.getLate());
+        new Parameter(
+                data.popup.viewctx.view, "p_".concat(calendar.getName()));
         
         response(data);
     }
@@ -175,7 +188,7 @@ class Style {
         Map<String, String> style;
         Map<Integer, String> constants;
         
-        stylesheet = StyleSheet.instance(data.popup.view);
+        stylesheet = StyleSheet.instance(data.popup.viewctx.view);
         constants = stylesheet.getConstants();
         style = stylesheet.newElement(".calcnt");
         style.put("position", "absolute");
