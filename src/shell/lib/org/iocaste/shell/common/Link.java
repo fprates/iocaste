@@ -8,9 +8,9 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.tooldata.Context;
-import org.iocaste.shell.common.tooldata.ToolData;
+import org.iocaste.shell.common.tooldata.ElementViewContext;
 import org.iocaste.shell.common.tooldata.ToolDataElement;
-import org.iocaste.shell.common.tooldata.ViewSpecItem;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 /**
  * Implementação de link html.
@@ -27,12 +27,14 @@ public class Link extends ToolDataElement {
     private String container;
 
     public Link(View view, String name, String action) {
-        super(new ViewContext(view, null, name), Const.LINK, name);
+        super(new ElementViewContext(view, null, TYPES.LINK, name),
+                Const.LINK, name);
         init(name);
     }
     
     public Link(Container container, String name, String action) {
-        super(new ViewContext(null, container, name), Const.LINK, name);
+        super(new ElementViewContext(null, container, TYPES.LINK, name),
+                Const.LINK, name);
         init(name);
     }
     
@@ -169,29 +171,4 @@ class LinkContainer extends AbstractContainer {
         super(container, Const.DUMMY, name);
     }
     
-}
-
-class ViewContext implements Context {
-    private View view;
-    private ToolData tooldata;
-    
-    public ViewContext(View view, Container container, String name) {
-        tooldata = new ToolData(ViewSpecItem.TYPES.LINK, name);
-        if (container != null) {
-            this.view = container.getView();
-            tooldata.parent = container.getHtmlName();
-        } else {
-            this.view = view;
-        }
-    }
-
-    @Override
-    public ToolData get(String name) {
-        return tooldata;
-    }
-
-    @Override
-    public View getView() {
-        return view;
-    }
 }

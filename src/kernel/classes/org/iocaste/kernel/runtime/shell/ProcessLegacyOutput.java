@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.kernel.runtime.RuntimeEngine;
+import org.iocaste.kernel.runtime.shell.factories.ButtonFactory;
 import org.iocaste.kernel.runtime.shell.factories.CheckBoxFactory;
 import org.iocaste.kernel.runtime.shell.factories.DataFormFactory;
 import org.iocaste.kernel.runtime.shell.factories.ExpandBarFactory;
 import org.iocaste.kernel.runtime.shell.factories.FileUploadFactory;
 import org.iocaste.kernel.runtime.shell.factories.FormFactory;
 import org.iocaste.kernel.runtime.shell.factories.FrameFactory;
-import org.iocaste.kernel.runtime.shell.factories.LegacyButtonFactory;
 import org.iocaste.kernel.runtime.shell.factories.LegacyTabbedPaneFactory;
 import org.iocaste.kernel.runtime.shell.factories.LegacyTabbedPaneItemFactory;
 import org.iocaste.kernel.runtime.shell.factories.LegacyTextFactory;
@@ -48,7 +48,7 @@ public class ProcessLegacyOutput extends AbstractHandler {
     public ProcessLegacyOutput() {
         factories = new HashMap<>();
         factories.put(ViewSpecItem.TYPES.BUTTON,
-                new LegacyButtonFactory());
+                new ButtonFactory());
         factories.put(ViewSpecItem.TYPES.CHECK_BOX,
                 new CheckBoxFactory());
         factories.put(ViewSpecItem.TYPES.DATA_FORM,

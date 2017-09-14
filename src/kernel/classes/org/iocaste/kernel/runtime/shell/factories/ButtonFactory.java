@@ -3,8 +3,8 @@ package org.iocaste.kernel.runtime.shell.factories;
 import java.util.Map;
 
 import org.iocaste.kernel.runtime.shell.ViewContext;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.tooldata.Button;
 
 public class ButtonFactory extends AbstractSpecFactory {
 

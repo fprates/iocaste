@@ -6,6 +6,7 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.kernel.runtime.shell.ComponentEntry;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
@@ -17,7 +18,6 @@ import org.iocaste.shell.common.TableContextItem;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
-import org.iocaste.shell.common.tooldata.Button;
 import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public abstract class AbstractTableHandler {

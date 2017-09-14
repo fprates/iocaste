@@ -1,5 +1,10 @@
 package org.iocaste.shell.common;
 
+import org.iocaste.shell.common.tooldata.Context;
+import org.iocaste.shell.common.tooldata.ElementViewContext;
+import org.iocaste.shell.common.tooldata.ToolDataElement;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
+
 /**
  * Botão html.
  * 
@@ -9,18 +14,26 @@ package org.iocaste.shell.common;
  * @author francisco.prates
  *
  */
-public class Button extends AbstractControlComponent {
-    private static final long serialVersionUID = 2295137293981769652L;
-    private boolean submit;
-    
+public class Button extends ToolDataElement {
+    private static final long serialVersionUID = 7733291339094177369L;
+
     public Button(View view, String name) {
-        super(view, Const.BUTTON, name);
-        submit = false;
+        super(new ElementViewContext(view, null, TYPES.BUTTON, name),
+                Const.BUTTON, name);
     }
     
     public Button(Container container, String name) {
-        super(container, Const.BUTTON, name);
-        submit = false;
+        super(new ElementViewContext(null, container, TYPES.BUTTON, name),
+                Const.BUTTON, name);
+    }
+    
+    public Button(Context viewctx, String name) {
+        super(viewctx, Const.BUTTON, name);
+    }
+    
+    @Override
+    public final boolean isControlComponent() {
+        return true;
     }
     
     /**
@@ -28,7 +41,7 @@ public class Button extends AbstractControlComponent {
      * @return true, se for submit.
      */
     public final boolean isSubmit() {
-        return submit;
+        return tooldata.submit;
     }
     
     /**
@@ -36,6 +49,6 @@ public class Button extends AbstractControlComponent {
      * @param submit true, para submit
      */
     public final void setSubmit(boolean submit) {
-        this.submit = submit;
+        tooldata.submit = submit;
     }
 }

@@ -3,6 +3,7 @@ package org.iocaste.kernel.runtime.shell.renderer.legacy;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.iocaste.kernel.runtime.shell.renderer.ButtonRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.DataItemRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.LinkRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.MessageRenderer;
