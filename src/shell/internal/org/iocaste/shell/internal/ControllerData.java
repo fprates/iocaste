@@ -16,7 +16,7 @@ public class ControllerData {
     public Map<String, ?> values;
     public PageContext pagectx;
     public Function function;
-    public String sessionid, contextname, servername, contexturl;
+    public String sessionid, contextname, servername;
     public int logid;
     public boolean event, disconnecteddb;
     public PopupControl popupcontrol;

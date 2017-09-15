@@ -73,8 +73,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
         control = config.state.view.getElement(message.getst("action"));
         if ((control != null) && control.isPopup()) {
             config.popupcontrol = (PopupControl)control;
-            config.contexturl = composeUrl(
-                    config.popupcontrol.getApplication());
             return;
         }
         
@@ -822,7 +820,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
             return pagectx;
         }
         
-        pagectx.setContextUrl(config.contexturl);
         pagectx.setError((byte)0);
         sequence = pagectx.getSequence();
         contextdata = new ContextData();
@@ -979,7 +976,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
         message.add("logid", pagectx.getLogid());
         message.add("sequence", pagectx.getSequence());
         message.add("sessionid", context.sessionid);
-        message.add("contexturl", pagectx.getContextUrl());
         message.add("pagecontrol",
                 (control == null)? null : control.getHtmlName());
         values = (Object[])callIocaste(context.sessionid, message);

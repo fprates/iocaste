@@ -121,7 +121,6 @@ public class ProcessLegacyOutput extends AbstractHandler {
         config.viewctx.viewexport = new ViewExport();
         config.viewctx.viewexport.popupcontrol = message.getst("popupcontrol");
         config.viewctx.viewexport.title = view.getTitle();
-        config.viewctx.viewexport.contexturl = message.getst("contexturl");
         config.viewctx.factories = factories;
         config.viewctx.sessionid = message.getst("sessionid");
         config.logid = message.geti("logid");

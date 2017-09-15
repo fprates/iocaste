@@ -16,7 +16,7 @@ import org.iocaste.shell.common.View;
 public class PageContext {
     private View view;
     private AppContext appctx;
-    private String name, username, contexturl, contenttype, contentencoding;
+    private String name, username, contenttype, contentencoding;
     public String messagetext;
     public Locale locale;
     private boolean reloadable, initialize, keepview;
@@ -72,14 +72,6 @@ public class PageContext {
      */
     public final String getContentType() {
         return contenttype;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final String getContextUrl() {
-        return contexturl;
     }
     
     /**
@@ -222,14 +214,6 @@ public class PageContext {
     public final void setContentType(String contenttype) {
         this.contenttype = contenttype;
     };
-    
-    /**
-     * 
-     * @param contexturl
-     */
-    public final void setContextUrl(String contexturl) {
-        this.contexturl = contexturl;
-    }
     
     /**
      * 
