@@ -1,6 +1,5 @@
 package org.iocaste.runtime.common.page;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.ExtendedObject;
@@ -72,9 +71,6 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
             String item, ExtendedObject[] objects, String field) {
         Object value;
         ToolData toolitem = getComponentData(tooldata).instance(item);
-        
-        if (toolitem.values == null)
-            toolitem.values = new LinkedHashMap<>();
         
         for (ExtendedObject object : objects) {
             value = object.get(field);

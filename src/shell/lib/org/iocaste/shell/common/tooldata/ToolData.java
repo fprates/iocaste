@@ -53,6 +53,7 @@ public class ToolData implements Serializable {
         objects = new LinkedHashMap<>();
         events = new HashMap<>();
         validators = new HashSet<>();
+        values = new LinkedHashMap<>();
     }
     
     public final ToolData clone(String prefix, ToolData parent)
