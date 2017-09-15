@@ -24,7 +24,6 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 
 public class StandardHtmlRenderer extends AbstractHtmlRenderer {
-    private String username;
     
     public StandardHtmlRenderer() {
         new ButtonRenderer(this);
@@ -75,7 +74,6 @@ public class StandardHtmlRenderer extends AbstractHtmlRenderer {
         
         config = new Config();
         config.viewctx = viewctx;
-        config.username = username;
         
         if (viewctx.offline) {
             for (Container container : viewctx.view.getContainers())
@@ -100,13 +98,5 @@ public class StandardHtmlRenderer extends AbstractHtmlRenderer {
         html.add(htmltag.toString());
         
         return html;
-    }
-    
-    /**
-     * Ajusta nome do usuário
-     * @param username nome
-     */
-    public final void setUsername(String username) {
-        this.username = username;
     }
 }

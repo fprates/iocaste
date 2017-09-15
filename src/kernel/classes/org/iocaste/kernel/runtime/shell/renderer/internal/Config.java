@@ -11,7 +11,7 @@ import org.iocaste.shell.common.View;
 public class Config {
     public ViewContext viewctx;
     public Form form;
-    public String currentaction, currentform, username;
+    public String currentaction, currentform;
     private String pagetrack;
     public int logid;
     public long sequence;
@@ -68,14 +68,6 @@ public class Config {
      */
     public final PopupControl getPopupControl() {
         return popupcontrol;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final String getUsername() {
-        return username;
     }
     
     /**

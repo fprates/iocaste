@@ -44,7 +44,8 @@ import org.iocaste.shell.common.tooldata.ViewSpecItem;
 
 public class ProcessLegacyOutput extends AbstractHandler {
     public Map<ViewSpecItem.TYPES, SpecFactory> factories;
-
+    private LegacyHtmlRenderer renderer;
+    
     public ProcessLegacyOutput() {
         factories = new HashMap<>();
         factories.put(ViewSpecItem.TYPES.BUTTON,
@@ -101,6 +102,8 @@ public class ProcessLegacyOutput extends AbstractHandler {
                 null);
         factories.put(ViewSpecItem.TYPES.VIRTUAL_CONTROL,
                 new LegacyVirtualControlFactory());
+        
+        renderer = new LegacyHtmlRenderer();
     }
     
     @Override
@@ -126,10 +129,9 @@ public class ProcessLegacyOutput extends AbstractHandler {
         config.viewctx.sessionid = message.getst("sessionid");
         config.logid = message.geti("logid");
         config.sequence = message.getl("sequence");
-        config.username = message.getst("username");
         config.viewctx.function = getFunction();
         
-        lines = new LegacyHtmlRenderer().run(config);
+        lines = renderer.run(config);
         content = new StringBuilder();
         for (String line : lines)
         	content.append(line);

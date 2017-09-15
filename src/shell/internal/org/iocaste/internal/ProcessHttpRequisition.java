@@ -37,7 +37,6 @@ import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewState;
 
 public class ProcessHttpRequisition extends AbstractHandler {
-    private static final String NOT_CONNECTED = "not.connected";
     private static final byte AUTHORIZATION_ERROR = 1;
     private static final String STD_CONTENT = "text/html";
     public Map<String, List<SessionContext>> apps;
@@ -935,7 +934,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
         EventHandler event;
         List<EventHandler> events;
         Map<String, List<EventHandler>> actions;
-        String action, username;
+        String action;
         View view = pagectx.getViewData();
         
         if (view == null)
@@ -975,12 +974,10 @@ public class ProcessHttpRequisition extends AbstractHandler {
         configResponse(context.resp, pagectx);
         control = pagectx.getPopupControl();
 
-        username = pagectx.getUsername();
         message = new Message("legacy_output_process");
         message.add("view", view);
         message.add("logid", pagectx.getLogid());
         message.add("sequence", pagectx.getSequence());
-        message.add("username", (username == null)? NOT_CONNECTED : username);
         message.add("sessionid", context.sessionid);
         message.add("contexturl", pagectx.getContextUrl());
         message.add("pagecontrol",

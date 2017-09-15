@@ -49,6 +49,7 @@ import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class ProcessOutput extends AbstractHandler {
     public Map<ViewSpecItem.TYPES, SpecFactory> factories;
+    private StandardHtmlRenderer renderer;
     
     public ProcessOutput() {
         factories = new HashMap<>();
@@ -106,6 +107,8 @@ public class ProcessOutput extends AbstractHandler {
                 null);
         factories.put(ViewSpecItem.TYPES.VIRTUAL_CONTROL,
                 new VirtualControlFactory());
+        
+        renderer = new StandardHtmlRenderer();
     }
     
     private void build(
@@ -162,22 +165,22 @@ public class ProcessOutput extends AbstractHandler {
         data.viewctx.messagetype = data.viewexport.msgtype;
     }
 
-	@Override
+    @Override
     public Object run(Message message) throws Exception {
-    	StringBuilder content;
-    	List<String> lines;
+        StringBuilder content;
+        List<String> lines;
         ProcessOutputData data = new ProcessOutputData();
         
-    	data.viewexport = message.get("view");
-    	data.viewctx = new ViewContext();
+        data.viewexport = message.get("view");
+        data.viewctx = new ViewContext();
         data.viewctx.sessionid = message.getSessionid();
-    	run(data);
-    	
-    	lines = new StandardHtmlRenderer().run(data.viewctx);
-    	content = new StringBuilder();
-    	for (String line : lines)
-    		content.append(line);
-    	return content.toString().getBytes();
+        run(data);
+        
+        lines = renderer.run(data.viewctx);
+        content = new StringBuilder();
+        for (String line : lines)
+        	content.append(line);
+        return content.toString().getBytes();
     }
     
     public final void run(ProcessOutputData outputdata) throws Exception {
