@@ -17,7 +17,7 @@ import org.iocaste.documents.common.WhereClause;
  * @author francisco.prates
  *
  */
-public class SearchHelp extends PopupControl {
+public class SearchHelp extends AbstractPopupControl {
     private static final long serialVersionUID = -1582634834243087782L;
     private String modelname, export, inputname, master, child, nsreference;
     private Set<String> itemnames;
@@ -28,7 +28,6 @@ public class SearchHelp extends PopupControl {
         
         itemnames = new LinkedHashSet<>();
         setAllowStacking(true);
-        setApplication("iocaste-search-help");
     }
 
     /**

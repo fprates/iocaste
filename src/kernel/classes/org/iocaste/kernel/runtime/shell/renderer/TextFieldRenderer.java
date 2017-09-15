@@ -220,10 +220,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
         data.control = control;
         data.action = config.currentaction;
         data.form = config.currentform;
-        data.init = true;
         renderer.run(data);
-        
-        control.update(data.viewctx.view);
         
         get(data.container.getType()).run(
                 tags = new ArrayList<>(), data.container, config);

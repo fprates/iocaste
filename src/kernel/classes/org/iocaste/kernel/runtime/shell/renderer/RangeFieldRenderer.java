@@ -99,7 +99,7 @@ public class RangeFieldRenderer
 
             if (calendar != null) {
                 Input.generateCalendar(
-                        view, rangeinput.getContainer(), tfield);
+                        config.viewctx, rangeinput.getContainer(), tfield);
                 
                 for (Calendar childcal : new Calendar[] {
                         (Calendar)view.getElement(calendar.getName()),

@@ -11,6 +11,7 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.kernel.documents.dataelement.GetDataElement;
 import org.iocaste.kernel.runtime.shell.ProcessOutputData;
+import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -20,7 +21,6 @@ import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.View;
 
 public class Input {
     private Map<String, DataElement> des;
@@ -47,33 +47,37 @@ public class Input {
      */
     private final void generateCalendar(
             InputComponent input, Container container) {
-        generateCalendar(outputdata.viewctx.view, container, input);
+        generateCalendar(outputdata.viewctx, container, input);
     }
     
     public static final void generateCalendar(
-            View view, Container container, InputComponent input) {
+            ViewContext viewctx, Container container, InputComponent input) {
         Calendar master, earlycal, latecal;
-        String htmlname, early, late;
+        String htmlname, early, late, parent;
         Map<String, Element> elements;
         
+        parent = container.getHtmlName();
         htmlname = input.getHtmlName().concat(".cal");
-        master = new Calendar(container, htmlname);
+        viewctx.instance(null, htmlname).parent = parent;
+        master = new Calendar(viewctx, htmlname, 0);
         master.setEarly(early = "early_".concat(htmlname));
         master.setLate(late = "late_".concat(htmlname));
         input.setCalendar(master);
-        
-        earlycal = new Calendar(container, early, Calendar.EARLY);
+
+        viewctx.instance(null, early).parent = parent;
+        earlycal = new Calendar(viewctx, early, Calendar.EARLY);
         earlycal.setMaster(htmlname);
         earlycal.setText("<");
-        
-        latecal = new Calendar(container, late, Calendar.LATE);
+
+        viewctx.instance(null, late).parent = parent;
+        latecal = new Calendar(viewctx, late, Calendar.LATE);
         latecal.setMaster(htmlname);
         latecal.setText(">");
         
         if (!container.isMultiLine())
             return;
         
-        elements = view.getElements();
+        elements = viewctx.view.getElements();
         elements.put(htmlname, master);
         elements.put(early, earlycal);
         elements.put(late, latecal);

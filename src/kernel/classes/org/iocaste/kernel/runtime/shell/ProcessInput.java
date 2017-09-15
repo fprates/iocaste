@@ -37,7 +37,6 @@ import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.View;
@@ -51,13 +50,13 @@ public class ProcessInput extends AbstractHandler {
     public static Map<String, Map<String, String>> msgsource;
     private static Map<Integer, String> msgconv;
     private ControllerData config;
+    private StandardHtmlRenderer renderer;
     
     static {
         Map<String, String> messages;
         
         msgsource = new HashMap<>();
         msgsource.put("pt_BR", messages = new HashMap<>());
-        
         messages.put("calendar", "Calendário");
         messages.put("field.is.obligatory", "Campo é obrigatório (%s).");
         messages.put("field.type.mismatch",
@@ -88,6 +87,10 @@ public class ProcessInput extends AbstractHandler {
         msgconv.put(EINITIAL, "field.is.obligatory");
         msgconv.put(EMISMATCH, "field.type.mismatch");
         msgconv.put(EINVALID_REFERENCE, "invalid.value");
+    }
+
+    public ProcessInput() {
+        renderer = new StandardHtmlRenderer();
     }
     
     private final void callController(ViewExport viewexport)
@@ -125,13 +128,11 @@ public class ProcessInput extends AbstractHandler {
             return;
 
         viewexport.action = getString(config.values, "action");
-        control = config.state.viewctx.view.getElement(viewexport.action);
+        control = (ControlComponent)getControl(viewexport.action);
         if ((control == null) || !control.isPopup())
             return;
         viewexport.popupcontrol = viewexport.action;
         viewexport.action = null;
-        viewexport.contexturl = 
-                composeUrl(((PopupControl)control).getApplication());
     }
     
     /**
@@ -180,17 +181,22 @@ public class ProcessInput extends AbstractHandler {
         }
     }
     
-    private final boolean isAction(String element, String name) {
-        Map<String, ActionEventHandler> handlers;
+    private final Element getControl(String name) {
+        Map<String, Map<String, ActionEventHandler>> events;
+        Element element = config.state.viewctx.view.getElement(name);
         
-        if (!config.state.viewctx.actions.containsKey(element))
-            return false;
-        handlers = config.state.viewctx.actions.get(element).get(name);
-        if (handlers == null)
-            return false;
-        for (String key : handlers.keySet())
-            return handlers.get(key).submit;
-        return false;
+        if ((element != null) ||
+                (events = config.state.viewctx.actions.get(name)) == null)
+            return element;
+        
+        for (String key : events.keySet()) {
+            for (ActionEventHandler handler : events.get(key).values()) {
+                name = handler.name;
+                return config.state.viewctx.view.getElement(name);
+            }
+            return null;
+        }
+        return null;
     }
     
     /**
@@ -277,6 +283,19 @@ public class ProcessInput extends AbstractHandler {
                 getUniversalInputValue(input, ri));
         
         return (object != null);
+    }
+    
+    private final boolean isAction(String element, String name) {
+        Map<String, ActionEventHandler> handlers;
+        
+        if (!config.state.viewctx.actions.containsKey(element))
+            return false;
+        handlers = config.state.viewctx.actions.get(element).get(name);
+        if (handlers == null)
+            return false;
+        for (String key : handlers.keySet())
+            return handlers.get(key).submit;
+        return false;
     }
     
     /**
@@ -578,7 +597,7 @@ public class ProcessInput extends AbstractHandler {
         config.state.viewctx.offline = true;
         outputprocess.run(data);
         
-        new StandardHtmlRenderer().run(config.state.viewctx);
+        renderer.run(config.state.viewctx);
         for (String key : parameters.keySet()) {
             if (isAction(key, key)) {
                 if (actionname != null)
@@ -737,7 +756,8 @@ public class ProcessInput extends AbstractHandler {
         }
         
         message(Const.NONE, null);
-        element = config.state.viewctx.view.getElement(controlname);
+        element = getControl(controlname);
+        
         if (element != null)
             processInputsStage(element, status);
         else

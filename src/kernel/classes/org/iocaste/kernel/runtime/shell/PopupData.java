@@ -7,6 +7,5 @@ public class PopupData {
     public PopupControl control;
     public String action, form;
     public ViewContext viewctx;
-    public boolean init;
     public Container container;
 }

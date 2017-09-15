@@ -2,6 +2,10 @@ package org.iocaste.shell.common;
 
 import java.util.Date;
 
+import org.iocaste.shell.common.tooldata.Context;
+import org.iocaste.shell.common.tooldata.ElementViewContext;
+import org.iocaste.shell.common.tooldata.ToolDataElement;
+
 /**
  * Ajuda de pesquisa
  * 
@@ -10,24 +14,23 @@ import java.util.Date;
  * @author francisco.prates
  *
  */
-public class Calendar extends PopupControl {
+public class Calendar extends ToolDataElement {
     private static final long serialVersionUID = -5466384144408033617L;
     public static final byte EARLY = -1;
     public static final byte LATE = 1;
-    private String inputname, early, late, master;
-    private byte mode;
-    private Date date;
     
     public Calendar(Container container, String name) {
-        this(container, name, (byte)0);
+        this(container, name, 0);
     }
     
-    public Calendar(Container container, String name, byte mode) {
-        super(container, Const.CALENDAR, name);
-        
+    public Calendar(Container container, String name, int mode) {
+        this(new ElementViewContext(null, container, null, name), name, mode);
+    }
+    
+    public Calendar(Context context, String name, int mode) {
+        super(context, Const.CALENDAR, name);
         setAllowStacking(true);
-        setApplication("iocaste-calendar");
-        this.mode = mode;
+        tooldata.values.put("mode", mode);
     }
     
     /**
@@ -35,7 +38,7 @@ public class Calendar extends PopupControl {
      * @return
      */
     public final Date getDate() {
-        return date;
+        return (Date)tooldata.values.get("date");
     }
     
     /**
@@ -43,7 +46,7 @@ public class Calendar extends PopupControl {
      * @return
      */
     public final String getEarly() {
-        return early;
+        return (String)tooldata.values.get("early");
     }
     
     /**
@@ -51,7 +54,7 @@ public class Calendar extends PopupControl {
      * @return nome do componente.
      */
     public final String getInputName() {
-        return inputname;
+        return (String)tooldata.values.get("inputname");
     }
     
     /**
@@ -59,23 +62,25 @@ public class Calendar extends PopupControl {
      * @return
      */
     public final String getLate() {
-        return late;
+        return (String)tooldata.values.get("late");
     }
     
     /**
      * 
      * @return
      */
-    public final String getMaster() {
-        return master;
+    public final int getMode() {
+        return (int)tooldata.values.get("mode");
     }
     
-    /**
-     * 
-     * @return
-     */
-    public final byte getMode() {
-        return mode;
+    @Override
+    public boolean isControlComponent() {
+        return true;
+    }
+    
+    @Override
+    public final boolean isPopup() {
+        return true;
     }
     
     /**
@@ -83,7 +88,7 @@ public class Calendar extends PopupControl {
      * @param date
      */
     public final void setDate(Date date) {
-        this.date = date;
+        tooldata.values.put("date", date);
     }
     
     /**
@@ -91,7 +96,7 @@ public class Calendar extends PopupControl {
      * @param early
      */
     public final void setEarly(String early) {
-        this.early = early;
+        tooldata.values.put("early", early);
     }
     
     /**
@@ -99,7 +104,7 @@ public class Calendar extends PopupControl {
      * @param inputname nome do campo.
      */
     public final void setInputName(String inputname) {
-        this.inputname = inputname;
+        tooldata.values.put("inputname", inputname);
     }
     
     /**
@@ -107,30 +112,22 @@ public class Calendar extends PopupControl {
      * @param late
      */
     public final void setLate(String late) {
-        this.late = late;
-    }
-    
-    /**
-     * 
-     * @param master
-     */
-    public final void setMaster(String master) {
-        this.master = master;
+        tooldata.values.put("late", late);
     }
 
     @Override
     public void update(View view) {
-        InputComponent input;
+        InputComponent source;
         Calendar calendar;
-        View _view = getView();
+        String master;
         
-        if (master == null) {
-            input = view.getElement("p_".concat(getName()));
-            date = input.get();
+        if ((master = getMaster()) == null) {
+            source = view.getElement("p_".concat(getName()));
+            tooldata.values.put("date", source.get());
         } else {
-            input = view.getElement("p_".concat(master));
-            calendar = _view.getElement(master);
-            calendar.setDate(input.getdt());
+            source = view.getElement("p_".concat(master));
+            calendar = view.getElement(master);
+            calendar.setDate(source.getdt());
         }
     }
 }

@@ -23,13 +23,14 @@ import org.iocaste.shell.common.LinkComponent;
 import org.iocaste.shell.common.LinkEntry;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipageContainer;
+import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.TextComponent;
 import org.iocaste.shell.common.View;
 
 public abstract class ToolDataElement implements Component, Container,
         InputComponent, ControlComponent, MultipageContainer, TextComponent,
-        LinkComponent {
+        LinkComponent, PopupControl {
 	private static final long serialVersionUID = 4217306786401069911L;
 	protected ToolData tooldata;
 	protected View view;
@@ -37,7 +38,7 @@ public abstract class ToolDataElement implements Component, Container,
     private Map<String, String> elements;
     private String htmlname, master;
     private boolean translatable, nohelper, stacking, multipart;
-    private boolean popup, range;
+    private boolean range;
     private Calendar calendar;
     private byte[] content;
     private SearchHelp search;
@@ -611,7 +612,7 @@ public abstract class ToolDataElement implements Component, Container,
 
     @Override
     public boolean isPopup() {
-        return popup;
+        return false;
     }
     
     /*
@@ -840,7 +841,7 @@ public abstract class ToolDataElement implements Component, Container,
      * 
      * @param master
      */
-    protected final void setMaster(String master) {
+    public final void setMaster(String master) {
         this.master = master;
     }
     
@@ -1017,5 +1018,8 @@ public abstract class ToolDataElement implements Component, Container,
         
         tooldata.text = message;
 	}
+	
+	@Override
+    public void update(View view) { }
 
 }
