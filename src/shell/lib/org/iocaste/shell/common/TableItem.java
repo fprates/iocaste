@@ -16,7 +16,6 @@ public class TableItem extends AbstractContainer {
     private TableColumn[] columns;
     private int index;
     private String tablename;
-    private boolean recursive;
     private Map<String, String> elements;
     
     public TableItem(Table table) {
@@ -56,11 +55,6 @@ public class TableItem extends AbstractContainer {
         Table table;
         int i, vlength;
         
-        if (recursive) {
-            recursive = false;
-            return;
-        }
-        recursive = true;
         table = getTable();
         i = size();
         if (i == table.width())

@@ -111,13 +111,21 @@ public abstract class AbstractComponent extends AbstractElement
     public void setHtmlName(String htmlname) {
         Container container;
         View view = getView();
+
+        container = view.getElement(this.container);
+        if (container == null) {
+            super.setHtmlName(htmlname);
+            view.index(this);
+            return;
+        }
+        
+        if (container.getElement(getHtmlName()) == null) {
+            super.setHtmlName(htmlname);
+            return;
+        }
         
         super.setHtmlName(htmlname);
-        container = view.getElement(this.container);
-        if (container == null)
-            view.index(this);
-        else
-            container.add(this);
+        container.add(this);
     }
     
     /*
