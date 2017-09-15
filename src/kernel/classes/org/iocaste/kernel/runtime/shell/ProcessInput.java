@@ -19,6 +19,7 @@ import org.iocaste.documents.common.ValueRangeItem;
 import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.documents.GetObject;
 import org.iocaste.kernel.runtime.RuntimeEngine;
+import org.iocaste.kernel.runtime.shell.factories.SpecFactory;
 import org.iocaste.kernel.runtime.shell.renderer.StandardHtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ControllerData;
@@ -94,6 +95,7 @@ public class ProcessInput extends AbstractHandler {
         InputStatus status;
         ControlComponent control;
         ComponentEntry entry;
+        SpecFactory factory;
         
         status = validate();
         if (status.fatal != null)
@@ -114,8 +116,9 @@ public class ProcessInput extends AbstractHandler {
             	continue;
             }
             
-            config.state.viewctx.factories.get(entry.data.type).update(
-            		config.state.viewctx, key);
+            factory = config.state.viewctx.factories.get(entry.data.type);
+            if (factory != null)
+                factory.update(config.state.viewctx, key);
         }
         
         if (status.event)

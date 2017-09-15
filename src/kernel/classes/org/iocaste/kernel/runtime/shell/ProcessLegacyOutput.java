@@ -19,7 +19,6 @@ import org.iocaste.kernel.runtime.shell.factories.LegacyTextFactory;
 import org.iocaste.kernel.runtime.shell.factories.LegacyVirtualControlFactory;
 import org.iocaste.kernel.runtime.shell.factories.LinkFactory;
 import org.iocaste.kernel.runtime.shell.factories.ListBoxFactory;
-import org.iocaste.kernel.runtime.shell.factories.NavControlFactory;
 import org.iocaste.kernel.runtime.shell.factories.NodeListFactory;
 import org.iocaste.kernel.runtime.shell.factories.NodeListItemFactory;
 import org.iocaste.kernel.runtime.shell.factories.ParameterFactory;
@@ -70,8 +69,6 @@ public class ProcessLegacyOutput extends AbstractHandler {
                 new NodeListFactory());
         factories.put(ViewSpecItem.TYPES.NODE_LIST_ITEM,
                 new NodeListItemFactory());
-        factories.put(ViewSpecItem.TYPES.PAGE_CONTROL,
-                new NavControlFactory());
         factories.put(ViewSpecItem.TYPES.PRINT_AREA,
                 new PrintAreaFactory());
         factories.put(ViewSpecItem.TYPES.RADIO_BUTTON,
