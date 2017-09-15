@@ -4,13 +4,13 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.ViewSpecItem.TYPES;
-import org.iocaste.internal.DefaultStyle;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.utils.Tools;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
+import org.iocaste.shell.internal.DefaultStyle;
 
 public class GetStyleSheet extends AbstractHandler {
     

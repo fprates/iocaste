@@ -1,4 +1,4 @@
-package org.iocaste.internal;
+package org.iocaste.shell.internal;
 
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;

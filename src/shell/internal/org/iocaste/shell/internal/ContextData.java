@@ -1,4 +1,4 @@
-package org.iocaste.internal;
+package org.iocaste.shell.internal;
 
 public class ContextData {
     public String sessionid, appname, pagename, locale;

@@ -1,4 +1,4 @@
-package org.iocaste.internal;
+package org.iocaste.shell.internal;
 
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;

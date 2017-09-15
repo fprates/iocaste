@@ -1,4 +1,4 @@
-package org.iocaste.internal;
+package org.iocaste.shell.internal;
 
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;

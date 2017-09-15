@@ -1,9 +1,9 @@
 package org.iocaste.install;
 
-import org.iocaste.internal.ProcessHttpRequisition;
-import org.iocaste.internal.RendererContext;
 import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
+import org.iocaste.shell.internal.ProcessHttpRequisition;
+import org.iocaste.shell.internal.RendererContext;
 import org.iocaste.protocol.Iocaste;
 
 public class ProcessInstallHttpRequisition extends ProcessHttpRequisition {
