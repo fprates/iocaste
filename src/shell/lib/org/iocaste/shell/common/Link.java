@@ -130,8 +130,8 @@ public class Link extends ToolDataElement {
     }
     
     @Override
-    public boolean isMultiLine() {
-        return false;
+    public boolean isControlComponent() {
+        return true;
     }
 
     @Override
