@@ -239,9 +239,9 @@ public class SearchHelp extends AbstractPopupControl {
     }
     
     @Override
-    public void update(View view) {
+    public void update(String action, Object value) {
         Map<String, Element> elements = getView().getElements();
-        DataForm criteria = view.getElement("criteria");
+        DataForm criteria = getView().getElement("criteria");
         
         elements.put("criteria", criteria);
         for (Element element : criteria.getElements())

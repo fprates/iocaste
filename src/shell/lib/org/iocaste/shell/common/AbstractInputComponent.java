@@ -25,9 +25,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private int length, vlength, error;
     private Const type;
     private DataElement dataelement;
-    private SearchHelp search;
-    private Calendar calendar;
-    private String master, nsreference, label;
+    private String master, nsreference, label, calendar, search;
     private byte[] content;
     private boolean placeholder;
     private boolean nohelper;
@@ -60,7 +58,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
      */
     @Override
     public final Calendar getCalendar() {
-        return calendar;
+        return (calendar == null)? null : getView().getElement(calendar);
     }
     
     /*
@@ -206,7 +204,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
      */
     @Override
     public final SearchHelp getSearchHelp() {
-        return search;
+        return (search == null)? null : getView().getElement(search);
     }
     
     /*
@@ -372,12 +370,12 @@ public abstract class AbstractInputComponent extends AbstractComponent
      */
     @Override
     public final void setCalendar(Calendar calendar) {
-        this.calendar = calendar;
-        
-        if (calendar == null)
+        if (calendar == null) {
+            this.calendar = null;
             return;
-        
-        this.calendar.setInputName(getHtmlName());
+        }
+        this.calendar = calendar.getHtmlName();
+        getCalendar().setInputName(getHtmlName());
     }
     
     /*
@@ -419,9 +417,8 @@ public abstract class AbstractInputComponent extends AbstractComponent
         
         if (search == null)
             return;
-        
-        search.setInputName(name);
-        calendar.setInputName(name);
+        getSearchHelp().setInputName(name);
+        getCalendar().setInputName(name);
     }
     
     /*
@@ -508,12 +505,12 @@ public abstract class AbstractInputComponent extends AbstractComponent
      */
     @Override
     public final void setSearchHelp(SearchHelp search) {
-        this.search = search;
-        
-        if (search == null)
+        if (search == null) {
+            this.search = null;
             return;
-        
-        this.search.setInputName(getHtmlName());
+        }
+        this.search = search.getHtmlName();
+        getSearchHelp().setInputName(getHtmlName());
     }
     
     /*

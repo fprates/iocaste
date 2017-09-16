@@ -3,7 +3,9 @@ package org.iocaste.kernel.runtime.shell.calendar;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 
 import org.iocaste.kernel.runtime.shell.PopupData;
@@ -12,7 +14,6 @@ import org.iocaste.shell.common.AbstractEventHandler;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.PopupControl;
@@ -47,6 +48,7 @@ public class CalendarRenderer implements PopupRenderer {
         link.setText(control.getText());
         link.setStyleClass("calmonth");
         link.setEvent("click", onclick);
+        link.setEventHandler(new ClickHandler(name));
     }
     
     private final void response(CalendarData data) throws Exception {
@@ -61,7 +63,7 @@ public class CalendarRenderer implements PopupRenderer {
         Locale locale;
         Properties texts;
         Button button;
-        EventHandler handler;
+        ClickHandler handler;
         
         Style.execute(data);
         
@@ -128,6 +130,7 @@ public class CalendarRenderer implements PopupRenderer {
             link.setEvent("click", action);
             link.setEventHandler(handler);
             
+            handler.put(compname, date);
             if (data.today == day)
                 link.setStyleClass("caltoday");
             else
@@ -149,7 +152,6 @@ public class CalendarRenderer implements PopupRenderer {
     
     @Override
     public final void run(PopupData popupdata) throws Exception {
-        Calendar calendar;
         int mode;
         CalendarData data = new CalendarData();
         
@@ -169,17 +171,6 @@ public class CalendarRenderer implements PopupRenderer {
             break;
         }
         
-        new Parameter(data.popup.viewctx.view,
-                "p_".concat(data.control.getName())).set(data.date);
-        
-        calendar = data.popup.viewctx.view.getElement(data.control.getEarly());
-        new Parameter(
-                data.popup.viewctx.view, "p_".concat(calendar.getName()));
-        
-        calendar = data.popup.viewctx.view.getElement(data.control.getLate());
-        new Parameter(
-                data.popup.viewctx.view, "p_".concat(calendar.getName()));
-        
         response(data);
     }
 }
@@ -187,16 +178,22 @@ public class CalendarRenderer implements PopupRenderer {
 class ClickHandler extends AbstractEventHandler {
     private static final long serialVersionUID = -3350721390644999358L;
     private String name;
+    private Map<String, Object> values;
     
     public ClickHandler(String name) {
         this.name = name;
+        values = new HashMap<>();
     }
     
     @Override
-    public void onEvent(byte event, String args) {
+    public final void onEvent(byte event, String action) {
         View view = getView();
         PopupControl control = view.getElement(name);
-        control.update(view);
+        control.update(action, values.get(action));
+    }
+    
+    public final void put(String action, Date date) {
+        values.put(action, date);
     }
     
 }

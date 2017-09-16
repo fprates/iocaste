@@ -116,18 +116,17 @@ public class Calendar extends ToolDataElement {
     }
 
     @Override
-    public void update(View view) {
-        InputComponent source;
+    public void update(String action, Object value) {
+        InputComponent input;
         Calendar calendar;
         String master;
         
         if ((master = getMaster()) == null) {
-            source = view.getElement("p_".concat(getName()));
-            tooldata.values.put("date", source.get());
+            input = view.getElement(getInputName());
+            input.set(value);
         } else {
-            source = view.getElement("p_".concat(master));
             calendar = view.getElement(master);
-            calendar.setDate(source.getdt());
+            calendar.setDate((Date)value);
         }
     }
 }

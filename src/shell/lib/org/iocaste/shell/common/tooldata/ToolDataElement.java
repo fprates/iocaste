@@ -1020,6 +1020,6 @@ public abstract class ToolDataElement implements Component, Container,
 	}
 	
 	@Override
-    public void update(View view) { }
+    public void update(String action, Object value) { }
 
 }
