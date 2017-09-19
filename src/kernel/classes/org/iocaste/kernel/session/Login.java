@@ -60,11 +60,16 @@ public class Login extends AbstractHandler {
         GetUserData getuserdata;
         Session session;
         Connection connection;
-        String[] locale_ = message.getst("locale").split("_");
+        String[] localetokens;
+        String _locale;
         String username = message.getst("user");
         String secret = message.getst("secret");
         String sessionid = message.getSessionid();
         
+        if ((_locale = message.getst("locale")) == null)
+            throw new Exception("login locale undefined.");
+        
+        localetokens = _locale.split("_");
         if (sessionid == null)
             throw new Exception("Null session not allowed.");
         
@@ -80,10 +85,10 @@ public class Login extends AbstractHandler {
                     connection, getuserdata, user, secret))
                 return false;
             
-            if (locale_.length == 1)
-                locale = new Locale(locale_[0]);
+            if (localetokens.length == 1)
+                locale = new Locale(localetokens[0]);
             else
-                locale = new Locale(locale_[0], locale_[1]);
+                locale = new Locale(localetokens[0], localetokens[1]);
             
             instance(session, user, sessionid, username, locale);
             connection.commit();
