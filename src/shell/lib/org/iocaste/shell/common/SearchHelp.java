@@ -8,6 +8,9 @@ import java.util.Set;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.WhereClause;
+import org.iocaste.shell.common.tooldata.Context;
+import org.iocaste.shell.common.tooldata.ElementViewContext;
+import org.iocaste.shell.common.tooldata.ToolDataElement;
 
 /**
  * Ajuda de pesquisa
@@ -17,19 +20,22 @@ import org.iocaste.documents.common.WhereClause;
  * @author francisco.prates
  *
  */
-public class SearchHelp extends AbstractPopupControl {
+public class SearchHelp extends ToolDataElement {
     private static final long serialVersionUID = -1582634834243087782L;
-    private String modelname, export, inputname, master, child, nsreference;
+    private String modelname, export, inputname, child;
     private Set<String> itemnames;
     private List<WhereClause> criteria;
     
     public SearchHelp(Container container, String name) {
-        super(container, Const.SEARCH_HELP, name);
-        
+        this(new ElementViewContext(null, container, null, name), name);
+    }
+
+    public SearchHelp(Context context, String name) {
+        super(context, Const.SEARCH_HELP, name);
         itemnames = new LinkedHashSet<>();
         setAllowStacking(true);
     }
-
+    
     /**
      * Adiciona coluna.
      * @param itemname item do modelo
@@ -88,14 +94,6 @@ public class SearchHelp extends AbstractPopupControl {
     }
     
     /**
-     * 
-     * @return
-     */
-    public final String getMaster() {
-        return master;
-    }
-    
-    /**
      * Retorna modelo associado.
      * @return nome do modelo.
      */
@@ -103,12 +101,14 @@ public class SearchHelp extends AbstractPopupControl {
         return modelname;
     }
     
-    /**
-     * 
-     * @return
-     */
-    public final String getNSReference() {
-        return nsreference;
+    @Override
+    public boolean isControlComponent() {
+        return true;
+    }
+    
+    @Override
+    public final boolean isPopup() {
+        return true;
     }
     
     /**
@@ -144,27 +144,11 @@ public class SearchHelp extends AbstractPopupControl {
     }
     
     /**
-     * 
-     * @param master
-     */
-    public final void setMaster(String master) {
-        this.master = master;
-    }
-    
-    /**
      * Define modelo de dados.
      * @param modelname nome do modelo.
      */
     public final void setModelName(String modelname) {
         this.modelname = modelname;
-    }
-
-    /**
-     * 
-     * @param nsreference
-     */
-    public final void setNSReference(String nsreference) {
-        this.nsreference = nsreference;
     }
     
     /**

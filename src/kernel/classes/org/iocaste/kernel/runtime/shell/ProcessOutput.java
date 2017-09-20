@@ -248,7 +248,7 @@ public class ProcessOutput extends AbstractHandler {
         for (HeaderLink link : outputdata.viewexport.links)
             outputdata.viewctx.view.add(link);
         
-        input = new Input(outputdata, null);
+        input = new Input(outputdata);
 //        input.pagectx.mpelements.clear();
         /*
          * deixa registerInputs() antes do commit(),

@@ -36,10 +36,8 @@ public abstract class ToolDataElement implements Component, Container,
 	protected View view;
     private DocumentModelItem modelitem;
     private Map<String, String> elements;
-    private String htmlname, master;
-    private boolean translatable, nohelper, stacking, multipart;
-    private boolean range;
-    private Calendar calendar;
+    private String htmlname, master, calendar;
+    private boolean translatable, nohelper, stacking, multipart, range;
     private byte[] content;
     private SearchHelp search;
     private EventHandler evhandler;
@@ -180,7 +178,7 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public final Calendar getCalendar() {
-        return calendar;
+        return view.getElement(calendar);
     }
     
     /*
@@ -388,7 +386,7 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public final String getNSReference() {
-        return tooldata.nsitem.name;
+        return (tooldata.nsitem == null)? null : tooldata.nsitem.name;
     }
     
     @Override
@@ -731,12 +729,13 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public final void setCalendar(Calendar calendar) {
-        this.calendar = calendar;
-        
-        if (calendar == null)
+        if (calendar == null) {
+            this.calendar = null;
             return;
+        }
         
-        this.calendar.setInputName(getHtmlName());
+        this.calendar = calendar.getHtmlName();
+        calendar.setInputName(getHtmlName());
     }
 
     @Override

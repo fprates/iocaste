@@ -29,6 +29,7 @@ import org.iocaste.kernel.runtime.shell.renderer.legacy.ContextMenu;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldContainerSource;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldSource;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldTableItemSource;
+import org.iocaste.kernel.runtime.shell.sh.SearchHelpRenderer;
 
 public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
 {
@@ -41,6 +42,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
         put(Const.TABLE_ITEM, new TextFieldTableItemSource());
         put(new TextFieldContainerSource());
         calendar = new CalendarRenderer();
+        search = new SearchHelpRenderer();
     }
 
     private final boolean allowContextMenu(InputComponent input) {
@@ -220,6 +222,8 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
         data.control = control;
         data.action = config.currentaction;
         data.form = config.currentform;
+        data.connection = config.viewctx.function.documents.database.
+                getDBConnection(config.viewctx.sessionid);
         renderer.run(data);
         
         get(data.container.getType()).run(

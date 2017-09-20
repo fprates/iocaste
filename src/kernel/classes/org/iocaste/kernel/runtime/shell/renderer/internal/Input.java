@@ -9,6 +9,7 @@ import java.util.Set;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.SearchHelpData;
 import org.iocaste.kernel.documents.dataelement.GetDataElement;
 import org.iocaste.kernel.runtime.shell.ProcessOutputData;
 import org.iocaste.kernel.runtime.shell.ViewContext;
@@ -17,6 +18,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
@@ -25,14 +27,12 @@ import org.iocaste.shell.common.TableItem;
 public class Input {
     private Map<String, DataElement> des;
     private ProcessOutputData outputdata;
-    private Container container;
     private GetDataElement dataelementget;
     private Connection connection;
     
-    public Input(ProcessOutputData outputdata, Container container)
+    public Input(ProcessOutputData outputdata)
             throws Exception {
         this.outputdata = outputdata;
-        this.container = container;
         
         dataelementget = outputdata.viewctx.function.get("get_data_element");
         connection = outputdata.viewctx.function.documents.database.
@@ -88,38 +88,39 @@ public class Input {
      * @param input
      * @param inputdata
      */
-    private final void generateSearchHelp(InputComponent input,
-            Container container) {
-//        SearchHelp sh, search;
-//        String shname, name, htmlname, nsreference;
-//        SearchHelpData shdata;
-//        
-//        shname = input.getModelItem().getSearchHelp();
-//        shdata = new SHLib(inputdata.viewctx.function).get(shname);
-//        if (shdata == null)
-//            return;
-//        
-//        name = input.getName();
-//        htmlname = input.getHtmlName();
-//        nsreference = input.getNSReference();
-//        
-//        sh = new SearchHelp(inputdata.container, name.concat(".sh"));
-//        sh.setHtmlName(htmlname.concat(".sh"));
-//        sh.setModelName(shdata.getModel());
-//        sh.setExport(shdata.getExport());
-//        sh.setNSReference(nsreference);
-//        sh.setCriteria(shdata.getWhere());
-//        
-//        search = new SearchHelp(inputdata.container, name.concat(".search"));
-//        search.setHtmlName(htmlname.concat(".search"));
-//        search.setMaster(sh.getHtmlName());
-//        search.setNSReference(nsreference);
-//        
-//        sh.setChild(search.getHtmlName());
-//        for (String key : shdata.getItems().keySet())
-//            sh.addModelItemName(key);
-//        
-//        input.setSearchHelp(sh);
+    private final void generateSearchHelp(InputComponent input) {
+        SearchHelp sh, search;
+        String shname, name, htmlname, nsreference;
+        SearchHelpData shdata;
+        
+        shname = input.getModelItem().getSearchHelp();
+        shdata = new SHLib(outputdata.viewctx.function).get(shname);
+        if (shdata == null)
+            return;
+        
+        name = input.getName();
+        htmlname = input.getHtmlName();
+        nsreference = input.getNSReference();
+
+        outputdata.viewctx.instance(null, shname = name.concat(".sh"));
+        sh = new SearchHelp(outputdata.viewctx, shname);
+        sh.setHtmlName(htmlname.concat(".sh"));
+        sh.setModelName(shdata.getModel());
+        sh.setExport(shdata.getExport());
+        sh.setNSReference(nsreference);
+        sh.setCriteria(shdata.getWhere());
+
+        outputdata.viewctx.instance(null, shname = name.concat(".search"));
+        search = new SearchHelp(outputdata.viewctx, shname);
+        search.setHtmlName(htmlname.concat(".search"));
+        search.setMaster(sh.getHtmlName());
+        search.setNSReference(nsreference);
+        
+        sh.setChild(search.getHtmlName());
+        for (String key : shdata.getItems().keySet())
+            sh.addModelItemName(key);
+        
+        input.setSearchHelp(sh);
     }
     
     /**
@@ -203,9 +204,10 @@ public class Input {
         if (element.isDataStorable()) {
             input = (InputComponent)element;
             modelitem = input.getModelItem();
+            container = input.getContainer();
             if (input.getSearchHelp() == null && modelitem != null &&
                     modelitem.getSearchHelp() != null)
-                generateSearchHelp(input, this.container);
+                generateSearchHelp(input);
             
             dataelement = input.getDataElement();
             if ((dataelement != null) && dataelement.isDummy()) {
@@ -218,7 +220,6 @@ public class Input {
                 input.setDataElement(dataelement);
             }
             
-            container = input.getContainer();
             if ((dataelement != null) && (input.getCalendar() == null) &&
                     (dataelement.getType() == DataType.DATE))
                 generateCalendar(input, container);

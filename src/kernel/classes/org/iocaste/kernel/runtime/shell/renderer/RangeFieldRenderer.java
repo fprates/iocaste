@@ -3,6 +3,7 @@ package org.iocaste.kernel.runtime.shell.renderer;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
+import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Input;
@@ -43,7 +44,7 @@ public class RangeFieldRenderer
             RangeInputComponent rangeinput, Config config) throws Exception {
     	View view;
         PopupControl popupcontrol;
-        String low, high;
+        String low, high, htmlname;
         DataElement dataelement;
         ValueRange range;
         ValueRangeItem value;
@@ -53,8 +54,10 @@ public class RangeFieldRenderer
         InputComponent input;
         Calendar calendar, fromcal;
         TextFieldRenderer textfieldrenderer;
+        ActionEventHandler handler;
         int length;
         
+        htmlname = rangeinput.getHtmlName();
         low = rangeinput.getLowHtmlName();
         high = rangeinput.getHighHtmlName();
         view = config.viewctx.view;
@@ -73,6 +76,11 @@ public class RangeFieldRenderer
         tabletag = new XMLElement("table");
         trtag = new XMLElement("tr");
         tabletag.addChild(trtag);
+        
+        handler = config.viewctx.getEventHandler(htmlname, htmlname, "focus");
+        handler.name = htmlname;
+        handler.event = null;
+        handler.call = null;
 
         calendar = input.getCalendar();
         textfieldrenderer = get(Const.TEXT_FIELD);

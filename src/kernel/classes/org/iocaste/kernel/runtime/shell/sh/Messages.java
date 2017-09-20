@@ -1,4 +1,4 @@
-package org.iocaste.sh;
+package org.iocaste.kernel.runtime.shell.sh;
 
 import org.iocaste.shell.common.MessageSource;
 
