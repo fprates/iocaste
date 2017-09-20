@@ -1,5 +1,6 @@
 package org.iocaste.runtime.common.page;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.iocaste.documents.common.ExtendedObject;
@@ -63,8 +64,24 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
     }
     
     protected final void listset(String tooldata,
+            String item, Collection<ExtendedObject> objects) {
+        listset(tooldata, item, objects, item);
+    }
+    
+    protected final void listset(String tooldata,
             String item, ExtendedObject[] objects) {
         listset(tooldata, item, objects, item);
+    }
+    
+    protected final void listset(String tooldata,
+            String item, Collection<ExtendedObject> objects, String field) {
+        Object value;
+        ToolData toolitem = getComponentData(tooldata).instance(item);
+        
+        for (ExtendedObject object : objects) {
+            value = object.get(field);
+            toolitem.values.put(value.toString(), value);
+        }
     }
     
     protected final void listset(String tooldata,
