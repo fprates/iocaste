@@ -30,12 +30,11 @@ public class OnClickHandler extends AbstractEventHandler {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.EventHandler#
-     *     onEvent(byte, java.lang.String)
+     * @see org.iocaste.shell.common.
+     *     EventHandler#onEvent(byte, org.iocaste.shell.common.ControlComponent)
      */
     @Override
-    public final void onEvent(byte event, String args) {
-        ControlComponent button;
+    public final void onEvent(byte event, ControlComponent control) {
         MultipageContainer pane;
         View view;
         TabbedPaneItem paneitem;
@@ -48,8 +47,7 @@ public class OnClickHandler extends AbstractEventHandler {
 
         view = getView();
         pane = view.getElement(this.pane);
-        button = view.getElement(args);
-        name = button.getHtmlName();
+        name = control.getHtmlName();
         name = name.substring(0, name.length() - 3);
         
         paneitem = pane.getElement(name);

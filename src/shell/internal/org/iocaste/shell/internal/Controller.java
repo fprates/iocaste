@@ -479,8 +479,7 @@ public class Controller {
             evhandler.setView(config.state.view);
             evhandler.setInputError(status.error);
             evhandler.setErrorType(status.msgtype);
-            evhandler.onEvent(EventHandler.ON_CLICK,
-                    status.control.getAction());
+            evhandler.onEvent(EventHandler.ON_CLICK, status.control);
             config.state.reloadable = false;
         } else {
             if (!status.event)

@@ -12,10 +12,10 @@ import org.iocaste.kernel.documents.GetDocumentModel;
 import org.iocaste.kernel.documents.SelectDocument;
 import org.iocaste.kernel.runtime.shell.PopupData;
 import org.iocaste.kernel.runtime.shell.PopupRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.internal.ChooseEventHandler;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.AbstractEventHandler;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
@@ -67,12 +67,14 @@ public class SearchHelpRenderer implements PopupRenderer {
             Container container, String name, ExtendedObject[] items) {
         TableColumn column;
         TableItem tableitem;
-        String export, action, iname, index;
+        String export, action, iname, index, choice;
         Object value;
         Text text;
         Link link;
         Parameter param;
         Table table;
+        ChooseEventHandler handler;
+        int i;
         
         param = new Parameter(container, "value");
         table = new Table(container, "search.table");
@@ -86,9 +88,11 @@ public class SearchHelpRenderer implements PopupRenderer {
         }
 
         export = context.control.getExport();
+        handler = new ChooseEventHandler(context.control);
+        i = 0;
         for (ExtendedObject object : items) {
             tableitem = new TableItem(table);
-            
+            choice = new StringBuilder("choice").append(i++).toString();
             for (DocumentModelItem modelitem : context.model.getItens()) {
                 name = modelitem.getName();
                 column = table.getColumn(name);
@@ -103,9 +107,11 @@ public class SearchHelpRenderer implements PopupRenderer {
                             append(value).
                             append("');").
                             toString();
-                    link = new Link(tableitem, "choose", null);
+                    link = new Link(tableitem, choice, null);
                     link.setText(value.toString());
                     link.setEvent("click", action);
+                    link.setEventHandler(handler);
+                    handler.put(choice, value);
                 } else {
                     text = new Text(tableitem, name);
                     text.setText((value == null)? "" : value.toString());
@@ -158,7 +164,7 @@ public class SearchHelpRenderer implements PopupRenderer {
         String name, searchjs, searchbt, master, criteriajs;
         ExtendedObject[] result;
         Container datacnt;
-        Button select, criteria;
+        Button button;
         Map<String, String> messages;
         
         Style.execute(context);
@@ -167,8 +173,8 @@ public class SearchHelpRenderer implements PopupRenderer {
                 new StandardContainer(context.popup.viewctx.view, "shstdcnt");
         context.popup.container.setStyleClass("shcnt");
         
-        new Button(context.popup.container, "cancel").
-                setEvent("click", "closeSh();");
+        button = new Button(context.popup.container, "cancel");
+        button.setEvent("click", "closeSh();");
         
         searchbt = context.control.getChild();
         if (searchbt == null)
@@ -180,17 +186,17 @@ public class SearchHelpRenderer implements PopupRenderer {
                 append(searchbt).append("');").toString();
         
         searchbt = "bt_".concat(searchbt);
-        select = new Button(context.popup.container, searchbt);
-        select.addAttribute("style", "display:none");
-        select.setEvent("click", searchjs);
-        select.setEventHandler(new SearchEventHandler(context));
+        button = new Button(context.popup.container, searchbt);
+        button.addAttribute("style", "display:none");
+        button.setEvent("click", searchjs);
+        button.setEventHandler(new SearchEventHandler(context));
         
         criteriajs = new StringBuilder("setElementDisplay('").append(searchbt).
                 append("', 'inline');setElementDisplay('criteria','block');"
                         + "setElementDisplay('bt_criteria','none');").
                 toString();
-        criteria = new Button(context.popup.container, "bt_criteria");
-        criteria.setEvent("click", criteriajs);
+        button = new Button(context.popup.container, "bt_criteria");
+        button.setEvent("click", criteriajs);
         master = context.control.getMaster();
         if (master != null)
             context.control = context.popup.viewctx.view.getElement(master);
@@ -255,32 +261,4 @@ public class SearchHelpRenderer implements PopupRenderer {
         
         response(context);
     }
-}
-
-class SearchEventHandler extends AbstractEventHandler {
-    private static final long serialVersionUID = -5684585760530934805L;
-    private Context context;
-    
-    public SearchEventHandler(Context context) {
-        this.context = context;
-    }
-    
-    @Override
-    public void onEvent(byte event, String args) {
-        ValueRange range;
-        InputComponent input;
-        DataForm form = context.popup.viewctx.view.getElement("criteria");
-        
-        for (Element element : form.getElements()) {
-            if (!element.isDataStorable())
-                continue;
-            
-            input = (DataItem)element;
-            range = input.get();
-            if (range == null)
-                continue;
-            context.criteria.put(input.getModelItem().getName(), range);
-        }
-    }
-    
 }

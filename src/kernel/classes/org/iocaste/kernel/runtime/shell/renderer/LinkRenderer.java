@@ -105,7 +105,7 @@ public class LinkRenderer extends AbstractElementRenderer<LinkComponent> {
                        append("');");
                 
                 handler = config.viewctx.
-                        getEventHandler(link.getName(), action, "click");
+                        getEventHandler(htmlname, action, "click");
                 handler.name = htmlname;
                 handler.call = onclick.toString();
             } else {

@@ -788,7 +788,7 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public final void setEvent(String name, String js) {
-//        events.put(name, js);
+        tooldata.events.put(name, js);
     }
     
     /*

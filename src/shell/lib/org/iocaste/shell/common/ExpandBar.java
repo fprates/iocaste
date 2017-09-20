@@ -119,10 +119,11 @@ class ExpandBarHandler extends AbstractEventHandler {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.EventAware#onEvent(byte, java.lang.String)
+     * @see org.iocaste.shell.common.
+     *     EventHandler#onEvent(byte, org.iocaste.shell.common.ControlComponent)
      */
     @Override
-    public final void onEvent(byte event, String action) {
+    public final void onEvent(byte event, ControlComponent control) {
         ebar.setExpanded(!ebar.isExpanded());
     }
 }

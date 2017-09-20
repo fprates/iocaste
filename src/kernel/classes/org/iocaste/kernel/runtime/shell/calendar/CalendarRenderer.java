@@ -3,14 +3,12 @@ package org.iocaste.kernel.runtime.shell.calendar;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
 
 import org.iocaste.kernel.runtime.shell.PopupData;
 import org.iocaste.kernel.runtime.shell.PopupRenderer;
-import org.iocaste.shell.common.AbstractEventHandler;
+import org.iocaste.kernel.runtime.shell.renderer.internal.ChooseEventHandler;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Container;
@@ -22,7 +20,6 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.View;
 
 public class CalendarRenderer implements PopupRenderer {
     private Messages messages;
@@ -48,7 +45,7 @@ public class CalendarRenderer implements PopupRenderer {
         link.setText(control.getText());
         link.setStyleClass("calmonth");
         link.setEvent("click", onclick);
-        link.setEventHandler(new ClickHandler(name));
+        link.setEventHandler(new ChooseEventHandler(data.control));
     }
     
     private final void response(CalendarData data) throws Exception {
@@ -63,7 +60,7 @@ public class CalendarRenderer implements PopupRenderer {
         Locale locale;
         Properties texts;
         Button button;
-        ClickHandler handler;
+        ChooseEventHandler handler;
         
         Style.execute(data);
         
@@ -105,7 +102,7 @@ public class CalendarRenderer implements PopupRenderer {
             }
         format = new SimpleDateFormat("yyyy-M-d");
         formatdest = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-        handler = new ClickHandler(data.control.getHtmlName());
+        handler = new ChooseEventHandler(data.control);
         for (int day = 1; day <= data.lastday; day++) {
             weekday = data.weekday - 1;
             compname = new StringBuilder(data.sweekdays[weekday]).
@@ -173,27 +170,4 @@ public class CalendarRenderer implements PopupRenderer {
         
         response(data);
     }
-}
-
-class ClickHandler extends AbstractEventHandler {
-    private static final long serialVersionUID = -3350721390644999358L;
-    private String name;
-    private Map<String, Object> values;
-    
-    public ClickHandler(String name) {
-        this.name = name;
-        values = new HashMap<>();
-    }
-    
-    @Override
-    public final void onEvent(byte event, String action) {
-        View view = getView();
-        PopupControl control = view.getElement(name);
-        control.update(action, values.get(action));
-    }
-    
-    public final void put(String action, Date date) {
-        values.put(action, date);
-    }
-    
 }

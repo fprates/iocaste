@@ -483,6 +483,8 @@ public class ProcessInput extends AbstractHandler {
                 break;
             case 1:
                 ri.set(config.state.viewctx.view, input.getMaster());
+                if (ri.state.master == null)
+                    continue;
                 if (name.equals(ri.state.master.getLowHtmlName()))
                     ri.type = LOW_RANGE;
                 else
@@ -568,7 +570,7 @@ public class ProcessInput extends AbstractHandler {
             evhandler.setInputError(status.error);
             evhandler.setErrorType(status.msgtype);
             evhandler.onEvent(
-            		EventHandler.ON_CLICK, status.control.getAction());
+                    EventHandler.ON_CLICK, status.control);
             config.state.reloadable = false;
         } else {
             if (!status.event)

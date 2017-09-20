@@ -224,11 +224,6 @@ public class SearchHelp extends ToolDataElement {
     
     @Override
     public void update(String action, Object value) {
-        Map<String, Element> elements = getView().getElements();
-        DataForm criteria = getView().getElement("criteria");
-        
-        elements.put("criteria", criteria);
-        for (Element element : criteria.getElements())
-            elements.put(element.getHtmlName(), element);
+        ((InputComponent)view.getElement(inputname)).set(value);
     }
 }

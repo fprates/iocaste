@@ -17,7 +17,7 @@ public interface EventHandler extends Serializable {
      * @param event
      * @param args
      */
-    public abstract void onEvent(byte event, String args);
+    public abstract void onEvent(byte event, ControlComponent control);
     
     /**
      * 

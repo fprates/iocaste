@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.AbstractEventHandler;
+import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.PopupControl;
@@ -30,22 +31,25 @@ public class ControllerData {
     
     public final void execonevent(Map<String, String[]> parameters) {
         String event = parameters.get("event")[0];
-        EventHandler ehandler = events.get(event);
+        OnFocusEvent ehandler = (OnFocusEvent)events.get(event);
         
         ehandler.setView(state.view);
-        ehandler.onEvent(
-                EventHandler.ON_FOCUS, parameters.get("action")[0]);
+        ehandler.onEvent(parameters.get("action")[0]);
     }
 }
 
 class OnFocusEvent extends AbstractEventHandler {
     private static final long serialVersionUID = 656542479738559096L;
 
-    @Override
-    public void onEvent(byte event, String args) {
+    public void onEvent(String action) {
         View view = getView();
-        Element element = view.getElement(args);
+        Element element = view.getElement(action);
         getView().setFocus(element);
+    }
+
+    @Override
+    public void onEvent(byte event, ControlComponent control) {
+        onEvent(control.getAction());
     }
     
 }

@@ -579,11 +579,11 @@ class OnFocus extends AbstractEventHandler {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.EventHandler#
-     *     onEvent(byte, java.lang.String)
+     * @see org.iocaste.shell.common.
+     *    EventHandler#onEvent(byte, org.iocaste.shell.common.ControlComponent)
      */
     @Override
-    public final void onEvent(byte event, String args) {
+    public final void onEvent(byte event, ControlComponent control) {
         element.getView().setFocus(element);
     }
 }

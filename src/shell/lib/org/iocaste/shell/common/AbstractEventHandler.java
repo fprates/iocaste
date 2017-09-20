@@ -25,14 +25,6 @@ public abstract class AbstractEventHandler implements EventHandler {
     protected final View getView() {
         return view;
     }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.EventHandler#
-     *     onEvent(byte, java.lang.String)
-     */
-    @Override
-    public abstract void onEvent(byte event, String args);
 
     /*
      * (non-Javadoc)
