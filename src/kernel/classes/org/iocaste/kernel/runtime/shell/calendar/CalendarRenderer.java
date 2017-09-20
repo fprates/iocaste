@@ -8,7 +8,6 @@ import java.util.Properties;
 
 import org.iocaste.kernel.runtime.shell.PopupData;
 import org.iocaste.kernel.runtime.shell.PopupRenderer;
-import org.iocaste.kernel.runtime.shell.renderer.internal.ChooseEventHandler;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Container;
@@ -20,6 +19,7 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
+import org.iocaste.shell.common.tooldata.ChooseEventHandler;
 
 public class CalendarRenderer implements PopupRenderer {
     private Messages messages;

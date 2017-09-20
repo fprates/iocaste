@@ -74,6 +74,14 @@ public class DataForm extends AbstractContainer {
         super.add(item);
     }
     
+    @Override
+    public final void add(Element element) {
+        if (element.getType() == Const.DATA_ITEM)
+            super.add(element);
+        else
+            getView().index(element);
+    }
+    
     public final void addGroup(String group, String... fields) {
         groups.put(group, fields);
     }

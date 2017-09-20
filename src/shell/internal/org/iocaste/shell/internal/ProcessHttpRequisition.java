@@ -976,7 +976,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
         message.add("logid", pagectx.getLogid());
         message.add("sequence", pagectx.getSequence());
         message.add("sessionid", context.sessionid);
-        message.add("pagecontrol",
+        message.add("popupcontrol",
                 (control == null)? null : control.getHtmlName());
         values = (Object[])callIocaste(context.sessionid, message);
         

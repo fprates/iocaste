@@ -1,4 +1,7 @@
-package org.iocaste.kernel.runtime.shell.sh;
+package org.iocaste.shell.common.tooldata;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.shell.common.AbstractEventHandler;
@@ -10,17 +13,17 @@ import org.iocaste.shell.common.InputComponent;
 
 public class SearchEventHandler extends AbstractEventHandler {
     private static final long serialVersionUID = -5684585760530934805L;
-    private Context context;
+    public Map<String, ValueRange> criteria;
     
-    public SearchEventHandler(Context context) {
-        this.context = context;
+    public SearchEventHandler() {
+        criteria = new HashMap<>();
     }
     
     @Override
     public void onEvent(byte event, ControlComponent control) {
         ValueRange range;
         InputComponent input;
-        DataForm form = context.popup.viewctx.view.getElement("criteria");
+        DataForm form = getView().getElement("criteria");
         
         for (Element element : form.getElements()) {
             if (!element.isDataStorable())
@@ -30,7 +33,7 @@ public class SearchEventHandler extends AbstractEventHandler {
             range = input.get();
             if (range == null)
                 continue;
-            context.criteria.put(input.getModelItem().getName(), range);
+            criteria.put(input.getModelItem().getName(), range);
         }
     }
     

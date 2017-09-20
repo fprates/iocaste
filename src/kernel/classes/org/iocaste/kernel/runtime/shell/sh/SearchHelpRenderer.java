@@ -12,7 +12,6 @@ import org.iocaste.kernel.documents.GetDocumentModel;
 import org.iocaste.kernel.documents.SelectDocument;
 import org.iocaste.kernel.runtime.shell.PopupData;
 import org.iocaste.kernel.runtime.shell.PopupRenderer;
-import org.iocaste.kernel.runtime.shell.renderer.internal.ChooseEventHandler;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -29,6 +28,8 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
+import org.iocaste.shell.common.tooldata.ChooseEventHandler;
+import org.iocaste.shell.common.tooldata.SearchEventHandler;
 
 public class SearchHelpRenderer implements PopupRenderer {
     private Messages messages;
@@ -126,7 +127,7 @@ public class SearchHelpRenderer implements PopupRenderer {
     }
     
     private final ExtendedObject[] getResultsFrom(
-            Context context) throws Exception {
+            Context context, SearchEventHandler handler) throws Exception {
         SelectDocument select;
         ValueRange range;
         List<WhereClause> wherelist;
@@ -144,11 +145,11 @@ public class SearchHelpRenderer implements PopupRenderer {
         query = new Query();
         query.setModel(context.model.getName());
         query.setNS(ns);
-        if ((context.criteria == null) || (context.criteria.size() == 0))
+        if (handler.criteria.size() == 0)
             return select.run(context.popup.connection, query);
         
-        for (String name : context.criteria.keySet()) {
-            range = context.criteria.get(name);
+        for (String name : handler.criteria.keySet()) {
+            range = handler.criteria.get(name);
             query.andIn(name, range);
         }
         
@@ -166,6 +167,7 @@ public class SearchHelpRenderer implements PopupRenderer {
         Container datacnt;
         Button button;
         Map<String, String> messages;
+        SearchEventHandler searchhandler;
         
         Style.execute(context);
         
@@ -189,7 +191,7 @@ public class SearchHelpRenderer implements PopupRenderer {
         button = new Button(context.popup.container, searchbt);
         button.addAttribute("style", "display:none");
         button.setEvent("click", searchjs);
-        button.setEventHandler(new SearchEventHandler(context));
+        button.setEventHandler(searchhandler = new SearchEventHandler());
         
         criteriajs = new StringBuilder("setElementDisplay('").append(searchbt).
                 append("', 'inline');setElementDisplay('criteria','block');"
@@ -229,7 +231,7 @@ public class SearchHelpRenderer implements PopupRenderer {
         
         this.messages.instance("pt_BR");
         this.messages.put(searchbt, "Selecionar");
-        result = getResultsFrom(context);
+        result = getResultsFrom(context, searchhandler);
         if (result == null) {
             new Text(datacnt, "no.results.found");
             context.popup.viewctx.view.setTitle(context.control.getText());
@@ -248,16 +250,16 @@ public class SearchHelpRenderer implements PopupRenderer {
         
         context.popup = data;
         context.control = (SearchHelp)data.control;
-        if (context.control.getMaster() != null) {
-            criteria = context.popup.viewctx.view.getElement("criteria");
-            for (Element element : criteria.getElements()) {
-                input = (InputComponent)element;
-                range = input.get();
-                if (range == null)
-                    continue;
-                context.criteria.put(element.getName(), range);
-            }
-        }
+//        if (context.control.getMaster() != null) {
+//            criteria = context.popup.viewctx.view.getElement("criteria");
+//            for (Element element : criteria.getElements()) {
+//                input = (InputComponent)element;
+//                range = input.get();
+//                if (range == null)
+//                    continue;
+//                context.criteria.put(element.getName(), range);
+//            }
+//        }
         
         response(context);
     }

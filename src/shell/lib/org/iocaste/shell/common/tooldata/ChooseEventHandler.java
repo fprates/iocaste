@@ -1,4 +1,4 @@
-package org.iocaste.kernel.runtime.shell.renderer.internal;
+package org.iocaste.shell.common.tooldata;
 
 import java.util.HashMap;
 import java.util.Map;
