@@ -64,7 +64,8 @@ public class StandardNavControlConfig extends AbstractViewConfig<Context> {
         getTool("back").cancellable = true;
         page = context.getPage();
         
-        messages = context.getMessageSource();
+        if ((messages = context.getMessageSource()) == null)
+            return;
         messages.instance("pt_BR");
         messages.put("pt_BR", "nc_logout", "Log out");
     }
