@@ -65,7 +65,7 @@ public class TableTool extends AbstractComponentTool {
         ctxitems.get("accept").visible = false;
         ctxitems.get("add").visible = true;
         ctxitems.get("remove").visible = true;
-        extcontext.data.set("topline", 0);
+        extcontext.data.topline = 0;
     }
     
     /**
@@ -121,7 +121,7 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void first() {
-        extcontext.data.set("topline", 0);
+        extcontext.data.topline = 0;
         move();
     }
     
@@ -202,7 +202,7 @@ public class TableTool extends AbstractComponentTool {
         int pages, topline;
         pages = extcontext.data.objects.size() /
                 (topline = extcontext.data.vlength);
-        extcontext.data.set("topline", (topline *= pages));
+        extcontext.data.topline = (topline *= pages);
         move();
     }
     
@@ -226,7 +226,7 @@ public class TableTool extends AbstractComponentTool {
         if (l > 0)
             for (int i= 0; i < l; i++)
                 items.add(TableRender.additem(extcontext, null, -1));
-        l = extcontext.data.geti("topline");
+        l = extcontext.data.topline;
         lastline = extcontext.data.objects.size() - 1;
         for (TableItem item : items) {
             if (l > lastline) {
@@ -242,18 +242,18 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void next() {
-        int topline = extcontext.data.geti("topline") + extcontext.data.vlength;
+        int topline = extcontext.data.topline + extcontext.data.vlength;
         if (topline > extcontext.data.objects.size())
             return;
-        extcontext.data.set("topline", topline);
+        extcontext.data.topline = topline;
         move();
     }
     
     public final void previous() {
-        int topline = extcontext.data.geti("topline") - extcontext.data.vlength;
+        int topline = extcontext.data.topline - extcontext.data.vlength;
         if (topline < 0)
             return;
-        extcontext.data.set("topline", topline);
+        extcontext.data.topline = topline;
         move();
     }
 
@@ -271,7 +271,7 @@ public class TableTool extends AbstractComponentTool {
         
         entry.component.load();
         table = getTable();
-        index = extcontext.data.geti("topline");
+        index = extcontext.data.topline;
         
         for (TableItem item : table.getItems()) {
             if (!item.isSelected()) {
@@ -313,10 +313,8 @@ public class TableTool extends AbstractComponentTool {
         
         if (entry.data.vlength == 0)
             entry.data.vlength = 15;
-        if (entry.data.geti("step") == 0)
-            entry.data.set("step", 1);
-        if (entry.data.geti("increment") == 0)
-            entry.data.set("increment", 1);
+        if (entry.data.step == 0)
+            entry.data.step = 1;
         
         extcontext.htmlname = entry.data.name.concat("_table");
         setHtmlName(extcontext.htmlname);
@@ -326,7 +324,7 @@ public class TableTool extends AbstractComponentTool {
         ctxitems = getTable().getContextItems();
         for (String key : actions)
             if (actionsstore.get(key).isMarkable())
-                ctxitems.get(key).visible = extcontext.data.getbl("mark");
+                ctxitems.get(key).visible = extcontext.data.mark;
     }
     
     public final void selectAll(boolean mark) {
@@ -355,7 +353,7 @@ public class TableTool extends AbstractComponentTool {
         
         item.setSelected(ttitem.selected);
         if (ttitem.highlighted)
-            item.setStyleClass(extcontext.data.getst("highlightstyle"));
+            item.setStyleClass(extcontext.data.styles.get("highlightstyle"));
         else
             item.setStyleClass(null);
         for (TableColumn column : columns) {

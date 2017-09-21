@@ -36,7 +36,7 @@ public abstract class AbstractTableHandler {
         TableColumn[] tcolumns = table.getColumns();
         TableItem item = new TableItem(table, pos);
 
-        itemcolumn = context.data.getst("itemcolumn");
+        itemcolumn = context.data.indexitem;
         nsinput = null;
         for (TableColumn tcolumn : tcolumns) {
             if (tcolumn.isMark())
@@ -91,9 +91,9 @@ public abstract class AbstractTableHandler {
                 }
             }
             
-            if (object == null && itemcolumn != null && name.equals(itemcolumn))
-            {
-                context.last += context.data.geti("increment");
+            if ((object == null) && (itemcolumn != null) &&
+                    name.equals(itemcolumn)) {
+                context.last += context.data.step;
                 if (element.isDataStorable()) {
                     input = (InputComponent)element;
                     input.set(context.last);
@@ -131,7 +131,7 @@ public abstract class AbstractTableHandler {
         }
         
         if (itemcolumn != null) {
-            context.last += context.data.geti("increment"); 
+            context.last += context.data.step;
             object.set(itemcolumn, context.last);
         }
         
@@ -153,10 +153,10 @@ public abstract class AbstractTableHandler {
             l = -1;
             if (vlines == 0)
                 vlines = context.data.items.size();
-            lastline = context.data.geti("topline") + vlines - 1;
+            lastline = context.data.topline + vlines - 1;
             for (int key : context.data.objects.keySet()) {
                 l++;
-                if (l < context.data.geti("topline"))
+                if (l < context.data.topline)
                     continue;
                 if (l > lastline)
                     break;
@@ -193,7 +193,7 @@ public abstract class AbstractTableHandler {
             break;
         }
 
-        table.setMark(context.data.getbl("mark"));
+        table.setMark(context.data.mark);
     }
 
     public static void setObject(TableContext context) {

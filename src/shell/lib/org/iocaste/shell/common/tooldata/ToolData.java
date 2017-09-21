@@ -17,15 +17,14 @@ import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class ToolData implements Serializable {
 	private static final long serialVersionUID = -4451606721765032982L;
-    private Map<String, Object> properties;
     public Const componenttype;
 	public ToolData nsitem, nsdata;
     public String sh, name, model, style, parent, group, label, actionname;
     public String text, tag, itemstyle, subpage, indexitem, pane, mask, image;
     public boolean internallabel, action, submit, disabled, secret, ns;
     public boolean invisible, required, focus, nolock, cancellable, absolute;
-    public boolean mark;
-    public int length, vlength, mode;
+    public boolean mark, noheader;
+    public int length, vlength, mode, topline, step;
     public String[] groups, ordering;
 	public Object[] textargs; 
     public Object nsvalue, value;
@@ -36,7 +35,7 @@ public class ToolData implements Serializable {
     public DataElement element;
     public Map<String, ToolData> items;
     public Map<String, Object> values;
-    public Map<String, String> events, attributes;
+    public Map<String, String> events, attributes, styles;
     public Set<String> validators, actions;
     
     public ToolData(TYPES type) {
@@ -49,11 +48,11 @@ public class ToolData implements Serializable {
         items = new HashMap<>();
         attributes = new HashMap<>();
         actions = new LinkedHashSet<>();
-        properties = new HashMap<>();
         objects = new LinkedHashMap<>();
         events = new HashMap<>();
         validators = new HashSet<>();
         values = new LinkedHashMap<>();
+        styles = new HashMap<>();
     }
     
     public final ToolData clone(String prefix, ToolData parent)
@@ -81,20 +80,6 @@ public class ToolData implements Serializable {
         return items.get(name);
     }
     
-    public final boolean getbl(String property) {
-        Object value = properties.get(property);
-        return (boolean)((value == null)? false : value);
-    }
-    
-    public final int geti(String property) {
-        Object value = properties.get(property);
-        return (int)((value == null)? 0 : value);
-    }
-    
-    public final String getst(String property) {
-        return (String)properties.get(property);
-    }
-    
     public final ToolData instance(String name) {
         ToolData item;
         
@@ -114,10 +99,6 @@ public class ToolData implements Serializable {
     
     private final void put(String name, ToolData item) {
         items.put(name, item);
-    }
-    
-    public final void set(String property, Object value) {
-        properties.put(property, value);
     }
     
     public final int size() {

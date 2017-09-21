@@ -120,9 +120,9 @@ public class TableRender extends AbstractTableHandler {
         style.put("margin", "0px");
         
         table = new Table(container, context.htmlname);
-        table.setHeader(!context.data.getbl("noheader"));
+        table.setHeader(!context.data.noheader);
         table.setStyleClass(
-                Table.BORDER, context.data.getst("borderstyle"));
+                Table.BORDER, context.data.styles.get("borderstyle"));
         table.setEnabled(!context.data.disabled);
         context.last = 0;
         context.tabletool.buildControls(table);
