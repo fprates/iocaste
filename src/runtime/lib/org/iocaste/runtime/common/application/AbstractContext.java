@@ -41,15 +41,22 @@ public abstract class AbstractContext implements Context {
         pages.put(name, new StandardPage(page));
     }
     
+    @Override
     public final void add(String tooldata, ExtendedObject object) {
         add(page, tooldata, object);
     }
     
+    @Override
     public final void add(
             String page, String tooldata, ExtendedObject object) {
         Map<Integer, ExtendedObject> objects = pages.get(page).
                 instance(tooldata).objects;
         objects.put(objects.size(), object);
+    }
+    
+    @Override
+    public final void clear(String page, String tooldata) {
+        pages.get(page).instance(tooldata).objects.clear();
     }
     
     @Override

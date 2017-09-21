@@ -16,6 +16,13 @@ import org.iocaste.shell.common.MessageSource;
 public interface Context {
 
     public abstract void add(String name, AbstractPage page);
+
+    public abstract void add(String tooldata, ExtendedObject object);
+    
+    public abstract void add(
+            String page, String tooldata, ExtendedObject object);
+    
+    public abstract void clear(String page, String tooldata);
     
     public abstract ActionHandler getHandler(String action);
     
