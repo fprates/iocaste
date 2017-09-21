@@ -84,11 +84,20 @@ public class DataFormTool extends AbstractComponentTool {
     
     @Override
     public final void load() {
+        ExtendedObject object;
+        ToolData item;
+        
         if (getElement() == null)
         	return;
-        entry.data.object = getObject();
-    	for (String key : entry.data.items.keySet())
-    		entry.data.items.get(key).value = entry.data.object.get(key);
+        object = getObject();
+        if (entry.data.object == null)
+            entry.data.object = object;
+        for (String key : entry.data.items.keySet()) {
+            item = entry.data.items.get(key);
+            if (!item.disabled)
+                entry.data.object.set(key, object.get(key));
+            item.value = entry.data.object.get(key);
+        }
     }
     
     @Override
