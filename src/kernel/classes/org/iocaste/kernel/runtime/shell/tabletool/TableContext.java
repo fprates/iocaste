@@ -15,10 +15,8 @@ public class TableContext {
     public TableTool tabletool;
     public int last;
     public Map<String, TableToolColumn> columns;
-    public Map<Integer, TableToolItem> items; 
     
     public TableContext() {
         columns = new HashMap<>();
-        items = new HashMap<>();
     }
 }

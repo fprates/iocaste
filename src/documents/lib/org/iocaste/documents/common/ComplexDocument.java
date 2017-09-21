@@ -290,6 +290,7 @@ public class ComplexDocument implements Serializable,
                     throw new RuntimeException(
                             "indexed item can't have null key");
                 object.set(cmodelitem.index, index);
+                object.setNS(header.getNS());
             }
             add(object);
             return (T)object;

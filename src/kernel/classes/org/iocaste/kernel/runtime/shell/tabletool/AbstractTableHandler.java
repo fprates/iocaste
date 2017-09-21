@@ -23,7 +23,7 @@ import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 public abstract class AbstractTableHandler {
     
     protected static TableItem additem(
-            TableContext context, TableToolItem ttitem, int pos) {
+            TableContext context, ExtendedObject object, int pos) {
         TableToolColumn ttcolumn;
         Element element;
         DataElement delement;
@@ -31,18 +31,10 @@ public abstract class AbstractTableHandler {
         String name, paramlink, nsinput, itemcolumn;
         Link link;
         Button button;
-        ExtendedObject object;
         ComponentEntry entry;
         Table table = context.tabletool.getElement();
         TableColumn[] tcolumns = table.getColumns();
         TableItem item = new TableItem(table, pos);
-        
-        if (ttitem != null) {
-            object = ttitem.object;
-            ttitem.set(item);
-        } else {
-            object = null;
-        }
 
         itemcolumn = context.data.getst("itemcolumn");
         nsinput = null;
@@ -133,9 +125,6 @@ public abstract class AbstractTableHandler {
             }
         }
         
-        if (ttitem != null)
-            context.tabletool.setLineProperties(tcolumns, ttitem);
-        
         if (object == null) {
             context.tabletool.set(item, null);
             return item;
@@ -154,7 +143,7 @@ public abstract class AbstractTableHandler {
         int l, lastline;
         int vlines = context.data.vlength;
         
-        if (context.items.size() == 0) {
+        if (context.data.objects.size() == 0) {
             if (vlines == 0)
                 vlines = 15;
             
@@ -165,13 +154,13 @@ public abstract class AbstractTableHandler {
             if (vlines == 0)
                 vlines = context.data.items.size();
             lastline = context.data.geti("topline") + vlines - 1;
-            for (int key : context.items.keySet()) {
+            for (int key : context.data.objects.keySet()) {
                 l++;
                 if (l < context.data.geti("topline"))
                     continue;
                 if (l > lastline)
                     break;
-                additem(context, context.items.get(key), -1);
+                additem(context, context.data.objects.get(key), -1);
             }
         }
     }
@@ -222,7 +211,7 @@ public abstract class AbstractTableHandler {
         Table table = context.tabletool.getElement();
         
         context.tabletool.setVisibleNavigation();
-        if (context.items.size() == 0) {
+        if (context.data.objects.size() == 0) {
             switch(context.data.mode) {
             case TableTool.CONTINUOUS_DISPLAY:
             case TableTool.CONTINUOUS_UPDATE:
