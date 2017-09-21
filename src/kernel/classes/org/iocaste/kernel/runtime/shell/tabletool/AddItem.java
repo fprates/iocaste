@@ -13,8 +13,7 @@ public class AddItem extends AbstractTableHandler {
         
         context.data = data;
         context.tabletool = tabletool;
-        switch (context.data.mode) {
-        case TableTool.CONTINUOUS_UPDATE:
+        if (context.data.vlength > 0) {
             for (TableItem item_ : table.getItems()) {
                 if (!item_.isSelected()) {
                     i++;
@@ -22,12 +21,9 @@ public class AddItem extends AbstractTableHandler {
                 }
                 break;
             }
-
             additem(context, null, i);
-            break;
-        default:
+        } else {
             additems(context);
-            break;
         }
     }
 

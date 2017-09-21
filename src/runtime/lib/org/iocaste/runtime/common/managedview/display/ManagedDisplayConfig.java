@@ -15,7 +15,7 @@ public class ManagedDisplayConfig extends AbstractViewConfig<Context> {
         
         configdata = new ConfigData();
         configdata.cmodel = context.runtime().getComplexModel(mviewctx.cmodel);
-        configdata.mode = ConfigData.DISPLAY;
+        configdata.disabled = true;
         configdata.context = context;
         
 //        getNavControl().setTitle(context.view.getPageName());

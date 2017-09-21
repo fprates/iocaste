@@ -174,23 +174,13 @@ public abstract class AbstractTableHandler {
         Map<String, TableContextItem> ctxitems;
         
         ctxitems = table.getContextItems();
-        switch (context.data.mode) {
-        case TableTool.UPDATE:
-        case TableTool.CONTINUOUS_UPDATE:
-            setVisible(ctxitems, "accept", false);
-            setVisible(ctxitems, "add", true);
-            setVisible(ctxitems, "remove", true);
-            break;
-            
-        case TableTool.DISPLAY:
-        case TableTool.CONTINUOUS_DISPLAY:
-            setVisible(ctxitems, "accept", false);
-            setVisible(ctxitems, "add", false);
-            setVisible(ctxitems, "remove", false);
+        setVisible(ctxitems, "accept", false);
+        setVisible(ctxitems, "add", !context.data.disabled);
+        setVisible(ctxitems, "remove", !context.data.disabled);
+        if (context.data.disabled) {
             table.setEnabled(false);
             for (String column : context.columns.keySet())
                 context.columns.get(column).data.disabled = true;
-            break;
         }
 
         table.setMark(context.data.mark);
@@ -211,18 +201,8 @@ public abstract class AbstractTableHandler {
         Table table = context.tabletool.getElement();
         
         context.tabletool.setVisibleNavigation();
-        if (context.data.objects.size() == 0) {
-            switch(context.data.mode) {
-            case TableTool.CONTINUOUS_DISPLAY:
-            case TableTool.CONTINUOUS_UPDATE:
-                table.clear();
-                return;
-            case TableTool.UPDATE:
-            case TableTool.DISPLAY:
-                additems(context);
-                return;
-            }
-        }
+        if ((context.data.objects.size() == 0) && (context.data.vlength == 0))
+            table.clear();
         
         additems(context);
     }

@@ -74,16 +74,11 @@ public class TableTool extends AbstractComponentTool {
     public final void add() {
         Map<String, TableContextItem> ctxitems;
         
-        switch (extcontext.data.mode) {
-        case TableTool.CONTINUOUS_UPDATE:
-            extcontext.data.vlength++;
-            break;
-        default:
+        if (extcontext.data.vlength > 0) {
             ctxitems = getTable().getContextItems();
             ctxitems.get("accept").visible = true;
             ctxitems.get("add").visible = false;
             ctxitems.get("remove").visible = false;
-            break;
         }
         
         AddItem.run(this, extcontext.data);
@@ -208,12 +203,22 @@ public class TableTool extends AbstractComponentTool {
     
     @Override
     public final void load() {
-        int i = 0;
-        Set<TableItem> items = getTable().getItems();
+        int startline, finishline, j;
+        TableItem[] items = getTable().getItems().toArray(new TableItem[0]);
         
-        entry.data.objects.clear();
-        for (TableItem item : items)
-            entry.data.objects.put(i++, get(item));
+        if (extcontext.data.vlength > 0) {
+            startline = extcontext.data.topline;
+            finishline = startline + extcontext.data.vlength;
+        } else {
+            startline = 0;
+            finishline = extcontext.data.objects.size();
+            entry.data.objects.clear();
+        }
+        
+        j = 0;
+        for (int i = startline; i < finishline; i++)
+            entry.data.objects.put(
+                    i, (j == items.length)? null : get(items[j++]));
     }
     
     private final void move() {

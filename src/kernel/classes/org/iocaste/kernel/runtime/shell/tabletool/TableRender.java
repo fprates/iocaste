@@ -82,6 +82,8 @@ public class TableRender extends AbstractTableHandler {
                 column = context.data.instance(itemname);
                 ttcolumn = columnInstance(context, column, item);
                 ttcolumn.tcolumn.setNamespace(true);
+                if (column.componenttype == null)
+                    column.componenttype = Const.TEXT_FIELD;
             }
         }
         

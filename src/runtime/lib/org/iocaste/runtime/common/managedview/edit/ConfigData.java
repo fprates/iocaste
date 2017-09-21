@@ -5,11 +5,8 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.runtime.common.application.Context;
 
 public class ConfigData {
-    public static final byte UPDATE = 1;
-    public static final byte DISPLAY = 2;
     public DocumentModelItem hkey;
     public ComplexModel cmodel;
-    public byte mode;
-    public boolean mark;
+    public boolean mark, disabled;
     public Context context;
 }

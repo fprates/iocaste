@@ -14,7 +14,7 @@ public class ManagedEditConfig extends AbstractViewConfig<Context> {
         
         configdata = new ConfigData();
         configdata.cmodel = context.runtime().getComplexModel(mviewctx.cmodel);
-        configdata.mode = ConfigData.UPDATE;
+        configdata.disabled = false;
         configdata.context = context;
         configdata.mark = true;
         

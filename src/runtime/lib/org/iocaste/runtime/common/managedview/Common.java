@@ -48,7 +48,7 @@ public class Common {
                 for (DocumentModelItem mitem : items) {
                     item = form.instance(mitem.getName());
                     key = model.isKey(mitem);
-                    item.disabled = key || (formdata.mode != ConfigData.UPDATE);
+                    item.disabled = key || formdata.disabled;
                     item.invisible = key;
                     if (!item.focus && !item.disabled)
                         item.focus = true;
@@ -73,7 +73,6 @@ public class Common {
                 continue;
             tabletool = page.instance(name.concat("_table"));
             tabletool.model = cmodelitem.model.getName();
-            tabletool.mode = griddata.mode;
             tabletool.mark = griddata.mark;
             tabletool.vlength = 0;
             for (String hide : new String[] {
