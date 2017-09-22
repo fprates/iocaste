@@ -8,7 +8,6 @@ public class PortalTileItemPage extends AbstractPage {
     protected void execute() throws Exception {
         set(new PortalTileItemSpec());
         set(new PortalTileItemConfig());
-        set(new PortalTileItemInput());
     }
 
 }

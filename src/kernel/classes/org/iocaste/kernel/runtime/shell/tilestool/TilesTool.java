@@ -37,8 +37,13 @@ public class TilesTool extends AbstractComponentTool {
             item = data.viewctx.entries.
                     get(tile.getName(exportitem.name)).data;
             if (item.indexitem == null) {
-                value = object.get(exportitem.name);
-                item.text = (value == null)? "" : value.toString();
+                if (data.viewctx.messagesrc.get(exportitem.name) == null) {
+                    value = object.get(exportitem.name);
+                    item.text = (value == null)? "" : value.toString();
+                } else {
+                    item.text = exportitem.name;
+                    item.textargs = new Object[] {object.get(exportitem.name)};
+                }
                 continue;
             }
             
