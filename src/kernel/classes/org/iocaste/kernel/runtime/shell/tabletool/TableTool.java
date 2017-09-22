@@ -582,7 +582,7 @@ public class TableTool extends AbstractComponentTool {
         }
         
         actions.clear();
-        if (entry.data.actions != null) {
+        if (entry.data.actions.size() != 0) {
             for (String key : entry.data.actions) {
                 actions.add(key);
                 if (!actionsstore.containsKey(key))

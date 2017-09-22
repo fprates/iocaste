@@ -169,11 +169,10 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
         PopupControl popupcontrol;
         String calname, shname;
         View view = config.viewctx.view;
-        String locale = view.getLocale().toString();
         
         tag.add("style", "display:inline;float:left;");
-        ctxmenu = new ContextMenu(ProcessInput.msgsource.get(locale),
-                "input.options", tagt, input.getHtmlName());
+        ctxmenu = new ContextMenu(
+                config, "input.options", tagt, input.getHtmlName());
         required = input.isObligatory();
         if (required)
             ctxmenu.add(ProcessInput.getMessage(view, "required"));
@@ -182,7 +181,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
                 getElement(config.viewctx.viewexport.popupcontrol);
         calendar = input.getCalendar();
         if (calendar != null) {
-            ctxmenu.add(calendar.getHtmlName(), config, "calendar");
+            ctxmenu.add(calendar.getHtmlName(), "calendar");
             if (popupcontrol != null) {
                 calname = popupcontrol.getName();
                 if ((calname.equals(calendar.getEarly()) ||
@@ -198,7 +197,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
 
         search = input.getSearchHelp();
         if (search != null) {
-            ctxmenu.add(search.getHtmlName(), config, "values");
+            ctxmenu.add(search.getHtmlName(), "values");
             if (popupcontrol != null) {
                 shname = popupcontrol.getHtmlName();
                 if (shname.equals(search.getHtmlName()) ||

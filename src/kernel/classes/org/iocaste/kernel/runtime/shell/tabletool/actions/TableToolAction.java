@@ -9,7 +9,7 @@ import org.iocaste.shell.common.TableContextItem;
 import org.iocaste.shell.common.ViewCustomAction;
 
 public abstract class TableToolAction implements ViewCustomAction {
-    private String action, name, locale;
+    private String action, name;
     protected TableContext context;
     protected boolean navigable, markable;
 
@@ -62,11 +62,7 @@ public abstract class TableToolAction implements ViewCustomAction {
     }
     
     protected final void setText(String locale, String text) {
-        if (!locale.equals(this.locale)) {
-            context.viewctx.messagesrc.instance(locale);
-            this.locale = locale;
-        }
-        context.viewctx.messagesrc.put(
-                locale, action.concat(context.data.name), text);
+        context.viewctx.messagesrc.instance(locale);
+        context.viewctx.messagesrc.put(name, text);
     }
 }

@@ -1,22 +1,20 @@
 package org.iocaste.kernel.runtime.shell.renderer.legacy;
 
-import java.util.Map;
-
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.protocol.utils.XMLElement;
 
 public class ContextMenu {
     private XMLElement options;
-    private Map<String, String> messages;
     private String itemstyle, title;
+    private Config config;
     
-    public ContextMenu(Map<String, String> messages, String title,
-            XMLElement tagt, String name) {
+    public ContextMenu(
+            Config config, String title, XMLElement tagt, String name) {
         String tfcontext;
         XMLElement tag;
 
-        this.messages = messages;
         this.title = title;
+        this.config = config;
         tfcontext = name.concat("_menu");
         tag = new XMLElement("li");
         renderOpenMenuButton(tag, tfcontext, name);
@@ -53,12 +51,15 @@ public class ContextMenu {
         options.addChild(tag);
     }
     
-    public final void add(String htmlname, Config config, String text) {
-        add(ContextMenuButtonRenderer.render(htmlname, config, messages, text));
+    public final void add(String htmlname, String text) {
+        add(ContextMenuButtonRenderer.
+                render(htmlname, config, htmlname));
     }
     
-    private final String getMessage(String id) {
-        return (messages == null)? id : messages.get(id);
+    public static final String getMessage(Config config, String id) {
+        String text;
+        return ((text = config.viewctx.messagesrc.get(id)) == null)?
+                id : text;
     }
     
     private final void renderCloseMenuButton(XMLElement button,
@@ -95,7 +96,7 @@ public class ContextMenu {
                 append(setElementDisplay(open, "none")).
                 append(setElementDisplay(close, "inline")).toString());
         if (title != null)
-            button.add("title", getMessage(title));
+            button.add("title", getMessage(config, title));
         button.addInner("+");
     }
     
