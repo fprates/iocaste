@@ -7,6 +7,8 @@ import org.iocaste.kernel.runtime.shell.renderer.ButtonRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.DataItemRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.LinkRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.MessageRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.NodeListItemRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.NodeListRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.RangeFieldRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.TableItemRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.TableRenderer;
