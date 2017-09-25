@@ -4,7 +4,7 @@ import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.tooldata.NodeList;
+import org.iocaste.shell.common.NodeList;
 
 public class NodeListRenderer extends AbstractElementRenderer<NodeList> {
 

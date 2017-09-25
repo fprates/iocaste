@@ -1,27 +1,35 @@
 package org.iocaste.shell.common;
 
+import org.iocaste.shell.common.tooldata.Context;
+import org.iocaste.shell.common.tooldata.ElementViewContext;
+import org.iocaste.shell.common.tooldata.ToolDataElement;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
+
 /**
  * Implementação de lista html.
  * 
  * @author francisco.prates
  *
  */
-public class NodeList extends AbstractContainer {
-    private static final long serialVersionUID = -5658238175080703049L;
-    public static final byte ORDERED = 0;
+public class NodeList extends ToolDataElement {
+	private static final long serialVersionUID = 9162219541727921060L;
+	public static final byte ORDERED = 0;
     public static final byte UNORDERED = 1;
     public static final byte DEFINITION = 2;
     private byte type;
-    private String itemsstyle;
     
     public NodeList(Container container, String name) {
-        super(container, Const.NODE_LIST, name);
-        init();
+        this(new ElementViewContext(null, container, TYPES.NODE_LIST, name),
+                name);
     }
     
     public NodeList(View view, String name) {
-        super(view, Const.NODE_LIST, name);
-        init();
+        this(new ElementViewContext(view, null, TYPES.NODE_LIST, name), name);
+    }
+    
+    public NodeList(Context viewctx, String name) {
+        super(viewctx, Const.NODE_LIST, name);
+        type = UNORDERED;
     }
     
     public final void add(NodeListItem item) {
@@ -35,7 +43,7 @@ public class NodeList extends AbstractContainer {
     }
     
     public final String getItemsStyle() {
-        return itemsstyle;
+        return tooldata.styles.get("item");
     }
     
     /**
@@ -46,12 +54,13 @@ public class NodeList extends AbstractContainer {
         return type;
     }
     
-    private final void init() {
-        type = UNORDERED;
+    @Override
+    public final boolean isContainable() {
+        return true;
     }
-    
+
     public final void setItemsStyle(String style) {
-        itemsstyle = style;
+        tooldata.styles.put("item", style);
     }
     
     /**

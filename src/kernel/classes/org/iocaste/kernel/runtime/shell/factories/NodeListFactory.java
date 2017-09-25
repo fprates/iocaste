@@ -2,7 +2,7 @@ package org.iocaste.kernel.runtime.shell.factories;
 
 import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.tooldata.NodeList;
+import org.iocaste.shell.common.NodeList;
 
 public class NodeListFactory extends AbstractSpecFactory {
 
