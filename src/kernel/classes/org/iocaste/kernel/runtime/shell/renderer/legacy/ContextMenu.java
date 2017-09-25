@@ -53,7 +53,7 @@ public class ContextMenu {
     
     public final void add(String htmlname, String text) {
         add(ContextMenuButtonRenderer.
-                render(htmlname, config, htmlname));
+                render(htmlname, config, text));
     }
     
     public static final String getMessage(Config config, String id) {
