@@ -12,7 +12,7 @@ public class PortalLoginConfig extends AbstractViewConfig<Context> {
         
         nodes = getTool("viewport");
         nodes.style = "portal_mini_viewport";
-        nodes.itemstyle = "portal_viewport_node";
+        nodes.styles.put("item", "portal_viewport_node");
         
         button = getTool("connect");
         button.style = "portal_button";

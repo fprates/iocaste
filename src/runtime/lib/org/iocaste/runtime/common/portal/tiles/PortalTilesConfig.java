@@ -12,7 +12,7 @@ public class PortalTilesConfig extends AbstractViewConfig<Context> {
         
         nodes = getTool("viewport");
         nodes.style = "portal_viewport";
-        nodes.itemstyle = "portal_viewport_node";
+        nodes.styles.put("item", "portal_viewport_node");
 //        getNavControl().setTitle(pagetiles.title, pagetiles.titleargs);
         
         tiles = getTool("items");
