@@ -11,10 +11,12 @@ import org.iocaste.kernel.runtime.shell.renderer.legacy.ContextMenu;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableContextItem;
 import org.iocaste.shell.common.TableItem;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class TableRenderer extends AbstractElementRenderer<Table> {
     
@@ -25,9 +27,10 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
     @Override
     protected final XMLElement execute(Table table, Config config)
             throws Exception {
-        String title, name, text, style;
+        String title, name, text, style, ctxname;
         Set<TableItem> items;
         ContextMenu ctxmenu;
+        NodeList ctxnode;
         TableContextItem ctxitem;
         Map<String, TableContextItem> ctxitems;
         XMLElement tag, trtag, thtag, divtag;
@@ -63,18 +66,22 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
                 thtag = new XMLElement("th");
                 thtag.add("class", style);
                 if (column.isMark()) {
-                    tag = new XMLElement("ul");
-                    tag.add("style",
+                    ctxname = new StringBuilder(table.getHtmlName()).
+                            append("_grid_options").toString();
+                    config.viewctx.instance(TYPES.NODE_LIST, ctxname);
+                    ctxnode = new NodeList(config.viewctx, ctxname);
+                    ctxnode.addAttribute("style",
                             "margin:0px;padding:0px;list-style-type:none");
                     ctxmenu = new ContextMenu(
-                            config, "grid.options", tag, "mark");
+                            config, ctxname, "grid.options", "mark");
                     ctxitems = table.getContextItems();
                     for (String itemname : ctxitems.keySet()) {
                         ctxitem = ctxitems.get(itemname);
                         if (ctxitem.visible)
                             ctxmenu.add(ctxitem.htmlname, ctxitem.text);
                     }
-                    thtag.addChild(tag);
+                    thtag.addChild(
+                            get(ctxnode.getType()).run(ctxnode, config));
                 } else {
                     text = column.getText();
                     if (text == null) {

@@ -7,6 +7,7 @@ import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.SearchHelp;
@@ -171,8 +172,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
         View view = config.viewctx.view;
         
         tag.add("style", "display:inline;float:left;");
-        ctxmenu = new ContextMenu(
-                config, "input.options", tagt, input.getHtmlName());
+        ctxmenu = new ContextMenu(config, "input.options", input.getHtmlName());
         required = input.isObligatory();
         if (required)
             ctxmenu.add(ProcessInput.getMessage(view, "required"));
@@ -209,6 +209,9 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
                 }
             }
         }
+        
+        for (Element element : ctxmenu.getElements())
+            tagt.addChild(get(element.getType()).run(element, config));
     }
     
     private final List<XMLElement> renderPopup(Config config,

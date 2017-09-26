@@ -1,91 +1,146 @@
 package org.iocaste.kernel.runtime.shell.renderer.legacy;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
-import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.AbstractEventHandler;
+import org.iocaste.shell.common.ControlComponent;
+import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.NodeList;
+import org.iocaste.shell.common.NodeListItem;
+import org.iocaste.shell.common.tooldata.ToolData;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class ContextMenu {
-    private XMLElement options;
-    private String itemstyle, title;
+    private NodeList options;
+    private String itemstyle, title, container;
     private Config config;
+    private List<NodeListItem> items;
+    private ContextMenuHandler handler;
     
     public ContextMenu(
-            Config config, String title, XMLElement tagt, String name) {
-        String tfcontext;
-        XMLElement tag;
-
+            Config config, String title, String name) {
+        this(config, null, title, name);
+    }
+    
+    public ContextMenu(
+            Config config, String container, String title, String name) {
+        NodeListItem item;
+        String tfcontext = name.concat("_menu");
+        
         this.title = title;
         this.config = config;
-        tfcontext = name.concat("_menu");
-        tag = new XMLElement("li");
-        renderOpenMenuButton(tag, tfcontext, name);
-        tagt.addChild(tag);
-        tag = new XMLElement("li");
-        renderCloseMenuButton(tag, tfcontext, name);
-        tagt.addChild(tag);
-        tag = new XMLElement("li");
-        tag.add("style", "padding:0px;margin:0px;float:left");
-        options = new XMLElement("ul");
-        options.add("id", tfcontext);
-        options.add("style", "display:none");
-        options.add("class", "ctxmenu");
-        tag.addChild(options);
-        tagt.addChild(tag);
-        itemstyle = "ctxmenu_item";
+        this.itemstyle = "ctxmenu_item";
+        this.container = container;
+        this.items = new ArrayList<>();
+        this.handler = new ContextMenuHandler(config.viewctx);
+        
+        renderOpenMenuButton(tfcontext, name);
+        renderCloseMenuButton(tfcontext, name);
+        
+        item = getNodeItem(name.concat("_options"));
+        item.addAttribute("style", "padding:0px;margin:0px;float:left");
+        
+        options = new NodeList(item, tfcontext);
+        options.addAttribute("style", "display:none");
+        options.setStyleClass("ctxmenu");
     }
     
     public final void add(String text) {
-        XMLElement tag;
-        
-        tag = new XMLElement("li");
-        tag.add("class", itemstyle);
-        tag.addInner(text);
-        options.addChild(tag);
-    }
-    
-    public final void add(XMLElement element) {
-        XMLElement tag;
-        
-        tag = new XMLElement("li");
-        tag.add("class", itemstyle);
-        tag.addChild(element);
-        options.addChild(tag);
+        String htmlname = new StringBuilder(options.getHtmlName()).
+                append("_").append(options.getElements().size()).toString();
+        get(htmlname).setText(text);
     }
     
     public final void add(String htmlname, String text) {
-        add(ContextMenuButtonRenderer.
-                render(htmlname, config, text));
+        renderItem(get(htmlname), htmlname, config, text);
     }
     
-    public static final String getMessage(Config config, String id) {
+    private final NodeListItem get(String name) {
+        NodeListItem item;
+        
+        item = new NodeListItem(options, name.concat("_option"));
+        item.setStyleClass(itemstyle);
+        return item;
+    }
+    
+    public final List<NodeListItem> getElements() {
+        return items;
+    }
+    
+    private final String getMessage(String id) {
         String text;
         return ((text = config.viewctx.messagesrc.get(id)) == null)?
                 id : text;
     }
     
-    private final void renderCloseMenuButton(XMLElement button,
-            String menu, String name) {
+    private final NodeListItem getNodeItem(String name) {
+        ToolData tooldata;
+        NodeListItem item;
+        
+        tooldata = config.viewctx.instance(TYPES.NODE_LIST_ITEM, name);
+        tooldata.parent = container;
+        item = new NodeListItem(config.viewctx, name);
+        if (tooldata.parent == null)
+            tooldata.tag = "li";
+        items.add(item);
+        return item;
+    }
+    
+    private final void renderCloseMenuButton(String menu, String name) {
+        NodeListItem item;
         String open = name.concat("_openmenu");
         String close = name.concat("_closemenu");
-        
-        button.add("id", close);
-        button.add("class", "button_ctxmenu_close");
-        button.add("style", "display:none");
-        button.add("onclick", new StringBuilder(
+
+        item = getNodeItem(close);
+        item.setStyleClass("button_ctxmenu_close");
+        item.addAttribute("style", "display:none");
+        item.addAttribute("onclick", new StringBuilder(
                 setElementDisplay(menu, "none")).
                 append(setElementDisplay(open, "inline")).
                 append(setElementDisplay(close, "none")).toString());
-        button.addInner("-");
+        item.setText("-");
     }
     
-    private final void renderOpenMenuButton(XMLElement button,
-            String menu, String name) {
+    private final void renderItem(NodeListItem container,
+            String htmlname, Config config, String text) {
+        ControlComponent control;
+        String onclick, name;
+        Link link;
+        ToolData tooldata;
+        
+        onclick = new StringBuilder("javascript:formSubmit('").
+                append(config.getCurrentForm()).
+                append("', '").append(config.getCurrentAction()).
+                append("', '").append(htmlname).append("');").toString();
+        
+        tooldata = config.viewctx.
+                instance(TYPES.LINK, name = htmlname.concat("_link"));
+        tooldata.parent = container.getHtmlName();
+        
+        link = new Link(config.viewctx, name);
+        link.setAction(onclick);
+        link.setStyleClass("ctxmenu_link");
+        link.setText(getMessage(text));
+        link.setAbsolute(true);
+        
+        control = config.viewctx.view.getElement(htmlname);
+        if (control == null)
+            control = config.viewctx.view.getElement(name);
+        control.setEventHandler(handler);
+    }
+    
+    private final void renderOpenMenuButton(String menu, String name) {
+        NodeListItem item;
         String open = name.concat("_openmenu");
         String close = name.concat("_closemenu");
-        
-        button.add("id", open);
-        button.add("class", "button_ctxmenu_open");
-        button.add("style", "display:inline");
-        button.add("onclick", new StringBuilder(
+
+        item = getNodeItem(open);
+        item.setStyleClass("button_ctxmenu_open");
+        item.addAttribute("style", "display:inline");
+        item.addAttribute("onclick", new StringBuilder(
                 setElementDisplayOfClass(".ctxmenu", "none")).
                 append(setElementDisplayOfClass(
                         ".button_ctxmenu_close", "none")).
@@ -96,8 +151,8 @@ public class ContextMenu {
                 append(setElementDisplay(open, "none")).
                 append(setElementDisplay(close, "inline")).toString());
         if (title != null)
-            button.add("title", getMessage(config, title));
-        button.addInner("+");
+            item.addAttribute("title", getMessage(title));
+        item.setText("+");
     }
     
     private final String setElementDisplay(String name, String value) {
@@ -115,4 +170,21 @@ public class ContextMenu {
     public final void setItemStyle(String itemstyle) {
         this.itemstyle = itemstyle;
     }
+}
+
+class ContextMenuHandler extends AbstractEventHandler {
+    private static final long serialVersionUID = 6213561752776374524L;
+    private ViewContext viewctx;
+    
+    public ContextMenuHandler(ViewContext viewctx) {
+        this.viewctx = viewctx;
+    }
+    
+    @Override
+    public void onEvent(byte event, ControlComponent control) {
+        if ((control == null) || !control.isPopup())
+            return;
+        viewctx.viewexport.popupcontrol = control.getHtmlName();
+    }
+    
 }
