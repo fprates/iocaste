@@ -1,29 +1,29 @@
 package org.iocaste.kernel.runtime.shell.tabletool.actions;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.kernel.runtime.shell.tabletool.TableContext;
-import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.shell.common.AbstractEventHandler;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableContextItem;
-import org.iocaste.shell.common.ViewCustomAction;
+import org.iocaste.shell.common.TableItem;
 
-public abstract class TableToolAction implements ViewCustomAction {
+public abstract class AbstractTableToolAction extends AbstractEventHandler {
+    private static final long serialVersionUID = -7712067205074943704L;
     private String action, name;
     protected TableContext context;
     protected boolean navigable, markable;
 
-    public TableToolAction(TableContext context,
-            Map<String, TableToolAction> store, String action) {
+    public AbstractTableToolAction(TableContext context,
+            Map<String, AbstractTableToolAction> store, String action) {
         this(context, store, action, true);
     }
     
-    public TableToolAction(TableContext context,
-            Map<String, TableToolAction> store, String action, boolean register)
+    public AbstractTableToolAction(TableContext context,
+            Map<String, AbstractTableToolAction> store, String action, boolean register)
     {
         name = action.concat(context.data.name);
-//        if (register)
-//            tabletool.getContext().function.register(name, this);
         store.put(action, this);
         this.context = context;
         this.action = action;
@@ -33,9 +33,6 @@ public abstract class TableToolAction implements ViewCustomAction {
         TableContextItem ctxitem = table.addContextItem(action);
         ctxitem.htmlname = action.concat(context.data.name);
     }
-    
-    @Override
-    public abstract void execute(AbstractContext context) throws Exception;
     
     public final String getAction() {
         return action;
@@ -51,6 +48,31 @@ public abstract class TableToolAction implements ViewCustomAction {
     
     public final boolean isNavigable() {
         return navigable;
+    }
+    
+    protected final void move() {
+//        int l, lastline;
+//        Set<TableItem> items;
+//        Table table = context.tabletool.getElement();
+//        
+//        items = table.getItems();
+//        l = context.data.vlength - items.size();
+//        if (l > 0)
+//            for (int i= 0; i < l; i++)
+//                items.add(addLine(null, -1));
+//        l = context.data.topline;
+//        lastline = context.data.objects.size() - 1;
+//        for (TableItem item : items) {
+//            if (l > lastline) {
+//                set(item, null);
+//                item.setVisible(false);
+//                continue;
+//            }
+//
+//            item.setVisible(true);
+//            set(item, context.data.objects.get(l));
+//            l++;
+//        }
     }
     
     protected final void setMarkable(boolean markable) {

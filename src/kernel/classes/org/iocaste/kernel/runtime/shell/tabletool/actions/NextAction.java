@@ -3,20 +3,25 @@ package org.iocaste.kernel.runtime.shell.tabletool.actions;
 import java.util.Map;
 
 import org.iocaste.kernel.runtime.shell.tabletool.TableContext;
-import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.shell.common.ControlComponent;
 
-public class NextAction extends TableToolAction {
+public class NextAction extends AbstractTableToolAction {
+    private static final long serialVersionUID = -3785804066512094959L;
 
-    public NextAction(TableContext context, Map<String, TableToolAction> store)
-    {
+    public NextAction(
+            TableContext context, Map<String, AbstractTableToolAction> store) {
         super(context, store, "next");
         setNavigable(true);
         setText("pt_BR", "Próximo [>]");
     }
 
     @Override
-    public void execute(AbstractContext context) throws Exception {
-        this.context.tabletool.next();
+    public void onEvent(byte event, ControlComponent control) {
+        int topline = context.data.topline + context.data.vlength;
+        if (topline > context.data.objects.size())
+            return;
+        context.data.topline = topline;
+        move();
     }
 
 }

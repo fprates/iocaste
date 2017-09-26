@@ -3,20 +3,26 @@ package org.iocaste.kernel.runtime.shell.tabletool.actions;
 import java.util.Map;
 
 import org.iocaste.kernel.runtime.shell.tabletool.TableContext;
-import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.shell.common.ControlComponent;
+import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableItem;
 
-public class DeselectAllAction extends TableToolAction {
+public class DeselectAllAction extends AbstractTableToolAction {
+    private static final long serialVersionUID = -1613073092365006156L;
 
     public DeselectAllAction(
-            TableContext context, Map<String, TableToolAction> store) {
+            TableContext context, Map<String, AbstractTableToolAction> store) {
         super(context, store, "deselect_all");
         setMarkable(true);
         setText("pt_BR", "Desmarcar todos [☐]");
     }
-    
+
     @Override
-    public void execute(AbstractContext context) throws Exception {
-        this.context.tabletool.selectAll(false);
+    public void onEvent(byte event, ControlComponent control) {
+        Table table = context.tabletool.getElement();
+        context.viewctx.entries.get(context.data.name).component.load();
+        for (TableItem item : table.getItems())
+            item.setSelected(false);
     }
 
 }

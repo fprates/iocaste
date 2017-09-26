@@ -78,7 +78,7 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
                     for (String itemname : ctxitems.keySet()) {
                         ctxitem = ctxitems.get(itemname);
                         if (ctxitem.visible)
-                            ctxmenu.add(ctxitem.htmlname,
+                            ctxmenu.add(ctxitem.htmlname, ctxitem.htmlname,
                                     ctxitem.text, ctxitem.handler);
                     }
                     thtag.addChild(

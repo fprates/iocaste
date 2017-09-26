@@ -51,8 +51,9 @@ public class ContextMenu {
         get(htmlname).setText(text);
     }
     
-    public final void add(String htmlname, String text, EventHandler handler) {
-        renderItem(get(htmlname), htmlname, config, text, handler);
+    public final void add(String linkname,
+            String ctrlname, String text, EventHandler handler) {
+        renderItem(get(linkname), linkname, ctrlname, config, text, handler);
     }
     
     private final NodeListItem get(String name) {
@@ -101,32 +102,28 @@ public class ContextMenu {
         item.setText("-");
     }
     
-    private final void renderItem(NodeListItem container,
-            String htmlname, Config config, String text, EventHandler handler)
-    {
+    private final void renderItem(NodeListItem container, String linkname,
+           String ctrlname, Config config, String text, EventHandler handler) {
         ControlComponent control;
-        String onclick, name;
+        String onclick;
         Link link;
         ToolData tooldata;
         
         onclick = new StringBuilder("javascript:formSubmit('").
                 append(config.getCurrentForm()).
                 append("', '").append(config.getCurrentAction()).
-                append("', '").append(htmlname).append("');").toString();
+                append("', '").append(ctrlname).append("');").toString();
         
-        tooldata = config.viewctx.
-                instance(TYPES.LINK, name = htmlname.concat("_link"));
+        tooldata = config.viewctx.instance(TYPES.LINK, linkname);
         tooldata.parent = container.getHtmlName();
         
-        link = new Link(config.viewctx, name);
+        link = new Link(config.viewctx, linkname);
         link.setAction(onclick);
         link.setStyleClass("ctxmenu_link");
         link.setText(getMessage(text));
         link.setAbsolute(true);
         
-        control = config.viewctx.view.getElement(htmlname);
-        if (control == null)
-            control = config.viewctx.view.getElement(name);
+        control = config.viewctx.view.getElement(ctrlname);
         control.setEventHandler(handler);
     }
     

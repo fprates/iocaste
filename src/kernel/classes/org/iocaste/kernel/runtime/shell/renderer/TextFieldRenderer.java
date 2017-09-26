@@ -37,6 +37,7 @@ import org.iocaste.kernel.runtime.shell.sh.SearchHelpRenderer;
 public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
 {
     private PopupRenderer calendar, search;
+    private EventHandler handler;
     
     public TextFieldRenderer(HtmlRenderer renderer) {
         super(renderer, Const.TEXT_FIELD);
@@ -170,8 +171,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
         SearchHelp search;
         Calendar calendar;
         PopupControl popupcontrol;
-        String calname, shname;
-        EventHandler handler;
+        String calname, shname, popupname;
         View view = config.viewctx.view;
         
         tag.add("style", "display:inline;float:left;");
@@ -182,11 +182,13 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
 
         popupcontrol = config.viewctx.view.
                 getElement(config.viewctx.viewexport.popupcontrol);
-        handler = (popupcontrol != null)?
-            new ContextMenuHandler(config.viewctx) : null;
         calendar = input.getCalendar();
         if (calendar != null) {
-            ctxmenu.add(calendar.getHtmlName(), "calendar", handler);
+            popupname = calendar.getHtmlName();
+            if (handler == null)
+                handler = new ContextMenuHandler(config.viewctx);
+            ctxmenu.add(
+                    popupname.concat("_link"), popupname, "calendar", handler);
             if (popupcontrol != null) {
                 calname = popupcontrol.getName();
                 if ((calname.equals(calendar.getEarly()) ||
@@ -202,7 +204,11 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
 
         search = input.getSearchHelp();
         if (search != null) {
-            ctxmenu.add(search.getHtmlName(), "values", handler);
+            popupname = search.getHtmlName();
+            if (handler == null)
+                handler = new ContextMenuHandler(config.viewctx);
+            ctxmenu.add(
+                    popupname.concat("_link"), popupname, "values", handler);
             if (popupcontrol != null) {
                 shname = popupcontrol.getHtmlName();
                 if (shname.equals(search.getHtmlName()) ||

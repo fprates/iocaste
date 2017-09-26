@@ -24,7 +24,7 @@ import org.iocaste.kernel.runtime.shell.tabletool.actions.NextAction;
 import org.iocaste.kernel.runtime.shell.tabletool.actions.PreviousAction;
 import org.iocaste.kernel.runtime.shell.tabletool.actions.RemoveAction;
 import org.iocaste.kernel.runtime.shell.tabletool.actions.SelectAllAction;
-import org.iocaste.kernel.runtime.shell.tabletool.actions.TableToolAction;
+import org.iocaste.kernel.runtime.shell.tabletool.actions.AbstractTableToolAction;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
@@ -55,7 +55,7 @@ public class TableTool extends AbstractComponentTool {
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;
     private TableContext context;
-    private Map<String, TableToolAction> actionsstore;
+    private Map<String, AbstractTableToolAction> actionsstore;
     private Set<String> actions;
     
     /**
@@ -70,36 +70,16 @@ public class TableTool extends AbstractComponentTool {
         context.data = entry.data;
         context.tabletool = this;
         actions = new LinkedHashSet<>();
-    }
-    
-    /**
-     * 
-     */
-    public final void accept() {
-        Map<String, TableContextItem> ctxitems;
-        
-        ctxitems = getTable().getContextItems();
-        ctxitems.get("accept").visible = false;
-        ctxitems.get("add").visible = true;
-        ctxitems.get("remove").visible = true;
-        context.data.topline = 0;
-    }
-    
-    /**
-     * 
-     */
-    public final void add() {
-        Map<String, TableContextItem> ctxitems;
-        
-        if (context.data.vlength > 0) {
-            ctxitems = getTable().getContextItems();
-            ctxitems.get("accept").visible = true;
-            ctxitems.get("add").visible = false;
-            ctxitems.get("remove").visible = false;
-        }
-        
-//        additems(this, context.data);
-//        installValidators();
+        actionsstore = new LinkedHashMap<>();
+        new SelectAllAction(context, actionsstore);
+        new DeselectAllAction(context, actionsstore);
+        new AcceptAction(context, actionsstore);
+        new AddAction(context, actionsstore);
+        new RemoveAction(context, actionsstore);
+        new FirstAction(context, actionsstore);
+        new PreviousAction(context, actionsstore);
+        new NextAction(context, actionsstore);
+        new LastAction(context, actionsstore);
     }
     
     private TableItem addLine(ExtendedObject object, int pos) {
@@ -247,13 +227,6 @@ public class TableTool extends AbstractComponentTool {
     
     /**
      * 
-     */
-    public final void additems() {
-        additems(null);
-    }
-    
-    /**
-     * 
      * @param objects
      */
     private final void additems(ExtendedObject[] objects) {
@@ -294,11 +267,6 @@ public class TableTool extends AbstractComponentTool {
         ttcolumn.data = column;
         context.columns.put(column.name, ttcolumn);
         return ttcolumn;
-    }
-    
-    public final void first() {
-        context.data.topline = 0;
-        move();
     }
     
     /**
@@ -393,14 +361,6 @@ public class TableTool extends AbstractComponentTool {
 //        }
     }
     
-    public final void last() {
-        int pages, topline;
-        pages = context.data.objects.size() /
-                (topline = context.data.vlength);
-        context.data.topline = (topline *= pages);
-        move();
-    }
-    
     @Override
     public final void load() {
         int startline, finishline, j;
@@ -468,72 +428,10 @@ public class TableTool extends AbstractComponentTool {
                 column.componenttype = Const.TEXT_FIELD;
         }
     }
-    
-    private final void move() {
-        int l, lastline;
-        Set<TableItem> items;
-        Table table = getTable();
-        
-        items = table.getItems();
-        l = context.data.vlength - items.size();
-        if (l > 0)
-            for (int i= 0; i < l; i++)
-                items.add(addLine(null, -1));
-        l = context.data.topline;
-        lastline = context.data.objects.size() - 1;
-        for (TableItem item : items) {
-            if (l > lastline) {
-                set(item, null);
-                item.setVisible(false);
-                continue;
-            }
-
-            item.setVisible(true);
-            set(item, context.data.objects.get(l));
-            l++;
-        }
-    }
-    
-    public final void next() {
-        int topline = context.data.topline + context.data.vlength;
-        if (topline > context.data.objects.size())
-            return;
-        context.data.topline = topline;
-        move();
-    }
-    
-    public final void previous() {
-        int topline = context.data.topline - context.data.vlength;
-        if (topline < 0)
-            return;
-        context.data.topline = topline;
-        move();
-    }
 
     @Override
     public void refresh() {
         setObject();
-    }
-    
-    /**
-     * 
-     */
-    public final void remove() {
-        Table table;
-        int index;
-        
-        entry.component.load();
-        table = getTable();
-        index = context.data.topline;
-        
-        for (TableItem item : table.getItems()) {
-            if (!item.isSelected()) {
-                index++;
-                continue;
-            }
-            table.remove(item);
-            context.data.objects.remove(index++);
-        }
     }
     
     private final void render() throws Exception {
@@ -566,20 +464,9 @@ public class TableTool extends AbstractComponentTool {
 
     @Override
     public void run() throws Exception {
+        TableContextItem ctxitem;
+        AbstractTableToolAction handler;
         Map<String, TableContextItem> ctxitems;
-        
-        if (actionsstore == null) {
-            actionsstore = new LinkedHashMap<>();
-            new SelectAllAction(context, actionsstore);
-            new DeselectAllAction(context, actionsstore);
-            new AcceptAction(context, actionsstore);
-            new AddAction(context, actionsstore);
-            new RemoveAction(context, actionsstore);
-            new FirstAction(context, actionsstore);
-            new PreviousAction(context, actionsstore);
-            new NextAction(context, actionsstore);
-            new LastAction(context, actionsstore);
-        }
         
         actions.clear();
         if (entry.data.actions.size() != 0) {
@@ -603,15 +490,13 @@ public class TableTool extends AbstractComponentTool {
         installValidators();
 
         ctxitems = getTable().getContextItems();
-        for (String key : actions)
-            if (actionsstore.get(key).isMarkable())
-                ctxitems.get(key).visible = context.data.mark;
-    }
-    
-    public final void selectAll(boolean mark) {
-        entry.component.load();
-        for (TableItem item : getTable().getItems())
-            item.setSelected(mark);
+        for (String key : actions) {
+            if (!(handler = actionsstore.get(key)).isMarkable())
+                continue;
+            ctxitem = ctxitems.get(key);
+            ctxitem.visible = context.data.mark;
+            ctxitem.handler = handler;
+        }
     }
     
     /**
