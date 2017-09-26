@@ -96,7 +96,6 @@ public class ProcessInput extends AbstractHandler {
     private final void callController(ViewExport viewexport)
     		throws Exception {
         InputStatus status;
-        ControlComponent control;
         ComponentEntry entry;
         SpecFactory factory;
         
@@ -107,7 +106,7 @@ public class ProcessInput extends AbstractHandler {
         viewexport.msgtype = status.msgtype;
         viewexport.message = status.message;
         viewexport.msgargs = status.msgargs;
-        viewexport.action = viewexport.popupcontrol = null;
+        viewexport.action = null;
         config.event = status.event;
         if (status.msgtype == Const.ERROR)
             return;
@@ -124,15 +123,8 @@ public class ProcessInput extends AbstractHandler {
                 factory.update(config.state.viewctx, key);
         }
         
-        if (status.event)
-            return;
-
-        viewexport.action = getString(config.values, "action");
-        control = (ControlComponent)getControl(viewexport.action);
-        if ((control == null) || !control.isPopup())
-            return;
-        viewexport.popupcontrol = viewexport.action;
-        viewexport.action = null;
+        if (!status.event)
+            viewexport.action = getString(config.values, "action");
     }
     
     /**
@@ -589,10 +581,11 @@ public class ProcessInput extends AbstractHandler {
         ProcessOutputData data = new ProcessOutputData();
         ProcessOutput outputprocess = getFunction().get("output_process");
         
-        data.viewexport = message.get("view");
         data.viewctx = new ViewContext();
         data.viewctx.sessionid = message.getSessionid();
-        parameters = Tools.toMap(TYPE.HASH, data.viewexport.reqparameters);
+        data.viewctx.viewexport = message.get("view");
+        parameters = Tools.
+                toMap(TYPE.HASH, data.viewctx.viewexport.reqparameters);
         
         config = new ControllerData();
         config.state.viewctx = data.viewctx;
@@ -612,13 +605,13 @@ public class ProcessInput extends AbstractHandler {
         }
         
         if (parameters.size() == 0)
-            return data.viewexport;
+            return data.viewctx.viewexport;
         
         config.function = getFunction();
 //        if (parameters.containsKey("event"))
 //            config.execonevent(parameters);
-        callController(data.viewexport);
-        return data.viewexport;
+        callController(data.viewctx.viewexport);
+        return data.viewctx.viewexport;
     }
     
     /**

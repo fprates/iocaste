@@ -32,7 +32,7 @@ public class TilesTool extends AbstractComponentTool {
         ExtendedObject object = (ExtendedObject)tile.get();
         String prefix = tile.getPrefix();
         
-        for (Object exportobj : data.viewexport.items) {
+        for (Object exportobj : data.viewctx.viewexport.items) {
             exportitem = (ToolData)exportobj;
             item = data.viewctx.entries.
                     get(tile.getName(exportitem.name)).data;
@@ -99,14 +99,14 @@ public class TilesTool extends AbstractComponentTool {
         data.viewctx = new ViewContext(viewctx.view);
         data.viewctx.sessionid = viewctx.sessionid;
         data.viewctx.messagesrc = viewctx.messagesrc;
-        data.viewexport = viewctx.subpages.get(entry.data.subpage);
+        data.viewctx.viewexport = viewctx.subpages.get(entry.data.subpage);
         data.parententry = entry;
         data.noeventhandlers = true;
         data.noinitmessages = true;
         for (int key : entry.data.objects.keySet()) {
             tile = new Tile(entry.data.name, key);
             tile.set(entry.data.objects.get(key));
-            data.viewexport.prefix = tile.getName();
+            data.viewctx.viewexport.prefix = tile.getName();
             output.run(data);
             buildLink(tile, data);
         }

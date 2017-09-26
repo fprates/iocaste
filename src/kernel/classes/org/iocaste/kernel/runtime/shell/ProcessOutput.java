@@ -155,11 +155,12 @@ public class ProcessOutput extends AbstractHandler {
         messages = ProcessInput.msgsource.get(data.viewctx.locale);
         for (String key : messages.keySet())
             data.viewctx.messagesrc.put(key, messages.get(key));
-        if (data.viewexport.message != null)
+        if (data.viewctx.viewexport.message != null)
             data.viewctx.messagetext = data.viewctx.messagesrc.get(
-                    data.viewexport.message, data.viewexport.message);
-        data.viewctx.messageargs = data.viewexport.msgargs;
-        data.viewctx.messagetype = data.viewexport.msgtype;
+                    data.viewctx.viewexport.message,
+                    data.viewctx.viewexport.message);
+        data.viewctx.messageargs = data.viewctx.viewexport.msgargs;
+        data.viewctx.messagetype = data.viewctx.viewexport.msgtype;
     }
 
     @Override
@@ -168,8 +169,8 @@ public class ProcessOutput extends AbstractHandler {
         List<String> lines;
         ProcessOutputData data = new ProcessOutputData();
         
-        data.viewexport = message.get("view");
         data.viewctx = new ViewContext();
+        data.viewctx.viewexport = message.get("view");
         data.viewctx.sessionid = message.getSessionid();
         run(data);
         
@@ -188,64 +189,69 @@ public class ProcessOutput extends AbstractHandler {
         Set<String> elements;
         
         outputdata.viewctx.function = getFunction();
-        outputdata.viewctx.viewexport = outputdata.viewexport;
-        outputdata.viewctx.locale = outputdata.viewexport.locale.toString();
+        outputdata.viewctx.locale =
+                outputdata.viewctx.viewexport.locale.toString();
         outputdata.viewctx.noeventhandlers = outputdata.noeventhandlers;
         outputdata.viewctx.types = RuntimeEngine.CONST_TYPES;
         outputdata.viewctx.factories = factories;
         if (!outputdata.noinitmessages)
             moveMessages(outputdata);
-        if (outputdata.viewexport.subpages != null)
-            for (int i = 0; i < outputdata.viewexport.subpages.length; i++)
+        if (outputdata.viewctx.viewexport.subpages != null)
+            for (int i = 0;
+                    i < outputdata.viewctx.viewexport.subpages.length; i++)
                 outputdata.viewctx.subpages.put(
-                        (String)outputdata.viewexport.subpages[i][0],
-                        (ViewExport)outputdata.viewexport.subpages[i][1]);
+                    (String)outputdata.viewctx.viewexport.subpages[i][0],
+                    (ViewExport)outputdata.viewctx.viewexport.subpages[i][1]);
 
         // se for houver prefixo, processa apenas elementos prefixados.
-        if (outputdata.viewexport.prefix == null)
+        if (outputdata.viewctx.viewexport.prefix == null)
             elements = outputdata.viewctx.entries.keySet();
         else
             elements = new LinkedHashSet<>();
-        for (Object object : outputdata.viewexport.items) {
+        for (Object object : outputdata.viewctx.viewexport.items) {
             data = (ToolData)object;
-            if (outputdata.viewexport.prefix == null) {
+            if (outputdata.viewctx.viewexport.prefix == null) {
                 outputdata.viewctx.add(data);
                 continue;
             }
             
             data = data.clone(
-                    outputdata.viewexport.prefix, outputdata.parententry.data);
+                    outputdata.viewctx.viewexport.prefix,
+                    outputdata.parententry.data);
             outputdata.viewctx.add(data);
             elements.add(data.name);
         }
         
         for (String key : elements) {
             entry = outputdata.viewctx.entries.get(key);
-            build(outputdata.viewctx, entry, outputdata.viewexport.prefix);
+            build(outputdata.viewctx,
+                    entry, outputdata.viewctx.viewexport.prefix);
             factory = factories.get(entry.data.type);
             if (factory == null)
                 continue;
-            factory.generate(
-                    outputdata.viewctx, entry, outputdata.viewexport.prefix);
+            factory.generate(outputdata.viewctx,
+                    entry, outputdata.viewctx.viewexport.prefix);
             if (entry.component == null)
                 continue;
             entry.component.run();
             entry.component.refresh();
         }
         
-        outputdata.viewctx.view.setLocale(outputdata.viewexport.locale);
-        if ((outputdata.viewexport.messages != null) &&
-                (outputdata.viewexport.messages.length > 0)) {
+        outputdata.viewctx.view.setLocale(
+                outputdata.viewctx.viewexport.locale);
+        if ((outputdata.viewctx.viewexport.messages != null) &&
+                (outputdata.viewctx.viewexport.messages.length > 0)) {
             outputdata.viewctx.messagesrc.importMessages(
-                    outputdata.viewctx.locale, outputdata.viewexport.messages);
+                outputdata.viewctx.locale,
+                outputdata.viewctx.viewexport.messages);
             fillTranslations(outputdata.viewctx);
         }
         
         outputdata.viewctx.view.setStyleSheet(
-                outputdata.viewexport.stylesheet);
+                outputdata.viewctx.viewexport.stylesheet);
         outputdata.viewctx.view.setStyleConst(
-                outputdata.viewexport.styleconst);
-        for (HeaderLink link : outputdata.viewexport.links)
+                outputdata.viewctx.viewexport.styleconst);
+        for (HeaderLink link : outputdata.viewctx.viewexport.links)
             outputdata.viewctx.view.add(link);
         
         input = new Input(outputdata);
