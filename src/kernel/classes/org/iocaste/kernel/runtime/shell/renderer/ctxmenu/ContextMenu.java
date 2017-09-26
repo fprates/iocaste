@@ -1,12 +1,11 @@
-package org.iocaste.kernel.runtime.shell.renderer.legacy;
+package org.iocaste.kernel.runtime.shell.renderer.ctxmenu;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
-import org.iocaste.shell.common.AbstractEventHandler;
 import org.iocaste.shell.common.ControlComponent;
+import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.NodeListItem;
@@ -18,7 +17,6 @@ public class ContextMenu {
     private String itemstyle, title, container;
     private Config config;
     private List<NodeListItem> items;
-    private ContextMenuHandler handler;
     
     public ContextMenu(
             Config config, String title, String name) {
@@ -35,7 +33,6 @@ public class ContextMenu {
         this.itemstyle = "ctxmenu_item";
         this.container = container;
         this.items = new ArrayList<>();
-        this.handler = new ContextMenuHandler(config.viewctx);
         
         renderOpenMenuButton(tfcontext, name);
         renderCloseMenuButton(tfcontext, name);
@@ -54,8 +51,8 @@ public class ContextMenu {
         get(htmlname).setText(text);
     }
     
-    public final void add(String htmlname, String text) {
-        renderItem(get(htmlname), htmlname, config, text);
+    public final void add(String htmlname, String text, EventHandler handler) {
+        renderItem(get(htmlname), htmlname, config, text, handler);
     }
     
     private final NodeListItem get(String name) {
@@ -105,7 +102,8 @@ public class ContextMenu {
     }
     
     private final void renderItem(NodeListItem container,
-            String htmlname, Config config, String text) {
+            String htmlname, Config config, String text, EventHandler handler)
+    {
         ControlComponent control;
         String onclick, name;
         Link link;
@@ -170,21 +168,4 @@ public class ContextMenu {
     public final void setItemStyle(String itemstyle) {
         this.itemstyle = itemstyle;
     }
-}
-
-class ContextMenuHandler extends AbstractEventHandler {
-    private static final long serialVersionUID = 6213561752776374524L;
-    private ViewContext viewctx;
-    
-    public ContextMenuHandler(ViewContext viewctx) {
-        this.viewctx = viewctx;
-    }
-    
-    @Override
-    public void onEvent(byte event, ControlComponent control) {
-        if ((control == null) || !control.isPopup())
-            return;
-        viewctx.viewexport.popupcontrol = control.getHtmlName();
-    }
-    
 }

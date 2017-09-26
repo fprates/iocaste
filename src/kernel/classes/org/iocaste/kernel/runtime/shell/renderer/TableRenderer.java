@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.kernel.runtime.shell.renderer.ctxmenu.ContextMenu;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
-import org.iocaste.kernel.runtime.shell.renderer.legacy.ContextMenu;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
@@ -78,7 +78,8 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
                     for (String itemname : ctxitems.keySet()) {
                         ctxitem = ctxitems.get(itemname);
                         if (ctxitem.visible)
-                            ctxmenu.add(ctxitem.htmlname, ctxitem.text);
+                            ctxmenu.add(ctxitem.htmlname,
+                                    ctxitem.text, ctxitem.handler);
                     }
                     thtag.addChild(
                             get(ctxnode.getType()).run(ctxnode, config));

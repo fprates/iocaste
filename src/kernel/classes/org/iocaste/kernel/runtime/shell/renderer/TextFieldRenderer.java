@@ -8,6 +8,7 @@ import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.SearchHelp;
@@ -22,11 +23,12 @@ import org.iocaste.kernel.runtime.shell.PopupData;
 import org.iocaste.kernel.runtime.shell.PopupRenderer;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
 import org.iocaste.kernel.runtime.shell.calendar.CalendarRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.ctxmenu.ContextMenu;
+import org.iocaste.kernel.runtime.shell.renderer.ctxmenu.ContextMenuHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Source;
-import org.iocaste.kernel.runtime.shell.renderer.legacy.ContextMenu;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldContainerSource;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldSource;
 import org.iocaste.kernel.runtime.shell.renderer.textfield.TextFieldTableItemSource;
@@ -169,6 +171,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
         Calendar calendar;
         PopupControl popupcontrol;
         String calname, shname;
+        EventHandler handler;
         View view = config.viewctx.view;
         
         tag.add("style", "display:inline;float:left;");
@@ -179,9 +182,11 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
 
         popupcontrol = config.viewctx.view.
                 getElement(config.viewctx.viewexport.popupcontrol);
+        handler = (popupcontrol != null)?
+            new ContextMenuHandler(config.viewctx) : null;
         calendar = input.getCalendar();
         if (calendar != null) {
-            ctxmenu.add(calendar.getHtmlName(), "calendar");
+            ctxmenu.add(calendar.getHtmlName(), "calendar", handler);
             if (popupcontrol != null) {
                 calname = popupcontrol.getName();
                 if ((calname.equals(calendar.getEarly()) ||
@@ -197,7 +202,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
 
         search = input.getSearchHelp();
         if (search != null) {
-            ctxmenu.add(search.getHtmlName(), "values");
+            ctxmenu.add(search.getHtmlName(), "values", handler);
             if (popupcontrol != null) {
                 shname = popupcontrol.getHtmlName();
                 if (shname.equals(search.getHtmlName()) ||
