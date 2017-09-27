@@ -44,6 +44,7 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.Validator;
+import org.iocaste.shell.common.tooldata.ObjectMetaData;
 import org.iocaste.shell.common.tooldata.ToolData;
 import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
@@ -82,7 +83,8 @@ public class TableTool extends AbstractComponentTool {
         new LastAction(context, actionsstore);
     }
     
-    private TableItem addLine(ExtendedObject object, int pos) {
+    private TableItem addLine(ToolData tooldata, int index, int pos) {
+        ExtendedObject object;
         TableToolColumn ttcolumn;
         Element element;
         DataElement delement;
@@ -91,15 +93,27 @@ public class TableTool extends AbstractComponentTool {
         Link link;
         Button button;
         ComponentEntry entry;
+        ObjectMetaData metadata;
         Table table = getElement();
         TableColumn[] tcolumns = table.getColumns();
         TableItem item = new TableItem(table, pos);
 
+        if (tooldata == null) {
+            object = null;
+            metadata = null;
+        } else {
+            object = tooldata.objects.get(index);
+            metadata = tooldata.metaobjects.get(index);
+        }
+        
         itemcolumn = context.data.indexitem;
         nsinput = null;
         for (TableColumn tcolumn : tcolumns) {
-            if (tcolumn.isMark())
+            if (tcolumn.isMark()) {
+                ((InputComponent)item.get(tcolumn.getName())).set(
+                        (metadata != null)? metadata.selected : false);
                 continue;
+            }
             
             name = tcolumn.getName();
             ttcolumn = context.columns.get(name);
@@ -200,7 +214,7 @@ public class TableTool extends AbstractComponentTool {
     }
     
     private final void addLines() {
-        int l, lastline;
+        int lastline;
         int vlines = context.data.vlength;
         
         if (context.data.objects.size() == 0) {
@@ -208,19 +222,17 @@ public class TableTool extends AbstractComponentTool {
                 vlines = 15;
             
             for (int i = 0; i < vlines; i++)
-                addLine(null, -1);
+                addLine(null, 0, -1);
         } else {
-            l = -1;
             if (vlines == 0)
                 vlines = context.data.items.size();
             lastline = context.data.topline + vlines - 1;
             for (int key : context.data.objects.keySet()) {
-                l++;
-                if (l < context.data.topline)
+                if (key < context.data.topline)
                     continue;
-                if (l > lastline)
+                if (key > lastline)
                     break;
-                addLine(context.data.objects.get(key), -1);
+                addLine(context.data, key, -1);
             }
         }
     }

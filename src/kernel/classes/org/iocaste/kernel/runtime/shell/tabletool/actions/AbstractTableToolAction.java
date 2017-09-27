@@ -8,6 +8,7 @@ import org.iocaste.shell.common.AbstractEventHandler;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableContextItem;
 import org.iocaste.shell.common.TableItem;
+import org.iocaste.shell.common.tooldata.ObjectMetaData;
 
 public abstract class AbstractTableToolAction extends AbstractEventHandler {
     private static final long serialVersionUID = -7712067205074943704L;
@@ -73,6 +74,21 @@ public abstract class AbstractTableToolAction extends AbstractEventHandler {
 //            set(item, context.data.objects.get(l));
 //            l++;
 //        }
+    }
+
+    protected final void save() {
+        ObjectMetaData ttitem;
+        int l = context.data.topline;
+        Table table = context.tabletool.getElement();
+        Set<TableItem> items = table.getItems();
+        
+        for (TableItem item : items) {
+            ttitem = context.data.metaobjects.get(l);
+            if (ttitem == null)
+                context.data.metaobjects.put(l, ttitem = new ObjectMetaData());
+            ttitem.selected = item.isSelected();
+            l++;
+        }
     }
     
     protected final void setMarkable(boolean markable) {

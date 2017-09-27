@@ -32,6 +32,7 @@ public class ToolData implements Serializable {
     public ViewSpecItem.TYPES type;
     public ExtendedObject object;
     public Map<Integer, ExtendedObject> objects;
+    public Map<Integer, ObjectMetaData> metaobjects;
     public DataElement element;
     public Map<String, ToolData> items;
     public Map<String, Object> values;
@@ -49,6 +50,7 @@ public class ToolData implements Serializable {
         attributes = new HashMap<>();
         actions = new LinkedHashSet<>();
         objects = new LinkedHashMap<>();
+        metaobjects = new HashMap<>();
         events = new HashMap<>();
         validators = new HashSet<>();
         values = new LinkedHashMap<>();

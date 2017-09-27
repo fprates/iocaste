@@ -23,6 +23,7 @@ public class SelectAllAction extends AbstractTableToolAction {
         context.viewctx.entries.get(context.data.name).component.load();
         for (TableItem item : table.getItems())
             item.setSelected(true);
+        save();
     }
 
 }
