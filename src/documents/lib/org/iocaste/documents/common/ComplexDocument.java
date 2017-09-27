@@ -1,6 +1,7 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,8 +54,7 @@ public class ComplexDocument implements Serializable,
         if (alias == null)
             throw new RuntimeException("Invalid object model.");
         citem = cmodel.getItems().get(alias);
-        key = (citem.index == null)?
-                getKey(cmodel, model, object, alias) : object.get(citem.index);
+        key = getKey(citem, alias, object, null);
         cdocitems = items.get(alias);
         if (key == null)
             key = cdocitems.objects.size();
@@ -73,12 +73,25 @@ public class ComplexDocument implements Serializable,
         if (alias == null)
             throw new RuntimeException("Invalid object model.");
         citem = cmodel.getItems().get(alias);
-        key = (citem.index == null)?
-                document.getKey() : document.getHeader().get(citem.index);
+        key = getKey(citem, alias, null, document);
         cdocitems = items.get(alias);
         if (key == null)
             key = cdocitems.documents.size();
         cdocitems.documents.put(key, document);
+    }
+    
+    private Object getKey(ComplexModelItem citem, String alias, ExtendedObject object,
+            ComplexDocument document) {
+        Object key;
+        if (object != null)
+            key = (citem.index == null)?
+                    getKey(cmodel, object.getModel(), object, alias) :
+                        object.get(citem.index);
+        else
+            key = (citem.index == null)?
+                    document.getKey() : document.getHeader().get(citem.index);
+        return (key instanceof BigDecimal)?
+                ((BigDecimal)key).longValue() : key;
     }
     
     /**

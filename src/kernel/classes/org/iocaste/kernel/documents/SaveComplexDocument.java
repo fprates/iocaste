@@ -1,6 +1,5 @@
 package org.iocaste.kernel.documents;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -193,12 +192,9 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
             items = original.getItemsMap(name);
             if (items == null)
                 continue;
-            for (Object key : items.keySet()) {
-                if (key instanceof BigDecimal)
-                    key = ((BigDecimal)key).longValue();
+            for (Object key : items.keySet())
                 if (!document.getItemsMap(name).containsKey(key))
                     delete.run(data.documents, data.connection, items.get(key));
-            }
         }
     }
 }
