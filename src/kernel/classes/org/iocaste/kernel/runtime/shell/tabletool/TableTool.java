@@ -237,16 +237,6 @@ public class TableTool extends AbstractComponentTool {
         }
     }
     
-    /**
-     * 
-     * @param objects
-     */
-    private final void additems(ExtendedObject[] objects) {
-        int i = context.data.objects.size();
-        for (ExtendedObject object : objects)
-            context.data.objects.put(i++, object);
-    }
-    
     public final void buildControls(Table table) {
         for (String name : actions)
             actionsstore.get(name).build(table);
@@ -477,7 +467,6 @@ public class TableTool extends AbstractComponentTool {
     @Override
     public void run() throws Exception {
         TableContextItem ctxitem;
-        AbstractTableToolAction handler;
         Map<String, TableContextItem> ctxitems;
         
         actions.clear();
@@ -503,11 +492,9 @@ public class TableTool extends AbstractComponentTool {
 
         ctxitems = getTable().getContextItems();
         for (String key : actions) {
-            if (!(handler = actionsstore.get(key)).isMarkable())
-                continue;
             ctxitem = ctxitems.get(key);
             ctxitem.visible = context.data.mark;
-            ctxitem.handler = handler;
+            ctxitem.handler = actionsstore.get(key);
         }
     }
     

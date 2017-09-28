@@ -16,7 +16,6 @@ public class Config {
     public int logid;
     public long sequence;
     private List<String> onload;
-    private PopupControl popupcontrol;
     
     public Config() {
         onload = new ArrayList<>();
@@ -62,12 +61,8 @@ public class Config {
         return pagetrack;
     }
     
-    /**
-     * 
-     * @return
-     */
     public final PopupControl getPopupControl() {
-        return popupcontrol;
+        return viewctx.view.getElement(viewctx.viewexport.popupcontrol);
     }
     
     /**
@@ -100,15 +95,6 @@ public class Config {
      */
     public final void setPageTrack(String pagetrack) {
         this.pagetrack = pagetrack;
-    }
-    
-    /**
-     * 
-     * @param shcontrol
-     */
-    public final void setPopupControl(String name) {
-        if (name != null)
-            this.popupcontrol = viewctx.view.getElement(name);
     }
     
     /**

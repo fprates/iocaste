@@ -111,6 +111,14 @@ public class SearchHelp extends ToolDataElement {
         return true;
     }
     
+    @Override
+    public final boolean isReady(PopupControl popupcontrol) {
+        String shname = getHtmlName();
+        SearchHelp search = (SearchHelp)popupcontrol;
+        return (shname.equals(search.getHtmlName()) ||
+                shname.equals(search.getChild()));
+    }
+    
     /**
      * 
      * @param child

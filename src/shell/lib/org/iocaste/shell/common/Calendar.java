@@ -83,6 +83,15 @@ public class Calendar extends ToolDataElement {
         return true;
     }
     
+    @Override
+    public final boolean isReady(PopupControl popupcontrol) {
+        String calname = getHtmlName();
+        Calendar calendar = (Calendar)popupcontrol;
+        return ((calname.equals(calendar.getEarly()) ||
+                 calname.equals(calendar.getLate()) ||
+                 calname.equals(calendar.getName())));
+    }
+    
     /**
      * 
      * @param date

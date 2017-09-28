@@ -78,7 +78,6 @@ public class LegacyHtmlRenderer extends AbstractHtmlRenderer {
         XMLElement bodytag = new XMLElement("body");
         
         config.setPageTrack(composePageTrack(config));
-        config.setPopupControl(config.viewctx.viewexport.popupcontrol);
         
         html.add("<!DOCTYPE html>");
         bodytag.add("onLoad", "initialize()");

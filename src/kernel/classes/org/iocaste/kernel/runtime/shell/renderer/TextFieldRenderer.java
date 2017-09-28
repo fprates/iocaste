@@ -37,7 +37,6 @@ import org.iocaste.kernel.runtime.shell.sh.SearchHelpRenderer;
 public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
 {
     private PopupRenderer calendar, search;
-    private EventHandler handler;
     
     public TextFieldRenderer(HtmlRenderer renderer) {
         super(renderer, Const.TEXT_FIELD);
@@ -171,7 +170,6 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
         SearchHelp search;
         Calendar calendar;
         PopupControl popupcontrol;
-        String calname, shname, popupname;
         View view = config.viewctx.view;
         
         tag.add("style", "display:inline;float:left;");
@@ -183,46 +181,37 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
         popupcontrol = config.viewctx.view.
                 getElement(config.viewctx.viewexport.popupcontrol);
         calendar = input.getCalendar();
-        if (calendar != null) {
-            popupname = calendar.getHtmlName();
-            if (handler == null)
-                handler = new ContextMenuHandler(config.viewctx);
-            ctxmenu.add(
-                    popupname.concat("_link"), popupname, "calendar", handler);
-            if (popupcontrol != null) {
-                calname = popupcontrol.getName();
-                if ((calname.equals(calendar.getEarly()) ||
-                     calname.equals(calendar.getLate()) ||
-                     calname.equals(calendar.getName()))) {
-                    tag = new XMLElement("li");
-                    tag.addChildren(
-                            renderPopup(config, this.calendar, popupcontrol));
-                    tagt.addChild(tag);
-                }
-            }
-        }
+        if (calendar != null)
+            renderPopup(config, ctxmenu,
+                    calendar, popupcontrol, tagt, "calendar", this.calendar);
 
         search = input.getSearchHelp();
-        if (search != null) {
-            popupname = search.getHtmlName();
-            if (handler == null)
-                handler = new ContextMenuHandler(config.viewctx);
-            ctxmenu.add(
-                    popupname.concat("_link"), popupname, "values", handler);
-            if (popupcontrol != null) {
-                shname = popupcontrol.getHtmlName();
-                if (shname.equals(search.getHtmlName()) ||
-                    shname.equals(search.getChild())) {
-                    tag = new XMLElement("li");
-                    tag.addChildren(
-                            renderPopup(config, this.search, popupcontrol));
-                    tagt.addChild(tag);
-                }
-            }
-        }
+        if (search != null)
+            renderPopup(config, ctxmenu,
+                    search, popupcontrol, tagt, "values", this.search);
         
         for (Element element : ctxmenu.getElements())
             tagt.addChild(get(element.getType()).run(element, config));
+    }
+    
+    private final void renderPopup(Config config, ContextMenu ctxmenu,
+        PopupControl inputcontrol, PopupControl popupcontrol, XMLElement tagt,
+        String title, PopupRenderer renderer) throws Exception {
+        XMLElement tag;
+        String popupname;
+        EventHandler handler;
+        
+        popupname = inputcontrol.getHtmlName();
+        handler = new ContextMenuHandler(config.viewctx);
+        ctxmenu.add(
+                popupname.concat("_link"), popupname, title, handler);
+
+        if ((popupcontrol == null) || (inputcontrol.getType() != popupcontrol.getType()) ||
+                !popupcontrol.isReady(inputcontrol))
+            return;
+        tag = new XMLElement("li");
+        tag.addChildren(renderPopup(config, renderer, popupcontrol));
+        tagt.addChild(tag);
     }
     
     private final List<XMLElement> renderPopup(Config config,

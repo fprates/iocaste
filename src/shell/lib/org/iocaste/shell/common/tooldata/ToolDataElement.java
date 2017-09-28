@@ -42,8 +42,7 @@ public abstract class ToolDataElement implements Component, Container,
     private SearchHelp search;
     private EventHandler evhandler;
     
-    public ToolDataElement(Context viewctx, Const type, ToolData tooldata)
-    {
+    public ToolDataElement(Context viewctx, Const type, ToolData tooldata) {
 		this.tooldata = tooldata;
 		view = viewctx.getView();
 		htmlname = tooldata.name;
@@ -610,6 +609,11 @@ public abstract class ToolDataElement implements Component, Container,
 
     @Override
     public boolean isPopup() {
+        return false;
+    }
+    
+    @Override
+    public boolean isReady(PopupControl popupcontrol) {
         return false;
     }
     
