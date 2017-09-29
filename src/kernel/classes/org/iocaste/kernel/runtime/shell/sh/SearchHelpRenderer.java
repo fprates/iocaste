@@ -134,11 +134,17 @@ public class SearchHelpRenderer implements PopupRenderer {
         Query query;
         Object ns;
         String nsreference;
+        InputComponent input;
 
         nsreference = context.control.getNSReference();
-        ns = (nsreference != null)?
-                ((InputComponent)context.popup.viewctx.view.
-                        getElement(nsreference)).get() : null;
+        if (nsreference != null) {
+            input = context.popup.viewctx.view.getElement(nsreference);
+            ns = input.get();
+        } else {
+            input = context.popup.viewctx.view.
+                    getElement(context.control.getInputName());
+            ns = input.getNS();
+        }
 
         select = context.popup.viewctx.function.documents.
                 get("select_document");
