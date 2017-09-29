@@ -214,6 +214,8 @@ public class DataFormTool extends AbstractComponentTool {
             input.setVisibleLength(item.vlength);
         if (item.label != null)
             input.setLabel(item.label);
+        for (String key : item.attributes.keySet())
+            input.addAttribute(key, item.attributes.get(key));
     }
     
     /**
