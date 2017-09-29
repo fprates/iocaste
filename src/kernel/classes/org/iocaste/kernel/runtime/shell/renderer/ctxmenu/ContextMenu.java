@@ -110,8 +110,9 @@ public class ContextMenu {
         Link link;
         ToolData tooldata;
         
-        onclick = Shell.formSubmit(config.getCurrentForm(),
-                config.getCurrentAction(), ctrlname);
+        onclick = new StringBuilder("javascript:").append(Shell.formSubmit(
+            config.getCurrentForm(), config.getCurrentAction(), ctrlname)).
+                toString();
         
         tooldata = config.viewctx.instance(TYPES.LINK, linkname);
         tooldata.parent = container.getHtmlName();
