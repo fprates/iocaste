@@ -9,6 +9,7 @@ import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.NodeListItem;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.tooldata.ToolData;
 import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
@@ -96,9 +97,9 @@ public class ContextMenu {
         item.setStyleClass("button_ctxmenu_close");
         item.addAttribute("style", "display:none");
         item.addAttribute("onclick", new StringBuilder(
-                setElementDisplay(menu, "none")).
-                append(setElementDisplay(open, "inline")).
-                append(setElementDisplay(close, "none")).toString());
+                Shell.setElementDisplay(menu, "none")).
+                append(Shell.setElementDisplay(open, "inline")).
+                append(Shell.setElementDisplay(close, "none")).toString());
         item.setText("-");
     }
     
@@ -109,10 +110,8 @@ public class ContextMenu {
         Link link;
         ToolData tooldata;
         
-        onclick = new StringBuilder("javascript:formSubmit('").
-                append(config.getCurrentForm()).
-                append("', '").append(config.getCurrentAction()).
-                append("', '").append(ctrlname).append("');").toString();
+        onclick = Shell.formSubmit(config.getCurrentForm(),
+                config.getCurrentAction(), ctrlname);
         
         tooldata = config.viewctx.instance(TYPES.LINK, linkname);
         tooldata.parent = container.getHtmlName();
@@ -136,30 +135,18 @@ public class ContextMenu {
         item.setStyleClass("button_ctxmenu_open");
         item.addAttribute("style", "display:inline");
         item.addAttribute("onclick", new StringBuilder(
-                setElementDisplayOfClass(".ctxmenu", "none")).
-                append(setElementDisplayOfClass(
+                Shell.setElementDisplayOfClass(".ctxmenu", "none")).
+                append(Shell.setElementDisplayOfClass(
                         ".button_ctxmenu_close", "none")).
-                append(setElementDisplayOfClass(
+                append(Shell.setElementDisplayOfClass(
                         ".button_ctxmenu_open", "inline")).
-                append(setElementDisplay("nc_login_options", "none")).
-                append(setElementDisplay(menu, "inline-block")).
-                append(setElementDisplay(open, "none")).
-                append(setElementDisplay(close, "inline")).toString());
+                append(Shell.setElementDisplay("nc_login_options", "none")).
+                append(Shell.setElementDisplay(menu, "inline-block")).
+                append(Shell.setElementDisplay(open, "none")).
+                append(Shell.setElementDisplay(close, "inline")).toString());
         if (title != null)
             item.addAttribute("title", getMessage(title));
         item.setText("+");
-    }
-    
-    private final String setElementDisplay(String name, String value) {
-        return new StringBuilder("setElementDisplay('").append(name).
-                append("','").append(value).append("');").toString();
-    }
-
-    private final String setElementDisplayOfClass(
-            String style, String display) {
-        return new StringBuilder("setElementDisplayOfClass('").
-                append(style).append("','").append(display).append("');").
-                toString();
     }
     
     public final void setItemStyle(String itemstyle) {

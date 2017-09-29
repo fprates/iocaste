@@ -14,6 +14,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.LinkComponent;
 import org.iocaste.shell.common.LinkEntry;
 import org.iocaste.shell.common.Parameter;
+import org.iocaste.shell.common.Shell;
 
 public class LinkRenderer extends AbstractElementRenderer<LinkComponent> {
     
@@ -62,10 +63,7 @@ public class LinkRenderer extends AbstractElementRenderer<LinkComponent> {
                 if (entry.value == null)
                     entry.value = "";
                 
-                onclick.append("setValue('").append(name).
-                        append("', '").append(entry.value).
-                        append("');");
-                
+                onclick.append(Shell.setValue(name, entry.value));
                 parameter = new Parameter(config.viewctx.view, name);
                 element = null;
                 switch (entry.type) {
@@ -94,15 +92,11 @@ public class LinkRenderer extends AbstractElementRenderer<LinkComponent> {
         if (!absolute) {
             if (action != null) {
                 atag.add("role", "button");
-                if (link.isScreenLockable())
-                    onclick.append("formSubmit('");
-                else
-                    onclick.append("formSubmitNoLock('");
-                
-                onclick.append(config.currentform).
-                       append("', '").append(config.currentaction).
-                       append("', '").append(action).
-                       append("');");
+                onclick.append(link.isScreenLockable()?
+                    Shell.formSubmit(
+                        config.currentform, config.currentaction, action) :
+                    Shell.formSubmitNoLock(
+                        config.currentform, config.currentaction, action));
                 
                 handler = config.viewctx.
                         getEventHandler(htmlname, action, "click");

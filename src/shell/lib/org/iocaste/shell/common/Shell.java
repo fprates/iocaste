@@ -123,6 +123,20 @@ public class Shell extends AbstractServiceInterface {
         }
     }
 
+    public static final String formSubmit(
+            String form, String action, String control) {
+        return new StringBuilder("formSubmit('").append(form).
+                append("', '").append(action).append("', '").append(control).
+                append("');").toString();
+    }
+
+    public static final String formSubmitNoLock(
+            String form, String action, String control) {
+        return new StringBuilder("formSubmitNoLock('").append(form).
+                append("', '").append(action).append("', '").append(control).
+                append("');").toString();
+    }
+    
     /**
      * Retorna elemento de dados de um componente de entrada.
      * @param input componente de entrada.
@@ -258,6 +272,18 @@ public class Shell extends AbstractServiceInterface {
         call(message);
     }
     
+    public static final String setElementDisplay(String name, String value) {
+        return new StringBuilder("setElementDisplay('").append(name).
+                append("','").append(value).append("');").toString();
+    }
+
+    public static final String setElementDisplayOfClass(
+            String style, String display) {
+        return new StringBuilder("setElementDisplayOfClass('").
+                append(style).append("','").append(display).append("');").
+                toString();
+    }
+    
     /**
      * 
      * @param position
@@ -266,6 +292,17 @@ public class Shell extends AbstractServiceInterface {
         Message message = new Message("set_pages_position");        
         message.add("position", position);
         call(message);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param value
+     * @return
+     */
+    public static final String setValue(String name, Object value) {
+        return new StringBuilder("setValue('").append(name).
+            append("', '").append(value).append("');").toString();
     }
     
     /**

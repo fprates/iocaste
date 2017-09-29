@@ -8,6 +8,7 @@ import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Shell;
 
 public class ButtonRenderer extends AbstractElementRenderer<Button> {
     
@@ -17,7 +18,6 @@ public class ButtonRenderer extends AbstractElementRenderer<Button> {
     
     @Override
     protected final XMLElement execute(Button button, Config config) {
-        StringBuilder onclick;
         String text, name, htmlname, action;
         XMLElement buttontag;
         ActionEventHandler handler;
@@ -33,14 +33,13 @@ public class ButtonRenderer extends AbstractElementRenderer<Button> {
         events = button.getEvents();
         action = button.getAction();
         if (!events.containsKey("click")) {
-        	onclick = new StringBuilder((button.isScreenLockable())?
-        			"formSubmit('" : "formSubmitNoLock('");
-            onclick.append(config.currentform).
-                    append("', '").append(config.currentaction).
-                    append("', '").append(htmlname).append("');");
             handler = config.viewctx.getEventHandler(name, action, "click");
             handler.name = htmlname;
-            handler.call = onclick.toString();
+            handler.call = button.isScreenLockable()?
+                Shell.formSubmit(
+                        config.currentform, config.currentaction, htmlname) :
+                Shell.formSubmitNoLock(
+                        config.currentform, config.currentaction, htmlname);
         }
         
         for (String event : events.keySet()) {

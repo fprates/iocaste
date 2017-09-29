@@ -182,10 +182,8 @@ public class SearchHelpRenderer implements PopupRenderer {
         if (searchbt == null)
             searchbt = context.popup.control.getHtmlName();
         
-        searchjs = new StringBuilder("formSubmit('").
-                append(context.popup.form).append("', '").
-                append(context.popup.action).append("', '").
-                append(searchbt).append("');").toString();
+        searchjs = Shell.formSubmit(
+                context.popup.form, context.popup.action, searchbt);
         
         searchbt = "bt_".concat(searchbt);
         button = new Button(context.popup.container, searchbt);
@@ -193,10 +191,13 @@ public class SearchHelpRenderer implements PopupRenderer {
         button.setEvent("click", searchjs);
         button.setEventHandler(searchhandler = new SearchEventHandler());
         
-        criteriajs = new StringBuilder("setElementDisplay('").append(searchbt).
-                append("', 'inline');setElementDisplay('criteria','block');"
-                        + "setElementDisplay('bt_criteria','none');").
-                toString();
+        criteriajs = new StringBuilder(
+            Shell.setElementDisplay(searchbt, "inline")).append(";").
+                append(Shell.setElementDisplay("criteria","block")).
+                append(";").
+                append(Shell.setElementDisplay("bt_criteria","none")).
+                append(";").toString();
+        
         button = new Button(context.popup.container, "bt_criteria");
         button.setEvent("click", criteriajs);
         master = context.control.getMaster();
