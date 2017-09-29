@@ -150,7 +150,7 @@ public class ProcessInput extends AbstractHandler {
         dataelement = Shell.getDataElement(input);
         if (dataelement == null) {
             if (input.isBooleanComponent())
-                input.setSelected((value.equals("on")? true : false));
+                input.setSelected((value != null) && value.equals("on"));
             
             return;
         }
