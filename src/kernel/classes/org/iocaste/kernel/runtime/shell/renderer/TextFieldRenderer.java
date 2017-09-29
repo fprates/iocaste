@@ -212,6 +212,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
         tag = new XMLElement("li");
         tag.addChildren(renderPopup(config, renderer, popupcontrol));
         tagt.addChild(tag);
+        config.viewctx.viewexport.popupcontrol = null;
     }
     
     private final List<XMLElement> renderPopup(Config config,
