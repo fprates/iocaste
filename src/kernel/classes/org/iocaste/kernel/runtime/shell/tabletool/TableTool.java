@@ -92,7 +92,6 @@ public class TableTool extends AbstractComponentTool {
         String name, paramlink, nsinput, itemcolumn;
         Link link;
         Button button;
-        ComponentEntry entry;
         ObjectMetaData metadata;
         Table table = getElement();
         TableColumn[] tcolumns = table.getColumns();
@@ -190,12 +189,8 @@ public class TableTool extends AbstractComponentTool {
                     continue;
                 }
                 
-                if (context.data.nsdata == null)
-                    continue;
-                
-                entry = context.viewctx.entries.
-                        get(context.data.nsdata.name);
-                input.setNSReference(entry.component.getNSField());
+                if (ttcolumn.data.nsdata != null)
+                    input.set(ttcolumn.data.nsdata.value, null);
             }
         }
         
