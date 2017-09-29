@@ -44,9 +44,10 @@ function revertElementDisplay(id) {
 }
 
 function _send(actionname, args, response) {
-    var pagetrack = document.getElementById("pagetrack").value;
+    var pagetrack = document.getElementById("pagetrack");
     var url = "index.html";
-    var param = "pagetrack="+pagetrack+"&action="+actionname;
+    var param = (pagetrack == null)? "action="+actionname :
+       "pagetrack="+pagetrack.value+"&action="+actionname;
     var xmlhttp = new XMLHttpRequest();
     
     if (args != null)
