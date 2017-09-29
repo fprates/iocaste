@@ -9,7 +9,7 @@ public class ParameterFactory extends AbstractSpecFactory {
     @Override
     protected void execute(ViewContext viewctx,
     		Container container, String parent, String name) {
-        new Parameter(container, name);
+        new Parameter(viewctx, name);
     }
 
 }

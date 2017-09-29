@@ -43,8 +43,7 @@ public class Form extends AbstractContainer {
     }
 
     private final void init(String name) {
-        Parameter parameter = new Parameter(this, "action");
-        parameter.setHtmlName(action = name.concat(".action"));
+        new Parameter(this, action = name.concat(".action"));
     }
     
     /**
