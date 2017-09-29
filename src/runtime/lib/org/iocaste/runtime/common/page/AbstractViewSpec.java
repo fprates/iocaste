@@ -185,4 +185,8 @@ public abstract class AbstractViewSpec implements ViewSpec {
     protected final void tiles(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TILES, name);
     }
+    
+    protected final void virtualcontrol(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.VIRTUAL_CONTROL, name);
+    }
 }
