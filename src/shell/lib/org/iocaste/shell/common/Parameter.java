@@ -27,4 +27,9 @@ public class Parameter extends ToolDataElement {
     public Parameter(Context context, String name) {
         super(context, Const.PARAMETER, name);
     }
+    
+    @Override
+    public final boolean isDataStorable() {
+        return true;
+    }
 }
