@@ -29,7 +29,7 @@ public class Common {
             case "head":
                 form.disabled = true;
                 if (mviewctx.nshidden && (ns != null))
-                    form.nsItemInstance().invisible = true;
+                    form.instance(form.nsdata).invisible = true;
                 for (DocumentModelItem mitem : items) {
                     key = model.isKey(mitem);
                     if (key)
@@ -41,7 +41,7 @@ public class Common {
                 break;
             case "base":
                 if (ns != null) {
-                    item = form.nsItemInstance();
+                    item = form.instance(form.nsdata);
                     item.invisible = item.disabled = true;
                 }
                 

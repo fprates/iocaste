@@ -385,7 +385,7 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public final String getNSReference() {
-        return (tooldata.nsitem == null)? null : tooldata.nsitem.name;
+        return tooldata.nsdata;
     }
     
     @Override
@@ -577,7 +577,10 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public boolean isEnabled() {
-        return !tooldata.disabled;
+        Container container = getContainer();
+        if (container == null)
+            return !tooldata.disabled;
+        return (!tooldata.disabled && container.isEnabled());
     }
 
     /*
@@ -687,7 +690,10 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public boolean isVisible() {
-        return !tooldata.invisible;
+        Container container = getContainer();
+        if (container == null)
+            return !tooldata.invisible;
+        return (!tooldata.invisible && container.isVisible());
     }
 
 	@Override
@@ -886,7 +892,7 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public final void setNSReference(String nsreference) {
-        
+        tooldata.nsdata = nsreference;
     }
     
     /*

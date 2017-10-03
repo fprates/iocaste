@@ -141,9 +141,7 @@ public class SearchHelpRenderer implements PopupRenderer {
             input = context.popup.viewctx.view.getElement(nsreference);
             ns = input.get();
         } else {
-            input = context.popup.viewctx.view.
-                    getElement(context.control.getInputName());
-            ns = input.getNS();
+            ns = null;
         }
 
         select = context.popup.viewctx.function.documents.

@@ -18,9 +18,8 @@ import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 public class ToolData implements Serializable {
 	private static final long serialVersionUID = -4451606721765032982L;
     public Const componenttype;
-	public ToolData nsitem, nsdata;
     public String sh, name, model, style, parent, group, label, actionname;
-    public String text, tag, subpage, indexitem, pane, mask, image;
+    public String text, tag, subpage, indexitem, pane, mask, image, nsdata;
     public boolean internallabel, action, submit, disabled, secret, ns;
     public boolean invisible, required, focus, nolock, cancellable, absolute;
     public boolean mark, noheader;
@@ -93,10 +92,6 @@ public class ToolData implements Serializable {
                 put(name, item);
         }
         return item;
-    }
-    
-    public final ToolData nsItemInstance() {
-        return (nsitem == null)? nsitem = instance(null) : nsitem;
     }
     
     private final void put(String name, ToolData item) {

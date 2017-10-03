@@ -184,13 +184,8 @@ public class TableTool extends AbstractComponentTool {
                     continue;
                 }
                 
-                if (context.data.nsitem != null) {
-                    input.setNSReference(context.data.nsitem.name);
-                    continue;
-                }
-                
                 if (ttcolumn.data.nsdata != null)
-                    input.set(ttcolumn.data.nsdata.value, null);
+                    input.setNSReference(ttcolumn.data.nsdata);
             }
         }
         
@@ -396,7 +391,7 @@ public class TableTool extends AbstractComponentTool {
                 context.data.ordering[i] = items[i].getName();
         }
         
-        if (context.data.nsitem == null) {
+        if (context.data.nsdata == null) {
             item = context.model.getNamespace();
             if (item != null) {
                 itemname = item.getName();

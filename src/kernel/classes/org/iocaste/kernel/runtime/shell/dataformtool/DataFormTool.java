@@ -30,7 +30,7 @@ public class DataFormTool extends AbstractComponentTool {
         ToolData dfdata = (ToolData)entry.data;
         DataForm df = getElement();
         
-        if (dfdata.nsitem != null) {
+        if (dfdata.nsdata != null) {
             for (Element element : df.getElements())
                 if (df.isNSReference(element.getName()))
                     return element.getHtmlName();
@@ -124,6 +124,7 @@ public class DataFormTool extends AbstractComponentTool {
         ComponentEntry nsentry;
         Map<String, List<String>> groups;
         String htmlname;
+        String[] tokens;
         ToolData data = getComponentData();
         Container container = getElement(data.parent);
         
@@ -145,14 +146,29 @@ public class DataFormTool extends AbstractComponentTool {
             df.setStyleClass(data.style);
         
         df.setEnabled(!data.disabled);
-        if (data.nsitem != null)
+        if (data.nsdata != null)
             for (Element element : df.getElements())
                 if (df.isNSReference(element.getName())) {
-                    setItem(data, (DataItem)element, data.nsitem);
+                    tokens = data.nsdata.split(".");
+                    switch (tokens.length) {
+                    case 1:
+                        item = data.instance(tokens[0]);
+                        if (item == null)
+                            item = viewctx.entries.get(tokens[0]).data;
+                        break;
+                    case 2:
+                        item = viewctx.entries.get(tokens[0]).data.
+                            instance(tokens[1]);
+                        break;
+                    default:
+                        throw new IocasteException(
+                                "no reference found for %s.", data.nsdata);
+                    }
+                    setItem(data, (DataItem)element, item);
                     break;
                 }
         if (data.nsdata != null) {
-            nsentry = viewctx.entries.get(data.nsdata.name);
+            nsentry = viewctx.entries.get(data.nsdata);
             df.setNSReference(nsentry.component.getNSField());
         }
         

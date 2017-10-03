@@ -15,6 +15,6 @@ public class TextFieldFactory extends AbstractSpecFactory {
     @Override
     protected void execute(ViewContext viewctx,
     		Container container, String parent, String name) {
-        new TextField(container, name);
+        new TextField(viewctx, name);
     }
 }

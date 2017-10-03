@@ -23,7 +23,7 @@ public class ManagedSelectConfig extends AbstractViewConfig<Context> {
                 getComplexModel(mviewctx.cmodel).getHeader();
         ns = head.custommodel.getNamespace();
         if (mviewctx.nshidden && (ns != null))
-            head.nsItemInstance().invisible = true;
+            head.instance(head.nsdata).invisible = true;
         for (DocumentModelItem mitem : head.custommodel.getItens()) {
             item = head.instance(mitem.getName());
             if (!head.custommodel.isKey(mitem))
