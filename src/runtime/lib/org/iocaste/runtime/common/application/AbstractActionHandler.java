@@ -4,7 +4,10 @@ import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.ComplexModelItem;
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.IocasteException;
@@ -24,52 +27,52 @@ public abstract class AbstractActionHandler<C extends Context>
     protected final void back() {
         context.popPage();
     }
-//
-//    protected final ComplexDocument clone(ComplexDocument document) {
-//        Map<String, ComplexModelItem> models;
-//        Map<Object, ExtendedObject> items;
-//        ExtendedObject source;
-//        ComplexModel cmodel = document.getModel();
-//        ComplexDocument clone = documentInstance(cmodel);
-//        DocumentModel model = cmodel.getHeader();
-//        ExtendedObject object = new ExtendedObject(model);
-//        
-//        /*
-//         * clone cmodel header object and clear its key field.
-//         * it's enough to triggers most of reindexing procedures.
-//         */
-//        clone.setHeader(object);
-//        Documents.move(object, document.getHeader());
-//        for (DocumentModelKey key : model.getKeys()) {
-//            Documents.clear(object, key.getModelItemName());
-//            break;
-//        }
-//        
-//        /*
-//         * clone cmodel items
-//         */
-//        models = cmodel.getItems();
-//        for (String name : models.keySet()) {
-//            if (models.get(name) == null)
-//                continue;
-//            items = document.getItemsMap(name);
-//            for (Object key : items.keySet()) {
-//                source = items.get(key);
-//                Documents.move(clone.instance(name, key), source);
-//            }
-//        }
-//        
-//        return clone;
-//    }
-//    
-//    protected final void delete(ExtendedObject object) {
-//        documents.delete(object);
-//    }
-//    
-//    protected final void delete(ComplexDocument document) {
-//        documents.deleteComplexDocument(document.getModel().getName(),
-//                document.getNS(), document.getKey());
-//    }
+
+    protected final ComplexDocument clone(ComplexDocument document) {
+        Map<String, ComplexModelItem> models;
+        Map<Object, ExtendedObject> items;
+        ExtendedObject source;
+        ComplexModel cmodel = document.getModel();
+        ComplexDocument clone = documentInstance(cmodel);
+        DocumentModel model = cmodel.getHeader();
+        ExtendedObject object = new ExtendedObject(model);
+        
+        /*
+         * clone cmodel header object and clear its key field.
+         * it's enough to triggers most of reindexing procedures.
+         */
+        clone.setHeader(object);
+        Documents.move(object, document.getHeader());
+        for (DocumentModelKey key : model.getKeys()) {
+            Documents.clear(object, key.getModelItemName());
+            break;
+        }
+        
+        /*
+         * clone cmodel items
+         */
+        models = cmodel.getItems();
+        for (String name : models.keySet()) {
+            if (models.get(name) == null)
+                continue;
+            items = document.getItemsMap(name);
+            for (Object key : items.keySet()) {
+                source = items.get(key);
+                Documents.move(clone.instance(name, key), source);
+            }
+        }
+        
+        return clone;
+    }
+    
+    protected final void delete(ExtendedObject object) {
+        context.runtime().delete(object);
+    }
+    
+    protected final void delete(ComplexDocument document) {
+        context.runtime().deleteComplexDocument(document.getModel().getName(),
+                document.getNS(), document.getKey());
+    }
     
     protected final DocumentExtractor documentExtractorInstance(String cmodel) {
         return new DocumentExtractor(context, cmodel);

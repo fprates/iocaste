@@ -151,6 +151,33 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     }
     
     /**
+     * Remove entrada da tabela.
+     * 
+     * A entrada é especificada por objeto extendido.
+     * 
+     * @param object objeto extendido
+     * @return 1, para remoção bem sucedida.
+     */
+    public final int delete(ExtendedObject object) {
+        Message message = new Message("delete_document");
+        message.add("object", object);
+        return call(message);
+    }
+    
+    public final void deleteComplexDocument(String cmodelname, Object key) {
+        deleteComplexDocument(cmodelname, null, key);
+    }
+    
+    public final void deleteComplexDocument(
+            String cmodelname, Object ns, Object key) {
+        Message message = new Message("delete_complex_document");
+        message.add("cmodel_name", cmodelname);
+        message.add("ns", ns);
+        message.add("id", key);
+        call(message);
+    }
+    
+    /**
      * Desconecta usuário atual da sessão.
      */
     public final void disconnect() {
