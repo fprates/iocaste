@@ -1,5 +1,6 @@
 package org.iocaste.runtime.common;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,8 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.database.ConnectionInfo;
+import org.iocaste.protocol.files.Directory;
+import org.iocaste.protocol.files.FileEntry;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
@@ -154,6 +157,81 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
         call(new Message("disconnect"));
     }
     
+    public final void fclose(String id) {
+        Message message = new Message("file_close");
+        message.add("id", id);
+        call(message);
+    }
+    
+    public final void fdelete(FileEntry[] files) {
+        Message message = new Message("file_entries_delete");
+        message.add("files", files);
+        call(message);
+    }
+    
+    private final boolean fdelete(boolean all, String... args) {
+        Message message = new Message("file_delete");
+        message.add("args", args);
+        message.add("all", all);
+        return call(message);
+    }
+    
+    public final boolean fdelete(String... args) {
+        return fdelete(false, args);
+    }
+    
+    /**
+     * 
+     * @param args
+     * @return
+     */
+    public final boolean fexists(String... args) {
+        Message message = new Message("file_exists");
+        message.add("args", args);
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @param option
+     * @param args
+     * @return
+     */
+    public final String file(int option, String... args) {
+        Message message = new Message("file");
+        message.add("option", option);
+        message.add("args", args);
+        return call(message);
+    }
+    
+    public final byte[] fread(String id) {
+        Message message = new Message("file_read");
+        message.add("id", id);
+        return call(message);
+    }
+    
+    public final List<FileEntry> funzip(String target, String... source) {
+        Message message = new Message("file_unzip");
+        message.add("target", target);
+        message.add("source", source);
+        return call(message);
+    }
+    
+    public final void fwrite(String id, byte[] buffer) {
+        Message message = new Message("file_write");
+        message.add("id", id);
+        message.add("buffer", buffer);
+        call(message);
+    }
+    
+    public final void fwrite(String dirsymbol, Directory directory, byte type) {
+        Message message = new Message("directory_write");
+        message.add("symbol", dirsymbol);
+        message.add("directory", directory);
+        message.add("type", type);
+        call(message);
+    }
+    
     /**
      * 
      * @param name
@@ -220,6 +298,17 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     	Message message = new Message("context_id_get");
     	message.add("track_id", trackid);
     	return call(message);
+    }
+    
+    /**
+     * 
+     * @param args
+     * @return
+     */
+    public final FileEntry[] getFiles(String... args) {
+        Message message = new Message("files_get");
+        message.add("args", args);
+        return call(message);
     }
     
     /**
@@ -363,6 +452,12 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     	return call(message);
     }
     
+    public final void mkdir(String... args) {
+        Message message = new Message("mkdir");
+        message.add("args", args);
+        call(message);
+    }
+    
     /**
      * Atualiza entrada especificada pelo objeto extendido.
      * @param object objeto a ser atualizado.
@@ -432,6 +527,10 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
         message.add("textobj", textobj);
         message.add("id", page);
         call(message);
+    }
+    
+    public final boolean rmdir(String... args) {
+        return fdelete(true, args);
     }
     
     /**

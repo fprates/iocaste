@@ -15,17 +15,17 @@ public class FileServices extends AbstractFunction {
     
     public FileServices() {
         entries = new HashMap<>();
-        export("close", new FileClose());
-        export("delete", new DeleteFile());
+        export("file_close", new FileClose());
+        export("file_delete", new DeleteFile());
         export("directory_write", new DirectoryWrite(this));
-        export("entries_delete", new FileEntriesDelete());
+        export("file_entries_delete", new FileEntriesDelete());
         export("file", new FileOperations());
         export("file_exists", new FileExists());
         export("files_get", new GetFiles());
         export("mkdir", new MakeDirectory());
-        export("unzip", new Unzip());
-        export("read", new FileRead());
-        export("write", new FileWrite());
+        export("file_unzip", new Unzip());
+        export("file_read", new FileRead());
+        export("file_write", new FileWrite());
     }
 
     public static final String composeFileName(String... names) {

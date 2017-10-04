@@ -44,7 +44,7 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     public final void close(String id) {
-        Message message = new Message("close");
+        Message message = new Message("file_close");
         message.add("id", id);
         call(message);
     }
@@ -78,13 +78,13 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     public final void delete(FileEntry[] files) {
-        Message message = new Message("entries_delete");
+        Message message = new Message("file_entries_delete");
         message.add("files", files);
         call(message);
     }
     
     private final boolean delete(boolean all, String... args) {
-        Message message = new Message("delete");
+        Message message = new Message("file_delete");
         message.add("args", args);
         message.add("all", all);
         return call(message);
@@ -305,7 +305,7 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     public final byte[] read(String id) {
-        Message message = new Message("read");
+        Message message = new Message("rfile_ead");
         message.add("id", id);
         return call(message);
     }
@@ -374,7 +374,7 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     public final List<FileEntry> unzip(String target, String... source) {
-        Message message = new Message("unzip");
+        Message message = new Message("file_unzip");
         message.add("target", target);
         message.add("source", source);
         return call(message);
@@ -403,7 +403,7 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     public final void write(String id, byte[] buffer) {
-        Message message = new Message("write");
+        Message message = new Message("file_write");
         message.add("id", id);
         message.add("buffer", buffer);
         call(message);

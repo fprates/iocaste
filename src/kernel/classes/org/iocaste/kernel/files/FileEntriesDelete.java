@@ -9,7 +9,7 @@ public class FileEntriesDelete extends AbstractHandler {
     @Override
     public Object run(Message message) throws Exception {
         FileEntry[] entries = message.get("files");
-        DeleteFile delete = getFunction().get("delete");
+        DeleteFile delete = getFunction().get("file_delete");
         
         for (FileEntry entry : entries)
             delete.run(false, entry.path);
