@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.Function;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.RuntimeEngine;
@@ -27,6 +28,7 @@ public abstract class AbstractContext implements Context {
     private RuntimeEngine runtime;
     private Stack<String> pagestack;
     private Locale locale;
+    private Function function;
     
     public AbstractContext() {
         pages = new HashMap<>();
@@ -57,6 +59,11 @@ public abstract class AbstractContext implements Context {
     @Override
     public final void clear(String page, String tooldata) {
         pages.get(page).instance(tooldata).objects.clear();
+    }
+
+    @Override
+    public final Function function() {
+        return function;
     }
     
     @Override
@@ -177,6 +184,7 @@ public abstract class AbstractContext implements Context {
     
     @Override
     public final void set(Application<?> application) {
+        function = application;
     	appname = application.getAppName();
     }
     

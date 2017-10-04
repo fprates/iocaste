@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.Function;
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.managedview.ManagedViewContext;
@@ -23,6 +24,8 @@ public interface Context {
             String page, String tooldata, ExtendedObject object);
     
     public abstract void clear(String page, String tooldata);
+    
+    public abstract Function function();
     
     public abstract ActionHandler getHandler(String action);
     
