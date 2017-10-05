@@ -23,10 +23,10 @@ public class Texts extends AbstractFunction {
     public final void update(String sessionid, String textname, String id,
             String text) throws Exception {
         String[] path = {"texteditor", textname, id};
-        FileWrite write = files.get("write");
+        FileWrite write = files.get("file_write");
         FileOperations fileops = files.get("file");
         FileExists exists = files.get("file_exists");
-        FileClose close = files.get("close");
+        FileClose close = files.get("file_close");
         
         String fd = fileops.run(files, sessionid,
                 (!exists.run(path))? Iocaste.CREATE : Iocaste.WRITE, path);

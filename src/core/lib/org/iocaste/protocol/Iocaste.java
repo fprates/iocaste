@@ -305,7 +305,7 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     public final byte[] read(String id) {
-        Message message = new Message("rfile_ead");
+        Message message = new Message("file_read");
         message.add("id", id);
         return call(message);
     }
