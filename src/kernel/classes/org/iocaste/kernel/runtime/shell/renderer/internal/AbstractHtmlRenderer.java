@@ -147,7 +147,8 @@ public abstract class AbstractHtmlRenderer implements HtmlRenderer {
                         throw new IocasteException(
                                 "undefined js event handler for %s at %s.",
                                         actionkey, elementkey);
-                    sb = new StringBuilder(handler.name).append(handler.event);
+                    sb = new StringBuilder(handler.name).append("_").
+                            append(handler.event);
                     handlerscript.function = sb.toString().replace('.', '_');
     
                     sb = new StringBuilder("function ").
