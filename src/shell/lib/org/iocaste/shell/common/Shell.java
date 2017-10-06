@@ -272,6 +272,11 @@ public class Shell extends AbstractServiceInterface {
         call(message);
     }
     
+    public static final String send(String name, String args) {
+        return new StringBuilder("_send('").append(name).
+                append("', '").append(args).append("', null);").toString();
+    }
+    
     public static final String setElementDisplay(String name, String value) {
         return new StringBuilder("setElementDisplay('").append(name).
                 append("','").append(value).append("');").toString();

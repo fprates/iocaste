@@ -7,6 +7,8 @@ import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.OnFocusHandler;
+import org.iocaste.shell.common.Shell;
 
 public class CheckBoxRenderer extends AbstractElementRenderer<InputComponent> {
     
@@ -31,8 +33,8 @@ public class CheckBoxRenderer extends AbstractElementRenderer<InputComponent> {
         
         handler = config.viewctx.getEventHandler(name, name, "focus");
         handler.name = name;
-        handler.call = new StringBuilder("_send('").append(name).
-                append("', '&event=onfocus', null);").toString();
+        handler.call = Shell.send(name,"&event=focus");
+        input.put("focus", new OnFocusHandler(input));
         
         if (!input.isEnabled())
             cboxtag.add("disabled", "disabled");
