@@ -17,7 +17,7 @@ public class AcceptAction extends AbstractTableToolAction {
     }
 
     @Override
-    public void onEvent(byte event, ControlComponent control) {
+    public void onEvent(ControlComponent control) {
         Map<String, TableContextItem> ctxitems;
         
         ctxitems = ((Table)context.tabletool.getElement()).getContextItems();

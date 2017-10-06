@@ -37,7 +37,7 @@ public class ExpandBarRenderer extends AbstractElementRenderer<ExpandBar> {
         edge.setText((text == null)? name : text);
         edge.setSubmit(false);
         edge.setStyleClass(container.getEdgeStyle());
-        edge.setEventHandler(container.getEventHandler());
+        edge.put("click", container.getEventHandler("click"));
         edge.setEnabled(container.isEnabled());
         ebarea.addChild(get(Const.BUTTON).run(edge, config));
 

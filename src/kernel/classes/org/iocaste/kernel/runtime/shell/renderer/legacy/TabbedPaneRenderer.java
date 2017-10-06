@@ -58,8 +58,8 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
             button = new Button(view, name.concat("_bt"));
             button.setText(text);
             button.setStyleClass(classname);
-            button.setEventHandler(tabbedpane.getEventHandler());
             button.setEnabled(element.isEnabled());
+            button.put("click", tabbedpane.getEventHandler("click"));
             tabbedtag.addChild(buttonrenderer.run(button, config));
         }
 

@@ -20,7 +20,7 @@ public class SearchEventHandler extends AbstractEventHandler {
     }
     
     @Override
-    public void onEvent(byte event, ControlComponent control) {
+    public void onEvent(ControlComponent control) {
         ValueRange range;
         InputComponent input;
         DataForm form = getView().getElement("criteria");

@@ -2,7 +2,6 @@ package org.iocaste.shell.common.tooldata;
 
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.OnClickHandler;
 
 /**
  * Componentes de abas.
@@ -17,7 +16,6 @@ public class TabbedPane extends ToolDataElement {
         super(viewctx, Const.TABBED_PANE, name);
         if (tooldata.style == null)
             tooldata.style = "tp_outer";
-        setEventHandler(new OnClickHandler(this));
     }
     
     /*

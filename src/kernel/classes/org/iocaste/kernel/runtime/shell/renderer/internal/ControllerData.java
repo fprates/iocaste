@@ -16,7 +16,6 @@ public class ControllerData {
     public Map<String, Object> values;
     public Function function;
     public String contextname, contexturl;
-    public boolean event;
     private Map<String, EventHandler> events;
     
     public ControllerData() {
@@ -45,7 +44,7 @@ class OnFocusEvent extends AbstractEventHandler {
 	}
 	
 	@Override
-    public void onEvent(byte event, ControlComponent control) {
+    public void onEvent(ControlComponent control) {
 	    onEvent(control.getAction());
     }
     

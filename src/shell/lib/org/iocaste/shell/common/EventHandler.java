@@ -9,15 +9,12 @@ import java.io.Serializable;
  *
  */
 public interface EventHandler extends Serializable {
-    public static final byte ON_CLICK = 0;
-    public static final byte ON_FOCUS = 1;
     
     /**
      * 
-     * @param event
-     * @param args
+     * @param control
      */
-    public abstract void onEvent(byte event, ControlComponent control);
+    public abstract void onEvent(ControlComponent control);
     
     /**
      * 

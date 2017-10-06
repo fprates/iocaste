@@ -111,7 +111,7 @@ public class SearchHelpRenderer implements PopupRenderer {
                     link = new Link(tableitem, choice, null);
                     link.setText(value.toString());
                     link.setEvent("click", action);
-                    link.setEventHandler(handler);
+                    link.put("click", handler);
                     handler.put(choice, value);
                 } else {
                     text = new Text(tableitem, name);
@@ -193,7 +193,7 @@ public class SearchHelpRenderer implements PopupRenderer {
         button = new Button(context.popup.container, searchbt);
         button.addAttribute("style", "display:none");
         button.setEvent("click", searchjs);
-        button.setEventHandler(searchhandler = new SearchEventHandler());
+        button.put("click", searchhandler = new SearchEventHandler());
         
         criteriajs = new StringBuilder(
             Shell.setElementDisplay(searchbt, "inline")).append(";").

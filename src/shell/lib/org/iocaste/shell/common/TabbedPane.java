@@ -34,6 +34,6 @@ public class TabbedPane extends AbstractMultipageContainer {
      */
     private final void init() {
         setStyleClass("tp_outer");
-        setEventHandler(new OnClickHandler(this));
+        put("click", new OnClickHandler(this));
     }
 }

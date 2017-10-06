@@ -14,7 +14,7 @@ public class CustomAction extends AbstractTableToolAction {
     }
 
     @Override
-    public void onEvent(byte event, ControlComponent control) {
+    public void onEvent(ControlComponent control) {
         // TODO Auto-generated method stub
         
     }

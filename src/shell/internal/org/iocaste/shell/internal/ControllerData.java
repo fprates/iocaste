@@ -48,7 +48,7 @@ class OnFocusEvent extends AbstractEventHandler {
     }
 
     @Override
-    public void onEvent(byte event, ControlComponent control) {
+    public void onEvent(ControlComponent control) {
         onEvent(control.getAction());
     }
     

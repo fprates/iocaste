@@ -18,7 +18,7 @@ public class SelectAllAction extends AbstractTableToolAction {
     }
 
     @Override
-    public void onEvent(byte event, ControlComponent control) {
+    public void onEvent(ControlComponent control) {
         Table table = context.tabletool.getElement();
         context.viewctx.entries.get(context.data.name).component.load();
         for (TableItem item : table.getItems())

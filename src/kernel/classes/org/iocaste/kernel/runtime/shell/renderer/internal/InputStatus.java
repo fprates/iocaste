@@ -10,6 +10,6 @@ public class InputStatus {
     public Const msgtype;
     public Object[] msgargs;
     public InputComponent input = null;
-    public String fatal = null, message = null;
-    public boolean event = false;
+    public String fatal, message;
+    public boolean event;
 }

@@ -464,31 +464,26 @@ public class Controller {
      */
     private static final void processInputsStage(Element element,
             ControllerData config, InputStatus status) throws Exception {
-        EventHandler evhandler = element.getEventHandler();
+        EventHandler evhandler;
+        String event;
         
-        status.event = (evhandler != null);
         if (element.isControlComponent()) {
             status.control = (ControlComponent)element;
             
             if (!status.control.isCancellable())
                 processInputs(config, status);
-            
-            if (!status.event)
-                return;
-            
-            evhandler.setView(config.state.view);
-            evhandler.setInputError(status.error);
-            evhandler.setErrorType(status.msgtype);
-            evhandler.onEvent(EventHandler.ON_CLICK, status.control);
-            config.state.reloadable = false;
-        } else {
-            if (!status.event)
-                return;
-            
-            evhandler.setView(config.state.view);
-            evhandler.onEvent(EventHandler.ON_CLICK, null);
-            config.state.reloadable = false;
         }
+        
+        event = getString(config.values, "event");
+        evhandler = element.getEventHandler(event);
+        if (evhandler == null)
+            return;
+        evhandler.setView(config.state.view);
+        evhandler.setInputError(status.error);
+        evhandler.setErrorType(status.msgtype);
+        evhandler.onEvent(status.control);
+        config.state.reloadable = false;
+        status.event = true;
     }
     
     /**

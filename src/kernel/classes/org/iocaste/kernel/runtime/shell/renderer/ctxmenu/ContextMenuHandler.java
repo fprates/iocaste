@@ -13,7 +13,7 @@ public class ContextMenuHandler extends AbstractEventHandler {
     }
     
     @Override
-    public void onEvent(byte event, ControlComponent control) {
+    public void onEvent(ControlComponent control) {
         if ((control == null) || !control.isPopup())
             return;
         viewctx.viewexport.popupcontrol = control.getHtmlName();

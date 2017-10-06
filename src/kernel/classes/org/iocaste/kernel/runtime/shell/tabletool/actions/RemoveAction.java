@@ -17,7 +17,7 @@ public class RemoveAction extends AbstractTableToolAction {
     }
 
     @Override
-    public void onEvent(byte event, ControlComponent control) {
+    public void onEvent(ControlComponent control) {
         Table table;
         int index;
         

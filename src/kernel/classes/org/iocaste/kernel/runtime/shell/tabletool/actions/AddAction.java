@@ -16,7 +16,7 @@ public class AddAction extends AbstractTableToolAction {
     }
 
     @Override
-    public void onEvent(byte event, ControlComponent control) {
+    public void onEvent(ControlComponent control) {
         Map<String, TableContextItem> ctxitems;
         
         if (context.data.vlength > 0) {

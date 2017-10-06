@@ -65,7 +65,7 @@ public class ExpandBar extends AbstractContainer {
         expanded = true;
         internalstyle = "eb_internal";
         edgestyle = "eb_edge";
-        setEventHandler(new ExpandBarHandler(this));
+        put("click", new ExpandBarHandler(this));
     }
     
     /**
@@ -117,13 +117,8 @@ class ExpandBarHandler extends AbstractEventHandler {
         this.ebar = ebar;
     }
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.
-     *     EventHandler#onEvent(byte, org.iocaste.shell.common.ControlComponent)
-     */
     @Override
-    public final void onEvent(byte event, ControlComponent control) {
+    public final void onEvent(ControlComponent control) {
         ebar.setExpanded(!ebar.isExpanded());
     }
 }

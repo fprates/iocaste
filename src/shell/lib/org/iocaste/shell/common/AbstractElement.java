@@ -42,7 +42,7 @@ public abstract class AbstractElement implements Element {
     private boolean enabled, visible, translatable;
     private View view;
     private Map<String, String> events, attributes;
-    private EventHandler evhandler;
+    private Map<String, EventHandler> evhandlers;
     
     /**
      * 
@@ -59,6 +59,7 @@ public abstract class AbstractElement implements Element {
         style = type.style();
         enabled = visible = translatable = true;
         events = new HashMap<>();
+        evhandlers = new HashMap<>();
         attributes = new HashMap<>();
     }
     
@@ -119,8 +120,8 @@ public abstract class AbstractElement implements Element {
      * @see org.iocaste.shell.common.Element#getEventHandler()
      */
     @Override
-    public final EventHandler getEventHandler() {
-        return evhandler;
+    public final EventHandler getEventHandler(String name) {
+        return (name == null)? null : evhandlers.get(name);
     }
     
     /*
@@ -245,6 +246,16 @@ public abstract class AbstractElement implements Element {
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#put(
+     *     java.lang.String, org.iocaste.shell.common.EventHandler)
+     */
+    @Override
+    public final void put(String name, EventHandler evhandler) {
+        evhandlers.put(name, evhandler);
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#setEnabled(boolean)
      */
     @Override
@@ -260,16 +271,6 @@ public abstract class AbstractElement implements Element {
     @Override
     public final void setEvent(String name, String js) {
         events.put(name, js);
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#
-     *     setEventHandler(org.iocaste.shell.common.EventHandler)
-     */
-    @Override
-    public final void setEventHandler(EventHandler evhandler) {
-        this.evhandler = evhandler;
     }
     
     /*

@@ -258,7 +258,6 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private final void init(Const type) {
         this.type = type;
         obligatory = false;
-        setEventHandler(new OnFocus(this));
     }
     
     /*
@@ -566,24 +565,5 @@ public abstract class AbstractInputComponent extends AbstractComponent
             label = messages.get(label);
         if (label == null)
             label = getTranslation(messages, getName());
-    }
-}
-
-class OnFocus extends AbstractEventHandler {
-    private static final long serialVersionUID = -6628615220035348184L;
-    private Element element;
-    
-    public OnFocus(Element element) {
-        this.element = element;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.
-     *    EventHandler#onEvent(byte, org.iocaste.shell.common.ControlComponent)
-     */
-    @Override
-    public final void onEvent(byte event, ControlComponent control) {
-        element.getView().setFocus(element);
     }
 }

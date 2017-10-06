@@ -107,7 +107,6 @@ public class ProcessInput extends AbstractHandler {
         viewexport.message = status.message;
         viewexport.msgargs = status.msgargs;
         viewexport.action = null;
-        config.event = status.event;
         if (status.msgtype == Const.ERROR)
             return;
         
@@ -546,32 +545,25 @@ public class ProcessInput extends AbstractHandler {
      */
     private final void processInputsStage(
     		Element element, InputStatus status) throws Exception {
-        EventHandler evhandler = element.getEventHandler();
+        EventHandler evhandler;
+        String event;
         
-        status.event = (evhandler != null);
         if (element.isControlComponent()) {
             status.control = (ControlComponent)element;
-            
             if (!status.control.isCancellable())
                 processInputs(status);
-            
-            if (!status.event)
-                return;
-            
-            evhandler.setView(config.state.viewctx.view);
-            evhandler.setInputError(status.error);
-            evhandler.setErrorType(status.msgtype);
-            evhandler.onEvent(
-                    EventHandler.ON_CLICK, status.control);
-            config.state.reloadable = false;
-        } else {
-            if (!status.event)
-                return;
-            
-            evhandler.setView(config.state.viewctx.view);
-            evhandler.onEvent(EventHandler.ON_CLICK, null);
-            config.state.reloadable = false;
         }
+        
+        event = getString(config.values, "event");
+        evhandler = element.getEventHandler(event);
+        if (evhandler == null)
+            return;
+        evhandler.setView(config.state.viewctx.view);
+        evhandler.setInputError(status.error);
+        evhandler.setErrorType(status.msgtype);
+        evhandler.onEvent(status.control);
+        config.state.reloadable = false;
+        status.event = true;
     }
 
 	@Override
@@ -608,8 +600,6 @@ public class ProcessInput extends AbstractHandler {
             return data.viewctx.viewexport;
         
         config.function = getFunction();
-//        if (parameters.containsKey("event"))
-//            config.execonevent(parameters);
         callController(data.viewctx.viewexport);
         return data.viewctx.viewexport;
     }
@@ -752,7 +742,6 @@ public class ProcessInput extends AbstractHandler {
         
         message(Const.NONE, null);
         element = getControl(controlname);
-        
         if (element != null)
             processInputsStage(element, status);
         else

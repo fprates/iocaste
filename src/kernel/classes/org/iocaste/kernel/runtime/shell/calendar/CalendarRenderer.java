@@ -45,7 +45,7 @@ public class CalendarRenderer implements PopupRenderer {
         link.setText(control.getText());
         link.setStyleClass("calmonth");
         link.setEvent("click", onclick);
-        link.setEventHandler(new ChooseEventHandler(data.control));
+        link.put("click", new ChooseEventHandler(data.control));
     }
     
     private final void response(CalendarData data) throws Exception {
@@ -125,7 +125,7 @@ public class CalendarRenderer implements PopupRenderer {
             link = new Link(item, compname, null);
             link.setText(Integer.toString(day));
             link.setEvent("click", action);
-            link.setEventHandler(handler);
+            link.put("click", handler);
             
             handler.put(compname, date);
             if (data.today == day)

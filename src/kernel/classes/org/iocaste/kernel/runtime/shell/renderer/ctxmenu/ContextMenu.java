@@ -124,7 +124,7 @@ public class ContextMenu {
         link.setAbsolute(true);
         
         control = config.viewctx.view.getElement(ctrlname);
-        control.setEventHandler(handler);
+        control.put("click", handler);
     }
     
     private final void renderOpenMenuButton(String menu, String name) {

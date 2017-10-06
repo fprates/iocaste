@@ -16,7 +16,7 @@ public class FirstAction extends AbstractTableToolAction {
     }
 
     @Override
-    public void onEvent(byte event, ControlComponent control) {
+    public void onEvent(ControlComponent control) {
         context.data.topline = 0;
         move();
     }

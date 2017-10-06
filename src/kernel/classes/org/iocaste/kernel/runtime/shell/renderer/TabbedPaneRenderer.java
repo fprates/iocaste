@@ -14,6 +14,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.OnClickHandler;
 import org.iocaste.shell.common.TabbedPaneItem;
 import org.iocaste.shell.common.tooldata.TabbedPane;
 import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
@@ -33,6 +34,7 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
         List<XMLElement> tags;
         Set<Element> elements;
         ButtonRenderer buttonrenderer;
+        OnClickHandler handler;
         StandardContainerRenderer itemrenderer;
         XMLElement tabbedtag = new XMLElement("div");
         
@@ -42,6 +44,7 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
         elements = tabbedpane.getElements();
         current = tabbedpane.getCurrentPage();
         buttonrenderer = get(Const.BUTTON);
+        handler = new OnClickHandler(tabbedpane);
         for (Element element : elements) {
             if (element.getType() != Const.TABBED_PANE_ITEM)
                 continue;
@@ -57,8 +60,8 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
             button = new Button(config.viewctx, btname);
             button.setText(text);
             button.setStyleClass(classname);
-            button.setEventHandler(tabbedpane.getEventHandler());
             button.setEnabled(element.isEnabled());
+            button.put("click", handler);
             tabbedtag.addChild(buttonrenderer.run(button, config));
         }
 

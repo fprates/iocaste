@@ -16,7 +16,7 @@ public class LastAction extends AbstractTableToolAction {
     }
 
     @Override
-    public void onEvent(byte event, ControlComponent control) {
+    public void onEvent(ControlComponent control) {
         int pages, topline;
         pages = context.data.objects.size() /
                 (topline = context.data.vlength);

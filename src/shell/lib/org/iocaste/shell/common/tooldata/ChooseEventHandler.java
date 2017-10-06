@@ -18,7 +18,7 @@ public class ChooseEventHandler extends AbstractEventHandler {
     }
     
     @Override
-    public final void onEvent(byte event, ControlComponent control) {
+    public final void onEvent(ControlComponent control) {
         String action = control.getAction();
         popupcontrol.update(action, values.get(action));
     }

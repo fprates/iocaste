@@ -30,11 +30,11 @@ public class OnClickHandler extends AbstractEventHandler {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.
-     *     EventHandler#onEvent(byte, org.iocaste.shell.common.ControlComponent)
+     * @see org.iocaste.shell.common.EventHandler#onEvent(
+     *   org.iocaste.shell.common.ControlComponent)
      */
     @Override
-    public final void onEvent(byte event, ControlComponent control) {
+    public final void onEvent(ControlComponent control) {
         MultipageContainer pane;
         View view;
         TabbedPaneItem paneitem;

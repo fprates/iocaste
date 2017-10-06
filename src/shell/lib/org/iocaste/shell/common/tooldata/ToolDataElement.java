@@ -2,6 +2,7 @@ package org.iocaste.shell.common.tooldata;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -40,7 +41,7 @@ public abstract class ToolDataElement implements Component, Container,
     private boolean translatable, nohelper, stacking, multipart, range;
     private byte[] content;
     private SearchHelp search;
-    private EventHandler evhandler;
+    private Map<String, EventHandler> evhandlers;
     
     public ToolDataElement(Context viewctx, Const type, ToolData tooldata) {
 		this.tooldata = tooldata;
@@ -48,6 +49,7 @@ public abstract class ToolDataElement implements Component, Container,
 		htmlname = tooldata.name;
 		translatable = true;
         elements = new LinkedHashMap<>();
+        evhandlers = new HashMap<>();
         if (isControlComponent() && (tooldata.actionname == null))
             tooldata.actionname = tooldata.name;
 		if (tooldata.componenttype == null)
@@ -255,13 +257,14 @@ public abstract class ToolDataElement implements Component, Container,
 		return elements.keySet().toArray(new String[0]);
 	}
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#getEventHandler()
-     */
+	/*
+	 * (non-Javadoc)
+	 * @see org.iocaste.shell.common.Element#getEventHandler(
+	 *    java.lang.String)
+	 */
     @Override
-    public final EventHandler getEventHandler() {
-        return evhandler;
+    public EventHandler getEventHandler(String name) {
+        return evhandlers.get(name);
     }
     
     /*
@@ -695,6 +698,11 @@ public abstract class ToolDataElement implements Component, Container,
             return !tooldata.invisible;
         return (!tooldata.invisible && container.isVisible());
     }
+    
+    @Override
+    public final void put(String name, EventHandler evhandler) {
+        evhandlers.put(name, evhandler);
+    }
 
 	@Override
 	public void remove(Element element) {
@@ -799,16 +807,6 @@ public abstract class ToolDataElement implements Component, Container,
     @Override
     public final void setEvent(String name, String js) {
         tooldata.events.put(name, js);
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#
-     *     setEventHandler(org.iocaste.shell.common.EventHandler)
-     */
-    @Override
-    public final void setEventHandler(EventHandler evhandler) {
-        this.evhandler = evhandler;
     }
     
     /*

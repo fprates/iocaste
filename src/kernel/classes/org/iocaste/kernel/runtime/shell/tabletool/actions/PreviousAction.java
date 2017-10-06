@@ -16,7 +16,7 @@ public class PreviousAction extends AbstractTableToolAction {
     }
 
     @Override
-    public void onEvent(byte event, ControlComponent control) {
+    public void onEvent(ControlComponent control) {
         int topline = context.data.topline - context.data.vlength;
         if (topline < 0)
             return;
