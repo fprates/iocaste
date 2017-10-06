@@ -263,8 +263,8 @@ public abstract class ToolDataElement implements Component, Container,
 	 *    java.lang.String)
 	 */
     @Override
-    public EventHandler getEventHandler(String name) {
-        return evhandlers.get(name);
+    public final EventHandler getEventHandler(String name) {
+        return (name == null)? evhandlers.get("click") : evhandlers.get(name);
     }
     
     /*

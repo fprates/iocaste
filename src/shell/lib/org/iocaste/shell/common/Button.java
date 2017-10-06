@@ -32,12 +32,6 @@ public class Button extends ToolDataElement {
     }
     
     @Override
-    public final EventHandler getEventHandler(String name) {
-        return (name == null)?
-                super.getEventHandler("click") : super.getEventHandler(name);
-    }
-    
-    @Override
     public final boolean isControlComponent() {
         return true;
     }
