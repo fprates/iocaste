@@ -38,6 +38,7 @@ import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.tooldata.ToolData;
+import org.iocaste.shell.common.tooldata.ViewExport;
 import org.iocaste.shell.common.tooldata.ViewSpecItem;
 
 public abstract class AbstractApplication<T extends Context>

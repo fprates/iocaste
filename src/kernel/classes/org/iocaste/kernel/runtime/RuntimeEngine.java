@@ -3,11 +3,12 @@ package org.iocaste.kernel.runtime;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.tooldata.ViewExport;
 import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
+import org.iocaste.kernel.runtime.shell.ProcessLegacyInput;
 import org.iocaste.kernel.runtime.shell.ProcessLegacyOutput;
 import org.iocaste.kernel.runtime.shell.ProcessOutput;
 import org.iocaste.protocol.AbstractFunction;
@@ -49,6 +50,7 @@ public class RuntimeEngine extends AbstractFunction {
 	
 	public RuntimeEngine() {
         export("input_process", new ProcessInput());
+        export("legacy_input_process", new ProcessLegacyInput());
         export("legacy_output_process", new ProcessLegacyOutput());
         export("output_process", new ProcessOutput());
         export("style_data_get", new GetStyleSheet());

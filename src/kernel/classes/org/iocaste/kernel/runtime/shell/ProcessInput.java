@@ -21,15 +21,14 @@ import org.iocaste.kernel.documents.GetObject;
 import org.iocaste.kernel.runtime.RuntimeEngine;
 import org.iocaste.kernel.runtime.shell.factories.SpecFactory;
 import org.iocaste.kernel.runtime.shell.renderer.StandardHtmlRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.internal.AbstractProcessHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ControllerData;
 import org.iocaste.kernel.runtime.shell.renderer.internal.InputStatus;
-import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.utils.Tools;
 import org.iocaste.protocol.utils.Tools.TYPE;
-import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -40,60 +39,17 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.tooldata.ViewExport;
 
-public class ProcessInput extends AbstractHandler {
-    private static final int EINITIAL = 1;
-    private static final int EMISMATCH = 2;
-    private static final int EINVALID_REFERENCE = 3;
-    private static final int LOW_RANGE = 3;
-    private static final int HIGH_RANGE = 4;
-    public static Map<String, Map<String, String>> msgsource;
-    private static Map<Integer, String> msgconv;
+public class ProcessInput extends AbstractProcessHandler {
     private ControllerData config;
     private StandardHtmlRenderer renderer;
-    
-    static {
-        Map<String, String> messages;
-        
-        msgsource = new HashMap<>();
-        msgsource.put("pt_BR", messages = new HashMap<>());
-        messages.put("calendar", "Calendário");
-        messages.put("field.is.obligatory", "Campo é obrigatório (%s).");
-        messages.put("field.type.mismatch",
-                "Tipo de valor incompatível com campo.");
-        messages.put("grid.options", "Opções da grid");
-        messages.put("input.options", "Opções da entrada");
-        messages.put("invalid.value", "Valor inválido (%s).");
-        messages.put("not.connected", "Não conectado");
-        messages.put("required", "Obrigatório");
-        messages.put("select", "Selecionar");
-        messages.put("user.not.authorized", "Usuário não autorizado.");
-        messages.put("values", "Valores possíveis");
-        
-        msgsource.put("en_US", messages = new HashMap<>());
-        messages.put("calendar", "Calendar");
-        messages.put("field.is.obligatory", "Input field is required (%s).");
-        messages.put("field.type.mismatch", "Input value type mismatch.");
-        messages.put("grid.options", "Grid options");
-        messages.put("input.options", "Input options");
-        messages.put("invalid.value", "Invalid value (%s).");
-        messages.put("not.connected", "Not connected");
-        messages.put("required", "Obligatory");
-        messages.put("select", "Select");
-        messages.put("user.not.authorized", "User not authorized.");
-        messages.put("values", "Suggested values");
-        
-        msgconv= new HashMap<>();
-        msgconv.put(EINITIAL, "field.is.obligatory");
-        msgconv.put(EMISMATCH, "field.type.mismatch");
-        msgconv.put(EINVALID_REFERENCE, "invalid.value");
-    }
 
     public ProcessInput() {
         renderer = new StandardHtmlRenderer();
     }
     
-    private final void callController(ViewExport viewexport)
+    private final InputStatus callController(ViewExport viewexport)
     		throws Exception {
         InputStatus status;
         ComponentEntry entry;
@@ -108,7 +64,7 @@ public class ProcessInput extends AbstractHandler {
         viewexport.msgargs = status.msgargs;
         viewexport.action = null;
         if (status.msgtype == Const.ERROR)
-            return;
+            return status;
         
         for (String key : config.state.viewctx.entries.keySet()) {
             entry = config.state.viewctx.entries.get(key);
@@ -124,6 +80,7 @@ public class ProcessInput extends AbstractHandler {
         
         if (!status.event)
             viewexport.action = getString(config.values, "action");
+        return status;
     }
     
     /**
@@ -164,7 +121,7 @@ public class ProcessInput extends AbstractHandler {
         switch (dataelement.getType()) {
         case DataType.BOOLEAN:
             if (input.isBooleanComponent())
-                return !value.equals("off");
+                return !((value == null) || value.equals("off"));
             
             return value;
         default:
@@ -566,6 +523,11 @@ public class ProcessInput extends AbstractHandler {
         status.event = true;
     }
 
+    public final InputStatus run(ControllerData config) throws Exception {
+        this.config = config;
+        return callController(config.state.viewctx.viewexport);
+    }
+    
 	@Override
 	public Object run(Message message) throws Exception {
         String actionname = null;

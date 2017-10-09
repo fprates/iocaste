@@ -34,19 +34,18 @@ import org.iocaste.kernel.runtime.shell.factories.TextFieldFactory;
 import org.iocaste.kernel.runtime.shell.factories.TilesFactory;
 import org.iocaste.kernel.runtime.shell.factories.VirtualControlFactory;
 import org.iocaste.kernel.runtime.shell.renderer.StandardHtmlRenderer;
+import org.iocaste.kernel.runtime.shell.renderer.internal.AbstractProcessHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Input;
-import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
-import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.HeaderLink;
-import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.tooldata.ToolData;
+import org.iocaste.shell.common.tooldata.ViewExport;
 import org.iocaste.shell.common.tooldata.ViewSpecItem;
 import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
-public class ProcessOutput extends AbstractHandler {
+public class ProcessOutput extends AbstractProcessHandler {
     public Map<ViewSpecItem.TYPES, SpecFactory> factories;
     private StandardHtmlRenderer renderer;
     
@@ -146,22 +145,6 @@ public class ProcessOutput extends AbstractHandler {
     private final SpecFactory getFactory(TYPES type) {
         return factories.get(type);
     }
-    
-    private final void moveMessages(ProcessOutputData data) {
-        Map<String, String> messages;
-        
-        data.viewctx.messagesrc = new MessageSource();
-        data.viewctx.messagesrc.instance(data.viewctx.locale);
-        messages = ProcessInput.msgsource.get(data.viewctx.locale);
-        for (String key : messages.keySet())
-            data.viewctx.messagesrc.put(key, messages.get(key));
-        if (data.viewctx.viewexport.message != null)
-            data.viewctx.messagetext = data.viewctx.messagesrc.get(
-                    data.viewctx.viewexport.message,
-                    data.viewctx.viewexport.message);
-        data.viewctx.messageargs = data.viewctx.viewexport.msgargs;
-        data.viewctx.messagetype = data.viewctx.viewexport.msgtype;
-    }
 
     @Override
     public Object run(Message message) throws Exception {
@@ -195,7 +178,7 @@ public class ProcessOutput extends AbstractHandler {
         outputdata.viewctx.types = RuntimeEngine.CONST_TYPES;
         outputdata.viewctx.factories = factories;
         if (!outputdata.noinitmessages)
-            moveMessages(outputdata);
+            moveMessages(outputdata.viewctx);
         if (outputdata.viewctx.viewexport.subpages != null)
             for (int i = 0;
                     i < outputdata.viewctx.viewexport.subpages.length; i++)

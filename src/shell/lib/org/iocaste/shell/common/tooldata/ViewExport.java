@@ -1,4 +1,4 @@
-package org.iocaste.runtime.common.application;
+package org.iocaste.shell.common.tooldata;
 
 import java.io.Serializable;
 import java.util.Locale;

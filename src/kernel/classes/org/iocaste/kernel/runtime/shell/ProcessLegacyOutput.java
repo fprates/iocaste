@@ -32,16 +32,16 @@ import org.iocaste.kernel.runtime.shell.factories.TableToolFactory;
 import org.iocaste.kernel.runtime.shell.factories.TextEditorFactory;
 import org.iocaste.kernel.runtime.shell.factories.TextFieldFactory;
 import org.iocaste.kernel.runtime.shell.factories.TilesFactory;
+import org.iocaste.kernel.runtime.shell.renderer.internal.AbstractProcessHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.legacy.LegacyHtmlRenderer;
-import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
-import org.iocaste.runtime.common.application.ViewExport;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.tooldata.ViewExport;
 import org.iocaste.shell.common.tooldata.ViewSpecItem;
 
-public class ProcessLegacyOutput extends AbstractHandler {
+public class ProcessLegacyOutput extends AbstractProcessHandler {
     public Map<ViewSpecItem.TYPES, SpecFactory> factories;
     private LegacyHtmlRenderer renderer;
     
@@ -123,9 +123,11 @@ public class ProcessLegacyOutput extends AbstractHandler {
         config.viewctx.viewexport.title = view.getTitle();
         config.viewctx.factories = factories;
         config.viewctx.sessionid = message.getst("sessionid");
+        config.viewctx.locale = view.getLocale().toString();
         config.logid = message.geti("logid");
         config.sequence = message.getl("sequence");
         config.viewctx.function = getFunction();
+        moveMessages(config.viewctx);
         
         lines = renderer.run(config);
         content = new StringBuilder();
