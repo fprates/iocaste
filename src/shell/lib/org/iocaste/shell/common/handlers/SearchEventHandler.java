@@ -1,4 +1,4 @@
-package org.iocaste.shell.common.tooldata;
+package org.iocaste.shell.common.handlers;
 
 import java.util.HashMap;
 import java.util.Map;

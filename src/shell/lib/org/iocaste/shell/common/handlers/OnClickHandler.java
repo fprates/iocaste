@@ -1,4 +1,14 @@
-package org.iocaste.shell.common;
+package org.iocaste.shell.common.handlers;
+
+import org.iocaste.shell.common.AbstractEventHandler;
+import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.ControlComponent;
+import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.MultipageContainer;
+import org.iocaste.shell.common.TabbedPaneItem;
+import org.iocaste.shell.common.View;
 
 public class OnClickHandler extends AbstractEventHandler {
     private static final long serialVersionUID = -4167470559514121355L;

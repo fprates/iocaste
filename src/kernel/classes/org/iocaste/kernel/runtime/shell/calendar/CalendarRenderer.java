@@ -19,7 +19,7 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.tooldata.ChooseEventHandler;
+import org.iocaste.shell.common.handlers.ChooseEventHandler;
 
 public class CalendarRenderer implements PopupRenderer {
     private Messages messages;

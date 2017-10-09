@@ -14,8 +14,8 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.OnClickHandler;
 import org.iocaste.shell.common.TabbedPaneItem;
+import org.iocaste.shell.common.handlers.OnClickHandler;
 import org.iocaste.shell.common.tooldata.TabbedPane;
 import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 

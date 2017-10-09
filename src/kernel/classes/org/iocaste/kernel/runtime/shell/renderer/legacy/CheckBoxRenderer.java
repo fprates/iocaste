@@ -7,8 +7,8 @@ import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.OnFocusHandler;
 import org.iocaste.shell.common.Shell;
+import org.iocaste.shell.common.handlers.OnFocusHandler;
 
 public class CheckBoxRenderer extends AbstractElementRenderer<InputComponent> {
     

@@ -28,8 +28,8 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.tooldata.ChooseEventHandler;
-import org.iocaste.shell.common.tooldata.SearchEventHandler;
+import org.iocaste.shell.common.handlers.ChooseEventHandler;
+import org.iocaste.shell.common.handlers.SearchEventHandler;
 
 public class SearchHelpRenderer implements PopupRenderer {
     private Messages messages;

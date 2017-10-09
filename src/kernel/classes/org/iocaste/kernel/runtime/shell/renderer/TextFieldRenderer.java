@@ -10,11 +10,12 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.OnFocusHandler;
 import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.handlers.ContextMenuHandler;
+import org.iocaste.shell.common.handlers.OnFocusHandler;
 import org.iocaste.shell.common.tooldata.Text;
 import org.iocaste.shell.common.tooldata.ToolData;
 import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
@@ -25,7 +26,6 @@ import org.iocaste.kernel.runtime.shell.PopupRenderer;
 import org.iocaste.kernel.runtime.shell.ProcessInput;
 import org.iocaste.kernel.runtime.shell.calendar.CalendarRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.ctxmenu.ContextMenu;
-import org.iocaste.kernel.runtime.shell.renderer.ctxmenu.ContextMenuHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
@@ -203,7 +203,7 @@ public class TextFieldRenderer extends AbstractElementRenderer<InputComponent>
         EventHandler handler;
         
         popupname = inputcontrol.getHtmlName();
-        handler = new ContextMenuHandler(config.viewctx);
+        handler = new ContextMenuHandler(config.viewctx.viewexport);
         ctxmenu.add(
                 popupname.concat("_link"), popupname, title, handler);
 

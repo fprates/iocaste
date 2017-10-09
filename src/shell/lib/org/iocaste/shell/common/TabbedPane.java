@@ -1,5 +1,7 @@
 package org.iocaste.shell.common;
 
+import org.iocaste.shell.common.handlers.OnClickHandler;
+
 /**
  * Componentes de abas.
  * 
