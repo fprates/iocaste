@@ -25,13 +25,14 @@ import org.iocaste.shell.common.LinkEntry;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipageContainer;
 import org.iocaste.shell.common.PopupControl;
+import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.TextComponent;
 import org.iocaste.shell.common.View;
 
 public abstract class ToolDataElement implements Component, Container,
         InputComponent, ControlComponent, MultipageContainer, TextComponent,
-        LinkComponent, PopupControl {
+        LinkComponent, PopupControl, RangeInputComponent {
 	private static final long serialVersionUID = 4217306786401069911L;
 	protected ToolData tooldata;
 	protected View view;
@@ -275,6 +276,11 @@ public abstract class ToolDataElement implements Component, Container,
     public final Map<String, String> getEvents() {
         return tooldata.events;
     }
+
+    @Override
+    public String getHighHtmlName() {
+        return null;
+    }
     
     /*
      * (non-Javadoc)
@@ -339,6 +345,11 @@ public abstract class ToolDataElement implements Component, Container,
     @Override
     public final Locale getLocale() {
         return view.getLocale();
+    }
+    
+    @Override
+    public String getLowHtmlName() {
+        return null;
     }
     
     @Override
