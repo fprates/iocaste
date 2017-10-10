@@ -130,6 +130,6 @@ public class Services extends AbstractFunction {
      */
     public final void updateView(Message message) {
         PageRenderer.updateView(message.getSessionid(),
-                (View)message.get("view"), this);
+                (View)message.get("view"));
     }
 }

@@ -31,6 +31,7 @@ public class LegacyHtmlRenderer extends AbstractHtmlRenderer {
         new DataItemRenderer(this);
         new DummyRenderer(this);
         new DummyRenderer(this, Const.RADIO_GROUP);
+        new DummyRenderer(this, Const.SEARCH_HELP);
         new ExpandBarRenderer(this);
         new FileEntryRenderer(this);
         new FormRenderer(this);

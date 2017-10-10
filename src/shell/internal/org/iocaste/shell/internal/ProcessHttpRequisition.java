@@ -42,6 +42,48 @@ public class ProcessHttpRequisition extends AbstractHandler {
     public Map<String, List<SessionContext>> apps;
     public TicketControl tickets;
     protected boolean disconnecteddb;
+    private static final int EINITIAL = 1;
+    private static final int EMISMATCH = 2;
+    private static final int EINVALID_REFERENCE = 3;
+    public static Map<String, Map<String, String>> msgsource;
+    private static Map<Integer, String> msgconv;
+    
+    static {
+        Map<String, String> messages;
+        
+        msgsource = new HashMap<>();
+        msgsource.put("pt_BR", messages = new HashMap<>());
+        messages.put("calendar", "Calendário");
+        messages.put("field.is.obligatory", "Campo é obrigatório (%s).");
+        messages.put("field.type.mismatch",
+                "Tipo de valor incompatível com campo.");
+        messages.put("grid.options", "Opções da grid");
+        messages.put("input.options", "Opções da entrada");
+        messages.put("invalid.value", "Valor inválido (%s).");
+        messages.put("not.connected", "Não conectado");
+        messages.put("required", "Obrigatório");
+        messages.put("select", "Selecionar");
+        messages.put("user.not.authorized", "Usuário não autorizado.");
+        messages.put("values", "Valores possíveis");
+        
+        msgsource.put("en_US", messages = new HashMap<>());
+        messages.put("calendar", "Calendar");
+        messages.put("field.is.obligatory", "Input field is required (%s).");
+        messages.put("field.type.mismatch", "Input value type mismatch.");
+        messages.put("grid.options", "Grid options");
+        messages.put("input.options", "Input options");
+        messages.put("invalid.value", "Invalid value (%s).");
+        messages.put("not.connected", "Not connected");
+        messages.put("required", "Obligatory");
+        messages.put("select", "Select");
+        messages.put("user.not.authorized", "User not authorized.");
+        messages.put("values", "Suggested values");
+        
+        msgconv= new HashMap<>();
+        msgconv.put(EINITIAL, "field.is.obligatory");
+        msgconv.put(EMISMATCH, "field.type.mismatch");
+        msgconv.put(EINVALID_REFERENCE, "invalid.value");
+    }
     
     public ProcessHttpRequisition() {
         tickets = new TicketControl();
@@ -54,8 +96,25 @@ public class ProcessHttpRequisition extends AbstractHandler {
         ControlComponent control;
         Service service;
         AbstractRenderer function;
+        Object[] values;
         
-        status = Controller.validate(config);
+        message = new Message("legacy_input_process");
+        message.add("view", config.state.view);
+        message.add("values", config.values);
+        values = (Object[])callIocaste(config.sessionid, message);
+        
+        status = new InputStatus();
+        config.state.view = (View)values[0];
+        status.fatal = (String)values[1];
+        status.msgtype = (Const)values[2];
+        status.msgargs = (Object[])values[3];
+        status.message = (String)values[4];
+        status.event = (boolean)values[5];
+        
+        control = (ControlComponent)values[6];
+        config.popupcontrol = (control != null)?
+                    control.isPopup()? (PopupControl)control : null : null;
+        
         if (status.fatal != null)
             throw new IocasteException(status.fatal);
         
@@ -69,12 +128,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
         
         for (String name : config.values.keySet())
             message.add(name, config.values.get(name));
-
-        control = config.state.view.getElement(message.getst("action"));
-        if ((control != null) && control.isPopup()) {
-            config.popupcontrol = (PopupControl)control;
-            return;
-        }
         
         function = getFunction();
         try {
@@ -461,6 +514,13 @@ public class ProcessHttpRequisition extends AbstractHandler {
         
         return Integer.parseInt(parsed[2]);
     }
+
+    
+    private final String getMessage(View view, String id) {
+        Map<String, String> messages;
+        messages = msgsource.get(view.getLocale().toString());
+        return (messages == null)? id : messages.get(id);
+    }
     
     /**
      * 
@@ -792,8 +852,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
             AbstractRenderer.pushPage(config.sessionid, config.state.view);
         
         config.pagectx.inputs.clear();
-        AbstractRenderer.updateView(
-                config.sessionid, config.state.view, function);
+        AbstractRenderer.updateView(config.sessionid, config.state.view);
         
         /*
          * prepara retorno para resposta, seja na visão atual ou se for
@@ -814,8 +873,8 @@ public class ProcessHttpRequisition extends AbstractHandler {
                 (config.state.rapp != null) &&
                     isConnected(config.sessionid)) {
             pagectx.setError(AUTHORIZATION_ERROR);
-            pagectx.message(Const.ERROR, Controller.getMessage(
-                    pagectx.getViewData(), "user.not.authorized"), null);
+            pagectx.message(Const.ERROR, getMessage(
+                    config.state.view, "user.not.authorized"), null);
             
             return pagectx;
         }

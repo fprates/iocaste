@@ -17,7 +17,6 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.protocol.StandardService;
 import org.iocaste.shell.common.AccessTicket;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.View;
 
@@ -279,10 +278,8 @@ public abstract class AbstractRenderer extends HttpServlet
      * @param view
      * @param function
      */
-    public static final void updateView(String sessionid, View view,
-            Function function) {
+    public static final void updateView(String sessionid, View view) {
         AppContext appcontext;
-        Input input;
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
         List<SessionContext> sessionctx = reqproc.apps.get(complexid[0]);
@@ -291,19 +288,6 @@ public abstract class AbstractRenderer extends HttpServlet
             return;
         
         appcontext = sessionctx.get(logid).getAppContext(view.getAppName());
-        input = new Input();
-        input.view = view;
-        input.container = null;
-        input.function = function;
-        input.pagectx = appcontext.getPageContext(view.getPageName());
-        input.pagectx.inputs.clear();
-        input.pagectx.mpelements.clear();
-        
-        for (Container container : view.getContainers()) {
-            input.element = container;
-            input.register();
-        }
-        
         appcontext.getPageContext(view.getPageName()).setViewData(view);
     }
 
