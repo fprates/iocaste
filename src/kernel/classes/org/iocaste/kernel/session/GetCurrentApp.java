@@ -9,9 +9,7 @@ public class GetCurrentApp extends AbstractHandler {
     public Object run(Message message) throws Exception {
         Session session = getFunction();
         String sessionid = message.getSessionid();
-        String appname = session.sessions.get(sessionid).getCurrentApp();
-        
-        return appname;
+        return session.sessions.get(sessionid).currentapp;
     }
 
 }

@@ -13,7 +13,6 @@ public class UserContext {
     private Locale locale;
     private int terminal;
     private Date conndate;
-    private String currentapp;
     private List<Authorization> authorizations;
     
     public UserContext(Locale locale) {
@@ -27,14 +26,6 @@ public class UserContext {
      */
     public final List<Authorization> getAuthorizations() {
         return authorizations;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final String getCurrentApp() {
-        return currentapp;
     }
     
     /**
@@ -75,14 +66,6 @@ public class UserContext {
      */
     public final void setAuthorizations(List<Authorization> authorizations) {
         this.authorizations = authorizations;
-    }
-    
-    /**
-     * 
-     * @param currentapp
-     */
-    public final void setCurrentApp(String currentapp) {
-        this.currentapp = currentapp;
     }
     
     /**

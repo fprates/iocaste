@@ -286,6 +286,7 @@ public abstract class AbstractApplication<T extends Context>
         servicedata = new ServiceInterfaceData();
         servicedata.servername = getServerName();
         servicedata.sessionid = req.getSession().getId();
+        servicedata.appname = getServletName();
     	runtime = new RuntimeEngine(servicedata);
         try {
             if (servicedata.sessionid == null)
@@ -298,7 +299,7 @@ public abstract class AbstractApplication<T extends Context>
             	if (context == null)
             	  throw new IocasteException("application context undefined.");
             	context.set(runtime);
-            	context.set(new ContextFunction<T>(getServletName(),
+            	context.set(new ContextFunction<T>(servicedata.appname,
             	        getServerName(), servicedata.sessionid));
                 if (context.getPages().size() > 0)
                     buildPages(context);

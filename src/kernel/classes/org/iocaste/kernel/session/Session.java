@@ -4,13 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.iocaste.kernel.UserContext;
 import org.iocaste.kernel.database.Database;
 import org.iocaste.kernel.users.Users;
 import org.iocaste.protocol.AbstractFunction;
 
 public class Session extends AbstractFunction {
-    public Map<String, UserContext> sessions;
+    public Map<String, SessionContext> sessions;
     public Map<String, List<String>> usersessions;
     public Database database;
     public Users users;

@@ -119,7 +119,7 @@ public class IsAuthorized extends AbstractHandler {
         Authorization objauthorization;
         Auth auth = getFunction();
         String sessionid = message.getSessionid();
-        UserContext context = auth.session.sessions.get(sessionid);
+        UserContext context = auth.session.sessions.get(sessionid).usercontext;
         
         if (context == null && auth.isAuthorizedCall())
             return false;

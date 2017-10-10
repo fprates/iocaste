@@ -18,7 +18,8 @@ public class GetUsername extends AbstractHandler {
         if (!session.sessions.containsKey(sessionid))
             return null;
         
-        return session.sessions.get(sessionid).getUser().getUsername();
+        return session.sessions.
+                get(sessionid).usercontext.getUser().getUsername();
     }
 
 }

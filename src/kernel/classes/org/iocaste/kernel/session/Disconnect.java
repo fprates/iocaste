@@ -21,7 +21,7 @@ public class Disconnect extends AbstractHandler {
         if (!session.sessions.containsKey(sessionid))
             return null;
         
-        context = session.sessions.get(sessionid);
+        context = session.sessions.get(sessionid).usercontext;
         session.usersessions.remove(context.getUser().getUsername());
         session.sessions.remove(sessionid);
         return null;

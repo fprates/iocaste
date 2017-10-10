@@ -28,9 +28,10 @@ import org.iocaste.shell.common.tooldata.ViewExport;
 @ServiceUrl("/iocaste-kernel/service.html")
 public class RuntimeEngine extends AbstractRuntimeInterface {
     public static final String SERVICE_URL = "/iocaste-kernel/service.html";
+    public ServiceInterfaceData data;
     
     public RuntimeEngine(ServiceInterfaceData data) {
-    	initService(data);
+    	initService(this.data = data);
     }
     
     /**
@@ -501,7 +502,9 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
      * @return
      */
     public final void newContext() {
-    	call(new Message("context_new"));
+        Message message = new Message("context_new");
+        message.add("app_name", data.appname);
+    	call(message);
     }
     
     /**

@@ -12,7 +12,7 @@ public class InvalidateAuthCache extends AbstractHandler {
         Session session = getFunction();
         
         for (String sessionid : session.sessions.keySet()) {
-            userctx = session.sessions.get(sessionid);
+            userctx = session.sessions.get(sessionid).usercontext;
             if (userctx != null)
                 userctx.setAuthorizations(null);
         }

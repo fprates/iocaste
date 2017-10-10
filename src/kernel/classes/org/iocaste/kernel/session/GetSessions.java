@@ -19,7 +19,7 @@ public class GetSessions extends AbstractHandler {
         
         users = new TreeSet<>();
         for (String sessionid : session.sessions.keySet()) {
-            context = session.sessions.get(sessionid);
+            context = session.sessions.get(sessionid).usercontext;
             user = context.getUser();
             if (user == null)
                 continue;

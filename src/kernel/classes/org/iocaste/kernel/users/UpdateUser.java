@@ -35,7 +35,8 @@ public class UpdateUser extends AbstractHandler {
         if (sids == null)
             return;
         for (String sid : sids)
-            users.session.sessions.get(sid).setAuthorizations(null);
+            users.session.sessions.
+                get(sid).usercontext.setAuthorizations(null);
     }
 
 }

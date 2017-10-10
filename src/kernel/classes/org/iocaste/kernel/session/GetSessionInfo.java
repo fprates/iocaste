@@ -21,7 +21,8 @@ public class GetSessionInfo extends AbstractHandler {
         Connection connection = session.database.
                 getDBConnection(message.getSessionid());
         
-        return getSessionInfo(session.sessions.get(sessionid), connection);
+        return getSessionInfo(
+                session.sessions.get(sessionid).usercontext, connection);
     }
     
     /**

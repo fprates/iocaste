@@ -8,7 +8,10 @@ public class NewContext extends AbstractHandler {
 	@Override
 	public Object run(Message message) throws Exception {
         Session session = getFunction();
-        session.sessions.put(message.getSessionid(), null);
+        SessionContext sessionctx = new SessionContext();
+        
+        sessionctx.currentapp = message.getst("app_name");
+        session.sessions.put(message.getSessionid(), sessionctx);
 		return null;
 	}
 }

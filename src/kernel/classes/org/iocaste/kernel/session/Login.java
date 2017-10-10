@@ -24,13 +24,15 @@ public class Login extends AbstractHandler {
     private final void instance(Session session,
             User user, String sessionid, String username, Locale locale) {
         int terminal;
-        UserContext context;
         String[] composed;
         List<String> sessionslist;
+        SessionContext sessionctx;
         
-        context = new UserContext(locale);
-        context.setUser(user);
-        session.sessions.put(sessionid, context);
+        if ((sessionctx = session.sessions.get(sessionid)) == null)
+            session.sessions.put(sessionid, sessionctx = new SessionContext());
+        sessionctx.usercontext = new UserContext(locale);
+        sessionctx.usercontext.setUser(user);
+        
         if (session.usersessions.containsKey(username)) {
             sessionslist = session.usersessions.get(username);
         } else {
@@ -42,15 +44,16 @@ public class Login extends AbstractHandler {
         composed = sessionid.split(":");
         sessionid = composed[0];
         terminal = (composed.length > 1)? Integer.parseInt(composed[1]) : 0;
-        context.setTerminal(terminal);
+        sessionctx.usercontext.setTerminal(terminal);
         
         if (session.sessions.containsKey(sessionid))
             return;
         
-        context = new UserContext(locale);
-        context.setUser(null);
-        context.setTerminal(terminal);
-        session.sessions.put(sessionid, context);
+        sessionctx = new SessionContext();
+        sessionctx.usercontext = new UserContext(locale);
+        sessionctx.usercontext.setUser(null);
+        sessionctx.usercontext.setTerminal(terminal);
+        session.sessions.put(sessionid, sessionctx);
     }
     
     @Override
@@ -104,7 +107,7 @@ public class Login extends AbstractHandler {
     public final String run(String sessionid, String dbname) {
         String dbsessionid = UUID.randomUUID().toString();
         Session session = getFunction();
-        UserContext userctx = session.sessions.get(sessionid);
+        UserContext userctx = session.sessions.get(sessionid).usercontext;
         
         instance(session, userctx.getUser(), dbsessionid, null, null);
         

@@ -15,7 +15,7 @@ public class GetLocale extends AbstractHandler {
     
     public Locale run(String sessionid) {
         Session session = getFunction();
-        UserContext context = session.sessions.get(sessionid);
+        UserContext context = session.sessions.get(sessionid).usercontext;
         
         return (context == null)? null : context.getLocale();
     }
