@@ -1,5 +1,7 @@
 package org.iocaste.runtime.common.application;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
@@ -195,16 +197,17 @@ public abstract class AbstractActionHandler<C extends Context>
     }
     
     protected ExtendedObject[] getobjects(String tooldata) {
-        ExtendedObject[] objects;
+        List<ExtendedObject> objects;
         Map<Integer, ExtendedObject> items;
-        int size;
+        ExtendedObject object;
         
-        if ((size = (items = gettool(tooldata).objects).size()) == 0)
+        if ((items = gettool(tooldata).objects).size() == 0)
             return null;
-        objects = new ExtendedObject[size];
-        for (int i = 0; i < size; i++)
-            objects[i] = items.get(i);
-        return objects;
+        objects = new ArrayList<>();
+        for (int key : items.keySet())
+            if ((object = items.get(key)) != null)
+                objects.add(object);
+        return objects.toArray(new ExtendedObject[0]);
     }
     
     protected final String getst(String tooldata) {
