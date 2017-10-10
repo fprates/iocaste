@@ -182,7 +182,7 @@ public abstract class AbstractApplication<T extends Context>
     
     @Override
     public final String getAppName() {
-    	return getServletName();
+        return null;
     }
     
     //	private final ViewExport getExceptionView(Exception e) {
@@ -298,7 +298,8 @@ public abstract class AbstractApplication<T extends Context>
             	if (context == null)
             	  throw new IocasteException("application context undefined.");
             	context.set(runtime);
-            	context.set(this);
+            	context.set(new ContextFunction<T>(getServletName(),
+            	        getServerName(), servicedata.sessionid));
                 if (context.getPages().size() > 0)
                     buildPages(context);
             } else {
