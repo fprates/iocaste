@@ -30,15 +30,11 @@ public class DataFormTool extends AbstractComponentTool {
         ToolData dfdata = (ToolData)entry.data;
         DataForm df = getElement();
         
-        if (dfdata.nsdata != null) {
-            for (Element element : df.getElements())
-                if (df.isNSReference(element.getName()))
-                    return element.getHtmlName();
+        if (dfdata.nsdata == null)
             return null;
-        }
-        for (String key : dfdata.get().keySet())
-            if (dfdata.get(key).ns)
-                return df.get(key).getHtmlName();
+        for (Element element : df.getElements())
+            if (df.isNSReference(element.getName()))
+                return element.getHtmlName();
         return null;
     }
     
@@ -84,18 +80,13 @@ public class DataFormTool extends AbstractComponentTool {
     
     @Override
     public final void load() {
-        ExtendedObject object;
         ToolData item;
         
         if (getElement() == null)
         	return;
-        object = getObject();
-        if (entry.data.object == null)
-            entry.data.object = object;
+        entry.data.object = getObject();
         for (String key : entry.data.items.keySet()) {
             item = entry.data.items.get(key);
-            if (!item.disabled)
-                entry.data.object.set(key, object.get(key));
             item.value = entry.data.object.get(key);
         }
     }
@@ -121,9 +112,7 @@ public class DataFormTool extends AbstractComponentTool {
         ToolData item;
         DataItem input;
         DataForm df;
-        ComponentEntry nsentry;
         Map<String, List<String>> groups;
-        String htmlname;
         String[] tokens;
         ToolData data = getComponentData();
         Container container = getElement(data.parent);
@@ -150,6 +139,8 @@ public class DataFormTool extends AbstractComponentTool {
             for (Element element : df.getElements())
                 if (df.isNSReference(element.getName())) {
                     tokens = data.nsdata.split(".");
+                    if (tokens.length == 0)
+                        tokens = new String[] {data.nsdata};
                     switch (tokens.length) {
                     case 1:
                         item = data.instance(tokens[0]);
@@ -167,10 +158,6 @@ public class DataFormTool extends AbstractComponentTool {
                     setItem(data, (DataItem)element, item);
                     break;
                 }
-        if (data.nsdata != null) {
-            nsentry = viewctx.entries.get(data.nsdata);
-            df.setNSReference(nsentry.component.getNSField());
-        }
         
         if (data.groups != null) {
             groups = new LinkedHashMap<>();
@@ -194,9 +181,6 @@ public class DataFormTool extends AbstractComponentTool {
             input.setVisible(!item.invisible);
             if (item.style != null)
                 input.setStyleClass(item.style);
-            htmlname = input.getHtmlName();
-            if (item.ns)
-                df.setNSReference(htmlname);
             if ((data.groups != null) && (item.group != null))
                 groups.get(item.group).add(item.name);
         }

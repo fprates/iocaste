@@ -24,6 +24,8 @@ public class Common {
         for (String name : new String[] {"head", "base"}) {
             form = page.instance(name);
             form.custommodel = model;
+            if (ns != null)
+                form.nsdata = ns.getName();
             
             switch(name) {
             case "head":

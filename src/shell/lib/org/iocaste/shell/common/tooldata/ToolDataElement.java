@@ -390,7 +390,7 @@ public abstract class ToolDataElement implements Component, Container,
      */
     @Override
     public final Object getNS() {
-        return tooldata.ns;
+        return tooldata.nsvalue;
     }
     
     /*
