@@ -14,7 +14,6 @@ public class CalendarData {
     public int[] weekdays;
     public String[] sweekdays;
     public Map<Integer, String> monthtext;
-    public Date date;
     private Calendar calendar;
 
     public CalendarData() {

@@ -15,6 +15,7 @@ public class ViewExport implements Serializable {
     public Object[][] stylesheet, styleconst, ncspec, reqparameters, subpages;
     public Locale locale;
     public String action, prefix, message, popupcontrol;
+    public Object popupvalue;
     public Const msgtype;
     public ViewTitle title;
 }

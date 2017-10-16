@@ -20,6 +20,7 @@ import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.handlers.ChooseEventHandler;
+import org.iocaste.shell.common.handlers.ContextMenuHandler;
 
 public class CalendarRenderer implements PopupRenderer {
     private Messages messages;
@@ -41,11 +42,13 @@ public class CalendarRenderer implements PopupRenderer {
                 append(name).append("');").toString();
         
         control = data.popup.viewctx.view.getElement(name);
+        control.put("click",
+                new ContextMenuHandler(data.popup.viewctx.viewexport));
+        
         link = new Link(container, "link_".concat(name), null);
         link.setText(control.getText());
         link.setStyleClass("calmonth");
         link.setEvent("click", onclick);
-        link.put("click", new ChooseEventHandler(data.control));
     }
     
     private final void response(CalendarData data) throws Exception {
@@ -64,7 +67,7 @@ public class CalendarRenderer implements PopupRenderer {
         
         Style.execute(data);
         
-        data.update(data.date);
+        data.update((Date)data.popup.viewctx.viewexport.popupvalue);
         data.popup.container =
                 new StandardContainer(data.popup.viewctx.view, "calstdcnt");
         data.popup.container.setStyleClass("calcnt");
@@ -74,7 +77,7 @@ public class CalendarRenderer implements PopupRenderer {
 
         locale = data.popup.viewctx.view.getLocale();
         format = new SimpleDateFormat("d MMMMM yyyy", locale);
-        value = format.format(data.date);
+        value = format.format((Date)data.popup.viewctx.viewexport.popupvalue);
         
         text = new Text(data.popup.container, "calhead");
         text.setText(value);
@@ -161,10 +164,11 @@ public class CalendarRenderer implements PopupRenderer {
         case 1:
             data.control = data.popup.viewctx.view.
                     getElement(data.control.getMaster());
-            data.date = data.calculate(data.control.getDate(), mode);
+            data.popup.viewctx.viewexport.popupvalue = data.calculate(
+                    (Date)data.popup.viewctx.viewexport.popupvalue, mode);
             break;
         default:
-            data.date = new Date();
+            data.popup.viewctx.viewexport.popupvalue = new Date();
             break;
         }
         
