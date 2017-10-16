@@ -78,15 +78,27 @@ public class DataFormTool extends AbstractComponentTool {
         return object;
     }
     
+    /**
+     * O código abaixo parece redundante, já que poderíamos em tese
+     * atribuir getObject() diretamente para entry.data.object. Entretanto,
+     * COMPANY e outros campos tem valores nulos quando desabilitados.
+     * 
+     * Conservaremos o valor atual quando o campo estiver desabilitado.
+     */
     @Override
     public final void load() {
+        ExtendedObject object;
         ToolData item;
         
         if (getElement() == null)
-        	return;
-        entry.data.object = getObject();
+            return;
+        object = getObject();
+        if (entry.data.object == null)
+            entry.data.object = object;
         for (String key : entry.data.items.keySet()) {
             item = entry.data.items.get(key);
+            if (!item.disabled)
+                entry.data.object.set(key, object.get(key));
             item.value = entry.data.object.get(key);
         }
     }
