@@ -1,4 +1,4 @@
-package org.iocaste.shell.common;
+package org.iocaste.runtime.common;
 
 import java.io.Serializable;
 

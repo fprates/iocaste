@@ -2,14 +2,12 @@ package org.iocaste.shell;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.AccessTicket;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.View;
 
 public class Services extends AbstractFunction {
 
     public Services() {
-        export("add_ticket", "addTicket");
         export("style_constants_get", new GetStyleConstants());
         export("disconnect_event", new DisconnectEvent());
         export("get_pages_positions", "getPagesPositions");
@@ -19,20 +17,8 @@ public class Services extends AbstractFunction {
         export("login_app_get", "getLoginApp");
         export("pop_page", "popPage");
         export("push_page", "pushPage");
-        export("remove_ticket", "removeTicket");
         export("set_pages_position", "setPagesPosition");
         export("update_view", "updateView");
-    }
-    
-    /**
-     * Adiciona tíquete de acesso à lista de iocaste-shell.
-     * @param message:
-     * - ticket (TicketData): tíquete de acesso
-     * @return código do tíquete
-     */
-    public final String addTicket(Message message) {
-        AccessTicket ticket = message.get("ticket");
-        return PageRenderer.addTicket(this, ticket);
     }
     
     /**
@@ -101,16 +87,6 @@ public class Services extends AbstractFunction {
         View view = message.get("view");
         
         PageRenderer.pushPage(sessionid, view);
-    }
-    
-    /**
-     * 
-     * @param message
-     */
-    public final void removeTicket(Message message) {
-        String ticket = message.getst("ticket");
-        
-        PageRenderer.removeTicket(ticket, this);
     }
     
     /**

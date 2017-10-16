@@ -10,15 +10,21 @@ public class CheckedSelect extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        Database database;
-        Select select;
-        Object[] results;
-        ConnectionState connstate;
-        String query, columns = message.getst("columns");
+        String columns = message.getst("columns");
         String from = message.getst("from");
         String where = message.getst("where");
         Object[] criteria = message.get("criteria");
         Map<String, String[]> ijoin = message.get("inner_join");
+        return run(getFunction(), columns, from, where, criteria, ijoin);
+    }
+    
+    public final Object[] run(Database database, String columns, String from,
+            String where, Object[] criteria, Map<String, String[]> ijoin)
+                throws Exception {
+        Select select;
+        Object[] results;
+        ConnectionState connstate;
+        String query;
         StringBuilder sb = new StringBuilder("select ");
         
         sb.append((columns == null)? "*" : columns);
@@ -38,7 +44,6 @@ public class CheckedSelect extends AbstractHandler {
         if (where != null)
             sb.append(" where ").append(where);
         
-        database = getFunction();
         query = sb.toString();
         connstate = database.instance();
         select = database.get("select");

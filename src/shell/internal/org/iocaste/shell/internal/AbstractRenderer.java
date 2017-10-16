@@ -16,7 +16,6 @@ import org.iocaste.protocol.Handler;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.protocol.StandardService;
-import org.iocaste.shell.common.AccessTicket;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.View;
 
@@ -27,11 +26,6 @@ public abstract class AbstractRenderer extends HttpServlet
     private static final boolean KEEP_SESSION = true;
     private String jsessionid, servername;
     public static ProcessHttpRequisition reqproc;
-    
-    public static final String addTicket(Function function, AccessTicket ticket)
-    {
-        return reqproc.tickets.add(ticket, function);
-    }
     
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServlet#doGet(
@@ -198,16 +192,6 @@ public abstract class AbstractRenderer extends HttpServlet
     public static final void removeAppEntry(String sessionid) {
         String[] complexid = sessionid.split(":");
         reqproc.apps.remove(complexid[0]);
-    }
-    
-    /**
-     * 
-     * @param ticketcode
-     * @param function
-     */
-    public static final void removeTicket(String ticketcode, Function function)
-    {
-        reqproc.tickets.remove(ticketcode, function);
     }
 
     /*

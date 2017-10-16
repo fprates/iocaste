@@ -38,17 +38,6 @@ public class Shell extends AbstractServiceInterface {
         initService(function, SERVER_NAME);
     }
     
-    /**
-     * Adiciona tíquete de acesso
-     * @param ticket
-     * @return
-     */
-    public final String addTicket(AccessTicket ticket) {
-        Message message = new Message("add_ticket");
-        message.add("ticket", ticket);
-        return call(message);
-    }
-    
     public static final boolean areEquals(InputComponent input, Object value) {
         DataElement de = getDataElement(input);
         Object ivalue = input.get();
@@ -259,16 +248,6 @@ public class Shell extends AbstractServiceInterface {
     public final void pushPage(View view) {
         Message message = new Message("push_page");
         message.add("view", view);
-        call(message);
-    }
-    
-    /**
-     * Remove ticket da lista de acessos.
-     * @param ticket código do ticket de acesso.
-     */
-    public final void removeTicket(String ticket) {
-        Message message = new Message("remove_ticket");
-        message.add("ticket", ticket);
         call(message);
     }
     

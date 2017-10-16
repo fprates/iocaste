@@ -35,6 +35,17 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     }
     
     /**
+     * Adiciona tíquete de acesso
+     * @param ticket
+     * @return
+     */
+    public final String add(AccessTicket ticket) {
+        Message message = new Message("ticket_add");
+        message.add("ticket", ticket);
+        return call(message);
+    }
+    
+    /**
      * Adds authorization to a profile
      * @param profile authorizations' profile
      * @param authorization authorization
@@ -556,6 +567,16 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
         Message message = new Message("remove_text");
         message.add("textobj", textobj);
         message.add("id", page);
+        call(message);
+    }
+    
+    /**
+     * Remove ticket da lista de acessos.
+     * @param ticket código do ticket de acesso.
+     */
+    public final void removeTicket(String ticket) {
+        Message message = new Message("ticket_remove");
+        message.add("ticket", ticket);
         call(message);
     }
     

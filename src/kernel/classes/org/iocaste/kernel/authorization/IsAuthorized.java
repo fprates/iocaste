@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.iocaste.kernel.UserContext;
 import org.iocaste.kernel.database.Select;
+import org.iocaste.kernel.session.SessionContext;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
@@ -119,22 +119,22 @@ public class IsAuthorized extends AbstractHandler {
         Authorization objauthorization;
         Auth auth = getFunction();
         String sessionid = message.getSessionid();
-        UserContext context = auth.session.sessions.get(sessionid).usercontext;
+        SessionContext context = auth.session.sessions.get(sessionid);
         
         if (context == null && auth.isAuthorizedCall())
             return false;
 
-        user = context.getUser();
+        user = context.usercontext.getUser();
         if (user == null)
             return false;
         
         objauthorization = message.get("authorization");
-        usrauthorizations = context.getAuthorizations();
+        usrauthorizations = context.usercontext.getAuthorizations();
         username = user.getUsername();
         if (usrauthorizations == null) {
             connection = auth.documents.database.getDBConnection(sessionid);
             usrauthorizations = getAuthorizations(connection, username);
-            context.setAuthorizations(usrauthorizations);
+            context.usercontext.setAuthorizations(usrauthorizations);
         }
         
         if (usrauthorizations == null)

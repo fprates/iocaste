@@ -25,7 +25,6 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.protocol.StandardService;
 import org.iocaste.protocol.user.Authorization;
-import org.iocaste.shell.common.AccessTicket;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
@@ -40,7 +39,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
     private static final byte AUTHORIZATION_ERROR = 1;
     private static final String STD_CONTENT = "text/html";
     public Map<String, List<SessionContext>> apps;
-    public TicketControl tickets;
     protected boolean disconnecteddb;
     private static final int EINITIAL = 1;
     private static final int EMISMATCH = 2;
@@ -86,7 +84,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
     }
     
     public ProcessHttpRequisition() {
-        tickets = new TicketControl();
         apps = new HashMap<>();
     }
     
@@ -199,9 +196,7 @@ public class ProcessHttpRequisition extends AbstractHandler {
     }
     
     private PageContext createContext(RendererContext context, int logid) {
-        tickets.load(getFunction());
-        return (!hasTicket(context.req))? createStartContext(context, logid) :
-            createTicketContext(context, logid);
+        return createStartContext(context, logid);
     }
     
     /**
@@ -319,36 +314,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
             pagectx.parameters.put(key, context.req.getParameterValues(key)[0]);
         }
         
-        return pagectx;
-    }
-    
-    /**
-     * 
-     * @param req
-     * @param sessionid
-     * @param logid
-     * @param function
-     * @return
-     */
-    private final PageContext createTicketContext(RendererContext context,
-            int logid) {
-        PageContext pagectx;
-        ContextData contextdata = new ContextData();
-        String ticketcode = context.req.getParameter("ticket");
-        AccessTicket ticket = tickets.get(ticketcode);
-        
-        contextdata.appname = ticket.getAppname();
-        contextdata.pagename = ticket.getPagename();
-        contextdata.logid = logid;
-        contextdata.sessionid = context.sessionid;
-        contextdata.initialize = true;
-        contextdata.locale = getLocale(contextdata);
-        
-        pagectx = createPageContext(contextdata);
-        pagectx.parameters.put("username", ticket.getUsername());
-        pagectx.parameters.put("secret", ticket.getSecret());
-        pagectx.parameters.put("locale", ticket.getLocale());
-        pagectx.parameters.put("ticket", ticketcode);
         return pagectx;
     }
     
@@ -674,20 +639,6 @@ public class ProcessHttpRequisition extends AbstractHandler {
                 append(Iocaste.SERVERNAME).toString();
         service = new StandardService(complexid, url);
         return (String)service.call(message);
-    }
-    
-    /**
-     * 
-     * @param req
-     * @return
-     */
-    private final boolean hasTicket(HttpServletRequest req) {
-        String ticket = req.getParameter("ticket");
-        
-        if (ticket == null)
-            return false; 
-        
-        return tickets.has(ticket);
     }
     
     /**
