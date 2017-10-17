@@ -97,8 +97,13 @@ public class DataFormTool extends AbstractComponentTool {
             entry.data.object = object;
         for (String key : entry.data.items.keySet()) {
             item = entry.data.items.get(key);
-            if (!item.disabled)
+            if (!item.disabled) {
+                if (key.equals(entry.data.nsdata)) {
+                    entry.data.object.setNS(item.value = object.getNS());
+                    continue;
+                }
                 entry.data.object.set(key, object.get(key));
+            }
             item.value = entry.data.object.get(key);
         }
     }
