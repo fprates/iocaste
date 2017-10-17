@@ -16,6 +16,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Shell;
+import org.iocaste.shell.common.handlers.OnFocusHandler;
 
 public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
     
@@ -67,8 +68,8 @@ public class ListBoxRenderer extends AbstractElementRenderer<InputComponent> {
         
         handler = config.viewctx.getEventHandler(name, name, "focus");
         handler.name = name;
-        handler.call = new StringBuilder("_send('").append(name).
-                append("', '&event=onfocus', null);").toString();
+        handler.call = Shell.send(name, "&event=focus");
+        input.put("focus", new OnFocusHandler(input));
         
         addAttributes(selecttag, input);
 
