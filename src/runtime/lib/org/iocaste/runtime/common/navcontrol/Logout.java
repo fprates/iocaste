@@ -8,7 +8,7 @@ public class Logout extends AbstractActionHandler<Context> {
     @Override
     protected void execute(Context context) throws Exception {
         home();
-        context.runtime().disconnect();
+        context.logout();
     }
     
 }

@@ -299,8 +299,9 @@ public abstract class AbstractApplication<T extends Context>
             	if (context == null)
             	  throw new IocasteException("application context undefined.");
             	context.set(runtime);
-            	context.set(new ContextFunction<T>(servicedata.appname,
-            	        getServerName(), servicedata.sessionid));
+            	context.set(new ContextFunction<T>(ctxentries,
+            	        servicedata.appname, getServerName(),
+            	        servicedata.sessionid));
                 if (context.getPages().size() > 0)
                     buildPages(context);
             } else {

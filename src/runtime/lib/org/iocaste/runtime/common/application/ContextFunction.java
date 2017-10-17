@@ -1,11 +1,13 @@
 package org.iocaste.runtime.common.application;
 
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
 
 import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.Handler;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.protocol.StandardService;
@@ -13,9 +15,11 @@ import org.iocaste.runtime.common.install.InstallContext;
 
 public class ContextFunction<C extends Context> implements Application<C> {
     private String servletname, sessionid, servername;
+    private Map<String, C> ctxentries;
     
-    public ContextFunction(
+    public ContextFunction(Map<String, C> ctxentries,
             String servletname, String servername, String sessionid) {
+        this.ctxentries = ctxentries;
         this.servletname = servletname;
         this.sessionid = sessionid;
         this.servername = servername;
@@ -62,9 +66,15 @@ public class ContextFunction<C extends Context> implements Application<C> {
         return false;
     }
 
+    public final void logout() {
+        ctxentries.remove(sessionid);
+    }
+    
     @Override
     public Object run(Message message) throws Exception {
-        // TODO Auto-generated method stub
+        if (!message.getId().equals("logout"))
+            throw new IocasteException("invalid call to context function");
+        ctxentries.remove(sessionid);
         return null;
     }
 

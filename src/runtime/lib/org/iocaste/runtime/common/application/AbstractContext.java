@@ -11,6 +11,7 @@ import java.util.Stack;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.IocasteException;
+import org.iocaste.protocol.Message;
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.managedview.ManagedViewContext;
@@ -126,6 +127,13 @@ public abstract class AbstractContext implements Context {
     @Override
     public final Map<String, AbstractPage> getPages() {
     	return pages;
+    }
+    
+    @Override
+    public final void logout() throws Exception {
+        function.run(new Message("logout"));
+        runtime.rollback();
+        runtime.disconnect();
     }
     
     @Override
