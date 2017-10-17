@@ -227,6 +227,18 @@ public class TableTool extends AbstractComponentTool {
         }
     }
     
+    private final void addnsitem(DocumentModelItem nsitem) {
+        ToolData column;
+        TableToolColumn ttcolumn;
+        String itemname = nsitem.getName();
+        
+        column = context.data.instance(itemname);
+        ttcolumn = columnInstance(column, nsitem);
+        ttcolumn.tcolumn.setNamespace(true);
+        if (column.componenttype == null)
+            column.componenttype = Const.TEXT_FIELD;
+    }
+    
     public final void buildControls(Table table) {
         for (String name : actions)
             actionsstore.get(name).build(table);
@@ -378,7 +390,6 @@ public class TableTool extends AbstractComponentTool {
      * @param modelname
      */
     private final void model() {
-        String itemname;
         DocumentModelItem[] items;
         DocumentModelItem item;
         ToolData column;
@@ -386,21 +397,23 @@ public class TableTool extends AbstractComponentTool {
 
         if (context.data.ordering == null) {
             items = context.model.getItens();
-            context.data.ordering = new String[items.length];
-            for (int i = 0; i < context.data.ordering.length; i++)
-                context.data.ordering[i] = items[i].getName();
+            if ((item = context.model.getNamespace()) == null) {
+                context.data.ordering = new String[items.length];
+                for (int i = 0; i < context.data.ordering.length; i++)
+                    context.data.ordering[i] = items[i].getName();
+            } else {
+                context.data.ordering = new String[items.length + 1];
+                context.data.ordering[0] = item.getName();
+                for (int i = 1; i < context.data.ordering.length; i++)
+                    context.data.ordering[i] = items[i - 1].getName();
+                addnsitem(item);
+            }
         }
         
         if (context.data.nsdata == null) {
             item = context.model.getNamespace();
-            if (item != null) {
-                itemname = item.getName();
-                column = context.data.instance(itemname);
-                ttcolumn = columnInstance(column, item);
-                ttcolumn.tcolumn.setNamespace(true);
-                if (column.componenttype == null)
-                    column.componenttype = Const.TEXT_FIELD;
-            }
+            if (item != null)
+                addnsitem(item);
         }
         
         for (String name : context.data.ordering) {
@@ -409,6 +422,11 @@ public class TableTool extends AbstractComponentTool {
                 column = context.data.instance(name);
 
             item = context.model.getModelItem(name);
+            if (item == null)
+                if (((item = context.model.getNamespace()) == null) ||
+                        !item.getName().equals(name))
+                    throw new IocasteException("invalid column %s.", name);
+            
             ttcolumn = columnInstance(column, item);
             if (item.getSearchHelp() == null)
                 item.setSearchHelp(column.sh);
