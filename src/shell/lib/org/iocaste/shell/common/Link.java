@@ -66,6 +66,10 @@ public class Link extends ToolDataElement {
     }
     
     public final void add(String name, ExtendedObject object) {
+        if (object == null) {
+            add(name, (Object)null);
+            return;
+        }
         String pname = new StringBuilder(tooldata.name).append("_").
                 append(name).toString();
         add(pname, name, object);
