@@ -13,6 +13,7 @@ import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.navcontrol.NavControl;
 import org.iocaste.runtime.common.style.ViewConfigStyle;
 import org.iocaste.shell.common.HeaderLink;
+import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.ViewTitle;
 import org.iocaste.shell.common.tooldata.ToolData;
@@ -36,6 +37,7 @@ public abstract class AbstractPage {
     private NavControl navcontrol;
     private Context context;
     private AbstractPage parent, root;
+    private MessageSource messages;
     private int subpagessize;
     private boolean ready;
     
@@ -132,6 +134,10 @@ public abstract class AbstractPage {
     	return links.toArray(new HeaderLink[0]);
     }
     
+    public final MessageSource getMessages() {
+        return messages;
+    }
+    
     public final NavControl getNavControl() {
     	return navcontrol;
     }
@@ -207,8 +213,13 @@ public abstract class AbstractPage {
 //    }
     
     public final void run() throws Exception {
-        handlers = (parent == null)? new HashMap<>() : parent.getHandlers();
-        navcontrol = (parent == null)? new NavControl() : parent.getNavControl();
+        if (parent == null) {
+            handlers = new HashMap<>();
+            navcontrol = new NavControl();
+        } else {
+            handlers = parent.getHandlers();
+            navcontrol = parent.getNavControl();
+        }
         execute();
     }
     
@@ -219,6 +230,10 @@ public abstract class AbstractPage {
     public final void set(AbstractPage parent) {
         this.parent = parent;
         this.root = parent.getRoot();
+    }
+    
+    public final void set(MessageSource messages) {
+        this.messages = messages;
     }
     
     protected void set(ViewConfig config) {

@@ -72,7 +72,6 @@ public abstract class AbstractApplication<T extends Context>
         Collection<ViewSpecItem> items;
         int i;
         ToolData data;
-        MessageSource messagesrc;
         ViewSpec spec = page.getSpec();
         ViewConfig config = page.getConfig();
         ViewInput input = page.getInput();
@@ -104,9 +103,7 @@ public abstract class AbstractApplication<T extends Context>
             else
                 page.outputview.locale = locale;
             page.outputview.title = page.getTitle();
-            messagesrc = context.getMessageSource();
-            if (messagesrc != null)
-                prepareMessages(page, messagesrc);
+            prepareMessages(page, context.getMessageSource());
             page.setReady(true);
         }
         
@@ -240,11 +237,26 @@ public abstract class AbstractApplication<T extends Context>
     
     private final void prepareMessages(
     		AbstractPage page, MessageSource messagesrc) {
-    	Properties messages;
     	int i;
+        Properties messages = null;
+        String locale = page.outputview.locale.toString();
     	
-    	messagesrc.entries();
-    	messages = messagesrc.getMessages(page.outputview.locale.toString());
+    	if (messagesrc != null) {
+    	    messagesrc.entries();
+    	    messages = messagesrc.getMessages(locale);
+    	}
+
+        for (String key : page.getChildren()) {
+            messagesrc = page.getChild(key).getMessages();
+            if (messagesrc == null)
+                continue;
+            messagesrc.entries();
+            if (messages == null)
+                messages = messagesrc.getMessages(locale);
+            else
+                messages.putAll(messagesrc.getMessages(locale));
+        }
+        
     	if (messages == null)
     		return;
     	page.outputview.messages = new String[messages.size()][2];
