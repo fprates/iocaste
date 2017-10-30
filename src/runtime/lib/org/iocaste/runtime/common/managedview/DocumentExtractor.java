@@ -17,6 +17,7 @@ import org.iocaste.protocol.IocasteException;
 import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.page.AbstractPage;
+import org.iocaste.shell.common.tooldata.MetaObject;
 import org.iocaste.shell.common.tooldata.ToolData;
 
 public class DocumentExtractor {
@@ -113,9 +114,9 @@ public class DocumentExtractor {
             source = (String)conversion.getSource();
             ttdata = page.instance(source);
             collection = new ArrayList<>();
-            for (ExtendedObject object : ttdata.objects.values())
-                if (!Documents.isInitial(object))
-                    collection.add(object);
+            for (MetaObject mobject : ttdata.objects.values())
+                if (!Documents.isInitial(mobject.object))
+                    collection.add(mobject.object);
             return collection;
         default:
             break;

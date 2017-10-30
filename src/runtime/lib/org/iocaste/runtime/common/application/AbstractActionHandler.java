@@ -19,6 +19,7 @@ import org.iocaste.runtime.common.RuntimeEngine;
 import org.iocaste.runtime.common.managedview.DocumentExtractor;
 import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.tooldata.MetaObject;
 import org.iocaste.shell.common.tooldata.ToolData;
 
 public abstract class AbstractActionHandler<C extends Context>
@@ -179,7 +180,7 @@ public abstract class AbstractActionHandler<C extends Context>
     protected final long getl(String tooldata, String field) {
         return gettool(tooldata).object.getl(field);
     }
-    
+
     protected final long getNextNumber(String range) {
         return context.runtime().getNextNumber(range);
     }
@@ -198,15 +199,29 @@ public abstract class AbstractActionHandler<C extends Context>
     
     protected ExtendedObject[] getobjects(String tooldata) {
         List<ExtendedObject> objects;
-        Map<Integer, ExtendedObject> items;
-        ExtendedObject object;
+        Map<Integer, MetaObject> items;
+        MetaObject mobject;
         
         if ((items = gettool(tooldata).objects).size() == 0)
             return null;
         objects = new ArrayList<>();
         for (int key : items.keySet())
-            if ((object = items.get(key)) != null)
-                objects.add(object);
+            if ((mobject = items.get(key)) != null)
+                objects.add(mobject.object);
+        return objects.toArray(new ExtendedObject[0]);
+    }
+    
+    protected ExtendedObject[] getselected(String tooldata) {
+        List<ExtendedObject> objects;
+        Map<Integer, MetaObject> items;
+        MetaObject mobject;
+        
+        if ((items = gettool(tooldata).objects).size() == 0)
+            return null;
+        objects = new ArrayList<>();
+        for (int key : items.keySet())
+            if (((mobject = items.get(key)) != null) && mobject.selected)
+                objects.add(mobject.object);
         return objects.toArray(new ExtendedObject[0]);
     }
     

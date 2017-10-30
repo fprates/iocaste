@@ -30,7 +30,7 @@ public class ToolData implements Serializable {
     public DocumentModel custommodel;
     public ViewSpecItem.TYPES type;
     public ExtendedObject object;
-    public Map<Integer, ExtendedObject> objects;
+    public Map<Integer, MetaObject> objects;
     public Map<Integer, ObjectMetaData> metaobjects;
     public DataElement element;
     public Map<String, ToolData> items;

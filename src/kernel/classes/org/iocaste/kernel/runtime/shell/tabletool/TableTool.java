@@ -44,6 +44,7 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.Validator;
+import org.iocaste.shell.common.tooldata.MetaObject;
 import org.iocaste.shell.common.tooldata.ObjectMetaData;
 import org.iocaste.shell.common.tooldata.ToolData;
 import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
@@ -84,7 +85,7 @@ public class TableTool extends AbstractComponentTool {
     }
     
     private TableItem addLine(ToolData tooldata, int index, int pos) {
-        ExtendedObject object;
+        MetaObject mobject;
         TableToolColumn ttcolumn;
         Element element;
         DataElement delement;
@@ -98,10 +99,10 @@ public class TableTool extends AbstractComponentTool {
         TableItem item = new TableItem(table, pos);
 
         if (tooldata == null) {
-            object = null;
+            mobject = null;
             metadata = null;
         } else {
-            object = tooldata.objects.get(index);
+            mobject = tooldata.objects.get(index);
             metadata = tooldata.metaobjects.get(index);
         }
         
@@ -163,7 +164,7 @@ public class TableTool extends AbstractComponentTool {
                 }
             }
             
-            if ((object == null) && (itemcolumn != null) &&
+            if ((mobject == null) && (itemcolumn != null) &&
                     name.equals(itemcolumn)) {
                 context.last += context.data.step;
                 if (element.isDataStorable()) {
@@ -189,17 +190,17 @@ public class TableTool extends AbstractComponentTool {
             }
         }
         
-        if (object == null) {
+        if (mobject == null) {
             set(item, null);
             return item;
         }
         
         if (itemcolumn != null) {
             context.last += context.data.step;
-            object.set(itemcolumn, context.last);
+            mobject.object.set(itemcolumn, context.last);
         }
         
-        set(item, object);
+        set(item, mobject.object);
         return item;
     }
     
@@ -381,8 +382,8 @@ public class TableTool extends AbstractComponentTool {
         
         j = 0;
         for (int i = startline; i < finishline; i++)
-            entry.data.objects.put(
-                    i, (j == items.length)? null : get(items[j++]));
+            entry.data.objects.put(i, (j == items.length)?
+                null : new MetaObject(get(items[j]), items[j++].isSelected()));
     }
     
     /**

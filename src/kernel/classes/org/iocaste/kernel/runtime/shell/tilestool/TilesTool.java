@@ -105,7 +105,7 @@ public class TilesTool extends AbstractComponentTool {
         data.noinitmessages = true;
         for (int key : entry.data.objects.keySet()) {
             tile = new Tile(entry.data.name, key);
-            tile.set(entry.data.objects.get(key));
+            tile.set(entry.data.objects.get(key).object);
             data.viewctx.viewexport.prefix = tile.getName();
             output.run(data);
             buildLink(tile, data);

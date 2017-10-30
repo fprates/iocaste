@@ -19,6 +19,7 @@ import org.iocaste.runtime.common.page.AbstractPage;
 import org.iocaste.runtime.common.page.StandardPage;
 import org.iocaste.runtime.common.portal.PortalContext;
 import org.iocaste.shell.common.MessageSource;
+import org.iocaste.shell.common.tooldata.MetaObject;
 
 public abstract class AbstractContext implements Context {
     private PortalContext portalctx;
@@ -52,9 +53,9 @@ public abstract class AbstractContext implements Context {
     @Override
     public final void add(
             String page, String tooldata, ExtendedObject object) {
-        Map<Integer, ExtendedObject> objects = pages.get(page).
+        Map<Integer, MetaObject> objects = pages.get(page).
                 instance(tooldata).objects;
-        objects.put(objects.size(), object);
+        objects.put(objects.size(), new MetaObject(object));
     }
     
     @Override
@@ -91,7 +92,7 @@ public abstract class AbstractContext implements Context {
     
     @Override
     public final ExtendedObject get(String page, String tooldata, int index) {
-        return pages.get(page).instance(tooldata).objects.get(index);
+        return pages.get(page).instance(tooldata).objects.get(index).object;
     }
 
     @Override
@@ -216,7 +217,8 @@ public abstract class AbstractContext implements Context {
             String page, String tooldata, ExtendedObject[] objects) {
         AbstractPage _page = pages.get(page);
         for (int i = 0; i < objects.length; i++)
-            _page.instance(tooldata).objects.put(i, objects[i]);
+            _page.instance(tooldata).objects.put(i,
+                    (objects[i] == null)? null : new MetaObject(objects[i]));
     }
     
     @Override
@@ -231,7 +233,8 @@ public abstract class AbstractContext implements Context {
         AbstractPage _page = pages.get(page);
         int i = 0;
         for (ExtendedObject object : objects)
-            _page.instance(tooldata).objects.put(i++, object);
+            _page.instance(tooldata).objects.put(i++,
+                    (object == null)? null : new MetaObject(object));
     }
     
     @Override

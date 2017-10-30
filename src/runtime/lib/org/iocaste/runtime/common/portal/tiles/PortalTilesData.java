@@ -19,8 +19,8 @@ public class PortalTilesData {
     public final static Set<String> showset(
             Context context, PortalTilesData data) {
         Set<String> show;
-        ExtendedObject object = context.getPage().instance("items").objects.
-                get(0);
+        ExtendedObject object = context.getPage().instance("items").
+                objects.get(0).object;
         DocumentModel model = object.getModel();
         
         if ((data == null) || (data.show.size() == 0)) {
