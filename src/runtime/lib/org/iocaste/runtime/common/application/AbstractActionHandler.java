@@ -230,9 +230,11 @@ public abstract class AbstractActionHandler<C extends Context>
     }
     
     private final ToolData gettoolkey(String name) {
+        String keyname;
         ToolData tooldata = gettool(name);
         for (DocumentModelKey key : tooldata.custommodel.getKeys())
-            return tooldata.get(key.getModelItemName());
+            return (tooldata.contains(keyname = key.getModelItemName()))?
+                    null : tooldata.instance(keyname);
 
         throw new IocasteException("%s isn't a valid key.", name);
     }

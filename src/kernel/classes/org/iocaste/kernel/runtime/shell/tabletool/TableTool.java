@@ -417,10 +417,7 @@ public class TableTool extends AbstractComponentTool {
         }
         
         for (String name : context.data.ordering) {
-            column = context.data.get(name);
-            if (column == null)
-                column = context.data.instance(name);
-
+            column = context.data.instance(name);
             item = context.model.getModelItem(name);
             if (item == null)
                 if (((item = context.model.getNamespace()) == null) ||

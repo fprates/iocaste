@@ -116,7 +116,7 @@ public class DataFormTool extends AbstractComponentTool {
         if (entry.data.object == null) {
             form.clearInputs();
             for (String name : entry.data.get().keySet()) {
-                item = entry.data.get(name);
+                item = entry.data.instance(name);
                 form.get(name).set(item.value);
             }
         } else {

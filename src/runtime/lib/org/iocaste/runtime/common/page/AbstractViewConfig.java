@@ -127,7 +127,7 @@ public abstract class AbstractViewConfig<C extends Context>
         for (DocumentModelItem item : model.getItens())
             data.instance(item.getName()).disabled = enable;
         for (String name : fields)
-            data.get(name).disabled = !enable;
+            data.instance(name).disabled = !enable;
     }
     
     private final void setVisible(ToolData data, boolean visible,
@@ -142,7 +142,7 @@ public abstract class AbstractViewConfig<C extends Context>
         for (DocumentModelItem item : model.getItens())
             data.instance(item.getName()).invisible = visible;
         for (String name : fields)
-            data.get(name).invisible = !visible;
+            data.instance(name).invisible = !visible;
     }
     
     protected final void show(ToolData data, String... fields) {

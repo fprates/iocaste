@@ -73,18 +73,18 @@ public class ToolData implements Serializable {
         return data;
     }
     
-    public final Map<String, ToolData> get() {
-        return items;
+    public final boolean contains(String name) {
+        return items.containsKey(name);
     }
     
-    public final ToolData get(String name) {
-        return items.get(name);
+    public final Map<String, ToolData> get() {
+        return items;
     }
     
     public final ToolData instance(String name) {
         ToolData item;
         
-        item = get(name);
+        item = items.get(name);
         if (item == null) {
             item = new ToolData(null);
             item.name = name;
