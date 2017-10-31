@@ -1,6 +1,7 @@
-package org.iocaste.kernel.session;
+package org.iocaste.kernel.session.tickets;
 
 import org.iocaste.kernel.database.Update;
+import org.iocaste.kernel.session.Session;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 

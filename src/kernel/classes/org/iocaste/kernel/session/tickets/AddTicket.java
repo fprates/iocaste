@@ -1,8 +1,9 @@
-package org.iocaste.kernel.session;
+package org.iocaste.kernel.session.tickets;
 
 import java.util.UUID;
 
 import org.iocaste.kernel.database.Update;
+import org.iocaste.kernel.session.Session;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 import org.iocaste.runtime.common.AccessTicket;

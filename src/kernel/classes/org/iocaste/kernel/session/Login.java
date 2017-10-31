@@ -58,27 +58,33 @@ public class Login extends AbstractHandler {
     
     @Override
     public Object run(Message message) throws Exception {
+        String locale;
+        String username = message.getst("user");
+        String secret = message.getst("secret");
+        String sessionid = message.getSessionid();
+        
+        if ((locale = message.getst("locale")) == null)
+            throw new Exception("login locale undefined.");
+        return run(sessionid, username, secret, locale);
+    }
+    
+    public final boolean run(
+            String sessionid, String username, String secret, String _locale)
+                    throws Exception {
         Locale locale;
         User user;
         GetUserData getuserdata;
         Session session;
         Connection connection;
         String[] localetokens;
-        String _locale;
-        String username = message.getst("user");
-        String secret = message.getst("secret");
-        String sessionid = message.getSessionid();
         
-        if ((_locale = message.getst("locale")) == null)
-            throw new Exception("login locale undefined.");
-        
-        localetokens = _locale.split("_");
         if (sessionid == null)
             throw new Exception("Null session not allowed.");
         
         if (username.length() > USERNAME_MAX_LEN)
             return false;
 
+        localetokens = _locale.split("_");
         session = getFunction();
         connection = session.database.getDBConnection(sessionid);
         try {

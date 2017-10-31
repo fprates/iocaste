@@ -9,15 +9,37 @@ public class Tools {
 	public enum TYPE {
 		HASH
 	};
-	
+    
     public static final Object[][] toArray(Map<?,?> map) {
-    	int i = 0;
-    	Object[][] items = new Object[map.size()][2];
-    	for (Object key : map.keySet()) {
-    		items[i][0] = key;
-    		items[i++][1] = map.get(key);
-    	}
-    	return items;
+        return toArray(map, (String)null);
+    }
+    
+    public static final Object[][] toArray(Map<?,?> map, String... excluding) {
+        Set<String> keys;
+        Object[][] items;
+        int i;
+        
+        if ((excluding != null) && (excluding.length > 0)) {
+            keys = new HashSet<>();
+            for (String key : excluding) {
+                if (!map.containsKey(key))
+                    continue;
+                keys.add(key);
+            }
+            items = new Object[map.size() - keys.size()][2];
+        } else {
+            keys = null;
+            items = new Object[map.size()][2];
+        }
+        
+        i = 0;
+        for (Object key : map.keySet()) {
+            if ((keys != null) && keys.contains(key))
+                continue;
+            items[i][0] = key;
+            items[i++][1] = map.get(key);
+        }
+        return items;
     }
     
     @SuppressWarnings("unchecked")

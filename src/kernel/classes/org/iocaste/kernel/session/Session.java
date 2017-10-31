@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.kernel.database.Database;
+import org.iocaste.kernel.session.tickets.AddTicket;
+import org.iocaste.kernel.session.tickets.RemoveTicket;
+import org.iocaste.kernel.session.tickets.TicketLogin;
 import org.iocaste.kernel.users.Users;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.runtime.common.AccessTicket;
@@ -41,6 +44,6 @@ public class Session extends AbstractFunction {
         export("set_current_app", new SetCurrentApp());
         export("ticket_add", new AddTicket());
         export("ticket_remove", new RemoveTicket());
-        export("tickets_load", new LoadTickets());
+        export("ticket_login", new TicketLogin());
     }
 }

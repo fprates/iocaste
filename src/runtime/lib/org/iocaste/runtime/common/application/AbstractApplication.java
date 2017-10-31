@@ -47,6 +47,7 @@ public abstract class AbstractApplication<T extends Context>
     private Map<String, T> ctxentries;
     private StandardPageFactory pagefactory;
     private ManagedViewFactory mviewfactory;
+    private boolean connbyticket;
     
     public AbstractApplication() {
     	ctxentries = new HashMap<>();
@@ -227,6 +228,12 @@ public abstract class AbstractApplication<T extends Context>
     	return false;
     }
     
+    private final boolean loginByTicket(
+            HttpServletRequest req, Context context) {
+        String id = req.getParameter("id");
+        return context.runtime().login(id);
+    }
+    
     private final void move(Context context, ViewExport inputview) {
     	AbstractPage page = context.getPage();
     	page.clearToolData();
@@ -306,6 +313,8 @@ public abstract class AbstractApplication<T extends Context>
             
             context = ctxentries.get(servicedata.sessionid);
             if (context == null) {
+                if (connbyticket)
+                    loginByTicket(req, context);
                 runtime.newContext();
             	ctxentries.put(servicedata.sessionid, context = execute());
             	if (context == null)
@@ -319,8 +328,8 @@ public abstract class AbstractApplication<T extends Context>
             } else {
                 outputview = getView(servicedata, context);
                 outputview.action = null;
-                outputview.reqparameters = Tools.
-                        toArray(req.getParameterMap());
+                outputview.reqparameters = Tools.toArray(
+                        req.getParameterMap(), connbyticket? "id" : null);
                 outputview = runtime.processInput(outputview);
         		move(context, outputview);
             	if (outputview.action != null)
@@ -367,6 +376,10 @@ public abstract class AbstractApplication<T extends Context>
     @Override
     public void setAuthorizedCall(boolean authorized) {
         // unused in AbstractApplication. Compatibility only.
+    }
+    
+    protected final void setConnectByTicket(boolean connbyticket) {
+        this.connbyticket = connbyticket;
     }
     
     @Override

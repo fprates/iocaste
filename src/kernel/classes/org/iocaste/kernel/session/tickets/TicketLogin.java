@@ -1,26 +1,23 @@
-package org.iocaste.kernel.session;
+package org.iocaste.kernel.session.tickets;
 
 import java.util.Map;
 
 import org.iocaste.kernel.database.CheckedSelect;
+import org.iocaste.kernel.session.Login;
+import org.iocaste.kernel.session.Session;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 import org.iocaste.runtime.common.AccessTicket;
 
-public class LoadTickets extends AbstractHandler {
-    private boolean loaded;
-
+public class TicketLogin extends AbstractHandler {
+    
     @SuppressWarnings("unchecked")
-    @Override
-    public Object run(Message message) throws Exception {
+    private final AccessTicket get(String id) throws Exception {
         AccessTicket ticket;
         Map<String, Object> record;
         Object[] lines;
         CheckedSelect select;
         Session session = getFunction();
-        
-        if (loaded)
-            return null;
         
         select = session.database.get("checked_select");
         
@@ -32,17 +29,15 @@ public class LoadTickets extends AbstractHandler {
          * lança SQLException. Vamos negociar assim, por enquanto.
          */
         try {
-            lines = select.run(
-                    session.database, null, "SHELL004", null, null, null); 
+            lines = select.run(session.database, null, "SHELL004",
+                    "where TKTID = ?", new Object[] {id}, null);
         } catch (Exception e) {
             return null;
         }
         
-        loaded = true;
         if (lines == null)
             return null;
         
-        session.tickets.clear();
         for (Object line : lines) {
             record = (Map<String, Object>)line;
             ticket = new AccessTicket();
@@ -51,9 +46,20 @@ public class LoadTickets extends AbstractHandler {
             ticket.setUsername((String)record.get("USRNM"));
             ticket.setSecret((String)record.get("SECRT"));
             ticket.setLocale((String)record.get("LOCAL"));
-            session.tickets.put((String)record.get("TKTID"), ticket);
+            return ticket;
         }
         return null;
+    }
+
+    @Override
+    public Object run(Message message) throws Exception {
+        String ticketid = message.getst("ticket_id");
+        String sessionid = message.getSessionid();
+        AccessTicket ticket = get(ticketid);
+        Login login = getFunction().get("login");
+        
+        return login.run(sessionid,
+                ticket.getUsername(), ticket.getSecret(), ticket.getLocale());
     }
     
 }

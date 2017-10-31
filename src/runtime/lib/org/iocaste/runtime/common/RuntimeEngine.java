@@ -491,6 +491,12 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     	return call(message);
     }
     
+    public final boolean login(String ticket) {
+        Message message = new Message("ticket_login");
+        message.add("ticket_id", ticket);
+        return call(message);
+    }
+    
     public final void mkdir(String... args) {
         Message message = new Message("mkdir");
         message.add("args", args);
