@@ -50,6 +50,8 @@ public interface Context {
     
     public abstract Map<String, AbstractPage> getPages();
     
+    public abstract boolean isConnectionByTicket();
+    
     public abstract void logout() throws Exception;
     
     public abstract ManagedViewContext mviewctx(String entity);

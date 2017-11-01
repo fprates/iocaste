@@ -47,7 +47,6 @@ public abstract class AbstractApplication<T extends Context>
     private Map<String, T> ctxentries;
     private StandardPageFactory pagefactory;
     private ManagedViewFactory mviewfactory;
-    private boolean connbyticket;
     
     public AbstractApplication() {
     	ctxentries = new HashMap<>();
@@ -229,9 +228,9 @@ public abstract class AbstractApplication<T extends Context>
     }
     
     private final boolean loginByTicket(
-            HttpServletRequest req, Context context) {
+            HttpServletRequest req, RuntimeEngine runtime) {
         String id = req.getParameter("id");
-        return context.runtime().login(id);
+        return runtime.login(id);
     }
     
     private final void move(Context context, ViewExport inputview) {
@@ -313,12 +312,13 @@ public abstract class AbstractApplication<T extends Context>
             
             context = ctxentries.get(servicedata.sessionid);
             if (context == null) {
-                if (connbyticket)
-                    loginByTicket(req, context);
                 runtime.newContext();
             	ctxentries.put(servicedata.sessionid, context = execute());
             	if (context == null)
             	  throw new IocasteException("application context undefined.");
+                if (context.isConnectionByTicket())
+                    if (!loginByTicket(req, runtime))
+                        context.setPageName("login-error");
             	context.set(runtime);
             	context.set(new ContextFunction<T>(ctxentries,
             	        servicedata.appname, getServerName(),
@@ -328,8 +328,8 @@ public abstract class AbstractApplication<T extends Context>
             } else {
                 outputview = getView(servicedata, context);
                 outputview.action = null;
-                outputview.reqparameters = Tools.toArray(
-                        req.getParameterMap(), connbyticket? "id" : null);
+                outputview.reqparameters = Tools.toArray(req.getParameterMap(),
+                        context.isConnectionByTicket()? "id" : null);
                 outputview = runtime.processInput(outputview);
         		move(context, outputview);
             	if (outputview.action != null)
@@ -376,10 +376,6 @@ public abstract class AbstractApplication<T extends Context>
     @Override
     public void setAuthorizedCall(boolean authorized) {
         // unused in AbstractApplication. Compatibility only.
-    }
-    
-    protected final void setConnectByTicket(boolean connbyticket) {
-        this.connbyticket = connbyticket;
     }
     
     @Override

@@ -22,15 +22,14 @@ public class TicketLogin extends AbstractHandler {
         select = session.database.get("checked_select");
         
         /*
-         * se precisa explicar código com comentário,
-         * é porque não é algo bom:
+         * se precisa explicar código com comentário, é porque não é algo bom:
          * usaremos try/catch aqui. é possível que SHELL004 ainda não
          * esteja instalada. Exception é bem ampla, mas execute() não
          * lança SQLException. Vamos negociar assim, por enquanto.
          */
         try {
             lines = select.run(session.database, null, "SHELL004",
-                    "where TKTID = ?", new Object[] {id}, null);
+                    "TKTID = ?", new Object[] {id}, null);
         } catch (Exception e) {
             return null;
         }

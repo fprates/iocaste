@@ -31,6 +31,7 @@ public abstract class AbstractContext implements Context {
     private Stack<String> pagestack;
     private Locale locale;
     private Function function;
+    private boolean connbyticket;
     
     public AbstractContext() {
         pages = new HashMap<>();
@@ -128,6 +129,11 @@ public abstract class AbstractContext implements Context {
     @Override
     public final Map<String, AbstractPage> getPages() {
     	return pages;
+    }
+    
+    @Override
+    public final boolean isConnectionByTicket() {
+        return connbyticket;
     }
     
     @Override
@@ -250,6 +256,10 @@ public abstract class AbstractContext implements Context {
     @Override
     public final void set(Locale locale) {
         this.locale = locale;
+    }
+    
+    public final void setConnectionByTicket(boolean connbyticket) {
+        this.connbyticket = connbyticket;
     }
     
     @Override
