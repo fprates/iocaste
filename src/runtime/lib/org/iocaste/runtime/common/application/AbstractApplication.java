@@ -203,6 +203,9 @@ public abstract class AbstractApplication<T extends Context>
         AbstractPage child;
         AbstractPage page = context.getPage();
         
+        if (page == null)
+            throw new IocasteException("current page is not defined.");
+        
         buildView(page, context, servicedata);
         if ((i = page.getSubPagesSize()) > 0) {
             page.outputview.subpages = new Object[i][2];
