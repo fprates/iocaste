@@ -286,7 +286,7 @@ public class TableTool extends AbstractComponentTool {
         TableToolColumn ttcolumn;
         ExtendedObject object = new ExtendedObject(context.model);
         
-        for (String name : context.data.get().keySet()) {
+        for (String name : context.columns.keySet()) {
             element = item.get(name);
             ttcolumn = context.columns.get(name);
             if (ttcolumn.tcolumn.isNamespace()) {
