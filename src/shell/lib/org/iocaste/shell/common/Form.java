@@ -43,7 +43,7 @@ public class Form extends AbstractContainer {
     }
 
     private final void init(String name) {
-        new Parameter(this, name.concat(".action"));
+        new Parameter(this, action = name.concat(".action"));
     }
     
     /**
@@ -68,9 +68,5 @@ public class Form extends AbstractContainer {
      */
     public final String getAction() {
         return action;
-    }
-    
-    public final void setAction(String action) {
-        this.action = action;
     }
 }
