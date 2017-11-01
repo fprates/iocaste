@@ -77,8 +77,10 @@ public abstract class AbstractApplication<T extends Context>
         ViewInput input = page.getInput();
         
         if (!page.isReady()) {
-            if (servicedata != null)
+            if (servicedata != null) {
                 configPageStyleData(page, servicedata);
+                page.outputview.path = servicedata.path;
+            }
             spec.run(context);
             i = 0;
             items = spec.getItems();
@@ -308,6 +310,7 @@ public abstract class AbstractApplication<T extends Context>
         servicedata.servername = getServerName();
         servicedata.sessionid = req.getSession().getId();
         servicedata.appname = getServletName();
+        servicedata.path = req.getRequestURI();
     	runtime = new RuntimeEngine(servicedata);
         try {
             if (servicedata.sessionid == null)

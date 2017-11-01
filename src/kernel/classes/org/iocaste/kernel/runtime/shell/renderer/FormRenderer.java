@@ -21,6 +21,7 @@ public class FormRenderer extends AbstractElementRenderer<Form> {
     protected final XMLElement execute(Form container, Config config)
             throws Exception {
         String[] printlines;
+        String action;
         XMLElement content;
         XMLElement formtag = new XMLElement("form");
         String enctype = container.getEnctype();
@@ -29,8 +30,11 @@ public class FormRenderer extends AbstractElementRenderer<Form> {
         config.currentaction = container.getAction();
         config.form = container;
         
+        action = container.getAction();
+        if (action == null)
+            action = config.viewctx.viewexport.path;
         formtag.add("method", "post");
-        formtag.add("action", "index.html");
+        formtag.add("action", action);
         formtag.add("id", htmlname);
         formtag.add("name", htmlname);
         
