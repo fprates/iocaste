@@ -52,11 +52,15 @@ public class TicketLogin extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
+        Login login;
+        String sessionid;
         String ticketid = message.getst("ticket_id");
-        String sessionid = message.getSessionid();
         AccessTicket ticket = get(ticketid);
-        Login login = getFunction().get("login");
         
+        if (ticket == null)
+            return false;
+        sessionid = message.getSessionid();
+        login = getFunction().get("login");
         return login.run(sessionid,
                 ticket.getUsername(), ticket.getSecret(), ticket.getLocale());
     }
