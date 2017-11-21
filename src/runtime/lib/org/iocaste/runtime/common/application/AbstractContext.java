@@ -85,11 +85,6 @@ public abstract class AbstractContext implements Context {
     }
     
     @Override
-    public final String getCurrentPage() {
-        return page;
-    }
-    
-    @Override
     public final Map<String, ManagedViewContext> getEntities() {
         return entities;
     }

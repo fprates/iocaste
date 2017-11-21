@@ -34,8 +34,6 @@ public interface Context {
     
     public abstract String getAppName();
     
-    public abstract String getCurrentPage();
-    
     public abstract Map<String, ManagedViewContext> getEntities();
     
     public abstract ActionHandler getHandler(String action);

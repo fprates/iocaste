@@ -207,7 +207,7 @@ public abstract class AbstractApplication<T extends Context>
         
         if (page == null)
             throw new IocasteException(
-                    "page %s is undefined.", context.getCurrentPage());
+                    "page %s is undefined.", context.getPageName());
         
         buildView(page, context, servicedata);
         if ((i = page.getSubPagesSize()) > 0) {
@@ -362,12 +362,39 @@ public abstract class AbstractApplication<T extends Context>
         if (handler == null)
             throw new IocasteException("no handler defined for %s.", action);
         try {
+            validate(context);
             handler.run(context);
         } catch (IocasteErrorMessage e) {
             context.runtime().rollback();
         } catch (Exception e) {
             throw e;
         }
+    }
+    
+    private final void validate(T context) throws Exception {
+        ToolData tooldata;
+        AbstractPage page = context.getPage();
+        
+        for (Object object : page.outputview.items) {
+            tooldata = (ToolData)object;
+            validate(context, page, tooldata);
+        }
+    }
+    
+    private final void validate(Context context,
+            AbstractPage page, ToolData tooldata) throws Exception {
+        ValidatorHandler validator;
+        Map<String, ValidatorHandler> validators = page.getValidators();
+        
+        for (String key : tooldata.validators) {
+            validator = validators.get(key);
+            if (validator == null)
+                throw new IocasteException("validator %s undefined.", key);
+            validator.run(context, tooldata);
+        }
+        
+        for (String key : tooldata.items.keySet())
+            validate(context, page, tooldata.items.get(key));
     }
     
     @Override

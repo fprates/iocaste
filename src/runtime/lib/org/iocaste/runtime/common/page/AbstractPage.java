@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.iocaste.runtime.common.ActionHandler;
 import org.iocaste.runtime.common.application.Context;
+import org.iocaste.runtime.common.application.ValidatorHandler;
 import org.iocaste.runtime.common.navcontrol.NavControl;
 import org.iocaste.runtime.common.style.ViewConfigStyle;
 import org.iocaste.shell.common.HeaderLink;
@@ -24,6 +25,7 @@ public abstract class AbstractPage {
     private Map<String, String> specalias;
     private Map<String, ToolData> entries;
     private Map<String, ActionHandler> handlers;
+    private Map<String, ValidatorHandler> validators;
     private Set<String> actions;
     private String submit, entity;
     private Map<String, ChildPage> children;
@@ -150,10 +152,14 @@ public abstract class AbstractPage {
         return spec;
     }
 
-	public final StyleSheet getStyleSheet() {
-		return stylesheet;
-	}
-
+    public final StyleSheet getStyleSheet() {
+    	return stylesheet;
+    }
+    
+    public final Map<String, ValidatorHandler> getValidators() {
+        return validators;
+    }
+    
     public final void importStyle(Object[][] constants, Object[][] objects) {
 		stylesheet = StyleSheet.instance(objects, constants);
     }
@@ -199,11 +205,11 @@ public abstract class AbstractPage {
      * @param action
      * @param handler
      */
-    public final void put(String action, ActionHandler handler) {
+    protected final void put(String action, ActionHandler handler) {
         handlers.put(action, handler);
     }
     
-    public final void put(String name, AbstractPage page) {
+    protected final void put(String name, AbstractPage page) {
         page.set(this);
         children.put(name, new ChildPage(page, false));
     }
@@ -215,9 +221,11 @@ public abstract class AbstractPage {
     public final void run() throws Exception {
         if (parent == null) {
             handlers = new HashMap<>();
+            validators = new HashMap<>();
             navcontrol = new NavControl();
         } else {
             handlers = parent.getHandlers();
+            validators = parent.getValidators();
             navcontrol = parent.getNavControl();
         }
         execute();
@@ -227,12 +235,12 @@ public abstract class AbstractPage {
         handlers.get(action).run(context);
     }
     
-    public final void set(AbstractPage parent) {
+    protected final void set(AbstractPage parent) {
         this.parent = parent;
         this.root = parent.getRoot();
     }
     
-    public final void set(MessageSource messages) {
+    protected final void set(MessageSource messages) {
         this.messages = messages;
     }
     
@@ -252,7 +260,7 @@ public abstract class AbstractPage {
         this.style = style;
     }
     
-    public final void set(StyleSheet stylesheet) {
+    protected final void set(StyleSheet stylesheet) {
     	this.stylesheet = stylesheet;
     }
     
@@ -274,7 +282,7 @@ public abstract class AbstractPage {
         navcontrol.submit(action);
     }
     
-    public final void subpage(String name, AbstractPage page) {
+    protected final void subpage(String name, AbstractPage page) {
         if (root == this) {
             page.set(this);
             children.put(name, new ChildPage(page, true));
@@ -283,6 +291,12 @@ public abstract class AbstractPage {
             root.subpage(name, page);
         }
     }
+    
+    protected final void validate(
+            String name, ValidatorHandler validator) {
+        validators.put(name, validator);
+    }
+    
 //    
 //    protected final void task(String action, String task) {
 //        put(action, new TaskCall(task));
