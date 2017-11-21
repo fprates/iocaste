@@ -27,20 +27,24 @@ public interface Context {
     
     public abstract Function function();
     
-    public abstract ActionHandler getHandler(String action);
-    
-    public abstract String getAppName();
-    
-    public abstract Map<String, ManagedViewContext> getEntities();
-    
-    public abstract MessageSource getMessageSource();
+    public abstract ExtendedObject get(String page, String tooldata);
 
     public abstract ExtendedObject get(
             String page, String tooldata, int index);
     
+    public abstract String getAppName();
+    
+    public abstract String getCurrentPage();
+    
+    public abstract Map<String, ManagedViewContext> getEntities();
+    
+    public abstract ActionHandler getHandler(String action);
+    
     public abstract Locale getLocale();
     
     public abstract Set<String> getManagedViews();
+    
+    public abstract MessageSource getMessageSource();
     
     public abstract String getPageName();
     
@@ -92,6 +96,8 @@ public interface Context {
     public abstract void set(MessageSource messagesrc);
     
     public abstract void set(Locale locale);
+
+    public abstract void setConnectionTicket(String ticketid);
     
     public abstract void setPageName(String name);
 }

@@ -26,7 +26,7 @@ public abstract class AbstractContext implements Context {
     private Map<String, ManagedViewContext> entities;
     private MessageSource messagesrc;
     private Map<String, AbstractPage> pages;
-    private String page, appname;
+    private String page, appname, ticketid;
     private RuntimeEngine runtime;
     private Stack<String> pagestack;
     private Locale locale;
@@ -70,8 +70,23 @@ public abstract class AbstractContext implements Context {
     }
     
     @Override
+    public final ExtendedObject get(String page, String tooldata) {
+        return pages.get(page).instance(tooldata).object;
+    }
+    
+    @Override
+    public final ExtendedObject get(String page, String tooldata, int index) {
+        return pages.get(page).instance(tooldata).objects.get(index).object;
+    }
+    
+    @Override
     public final String getAppName() {
     	return appname;
+    }
+    
+    @Override
+    public final String getCurrentPage() {
+        return page;
     }
     
     @Override
@@ -89,11 +104,6 @@ public abstract class AbstractContext implements Context {
     		if ((handler = page.getChild(key).getActionHandler(action)) != null)
     			return handler;
     	return null;
-    }
-    
-    @Override
-    public final ExtendedObject get(String page, String tooldata, int index) {
-        return pages.get(page).instance(tooldata).objects.get(index).object;
     }
 
     @Override
@@ -129,6 +139,10 @@ public abstract class AbstractContext implements Context {
     @Override
     public final Map<String, AbstractPage> getPages() {
     	return pages;
+    }
+    
+    public final String getConnectionTicket() {
+        return ticketid;
     }
     
     @Override
@@ -260,6 +274,10 @@ public abstract class AbstractContext implements Context {
     
     public final void setConnectionByTicket(boolean connbyticket) {
         this.connbyticket = connbyticket;
+    }
+
+    public final void setConnectionTicket(String ticketid) {
+        this.ticketid = ticketid;
     }
     
     @Override

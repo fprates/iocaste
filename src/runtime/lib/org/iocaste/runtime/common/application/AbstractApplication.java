@@ -206,7 +206,8 @@ public abstract class AbstractApplication<T extends Context>
         AbstractPage page = context.getPage();
         
         if (page == null)
-            throw new IocasteException("current page is not defined.");
+            throw new IocasteException(
+                    "page %s is undefined.", context.getCurrentPage());
         
         buildView(page, context, servicedata);
         if ((i = page.getSubPagesSize()) > 0) {
@@ -233,9 +234,10 @@ public abstract class AbstractApplication<T extends Context>
     }
     
     private final boolean loginByTicket(
-            HttpServletRequest req, RuntimeEngine runtime) {
+            HttpServletRequest req, Context context) {
         String id = req.getParameter("id");
-        return runtime.login(id);
+        context.setConnectionTicket(id);
+        return context.runtime().login(id);
     }
     
     private final void move(Context context, ViewExport inputview) {
@@ -322,13 +324,13 @@ public abstract class AbstractApplication<T extends Context>
             	ctxentries.put(servicedata.sessionid, context = execute());
             	if (context == null)
             	  throw new IocasteException("application context undefined.");
-                if (context.isConnectionByTicket())
-                    if (!loginByTicket(req, runtime))
-                        context.setPageName("login-error");
             	context.set(runtime);
             	context.set(new ContextFunction<T>(ctxentries,
             	        servicedata.appname, getServerName(),
             	        servicedata.sessionid));
+                if (context.isConnectionByTicket())
+                    if (!loginByTicket(req, context))
+                        context.setPageName("login-error");
                 if (context.getPages().size() > 0)
                     buildPages(context);
             } else {
