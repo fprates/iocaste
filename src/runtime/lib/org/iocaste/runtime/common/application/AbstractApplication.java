@@ -227,6 +227,25 @@ public abstract class AbstractApplication<T extends Context>
     	return page.outputview;
     }
     
+    private final void initContext(ContextData<T> ctxdata) throws Exception {
+        ctxdata.runtime.newContext();
+        ctxentries.put(
+                ctxdata.servicedata.sessionid, ctxdata.context = execute());
+        if (ctxdata.context == null)
+          throw new IocasteException("application context undefined.");
+        ctxdata.context.set(ctxdata.runtime);
+        ctxdata.context.set(new ContextFunction<T>(ctxentries,
+                ctxdata.servicedata.appname, getServerName(),
+                ctxdata.servicedata.sessionid));
+        if (ctxdata.context.isConnectionByTicket())
+            if (!loginByTicket(ctxdata.req, ctxdata.context)) {
+                ctxdata.context.setPageName("login-error");
+                ctxdata.resetctx = true;
+            }
+        if (ctxdata.context.getPages().size() > 0)
+            buildPages(ctxdata.context);
+    }
+    
     @Override
     public boolean isAuthorizedCall() {
     	// TODO Auto-generated method stub
@@ -236,8 +255,11 @@ public abstract class AbstractApplication<T extends Context>
     private final boolean loginByTicket(
             HttpServletRequest req, Context context) {
         String id = req.getParameter("id");
+        boolean connected = context.runtime().login(id);
+        if (!connected)
+            return connected;
         context.setConnectionTicket(id);
-        return context.runtime().login(id);
+        return connected;
     }
     
     private final void move(Context context, ViewExport inputview) {
@@ -298,61 +320,65 @@ public abstract class AbstractApplication<T extends Context>
     	return null;
     }
     
+    private final void reloadContext(ContextData<T> ctxdata) throws Exception {
+        ViewExport outputview;
+        
+        outputview = getView(ctxdata.servicedata, ctxdata.context);
+        outputview.action = null;
+        outputview.reqparameters = Tools.toArray(ctxdata.req.getParameterMap(),
+                ctxdata.context.isConnectionByTicket()? "id" : null);
+        outputview = ctxdata.runtime.processInput(outputview);
+        move(ctxdata.context, outputview);
+        if (outputview.action != null)
+            run(ctxdata.context, outputview.action);
+    }
+    
     private void run(HttpServletRequest req, HttpServletResponse resp)
     		throws Exception {
+        String ctxticketid, reqticketid;
         ViewExport outputview;
-        RuntimeEngine runtime;
-        ServiceInterfaceData servicedata;
         byte[] content;
-        T context = null;
+        ContextData<T> ctxdata = new ContextData<T>();
     
         req.setCharacterEncoding("UTF-8");
         setServerName(req);
-        servicedata = new ServiceInterfaceData();
-        servicedata.servername = getServerName();
-        servicedata.sessionid = req.getSession().getId();
-        servicedata.appname = getServletName();
-        servicedata.path = req.getRequestURI();
-    	runtime = new RuntimeEngine(servicedata);
+        ctxdata.servicedata = new ServiceInterfaceData();
+        ctxdata.servicedata.servername = getServerName();
+        ctxdata.servicedata.sessionid = req.getSession().getId();
+        ctxdata.servicedata.appname = getServletName();
+        ctxdata.servicedata.path = req.getRequestURI();
+        ctxdata.runtime = new RuntimeEngine(ctxdata.servicedata);
+        ctxdata.req = req;
         try {
-            if (servicedata.sessionid == null)
+            if (ctxdata.servicedata.sessionid == null)
                 throw new IocasteException("invalid session.");
             
-            context = ctxentries.get(servicedata.sessionid);
-            if (context == null) {
-                runtime.newContext();
-            	ctxentries.put(servicedata.sessionid, context = execute());
-            	if (context == null)
-            	  throw new IocasteException("application context undefined.");
-            	context.set(runtime);
-            	context.set(new ContextFunction<T>(ctxentries,
-            	        servicedata.appname, getServerName(),
-            	        servicedata.sessionid));
-                if (context.isConnectionByTicket())
-                    if (!loginByTicket(req, context))
-                        context.setPageName("login-error");
-                if (context.getPages().size() > 0)
-                    buildPages(context);
-            } else {
-                outputview = getView(servicedata, context);
-                outputview.action = null;
-                outputview.reqparameters = Tools.toArray(req.getParameterMap(),
-                        context.isConnectionByTicket()? "id" : null);
-                outputview = runtime.processInput(outputview);
-        		move(context, outputview);
-            	if (outputview.action != null)
-            	    run(context, outputview.action);
-            }
+            ctxdata.context = ctxentries.get(ctxdata.servicedata.sessionid);
+            if (ctxdata.context == null)
+                initContext(ctxdata);
+            else
+                if (ctxdata.context.isConnectionByTicket()) {
+                    ctxticketid = ctxdata.context.getConnectionTicket();
+                    reqticketid = req.getParameter("id");
+                    if (!ctxticketid.equals(reqticketid))
+                        initContext(ctxdata);
+                    else
+                        reloadContext(ctxdata);
+                } else {
+                    reloadContext(ctxdata);
+                }
             
-            outputview = getView(servicedata, context);
-            content = runtime.processOutput(outputview);
+            outputview = getView(ctxdata.servicedata, ctxdata.context);
+            content = ctxdata.runtime.processOutput(outputview);
             print(resp, content);
-            runtime.commit();
+            ctxdata.runtime.commit();
+            if (ctxdata.resetctx)
+                ctxentries.remove(ctxdata.servicedata.sessionid);
         } catch (Exception e) {
     //            outputview = getExceptionView(e);
     //            content = iocaste.processOutput(outputview);
-            ctxentries.remove(servicedata.sessionid);
-            runtime.rollback();
+            ctxentries.remove(ctxdata.servicedata.sessionid);
+            ctxdata.runtime.rollback();
             throw e;
         }
     }
@@ -422,4 +448,12 @@ public abstract class AbstractApplication<T extends Context>
     public void setSessionid(String sessionid) {
         // unused in AbstractApplication. Compatibility only.
     }
+}
+
+class ContextData<T extends Context> {
+    public HttpServletRequest req;
+    public ServiceInterfaceData servicedata;
+    public RuntimeEngine runtime;
+    public T context;
+    public boolean resetctx;
 }

@@ -51,6 +51,8 @@ public interface Context {
     public abstract AbstractPage getPage(String name);
     
     public abstract Map<String, AbstractPage> getPages();
+
+    public abstract String getConnectionTicket();
     
     public abstract boolean isConnectionByTicket();
     
