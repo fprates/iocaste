@@ -284,6 +284,11 @@ public abstract class AbstractActionHandler<C extends Context>
     protected final ExtendedObject instance(String model) {
         return new ExtendedObject(context.runtime().getModel(model));
     }
+
+    @Override
+    public boolean isValidator() {
+        return false;
+    }
     
     protected final void message(Const type, String text, Object... args) {
         AbstractPage page = context.getPage();

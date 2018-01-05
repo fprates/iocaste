@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.runtime.common.ActionHandler;
+import org.iocaste.runtime.common.application.AbstractValidatorHandler;
 import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.application.ValidatorHandler;
 import org.iocaste.runtime.common.navcontrol.NavControl;
@@ -206,17 +207,16 @@ public abstract class AbstractPage {
      * @param handler
      */
     protected final void put(String action, ActionHandler handler) {
-        handlers.put(action, handler);
+        if (handler.isValidator())
+            validators.put(action, (ValidatorHandler)handler);
+        else
+            handlers.put(action, handler);
     }
     
     protected final void put(String name, AbstractPage page) {
         page.set(this);
         children.put(name, new ChildPage(page, false));
     }
-    
-//    protected final void put(String name, AbstractExtendedValidator validator) {
-//        view.put(name, validator);
-//    }
     
     public final void run() throws Exception {
         if (parent == null) {
@@ -290,11 +290,6 @@ public abstract class AbstractPage {
         } else {
             root.subpage(name, page);
         }
-    }
-    
-    protected final void validate(
-            String name, ValidatorHandler validator) {
-        validators.put(name, validator);
     }
     
 //    

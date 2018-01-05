@@ -9,6 +9,11 @@ public abstract class AbstractValidatorHandler<T extends Context>
     protected final void execute(T context) { }
     
     protected abstract void execute(T context, ToolData tooldata);
+
+    @Override
+    public final boolean isValidator() {
+        return true;
+    }
     
     @Override
     @SuppressWarnings("unchecked")
