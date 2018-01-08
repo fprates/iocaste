@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.runtime.common.ActionHandler;
-import org.iocaste.runtime.common.application.AbstractValidatorHandler;
 import org.iocaste.runtime.common.application.Context;
 import org.iocaste.runtime.common.application.ValidatorHandler;
 import org.iocaste.runtime.common.navcontrol.NavControl;

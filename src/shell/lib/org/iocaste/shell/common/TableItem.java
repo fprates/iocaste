@@ -110,6 +110,13 @@ public class TableItem extends AbstractContainer {
         return input.isSelected();
     }
     
+    @Override
+    public final boolean isVisible(Element element) {
+        Table container = (Table)getContainer();
+        TableColumn column = container.getColumn(element.getName());
+        return (column.isVisible() && isVisible());
+    }
+    
     /**
      * Define seleção da linha.
      * @param selected true, para selecionar linha.

@@ -76,6 +76,8 @@ public interface Container extends Element {
      */
     public abstract boolean isMultiLine();
     
+    public abstract boolean isVisible(Element element);
+    
     /**
      * Remove elemento do container.
      * @param element elemento

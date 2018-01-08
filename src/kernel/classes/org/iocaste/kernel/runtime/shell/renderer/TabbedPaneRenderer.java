@@ -6,14 +6,11 @@ import java.util.Set;
 
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
-import org.iocaste.kernel.runtime.shell.renderer.legacy.ParameterRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.legacy.StandardContainerRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.TabbedPaneItem;
 import org.iocaste.shell.common.handlers.OnClickHandler;
 import org.iocaste.shell.common.tooldata.TabbedPane;
@@ -82,24 +79,5 @@ public class TabbedPaneRenderer extends AbstractElementRenderer<TabbedPane> {
 
         tabbedtag.addChildren(tags);
         return tabbedtag;
-    }
-    
-    private final void renderHiddenInputs(List<XMLElement> tags,
-            Container container, Config config) throws Exception {
-        InputComponent input;
-        ParameterRenderer renderer = get(Const.PARAMETER);
-        
-        for (Element element : container.getElements()) {
-            if (element.isContainable()) {
-                renderHiddenInputs(tags, (Container)element, config);
-                continue;
-            }
-            
-            if (!element.isDataStorable())
-                continue;
-
-            input = (InputComponent)element;
-            tags.add(renderer.run(input, config));
-        }
     }
 }

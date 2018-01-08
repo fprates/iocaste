@@ -707,7 +707,12 @@ public abstract class ToolDataElement implements Component, Container,
         Container container = getContainer();
         if (container == null)
             return !tooldata.invisible;
-        return (!tooldata.invisible && container.isVisible());
+        return (!tooldata.invisible && container.isVisible(this));
+    }
+    
+    @Override
+    public boolean isVisible(Element element) {
+        return isVisible();
     }
     
     @Override

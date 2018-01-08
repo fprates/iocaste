@@ -12,6 +12,7 @@ import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Renderer;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Source;
+import org.iocaste.kernel.runtime.shell.renderer.legacy.ParameterRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -81,6 +82,46 @@ public abstract class AbstractElementRenderer<T extends Element>
         sources.put(type, source);
     }
     
+    /**
+     * 
+     * @param elements
+     * @param config
+     * @return
+     */
+    protected final List<XMLElement> renderElements(
+            Set<Element> elements, Config config) throws Exception {
+        XMLElement xmlelement;
+        List<XMLElement> tags = new ArrayList<>();
+        
+        for (Element element : elements) {
+            xmlelement = get(element.getType()).run(element, config);
+            if (xmlelement != null)
+                tags.add(xmlelement);
+        }
+        
+        return tags;
+    }
+
+    protected final void renderHiddenInput(List<XMLElement> tags,
+            InputComponent input, Config config, Renderer<?> renderer)
+                    throws Exception {
+        tags.add(renderer.run(input, config));
+    }
+    
+    protected final void renderHiddenInputs(List<XMLElement> tags,
+            Container container, Config config) throws Exception {
+        ParameterRenderer renderer = get(Const.PARAMETER);
+        for (Element element : container.getElements()) {
+            if (element.isContainable()) {
+                renderHiddenInputs(tags, (Container)element, config);
+                continue;
+            }
+            
+            if (element.isDataStorable())
+                renderHiddenInput(tags, (InputComponent)element, config, renderer);
+        }
+    }
+    
     @Override
     public final void run(List<XMLElement> parent, Container container,
             Config config) throws Exception {
@@ -103,26 +144,6 @@ public abstract class AbstractElementRenderer<T extends Element>
         }
         
         return execute((T)element, config);
-    }
-    
-    /**
-     * 
-     * @param elements
-     * @param config
-     * @return
-     */
-    protected final List<XMLElement> renderElements(
-            Set<Element> elements, Config config) throws Exception {
-        XMLElement xmlelement;
-        List<XMLElement> tags = new ArrayList<>();
-        
-        for (Element element : elements) {
-            xmlelement = get(element.getType()).run(element, config);
-            if (xmlelement != null)
-                tags.add(xmlelement);
-        }
-        
-        return tags;
     }
     
     /**

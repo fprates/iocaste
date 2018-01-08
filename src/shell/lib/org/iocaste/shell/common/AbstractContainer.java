@@ -181,6 +181,11 @@ public abstract class AbstractContainer
         return (super.isVisible() && container.isVisible());
     }
     
+    @Override
+    public boolean isVisible(Element element) {
+        return isVisible();
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.Container#remove(
