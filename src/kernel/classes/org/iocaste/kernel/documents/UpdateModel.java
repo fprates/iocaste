@@ -233,8 +233,11 @@ public class UpdateModel extends AbstractDocumentsHandler {
             
             if (!oldmodel.contains(item)) {
                 insert.run(data.connection, data.element);                
-                if (insertModelItem(data.connection, data.documents, item) == 0)
-                    throw new IocasteException("error on model insert");
+                if (insertModelItem(data.connection, data.documents, item) == 0) {
+                    data.olditem = item;
+                    data.oldfieldname = item.getTableFieldName();
+                    updateModelItem(data, data.model);
+                }
             } else {
                 itemname = item.getName();
                 data.olditem = oldmodel.getModelItem(itemname);
