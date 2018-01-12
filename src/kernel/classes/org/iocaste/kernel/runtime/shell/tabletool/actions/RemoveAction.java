@@ -31,7 +31,6 @@ public class RemoveAction extends AbstractTableToolAction {
                 continue;
             }
             table.remove(item);
-            context.data.metaobjects.remove(index);
             context.data.objects.remove(index++);
         }
     }

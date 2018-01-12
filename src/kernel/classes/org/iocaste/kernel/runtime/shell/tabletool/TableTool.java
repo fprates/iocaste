@@ -45,7 +45,6 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.Validator;
 import org.iocaste.shell.common.tooldata.MetaObject;
-import org.iocaste.shell.common.tooldata.ObjectMetaData;
 import org.iocaste.shell.common.tooldata.ToolData;
 import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
@@ -93,25 +92,17 @@ public class TableTool extends AbstractComponentTool {
         String name, paramlink, nsinput, itemcolumn;
         Link link;
         Button button;
-        ObjectMetaData metadata;
         Table table = getElement();
         TableColumn[] tcolumns = table.getColumns();
         TableItem item = new TableItem(table, pos);
 
-        if (tooldata == null) {
-            mobject = null;
-            metadata = null;
-        } else {
-            mobject = tooldata.objects.get(index);
-            metadata = tooldata.metaobjects.get(index);
-        }
-        
+        mobject = (tooldata == null)? null : tooldata.objects.get(index);
         itemcolumn = context.data.indexitem;
         nsinput = null;
         for (TableColumn tcolumn : tcolumns) {
             if (tcolumn.isMark()) {
                 ((InputComponent)item.get(tcolumn.getName())).set(
-                        (metadata != null)? metadata.selected : false);
+                        (mobject != null)? mobject.selected : false);
                 continue;
             }
             
