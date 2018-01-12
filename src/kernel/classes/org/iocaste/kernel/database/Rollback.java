@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 
-import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
-
 public class Rollback extends AbstractHandler {
     
     @Override
@@ -28,7 +26,7 @@ public class Rollback extends AbstractHandler {
         
         try {
             connection.rollback();
-        } catch (MySQLNonTransientConnectionException e) {
+        } catch (Exception e) {
             throw new SQLException(e.getMessage());
         } finally {
             database.freeConnection(sessionid);
