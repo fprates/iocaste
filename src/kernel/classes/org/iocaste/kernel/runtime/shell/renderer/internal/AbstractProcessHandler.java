@@ -61,9 +61,10 @@ public abstract class AbstractProcessHandler extends AbstractHandler {
         messages = msgsource.get(viewctx.locale);
         for (String key : messages.keySet())
             viewctx.messagesrc.put(key, messages.get(key));
-        for (int i = 0; i < viewctx.viewexport.messages.length; i++)
-            viewctx.messagesrc.put(viewctx.viewexport.messages[i][0],
-                    viewctx.viewexport.messages[i][1]);
+        if (viewctx.viewexport.messages != null)
+            for (int i = 0; i < viewctx.viewexport.messages.length; i++)
+                viewctx.messagesrc.put(viewctx.viewexport.messages[i][0],
+                        viewctx.viewexport.messages[i][1]);
         if (viewctx.viewexport.message != null)
             viewctx.messagetext = viewctx.messagesrc.get(
                     viewctx.viewexport.message,
