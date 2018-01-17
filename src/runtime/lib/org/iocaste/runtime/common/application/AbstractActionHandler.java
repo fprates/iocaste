@@ -248,7 +248,7 @@ public abstract class AbstractActionHandler<C extends Context>
         String keyname;
         ToolData tooldata = gettool(name);
         for (DocumentModelKey key : tooldata.custommodel.getKeys())
-            return (tooldata.contains(keyname = key.getModelItemName()))?
+            return (!tooldata.contains(keyname = key.getModelItemName()))?
                     null : tooldata.instance(keyname);
 
         throw new IocasteException("%s isn't a valid key.", name);
