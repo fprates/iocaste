@@ -19,7 +19,7 @@ public class ManagedCreateValidate extends AbstractActionHandler<Context> {
         mviewctx.ns = object.getNS();
         mviewctx.document = null;
         
-        if (getcdocument(mviewctx.cmodel, mviewctx.id) != null)
+        if (getcdocument(mviewctx.cmodel, mviewctx.ns, mviewctx.id) != null)
             message(Const.ERROR, "document.already.exists");
 
         init(mviewctx.redirect);
