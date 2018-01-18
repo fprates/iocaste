@@ -6,6 +6,7 @@ import java.util.Map;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.runtime.common.application.AbstractActionHandler;
 import org.iocaste.runtime.common.page.AbstractPage;
+import org.iocaste.shell.common.MessageSource;
 
 public class ManagedViewContext {
     public static final String CREATE = "create";
@@ -23,6 +24,7 @@ public class ManagedViewContext {
     public Map<String, String> models;
     public Object id, ns;
     public ComplexDocument document;
+    public MessageSource messages;
     public boolean nshidden;
     
     public ManagedViewContext(String entity) {

@@ -27,6 +27,7 @@ public abstract class AbstractEntityCustomPage extends AbstractPage {
         
         submit("validate", mviewctx.inputvalidate);
         action("save", mviewctx.save);
+        set(mviewctx.messages);
     }
 
 }

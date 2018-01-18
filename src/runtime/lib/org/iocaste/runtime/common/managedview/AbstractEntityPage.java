@@ -44,6 +44,7 @@ public class AbstractEntityPage extends AbstractPage {
             break;
         }
         submit("validate", mviewctx.inputvalidate);
+        set(mviewctx.messages);
     }
     
     private final void setSelectConfig(ViewConfig config) {

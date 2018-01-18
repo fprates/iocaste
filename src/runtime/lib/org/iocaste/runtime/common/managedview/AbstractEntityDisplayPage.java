@@ -19,9 +19,12 @@ public abstract class AbstractEntityDisplayPage extends AbstractPage {
     
     @Override
     public void execute() {
+        ManagedViewContext mviewctx = getContext().mviewctx();
+        
         set(spec);
         set(config);
         set(input);
+        set(mviewctx.messages);
     }
 
 }
