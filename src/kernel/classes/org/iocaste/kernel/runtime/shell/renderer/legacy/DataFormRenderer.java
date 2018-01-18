@@ -29,8 +29,11 @@ public class DataFormRenderer extends AbstractElementRenderer<DataForm> {
         String htmlname = form.getHtmlName();
 
         groups = form.getGroups();
-        if (groups.size() == 0)
-            return renderGroup(form, form.getElements(), htmlname, config);
+        if (groups.size() == 0) {
+            formtag = renderGroup(form, form.getElements(), htmlname, config);
+            renderHiddenInputs(formtag, config);
+            return formtag;
+        }
         
         elements = new LinkedHashSet<>();
         formtag = new XMLElement("div");
@@ -40,6 +43,8 @@ public class DataFormRenderer extends AbstractElementRenderer<DataForm> {
             formtag.addChild(renderGroup(form, elements, name, config));
             elements.clear();
         }
+        
+        renderHiddenInputs(formtag, config);
         return formtag;
     }
     
@@ -54,9 +59,13 @@ public class DataFormRenderer extends AbstractElementRenderer<DataForm> {
         addAttributes(formtag, form);
         
         for (Element element : elements) {
-            if (!element.isDataStorable() || !element.isVisible())
+            if (!element.isDataStorable())
                 continue;
             dataitem = (DataItem)element;
+            if (!element.isVisible()) {
+                hide(dataitem);
+                continue;
+            }
             renderer.execute(dataitem, formtag, config);
         }
         

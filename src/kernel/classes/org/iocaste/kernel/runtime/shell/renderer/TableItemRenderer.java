@@ -16,18 +16,9 @@ import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 
 public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
-    private List<InputComponent> hidden;
     
     public TableItemRenderer(HtmlRenderer renderer) {
         super(renderer, Const.TABLE_ITEM);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final List<InputComponent> getHidden() {
-        return hidden;
     }
     
     @Override
@@ -45,7 +36,6 @@ public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
         List<XMLElement> tags = new ArrayList<>();
         
         savemark = true;
-        hidden = new ArrayList<>();
         style = item.getStyleClass();
         trtag.add("class",
                 (style == null)? table.getStyleClass(Table.TABLE_LINE) : style);
@@ -59,7 +49,7 @@ public class TableItemRenderer extends AbstractElementRenderer<TableItem> {
             
             if (!column.isVisible() || !item.isVisible()) {
                 if (element.isDataStorable())
-                    hidden.add((InputComponent)element);
+                    hide((InputComponent)element);
                 continue;
             }
             

@@ -8,7 +8,6 @@ import java.util.Set;
 import org.iocaste.kernel.runtime.shell.renderer.ctxmenu.ContextMenu;
 import org.iocaste.kernel.runtime.shell.renderer.internal.Config;
 import org.iocaste.kernel.runtime.shell.renderer.internal.HtmlRenderer;
-import org.iocaste.kernel.runtime.shell.renderer.legacy.ParameterRenderer;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
@@ -28,7 +27,6 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
     @Override
     protected final XMLElement execute(Table table, Config config)
             throws Exception {
-        ParameterRenderer renderer;
         String title, name, text, style, ctxname;
         Set<TableItem> items;
         ContextMenu ctxmenu;
@@ -38,7 +36,6 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
         XMLElement tag, trtag, thtag, divtag;
         TableItemRenderer itemrenderer;
         XMLElement tabletag = new XMLElement("table");
-        List<InputComponent> hidden = new ArrayList<>();
         List<XMLElement> tags = new ArrayList<>();
 
         tabletag.add("class", table.getStyleClass());
@@ -109,7 +106,8 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
                     continue;
                 tags.clear();
                 tags.add(itemrenderer.run(item, config));
-                hidden.addAll(itemrenderer.getHidden());
+                for (InputComponent input : itemrenderer.getHidden())
+                    hide(input);
                 tag.addChildren(tags);
             }
             
@@ -121,13 +119,7 @@ public class TableRenderer extends AbstractElementRenderer<Table> {
         if (style != null)
             divtag.add("class", style);
         divtag.addChild(tabletag);
-        if (hidden.size() > 0) {
-            renderer = get(Const.PARAMETER);
-            tags.clear();
-            for (InputComponent input : hidden)
-                renderHiddenInput(tags, input, config, renderer);
-            divtag.addChildren(tags);
-        }
+        renderHiddenInputs(divtag, config);
         return divtag;
     }
 }

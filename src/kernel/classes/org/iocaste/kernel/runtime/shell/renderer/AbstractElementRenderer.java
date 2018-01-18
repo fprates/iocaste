@@ -22,6 +22,7 @@ import org.iocaste.shell.common.Shell;
 
 public abstract class AbstractElementRenderer<T extends Element>
         implements Renderer<T> {
+    private List<InputComponent> hidden;
     private HtmlRenderer renderer;
     private Map<Const, Source> sources;
     private Const type;
@@ -30,6 +31,7 @@ public abstract class AbstractElementRenderer<T extends Element>
         sources = new HashMap<>();
         this.renderer = renderer;
         this.type = type;
+        hidden = new ArrayList<>();
         renderer.add(this);
     }
     
@@ -49,6 +51,14 @@ public abstract class AbstractElementRenderer<T extends Element>
     
     protected final <R extends Renderer<? extends Element>> R get(Const type) {
         return renderer.getRenderer(type);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final List<InputComponent> getHidden() {
+        return hidden;
     }
     
     protected final String getStyle(InputComponent input) {
@@ -72,6 +82,10 @@ public abstract class AbstractElementRenderer<T extends Element>
     @Override
     public final Const getType() {
         return type;
+    }
+    
+    protected final void hide(InputComponent input) {
+        hidden.add(input);
     }
     
     protected final void put(Source source) {
@@ -122,6 +136,16 @@ public abstract class AbstractElementRenderer<T extends Element>
         }
     }
     
+    protected final void renderHiddenInputs(XMLElement divtag, Config config)
+            throws Exception {
+        ParameterRenderer renderer = get(Const.PARAMETER);
+        List<XMLElement> tags = new ArrayList<>();
+        
+        for (InputComponent input : hidden)
+            renderHiddenInput(tags, input, config, renderer);
+        divtag.addChildren(tags);
+    }
+    
     @Override
     public final void run(List<XMLElement> parent, Container container,
             Config config) throws Exception {
@@ -143,6 +167,7 @@ public abstract class AbstractElementRenderer<T extends Element>
                 factory.addEventHandler(config.viewctx, element.getHtmlName());
         }
         
+        hidden.clear();
         return execute((T)element, config);
     }
     
