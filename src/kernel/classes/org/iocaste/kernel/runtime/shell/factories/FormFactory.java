@@ -23,7 +23,7 @@ public class FormFactory extends AbstractSpecFactory {
     @Override
     protected void execute(ViewContext viewctx,
     		Container container, String parent, String name) {
-        new Form(viewctx.view, name);
+        new Form(viewctx, name);
     }
 
 }

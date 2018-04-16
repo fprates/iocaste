@@ -21,29 +21,34 @@
 
 package org.iocaste.shell.common;
 
+import org.iocaste.shell.common.tooldata.Context;
+import org.iocaste.shell.common.tooldata.ElementViewContext;
+import org.iocaste.shell.common.tooldata.ToolDataElement;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
+
 /**
  * Implementação de formulário HTML.
  * 
  * @author Francisco de Assis Prates
  *
  */
-public class Form extends AbstractContainer {
+public class Form extends ToolDataElement {
     private static final long serialVersionUID = -4049409929220114810L;
     public static final String MULTIPART_ENCODE = "multipart/form-data";
-    private String enctype, action;
     
     public Form(View view, String name) {
-        super(view, Const.FORM, name);
-        init(name);
+        this(new ElementViewContext(view, null, TYPES.FORM, name), name);
     }
     
     public Form(Container container, String name) {
-        super(container, Const.FORM, name);
-        init(name);
+        this(new ElementViewContext(null, container, TYPES.FORM, name), name);
     }
 
-    private final void init(String name) {
-        new Parameter(this, action = name.concat(".action"));
+    public Form(Context viewctx, String name) {
+        super(viewctx, Const.FORM, name);
+        String action = name.concat(".action");
+        new Parameter(this, action);
+        setAction(action);
     }
     
     /**
@@ -51,7 +56,7 @@ public class Form extends AbstractContainer {
      * @return codificação
      */
     public final String getEnctype() {
-        return enctype;
+        return tooldata.attributes.get("enctype");
     }
     
     /**
@@ -59,14 +64,6 @@ public class Form extends AbstractContainer {
      * @param enctype codificação
      */
     public final void setEnctype(String enctype) {
-        this.enctype = enctype;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final String getAction() {
-        return action;
+        tooldata.attributes.put("enctype", enctype);
     }
 }

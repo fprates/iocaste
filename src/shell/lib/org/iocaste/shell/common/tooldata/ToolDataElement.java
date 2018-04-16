@@ -57,7 +57,7 @@ public abstract class ToolDataElement implements Component, Container,
 			tooldata.componenttype = type;
 		if (tooldata.style == null)
 			tooldata.style = type.style();
-        if (tooldata.parent == null)
+        if ((tooldata.parent == null) || tooldata.parent.equals("view"))
         	view.add(this);
         else
         	((Container)getElement(tooldata.parent)).add(this);
