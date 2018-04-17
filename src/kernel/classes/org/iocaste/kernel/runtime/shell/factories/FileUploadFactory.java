@@ -9,7 +9,7 @@ public class FileUploadFactory extends AbstractSpecFactory {
     @Override
     protected void execute(ViewContext viewctx,
     		Container container, String parent, String name) {
-        new FileEntry(container, name);
+        new FileEntry(viewctx, name);
     }
 
 }

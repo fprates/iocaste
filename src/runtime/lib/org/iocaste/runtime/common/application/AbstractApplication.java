@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -14,6 +15,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.Handler;
 import org.iocaste.protocol.IocasteException;
@@ -36,20 +40,21 @@ import org.iocaste.runtime.common.protocol.GenericService;
 import org.iocaste.runtime.common.protocol.ServiceInterfaceData;
 import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.MessageSource;
+import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.tooldata.ToolData;
 import org.iocaste.shell.common.tooldata.ViewExport;
 import org.iocaste.shell.common.tooldata.ViewSpecItem;
 
 public abstract class AbstractApplication<T extends Context>
-		extends AbstractIocasteServlet implements Application<T> {
+        extends AbstractIocasteServlet implements Application<T> {
     private static final long serialVersionUID = 1890996994514012046L;
     private Map<String, T> ctxentries;
     private StandardPageFactory pagefactory;
     private ManagedViewFactory mviewfactory;
     
     public AbstractApplication() {
-    	ctxentries = new HashMap<>();
+        ctxentries = new HashMap<>();
         pagefactory = new StandardPageFactory();
         mviewfactory = new ManagedViewFactory();
     }
@@ -119,46 +124,46 @@ public abstract class AbstractApplication<T extends Context>
     }
     
     private final void configOutputStyleData(AbstractPage page) {
-    	String csslink;
-    	StyleSheet stylesheet = page.getStyleSheet();
-    	page.outputview.stylesheet = StyleSheet.convertStyleSheet(stylesheet);
-    	page.outputview.styleconst = Tools.toArray(stylesheet.getConstants());
-    	if ((csslink = stylesheet.getLink()) == null)
-    	    page.add(new HeaderLink("stylesheet", "text/css", csslink));
+        String csslink;
+        StyleSheet stylesheet = page.getStyleSheet();
+        page.outputview.stylesheet = StyleSheet.convertStyleSheet(stylesheet);
+        page.outputview.styleconst = Tools.toArray(stylesheet.getConstants());
+        if ((csslink = stylesheet.getLink()) == null)
+            page.add(new HeaderLink("stylesheet", "text/css", csslink));
     }
     
     private final void configPageStyleData(
-    		AbstractPage page, ServiceInterfaceData servicedata) {
+            AbstractPage page, ServiceInterfaceData servicedata) {
         GenericService service;
-    	Message message;
+        Message message;
         ViewExport viewexport;
         AbstractPage navcontrol;
-    	
-    	message = new Message("style_data_get");
+        
+        message = new Message("style_data_get");
         servicedata.serviceurl = RuntimeEngine.SERVICE_URL;
         service = new GenericService(servicedata);
         viewexport = service.invoke(message);
         page.importStyle(viewexport.styleconst, viewexport.stylesheet);
         navcontrol = page.getChild("navcontrol");
         ((StandardNavControlSpec)navcontrol.getSpec()).ncspec =
-        		viewexport.ncspec;
+                viewexport.ncspec;
         ((StandardNavControlConfig)navcontrol.getConfig()).ncconfig =
-        		(Object[][])viewexport.ncconfig;
+                (Object[][])viewexport.ncconfig;
     }
     
     @Override
     protected final void doGet(HttpServletRequest req, HttpServletResponse resp)
-    		throws ServletException, IOException {
+            throws ServletException, IOException {
         try {
-        	run(req, resp);
-    	} catch (Exception e) {
-    		throw new ServletException(e);
-    	}
+            run(req, resp);
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
     }
     
     @Override
     protected final void doPost(HttpServletRequest req,
-    		HttpServletResponse resp) throws ServletException, IOException {
+            HttpServletResponse resp) throws ServletException, IOException {
         String servletpath = req.getServletPath();
         
         if (servletpath.equals("/view.html")) {
@@ -167,16 +172,16 @@ public abstract class AbstractApplication<T extends Context>
         }
         
         try {
-        	run(req, resp);
-    	} catch (Exception e) {
-    		throw new ServletException(e);
-    	}
+            run(req, resp);
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
     }
     
     @Override
     public <U extends Handler> U get(String handler) {
-    	// TODO Auto-generated method stub
-    	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
     
     @Override
@@ -184,14 +189,14 @@ public abstract class AbstractApplication<T extends Context>
         return null;
     }
     
-    //	private final ViewExport getExceptionView(Exception e) {
-    //		return new ViewExport();
-    //	}
+    //  private final ViewExport getExceptionView(Exception e) {
+    //      return new ViewExport();
+    //  }
     
     @Override
     public Set<String> getMethods() {
-    	// TODO Auto-generated method stub
-    	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
     
     @Override
@@ -200,7 +205,7 @@ public abstract class AbstractApplication<T extends Context>
     }
     
     private final ViewExport getView(
-    		ServiceInterfaceData servicedata, T context) throws Exception {
+            ServiceInterfaceData servicedata, T context) throws Exception {
         int i;
         AbstractPage child;
         AbstractPage page = context.getPage();
@@ -224,7 +229,7 @@ public abstract class AbstractApplication<T extends Context>
                 page.outputview.subpages[i++][1] = child.outputview;
             }
         }
-    	return page.outputview;
+        return page.outputview;
     }
     
     private final void initContext(ContextData<T> ctxdata) throws Exception {
@@ -248,8 +253,8 @@ public abstract class AbstractApplication<T extends Context>
     
     @Override
     public boolean isAuthorizedCall() {
-    	// TODO Auto-generated method stub
-    	return false;
+        // TODO Auto-generated method stub
+        return false;
     }
     
     private final boolean loginByTicket(
@@ -262,24 +267,44 @@ public abstract class AbstractApplication<T extends Context>
         return connected;
     }
     
-    private final void move(Context context, ViewExport inputview) {
-    	AbstractPage page = context.getPage();
-    	page.clearToolData();
-    	for (Object object : inputview.items)
-    		page.add((ToolData)object);
-    	page.outputview = inputview;
+    private final void move(ContextData<T> ctxdata, ViewExport inputview) {
+        ToolData tooldata;
+        FileItem fileitem;
+        String filename;
+        AbstractPage page = ctxdata.context.getPage();
+        
+        page.clearToolData();
+        for (Object object : inputview.items) {
+            page.add(tooldata = (ToolData)object);
+            if (!tooldata.multipart)
+                continue;
+            fileitem = ctxdata.files.get(tooldata.name);
+            if (fileitem == null)
+                continue;
+            filename = fileitem.getName();
+            if (filename.equals("")) {
+                tooldata.error = MultipartElement.EMPTY_FILE_NAME;
+                continue;
+            }
+            if (tooldata.disabled)
+                continue;
+            tooldata.value = filename;
+            tooldata.content = fileitem.get();
+            tooldata.error = 0;
+        }
+        page.outputview = inputview;
     }
     
     private final void prepareMessages(
-    		AbstractPage page, MessageSource messagesrc) {
-    	int i;
+            AbstractPage page, MessageSource messagesrc) {
+        int i;
         Properties messages = null;
         String locale = page.outputview.locale.toString();
-    	
-    	if (messagesrc != null) {
-    	    messagesrc.entries();
-    	    messages = messagesrc.getMessages(locale);
-    	}
+        
+        if (messagesrc != null) {
+            messagesrc.entries();
+            messages = messagesrc.getMessages(locale);
+        }
 
         for (String key : page.getChildren()) {
             messagesrc = page.getChild(key).getMessages();
@@ -292,18 +317,18 @@ public abstract class AbstractApplication<T extends Context>
                 messages.putAll(messagesrc.getMessages(locale));
         }
         
-    	if (messages == null)
-    		return;
-    	page.outputview.messages = new String[messages.size()][2];
-    	i = 0;
-    	for (Object key : messages.keySet()) {
-    		page.outputview.messages[i][0] = (String)key;
-    		page.outputview.messages[i++][1] = (String)messages.get(key);
-    	}
+        if (messages == null)
+            return;
+        page.outputview.messages = new String[messages.size()][2];
+        i = 0;
+        for (Object key : messages.keySet()) {
+            page.outputview.messages[i][0] = (String)key;
+            page.outputview.messages[i++][1] = (String)messages.get(key);
+        }
     }
     
     private final void print(HttpServletResponse resp, byte[] content)
-    		throws IOException {
+            throws IOException {
         PrintWriter writer;
         
         resp.setContentType("text/html");
@@ -313,28 +338,65 @@ public abstract class AbstractApplication<T extends Context>
         writer.flush();
         writer.close();
     }
-    
-    @Override
-    public Object run(Message message) throws Exception {
-    	// TODO Auto-generated method stub
-    	return null;
+
+    private final Map<String, String[]> processMultipartContent(
+            ContextData<T> ctxdata) throws Exception {
+        String[] values;
+        String value;
+        FileItem fileitem;
+        Map<String, String[]> parameters;
+        
+        parameters = new HashMap<>();
+        for (String fkey : ctxdata.files.keySet()) {
+            fileitem = ctxdata.files.get(fkey);
+            if (!fileitem.isFormField()) {
+                parameters.put(fkey, new String[] {fileitem.getName()});
+                continue;
+            }
+            
+            value = fileitem.getString("UTF-8");
+            values = parameters.get(fkey);
+            if ((values == null) || (values != null && value.length() > 0))
+                parameters.put(fkey, new String[] {value});
+        }
+        
+        return parameters;
     }
     
+    @SuppressWarnings("unchecked")
     private final void reloadContext(ContextData<T> ctxdata) throws Exception {
         ViewExport outputview;
+        ServletFileUpload fileupload;
+        Map<String, String[]> parameters;
+
+        ctxdata.files.clear();
+        if (ServletFileUpload.isMultipartContent(ctxdata.req)) {
+            fileupload = new ServletFileUpload(new DiskFileItemFactory());
+            for (FileItem fileitem : (List<FileItem>)fileupload.parseRequest(ctxdata.req))
+                ctxdata.files.put(fileitem.getFieldName(), fileitem);
+            parameters = processMultipartContent(ctxdata);
+        } else {
+            parameters = ctxdata.req.getParameterMap();
+        }
         
         outputview = getView(ctxdata.servicedata, ctxdata.context);
         outputview.action = null;
-        outputview.reqparameters = Tools.toArray(ctxdata.req.getParameterMap(),
+        outputview.reqparameters = Tools.toArray(parameters,
                 ctxdata.context.isConnectionByTicket()? "id" : null);
         outputview = ctxdata.runtime.processInput(outputview);
-        move(ctxdata.context, outputview);
+        move(ctxdata, outputview);
         if (outputview.action != null)
             run(ctxdata.context, outputview.action);
     }
     
+    @Override
+    public Object run(Message message) throws Exception {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
     private void run(HttpServletRequest req, HttpServletResponse resp)
-    		throws Exception {
+            throws Exception {
         String ctxticketid, reqticketid;
         ViewExport outputview;
         byte[] content;
@@ -456,4 +518,9 @@ class ContextData<T extends Context> {
     public RuntimeEngine runtime;
     public T context;
     public boolean resetctx;
+    public Map<String, FileItem> files;
+    
+    public ContextData() {
+        files = new HashMap<>();
+    }
 }

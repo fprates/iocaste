@@ -8,6 +8,7 @@
             <fileset dir="${builddir}/core/lib"/>
         	<fileset dir="${builddir}/documents/lib"/>
             <fileset dir="${builddir}/shell/lib"/>
+            <fileset dir="${basedir}/lib-shell"/>
         	<fileset dir="${builddir}/packagetool/lib"/>
             <fileset dir="${basedir}/ext"/>
         </path>

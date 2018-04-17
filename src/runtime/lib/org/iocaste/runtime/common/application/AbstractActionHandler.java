@@ -68,6 +68,10 @@ public abstract class AbstractActionHandler<C extends Context>
         return clone;
     }
     
+    protected final byte[] contentget(String tooldata) {
+        return gettool(tooldata).content;
+    }
+    
     protected final void delete(ExtendedObject object) {
         context.runtime().delete(object);
     }
@@ -95,24 +99,9 @@ public abstract class AbstractActionHandler<C extends Context>
     
     protected abstract void execute(C context) throws Exception;
     
-//    protected final byte[] filecontentget(String fileentry) {
-//        return fileentryget(fileentry).getContent();
-//    }
-//    
-//    private final FileEntry fileentryget(String fileentry) {
-//        FileEntry fentry = context.view.getElement(fileentry);
-//        if (fentry != null)
-//            return fentry;
-//        throw new RuntimeException(fileentry.concat(" is an invalid element."));
-//    }
-//    
-//    protected final int fileerrorget(String fileentry) {
-//        return fileentryget(fileentry).getError();
-//    }
-//    
-//    protected final String filenameget(String fileentry) {
-//        return fileentryget(fileentry).get();
-//    }
+    protected final int errorget(String tooldata) {
+        return gettool(tooldata).error;
+    }
     
 	protected <T> T get(String tooldata, String field) {
     	return gettool(tooldata).object.get(field);

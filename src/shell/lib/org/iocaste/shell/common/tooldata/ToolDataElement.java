@@ -24,6 +24,7 @@ import org.iocaste.shell.common.LinkComponent;
 import org.iocaste.shell.common.LinkEntry;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipageContainer;
+import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.SearchHelp;
@@ -32,15 +33,14 @@ import org.iocaste.shell.common.View;
 
 public abstract class ToolDataElement implements Component, Container,
         InputComponent, ControlComponent, MultipageContainer, TextComponent,
-        LinkComponent, PopupControl, RangeInputComponent {
-	private static final long serialVersionUID = 4217306786401069911L;
-	protected ToolData tooldata;
-	protected View view;
+        LinkComponent, PopupControl, RangeInputComponent, MultipartElement {
+    private static final long serialVersionUID = 4217306786401069911L;
+    protected ToolData tooldata;
+    protected View view;
     private DocumentModelItem modelitem;
     private Map<String, String> elements;
     private String htmlname, master, calendar;
-    private boolean translatable, nohelper, stacking, multipart, range;
-    private byte[] content;
+    private boolean translatable, nohelper, stacking, range;
     private SearchHelp search;
     private Map<String, EventHandler> evhandlers;
     
@@ -192,8 +192,9 @@ public abstract class ToolDataElement implements Component, Container,
         return tooldata.componenttype;
     }
 
+    @Override
     public final byte[] getContent() {
-        return content;
+        return tooldata.content;
     }
 
 	@Override
@@ -257,6 +258,11 @@ public abstract class ToolDataElement implements Component, Container,
 	public String[] getElementsNames() {
 		return elements.keySet().toArray(new String[0]);
 	}
+
+    @Override
+    public final int getError() {
+        return tooldata.error;
+    }
     
 	/*
 	 * (non-Javadoc)
@@ -536,7 +542,7 @@ public abstract class ToolDataElement implements Component, Container,
 
 	@Override
 	public boolean hasMultipartSupport() {
-		return multipart;
+		return tooldata.multipart;
 	}
     
 	@Override
@@ -787,8 +793,9 @@ public abstract class ToolDataElement implements Component, Container,
         tooldata.componenttype = type;
     }
     
+    @Override
     public final void setContent(byte[] content) {
-        this.content = content;
+        tooldata.content = content;
     }
     
     @Override
@@ -813,6 +820,11 @@ public abstract class ToolDataElement implements Component, Container,
     @Override
     public void setEnabled(boolean enabled) {
     	tooldata.disabled = !enabled;
+    }
+
+    @Override
+    public final void setError(int error) {
+        tooldata.error = error;
     }
     
     /*

@@ -22,10 +22,11 @@ public class ToolData implements Serializable {
     public String text, tag, subpage, indexitem, pane, mask, image, nsdata;
     public boolean internallabel, action, submit, disabled, secret;
     public boolean invisible, required, focus, nolock, cancellable, absolute;
-    public boolean mark, noheader;
-    public int length, vlength, topline, step;
+    public boolean mark, noheader, multipart;
+    public int length, vlength, topline, step, error;
     public String[] groups, ordering;
-	public Object[] textargs; 
+    public Object[] textargs;
+    public byte[] content;
     public Object nsvalue, value;
     public DocumentModel custommodel;
     public ViewSpecItem.TYPES type;
