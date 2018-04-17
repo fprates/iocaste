@@ -283,14 +283,18 @@ public abstract class AbstractApplication<T extends Context>
                 continue;
             filename = fileitem.getName();
             if (filename.equals("")) {
-                tooldata.error = MultipartElement.EMPTY_FILE_NAME;
+                tooldata.value = null;
+                tooldata.values.remove("content");
+                tooldata.values.remove("content-type");
+                tooldata.values.remove("error", MultipartElement.EMPTY_FILE_NAME);
                 continue;
             }
             if (tooldata.disabled)
                 continue;
             tooldata.value = filename;
-            tooldata.content = fileitem.get();
-            tooldata.error = 0;
+            tooldata.values.put("content", fileitem.get());
+            tooldata.values.put("content-type", fileitem.getContentType());
+            tooldata.values.put("error", 0);
         }
         page.outputview = inputview;
     }

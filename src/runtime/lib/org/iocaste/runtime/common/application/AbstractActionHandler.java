@@ -68,8 +68,16 @@ public abstract class AbstractActionHandler<C extends Context>
         return clone;
     }
     
+    protected final int contenterrorget(String tooldata) {
+        return (int)gettool(tooldata).values.get("error");
+    }
+    
     protected final byte[] contentget(String tooldata) {
-        return gettool(tooldata).content;
+        return (byte[])gettool(tooldata).values.get("content");
+    }
+    
+    protected final String contenttypeget(String tooldata) {
+        return (String)gettool(tooldata).values.get("content-type");
     }
     
     protected final void delete(ExtendedObject object) {
@@ -98,10 +106,6 @@ public abstract class AbstractActionHandler<C extends Context>
     }
     
     protected abstract void execute(C context) throws Exception;
-    
-    protected final int errorget(String tooldata) {
-        return gettool(tooldata).error;
-    }
     
 	protected <T> T get(String tooldata, String field) {
     	return gettool(tooldata).object.get(field);

@@ -194,7 +194,7 @@ public abstract class ToolDataElement implements Component, Container,
 
     @Override
     public final byte[] getContent() {
-        return tooldata.content;
+        return (byte[])tooldata.values.get("content");
     }
 
 	@Override
@@ -261,7 +261,7 @@ public abstract class ToolDataElement implements Component, Container,
 
     @Override
     public final int getError() {
-        return tooldata.error;
+        return (int)tooldata.values.get("error");
     }
     
 	/*
@@ -795,7 +795,7 @@ public abstract class ToolDataElement implements Component, Container,
     
     @Override
     public final void setContent(byte[] content) {
-        tooldata.content = content;
+        tooldata.values.put("content", content);
     }
     
     @Override
@@ -824,7 +824,7 @@ public abstract class ToolDataElement implements Component, Container,
 
     @Override
     public final void setError(int error) {
-        tooldata.error = error;
+        tooldata.values.put("error", error);
     }
     
     /*

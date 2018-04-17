@@ -23,10 +23,9 @@ public class ToolData implements Serializable {
     public boolean internallabel, action, submit, disabled, secret;
     public boolean invisible, required, focus, nolock, cancellable, absolute;
     public boolean mark, noheader, multipart;
-    public int length, vlength, topline, step, error;
+    public int length, vlength, topline, step;
     public String[] groups, ordering;
     public Object[] textargs;
-    public byte[] content;
     public Object nsvalue, value;
     public DocumentModel custommodel;
     public ViewSpecItem.TYPES type;
