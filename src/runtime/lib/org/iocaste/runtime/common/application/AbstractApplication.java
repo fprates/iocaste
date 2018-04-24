@@ -91,10 +91,11 @@ public abstract class AbstractApplication<T extends Context>
             items = spec.getItems();
             page.outputview.items = new Object[items.size()];
             for (ViewSpecItem item : items) {
-                page.outputview.items[i++] =
-                        data = page.instance(item.getName());
+                data = page.instance(item.getName());
+                data.clear();
                 data.type = item.getType();
                 data.parent = item.getParent();
+                page.outputview.items[i++] = data;
             }
             
             if (config != null) {

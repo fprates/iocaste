@@ -54,6 +54,12 @@ public class ToolData implements Serializable {
         styles = new HashMap<>();
     }
     
+    public final void clear() {
+        custommodel = null;
+        model = null;
+        ordering = null;
+    }
+    
     public final ToolData clone(String prefix, ToolData parent)
             throws Exception {
         Object valuefrom;
