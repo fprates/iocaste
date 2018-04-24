@@ -136,14 +136,15 @@ public class DataFormTool extends AbstractComponentTool {
         
         df = new DataForm(container, data.name);
         setHtmlName(df.getHtmlName());
-        if (data.custommodel != null)
-            DataForm.importModel(df, data.custommodel);
-        if (data.model != null)
+        if ((data.model != null) && (data.custommodel == null)) {
             data.custommodel = DataForm.importModel(
                     df, data.model, viewctx.function);
-        else
-            data.model = (data.custommodel != null)?
-                    data.custommodel.getName() : null;
+        } else {
+            if (data.custommodel == null)
+                throw new IocasteException("undefined model for %s.", data.name);
+            DataForm.importModel(df, data.custommodel);
+            data.model = data.custommodel.getName();
+        }
 
         if (data.custommodel == null)
             throw new IocasteException("undefined model for %s.", data.name);
