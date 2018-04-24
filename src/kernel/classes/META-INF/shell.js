@@ -7,6 +7,12 @@ function closeCal() {
     cal.style.display='none';
 }
 
+function closeMenu(menu, openmenu, closemenu) {
+    setElementDisplay(menu, "none");
+    setElementDisplay(openmenu, "inline");
+    setElementDisplay(closemenu, "none");
+}
+
 function closeSh() {
 	var sh = document.getElementById('shstdcnt');
 	sh.style.display='none';
@@ -35,6 +41,16 @@ function formSubmitNoLock(formname, actionname, value) {
 
 function getClassStyle(id) {
     return document.getElementById(id).className;
+}
+
+function openMenu(menu, openmenu, closemenu) {
+    setElementDisplayOfClass(".ctxmenu", "none");
+    setElementDisplayOfClass(".button_ctxmenu_close", "none");
+    setElementDisplayOfClass(".button_ctxmenu_open", "inline");
+    setElementDisplay("nc_login_options", "none");
+    setElementDisplay(menu, "inline-block");
+    setElementDisplay(openmenu, "none");
+    setElementDisplay(closemenu, "inline");
 }
 
 function revertElementDisplay(id) {

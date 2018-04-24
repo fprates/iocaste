@@ -96,10 +96,7 @@ public class ContextMenu {
         item = getNodeItem(close);
         item.setStyleClass("button_ctxmenu_close");
         item.addAttribute("style", "display:none");
-        item.addAttribute("onclick", new StringBuilder(
-                Shell.setElementDisplay(menu, "none")).
-                append(Shell.setElementDisplay(open, "inline")).
-                append(Shell.setElementDisplay(close, "none")).toString());
+        item.addAttribute("onclick", Shell.closeMenu(menu, open, close));
         item.setText("-");
     }
     
@@ -120,7 +117,7 @@ public class ContextMenu {
         link = new Link(config.viewctx, linkname);
         link.setAction(onclick);
         link.setStyleClass("ctxmenu_link");
-        link.setText(getMessage(text));
+        link.setText((text == null)? "" : getMessage(text));
         link.setAbsolute(true);
         
         control = config.viewctx.view.getElement(ctrlname);
@@ -135,16 +132,7 @@ public class ContextMenu {
         item = getNodeItem(open);
         item.setStyleClass("button_ctxmenu_open");
         item.addAttribute("style", "display:inline");
-        item.addAttribute("onclick", new StringBuilder(
-                Shell.setElementDisplayOfClass(".ctxmenu", "none")).
-                append(Shell.setElementDisplayOfClass(
-                        ".button_ctxmenu_close", "none")).
-                append(Shell.setElementDisplayOfClass(
-                        ".button_ctxmenu_open", "inline")).
-                append(Shell.setElementDisplay("nc_login_options", "none")).
-                append(Shell.setElementDisplay(menu, "inline-block")).
-                append(Shell.setElementDisplay(open, "none")).
-                append(Shell.setElementDisplay(close, "inline")).toString());
+        item.addAttribute("onclick", Shell.openMenu(menu, open, close));
         if (title != null)
             item.addAttribute("title", getMessage(title));
         item.setText("+");

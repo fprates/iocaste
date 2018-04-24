@@ -62,6 +62,14 @@ public class Shell extends AbstractServiceInterface {
         return ivalue.equals(value);
     }
     
+    public static final String closeMenu(
+            String menu, String openmenu, String closemenu) {
+        return new StringBuilder("closeMenu('").
+                append(menu).append("', '").
+                append(openmenu).append("', '").
+                append(closemenu).append("');").toString();
+    }
+    
     /**
      * Gera um componente especificado.
      * 
@@ -231,6 +239,14 @@ public class Shell extends AbstractServiceInterface {
         
         element = getDataElement(input);
         return Documents.isInitial(element, value);
+    }
+    
+    public static final String openMenu(
+            String menu, String openmenu, String closemenu) {
+        return new StringBuilder("openMenu('").
+                append(menu).append("', '").
+                append(openmenu).append("', '").
+                append(closemenu).append("');").toString();
     }
     
     /**
