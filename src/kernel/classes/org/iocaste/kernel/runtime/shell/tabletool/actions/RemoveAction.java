@@ -19,7 +19,7 @@ public class RemoveAction extends AbstractTableToolAction {
     @Override
     public void onEvent(ControlComponent control) {
         Table table;
-        int index;
+        int index, i = 0;
         
         context.viewctx.entries.get(context.data.name).component.load();
         table = context.tabletool.getElement();
@@ -27,11 +27,12 @@ public class RemoveAction extends AbstractTableToolAction {
         
         for (TableItem item : table.getItems()) {
             if (!item.isSelected()) {
+                i++;
                 index++;
                 continue;
             }
             table.remove(item);
-            context.data.objects.remove(index++);
+            context.data.objects.put(i, context.data.objects.get(++index));
         }
     }
 
