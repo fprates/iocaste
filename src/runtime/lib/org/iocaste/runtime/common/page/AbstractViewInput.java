@@ -87,6 +87,7 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
         Object value;
         ToolData toolitem = getComponentData(tooldata).instance(item);
         
+        toolitem.values.clear();
         for (ExtendedObject object : objects) {
             value = object.get(field);
             toolitem.values.put(value.toString(), value);
@@ -98,6 +99,7 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
         Object value;
         ToolData toolitem = getComponentData(tooldata).instance(item);
         
+        toolitem.values.clear();
         for (ExtendedObject object : objects) {
             value = object.get(field);
             toolitem.values.put(value.toString(), value);
