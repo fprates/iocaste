@@ -55,12 +55,21 @@ public abstract class AbstractViewInput<C extends Context> implements ViewInput
         link.values.put(pname, (value == null)? null : value.toString());
     }
     
+    private void listset(Map<String, Object> valuesmap, Object[][] values) {
+        valuesmap.clear();
+        for (int i = 0; i < values.length; i++)
+            valuesmap.put(values[i][0].toString(), values[i][1]);
+    }
+    
     protected void listset(String name, Object[][] values) {
     	Map<String, Object> valuesmap = getComponentData(name).values;
-    	
-    	valuesmap.clear();
-        for (int i = 0; i < values.length; i++)
-        	valuesmap.put(values[i][0].toString(), values[i][1]);
+    	listset(valuesmap, values);
+    }
+    
+    protected final void listset(String tooldata,
+            String item, Object[][] values) {
+        ToolData toolitem = getComponentData(tooldata).instance(item);
+        listset(toolitem.values, values);
     }
     
     protected final void listset(String tooldata,
