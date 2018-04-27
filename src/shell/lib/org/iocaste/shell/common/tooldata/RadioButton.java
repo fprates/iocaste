@@ -21,10 +21,13 @@ public class RadioButton extends ToolDataElement {
         super(viewctx, Const.RADIO_BUTTON, name);
         this.group = group.getHtmlName();
         this.index = index;
-        setStyleClass(group.getButtonStyleClass());
+        if (tooldata.style == null)
+            setStyleClass(group.getButtonStyleClass());
         
         group.rename(getHtmlName(), name);
         tooldata.value = false;
+        if (tooldata.text == null)
+            tooldata.text = tooldata.name;
     }
     
     /**

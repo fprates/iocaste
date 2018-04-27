@@ -19,12 +19,10 @@ import org.iocaste.shell.common.View;
 public class RadioGroup extends ToolDataElement {
 	private static final long serialVersionUID = -6289110111087544467L;
 	private Set<String> items;
-    private String buttonstyle;
     
     public RadioGroup(Context viewctx, String name) {
         super(viewctx, Const.RADIO_GROUP, name);
         items = new LinkedHashSet<>();
-        buttonstyle = "radio_button";
     }
     
     public final RadioButton button(Context viewctx, String name) {
@@ -43,7 +41,7 @@ public class RadioGroup extends ToolDataElement {
     }
     
     public final String getButtonStyleClass() {
-        return buttonstyle;
+        return tooldata.styles.get("button");
     }
     
     public final RadioButton getSelected() {
@@ -87,7 +85,7 @@ public class RadioGroup extends ToolDataElement {
     
     public final void setButtonStyleClass(String styleclass) {
         View view = getView();
-        buttonstyle = styleclass;
+        tooldata.styles.put("button", styleclass);
         for (String name : items)
             ((RadioButton)view.getElement(name)).setStyleClass(styleclass);
     }

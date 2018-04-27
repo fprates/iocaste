@@ -15,9 +15,13 @@ public class RadioGroupFactory extends AbstractSpecFactory {
     
     @Override
     public final void update(ViewContext viewctx, String name) {
-    	ToolData tooldata = viewctx.entries.get(name).data;
-    	if (tooldata.value != null)
-    		tooldata.value = ((String)tooldata.value).split("\\.")[1];
+        String[] tokens;
+        ToolData tooldata = viewctx.entries.get(name).data;
+        if (tooldata.value == null)
+            return;
+        if ((tokens = ((String)tooldata.value).split("\\.")).length == 1)
+            return;
+        tooldata.value = tokens[1];
     }
 
 }
