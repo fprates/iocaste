@@ -20,6 +20,7 @@ import org.iocaste.runtime.common.page.StandardPage;
 import org.iocaste.runtime.common.portal.PortalContext;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.tooldata.MetaObject;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public abstract class AbstractContext implements Context {
     private PortalContext portalctx;
@@ -231,9 +232,10 @@ public abstract class AbstractContext implements Context {
     @Override
     public final void set(
             String page, String tooldata, ExtendedObject[] objects) {
-        AbstractPage _page = pages.get(page);
+        ToolData item = pages.get(page).instance(tooldata);
+        item.objects.clear();
         for (int i = 0; i < objects.length; i++)
-            _page.instance(tooldata).objects.put(i,
+            item.objects.put(i,
                     (objects[i] == null)? null : new MetaObject(objects[i]));
     }
     
@@ -246,10 +248,11 @@ public abstract class AbstractContext implements Context {
     @Override
     public final void set(
             String page, String tooldata, Collection<ExtendedObject> objects) {
-        AbstractPage _page = pages.get(page);
+        ToolData item = pages.get(page).instance(tooldata);
         int i = 0;
+        item.objects.clear();
         for (ExtendedObject object : objects)
-            _page.instance(tooldata).objects.put(i++,
+            item.objects.put(i++,
                     (object == null)? null : new MetaObject(object));
     }
     
