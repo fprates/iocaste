@@ -2,6 +2,7 @@ package org.iocaste.kernel.runtime.shell.tabletool.actions;
 
 import java.util.Map;
 
+import org.iocaste.kernel.runtime.shell.ComponentEntry;
 import org.iocaste.kernel.runtime.shell.tabletool.TableContext;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Table;
@@ -20,10 +21,11 @@ public class RemoveAction extends AbstractTableToolAction {
     public void onEvent(ControlComponent control) {
         Table table;
         int index, i = 0;
+        ComponentEntry entry = context.viewctx.entries.get(context.name);
         
-        context.viewctx.entries.get(context.data.name).component.load();
+        entry.component.load();
         table = context.tabletool.getElement();
-        index = context.data.topline;
+        index = entry.data.topline;
         
         for (TableItem item : table.getItems()) {
             if (!item.isSelected()) {
@@ -32,7 +34,7 @@ public class RemoveAction extends AbstractTableToolAction {
                 continue;
             }
             table.remove(item);
-            context.data.objects.put(i, context.data.objects.get(++index));
+            entry.data.objects.put(i, entry.data.objects.get(++index));
         }
     }
 

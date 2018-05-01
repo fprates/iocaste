@@ -2,6 +2,7 @@ package org.iocaste.kernel.runtime.shell.tabletool.actions;
 
 import java.util.Map;
 
+import org.iocaste.kernel.runtime.shell.ComponentEntry;
 import org.iocaste.kernel.runtime.shell.tabletool.TableContext;
 import org.iocaste.shell.common.ControlComponent;
 
@@ -18,9 +19,10 @@ public class LastAction extends AbstractTableToolAction {
     @Override
     public void onEvent(ControlComponent control) {
         int pages, topline;
-        pages = context.data.objects.size() /
-                (topline = context.data.vlength);
-        context.data.topline = (topline *= pages);
+        ComponentEntry entry = context.viewctx.entries.get(context.name);
+        pages = entry.data.objects.size() /
+                (topline = entry.data.vlength);
+        entry.data.topline = (topline *= pages);
         move();
     }
 

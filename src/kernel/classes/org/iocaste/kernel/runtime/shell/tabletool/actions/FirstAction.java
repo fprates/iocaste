@@ -17,7 +17,7 @@ public class FirstAction extends AbstractTableToolAction {
 
     @Override
     public void onEvent(ControlComponent control) {
-        context.data.topline = 0;
+        context.viewctx.entries.get(context.name).data.topline = 0;
         move();
     }
 

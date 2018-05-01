@@ -113,6 +113,11 @@ public abstract class AbstractApplication<T extends Context>
             page.outputview.title = page.getTitle();
             prepareMessages(page, context.getMessageSource());
             page.setReady(true);
+        } else {
+            for (i = 0; i < page.outputview.items.length; i++) {
+                data = (ToolData)page.outputview.items[i];
+                page.outputview.items[i] = page.instance(data.name);
+            }
         }
         
         if (input != null)

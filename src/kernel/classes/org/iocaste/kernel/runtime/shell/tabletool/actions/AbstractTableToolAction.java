@@ -9,6 +9,7 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableContextItem;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.tooldata.MetaObject;
+import org.iocaste.shell.common.tooldata.ToolData;
 
 public abstract class AbstractTableToolAction extends AbstractEventHandler {
     private static final long serialVersionUID = -7712067205074943704L;
@@ -22,17 +23,17 @@ public abstract class AbstractTableToolAction extends AbstractEventHandler {
     }
     
     public AbstractTableToolAction(TableContext context,
-            Map<String, AbstractTableToolAction> store, String action, boolean register)
-    {
-        name = action.concat(context.data.name);
+            Map<String, AbstractTableToolAction> store, String action,
+            boolean register) {
+        name = action.concat(context.name);
         store.put(action, this);
         this.context = context;
         this.action = action;
     }
     
-    public final void build(Table table) {
+    public final void build(ToolData data, Table table) {
         TableContextItem ctxitem = table.addContextItem(action);
-        ctxitem.htmlname = action.concat(context.data.name);
+        ctxitem.htmlname = action.concat(data.name);
     }
     
     public final String getAction() {
@@ -76,16 +77,16 @@ public abstract class AbstractTableToolAction extends AbstractEventHandler {
 //        }
     }
 
-    protected final void save() {
+    protected final void save(ToolData data) {
         MetaObject ttitem;
-        int l = context.data.topline;
+        int l = data.topline;
         Table table = context.tabletool.getElement();
         Set<TableItem> items = table.getItems();
         
         for (TableItem item : items) {
-            ttitem = context.data.objects.get(l);
+            ttitem = data.objects.get(l);
             if (ttitem == null)
-                context.data.objects.put(l, ttitem = new MetaObject(null));
+                data.objects.put(l, ttitem = new MetaObject(null));
             ttitem.selected = item.isSelected();
             l++;
         }

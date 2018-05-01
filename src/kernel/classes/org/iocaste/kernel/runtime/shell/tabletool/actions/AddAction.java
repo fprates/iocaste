@@ -18,10 +18,10 @@ public class AddAction extends AbstractTableToolAction {
     @Override
     public void onEvent(ControlComponent control) {
         Map<String, TableContextItem> ctxitems;
+        Table table = context.tabletool.getElement();
         
-        if (context.data.vlength > 0) {
-            ctxitems = ((Table)context.tabletool.getElement()).
-                    getContextItems();
+        if (table.getItems().size() > 0) {
+            ctxitems = table.getContextItems();
             ctxitems.get("accept").visible = true;
             ctxitems.get("add").visible = false;
             ctxitems.get("remove").visible = false;

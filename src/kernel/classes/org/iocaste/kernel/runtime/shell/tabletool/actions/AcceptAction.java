@@ -24,7 +24,7 @@ public class AcceptAction extends AbstractTableToolAction {
         ctxitems.get("accept").visible = false;
         ctxitems.get("add").visible = true;
         ctxitems.get("remove").visible = true;
-        context.data.topline = 0;
+        context.viewctx.entries.get(context.name).data.topline = 0;
     }
 
 }
