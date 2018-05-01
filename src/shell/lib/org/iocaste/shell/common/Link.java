@@ -29,18 +29,18 @@ public class Link extends ToolDataElement {
     public Link(View view, String name, String action) {
         super(new ElementViewContext(view, null, TYPES.LINK, name),
                 Const.LINK, name);
-        init(name);
+        init(name, action);
     }
     
     public Link(Container container, String name, String action) {
         super(new ElementViewContext(null, container, TYPES.LINK, name),
                 Const.LINK, name);
-        init(name);
+        init(name, action);
     }
     
     public Link(Context viewctx, String name) {
         super(viewctx, Const.LINK, name);
-        init(name);
+        init(name, name);
     }
 
     @Override
@@ -114,13 +114,12 @@ public class Link extends ToolDataElement {
         return values;
     }
 
-    private final void init(String name) {
+    private final void init(String name, String action) {
         Object value;
         
         setText((tooldata.text == null)?
                 name : tooldata.text, tooldata.textargs);
-        if (tooldata.actionname == null)
-            tooldata.actionname = tooldata.name;
+        tooldata.actionname = (action == null)? tooldata.name : action;
         values = new HashMap<>();
         container = name.concat("_cnt");
         new LinkContainer(this, container);
