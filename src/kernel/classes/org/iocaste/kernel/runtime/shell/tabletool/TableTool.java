@@ -477,8 +477,6 @@ public class TableTool extends AbstractComponentTool {
             actions.addAll(actionsstore.keySet());
         }
         
-        if (entry.data.vlength == 0)
-            entry.data.vlength = 15;
         if (entry.data.step == 0)
             entry.data.step = 1;
         
