@@ -359,6 +359,7 @@ public class TableTool extends AbstractComponentTool {
     
     @Override
     public final void load() {
+        Element element;
         int startline, finishline, j;
         TableItem[] items = getTable().getItems().toArray(new TableItem[0]);
         
@@ -375,6 +376,12 @@ public class TableTool extends AbstractComponentTool {
         for (int i = startline; i < finishline; i++)
             entry.data.objects.put(i, (j == items.length)?
                 null : new MetaObject(get(items[j]), items[j++].isSelected()));
+        for (String key : entry.data.items.keySet()) {
+            element = context.viewctx.view.getElement(entry.data.name+"."+key);
+            if ((element == null) || !element.isDataStorable())
+                continue;
+            entry.data.value = ((InputComponent)element).get();
+        }
     }
     
     /**
