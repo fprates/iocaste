@@ -27,6 +27,9 @@ import org.iocaste.shell.common.tooldata.ViewExport;
 
 @ServiceUrl("/iocaste-kernel/service.html")
 public class RuntimeEngine extends AbstractRuntimeInterface {
+    public static final int CREATE = 0;
+    public static final int READ = 1;
+    public static final int WRITE = 2;
     public static final String SERVICE_URL = "/iocaste-kernel/service.html";
     public ServiceInterfaceData data;
     
