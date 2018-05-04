@@ -213,14 +213,20 @@ public abstract class AbstractApplication<T extends Context>
     private final ViewExport getView(
             ServiceInterfaceData servicedata, T context) throws Exception {
         int i;
+        boolean ready;
         AbstractPage child;
         AbstractPage page = context.getPage();
         
         if (page == null)
             throw new IocasteException(
                     "page %s is undefined.", context.getPageName());
-        
+
+        ready = page.isReady();
         buildView(page, context, servicedata);
+        
+        if (ready)
+            return page.outputview;
+        
         if ((i = page.getSubPagesSize()) > 0) {
             page.outputview.subpages = new Object[i][2];
             i = 0;
