@@ -5,8 +5,8 @@ import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.runtime.common.application.Context;
+import org.iocaste.shell.common.tooldata.MetaObject;
 
 public class PortalTilesData {
     public String key, action, highlight;
@@ -19,10 +19,13 @@ public class PortalTilesData {
     public final static Set<String> showset(
             Context context, PortalTilesData data) {
         Set<String> show;
-        ExtendedObject object = context.getPage().instance("items").
-                objects.get(0).object;
-        DocumentModel model = object.getModel();
+        DocumentModel model;
+        MetaObject mobject = context.getPage().instance("items").objects.get(0);
         
+        if (mobject == null)
+            return null;
+
+        model = mobject.object.getModel();
         if ((data == null) || (data.show.size() == 0)) {
             show = new LinkedHashSet<>();
             for (DocumentModelItem item : model.getItens())

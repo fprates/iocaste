@@ -26,8 +26,9 @@ public class PortalTileItemConfig extends AbstractViewConfig<Context> {
         
         getTool(data.highlight).style = "portal_tile_key";
         show = PortalTilesData.showset(context, data);
-        for (String name : show)
-            if (!name.equals(data.highlight))
-                getTool(name).style = "portal_tile_text";
+        if (show != null)
+            for (String name : show)
+                if (!name.equals(data.highlight))
+                    getTool(name).style = "portal_tile_text";
     }
 }

@@ -16,6 +16,8 @@ public class PortalTileItemSpec extends AbstractViewSpec {
         nodelist("item", "node_item");
         data = context.portalctx().tilesDataInstance();
         show = PortalTilesData.showset(context, data);
+        if (show == null)
+            return;
         if (data.highlight == null) {
             if (data.key == null) {
                 if (data.highlight == null)
