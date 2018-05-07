@@ -89,7 +89,7 @@ public class DataForm extends ToolDataElement {
         Context itemviewctx;
         DataElement dataelement;
         DataItem dataitem;
-        int length;
+        int length, vlength;
         
         dataelement = item.getDataElement();
         name = item.getName();
@@ -110,7 +110,9 @@ public class DataForm extends ToolDataElement {
         
         dataitem.setModelItem(item);
         length = dataelement.getLength();
-        dataitem.setLength((length == 0)? 20 : length);
+        vlength = dataitem.getVisibleLength();
+        dataitem.setLength((length == 0)? length = 20 : length);
+        dataitem.setVisibleLength((vlength == 0)? length : vlength);
         dataitem.setDataElement(dataelement);
         dataitem.setNSReference(getNSReference());
     }

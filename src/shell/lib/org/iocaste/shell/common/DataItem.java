@@ -38,11 +38,14 @@ public class DataItem extends ToolDataElement {
         tooldata.values.put(key, value);
     }
     
-    /**
-     * 
-     */
+    @Override
     public final void clear() {
         tooldata.clear();
+    }
+    
+    @Override
+    public final Const getType() {
+        return Const.DATA_ITEM;
     }
     
     /**

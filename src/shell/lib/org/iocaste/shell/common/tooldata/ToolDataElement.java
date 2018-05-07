@@ -496,7 +496,7 @@ public abstract class ToolDataElement implements Component, Container,
      * @see org.iocaste.shell.common.Element#getType()
      */
     @Override
-    public final Const getType() {
+    public Const getType() {
         return tooldata.componenttype;
     }
     
