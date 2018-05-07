@@ -1050,6 +1050,16 @@ public abstract class ToolDataElement implements Component, Container,
         if (!isTranslatable())
             return;
         
+        if (isDataStorable()) {
+            if (tooldata.label == null)
+                tooldata.label = getTranslation(messages, getName());
+            else
+                tooldata.label = messages.get(tooldata.label);
+            if (tooldata.label == null)
+                tooldata.label = getTranslation(messages, getName());
+            return;
+        }
+        
         message = getTranslation(messages, getName());
         if (message == null)
             return;
