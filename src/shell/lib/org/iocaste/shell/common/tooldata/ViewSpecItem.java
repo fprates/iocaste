@@ -6,6 +6,7 @@ public class ViewSpecItem {
         BUTTON("button"),
         CHECK_BOX("checkbox"),
         DATA_FORM("dataform", true),
+        DUMMY("dummy"),
         EXPAND_BAR("expandbar"),
         FORM("form"),
         FILE_UPLOAD("fileupload"),

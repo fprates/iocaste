@@ -32,6 +32,11 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.Function;
+import org.iocaste.shell.common.tooldata.Context;
+import org.iocaste.shell.common.tooldata.ElementViewContext;
+import org.iocaste.shell.common.tooldata.ToolData;
+import org.iocaste.shell.common.tooldata.ToolDataElement;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 /**
  * Implementação de formulário de dados.
@@ -39,12 +44,12 @@ import org.iocaste.protocol.Function;
  * @author Francisco de Assis Prates
  *
  */
-public class DataForm extends AbstractContainer {
+public class DataForm extends ToolDataElement {
     private static final long serialVersionUID = -5059126959559630847L;
     private boolean keyrequired;
     private Map<String, String[]> groups;
     private List<String[]> lines;
-    private String nsreference;
+    private Context viewctx;
     
     /**
      * 
@@ -52,8 +57,8 @@ public class DataForm extends AbstractContainer {
      * @param name
      */
     public DataForm(View view, String name) {
-        super(view, Const.DATA_FORM, name);
-        init();
+        this(new ElementViewContext(
+                view, null, TYPES.DATA_FORM, name), name);
     }
     
     /**
@@ -62,32 +67,26 @@ public class DataForm extends AbstractContainer {
      * @param name
      */
     public DataForm(Container container, String name) {
-        super(container, Const.DATA_FORM, name);
-        init();
+        this(new ElementViewContext(
+                null, container, TYPES.DATA_FORM, name), name);
     }
     
-    /**
-     * Adiciona campo à visão.
-     * @param item
-     */
-    public final void add(DataItem item) {
-        super.add(item);
-    }
-    
-    @Override
-    public final void add(Element element) {
-        if (element.getType() == Const.DATA_ITEM)
-            super.add(element);
-        else
-            getView().index(element);
+    public DataForm(Context viewctx, String name) {
+        super(viewctx, Const.DATA_FORM, name);
+        keyrequired = false;
+        lines = new ArrayList<>();
+        groups = new LinkedHashMap<>();
+        this.viewctx = viewctx;
     }
     
     public final void addGroup(String group, String... fields) {
         groups.put(group, fields);
     }
     
-    private static final void append(DataForm df, DocumentModelItem item) {
+    private final void append(DocumentModelItem item) {
         String name;
+        ToolData itemtooldata;
+        Context itemviewctx;
         DataElement dataelement;
         DataItem dataitem;
         int length;
@@ -97,18 +96,23 @@ public class DataForm extends AbstractContainer {
         
         switch (dataelement.getType()) {
         case DataType.BOOLEAN:
-            dataitem = new DataItem(df, Const.CHECKBOX, name);
+            dataitem = new DataItem(this, Const.CHECKBOX, name);
             break;
         default:
-            dataitem = new DataItem(df, Const.TEXT_FIELD, name);
+            itemtooldata = viewctx.get(getName()).instance(name);
+            itemviewctx = new ElementViewContext(
+                    itemtooldata, this, TYPES.DUMMY);
+            dataitem = new DataItem(itemviewctx,
+                (itemtooldata.componenttype == null)?
+                    Const.TEXT_FIELD : itemtooldata.componenttype, name);
             break;
         }
+        
         dataitem.setModelItem(item);
         length = dataelement.getLength();
-        dataitem.setLength(length);
-        dataitem.setVisibleLength(length);
+        dataitem.setLength((length == 0)? 20 : length);
         dataitem.setDataElement(dataelement);
-        dataitem.setNSReference(df.getNSReference());
+        dataitem.setNSReference(getNSReference());
     }
     
     /**
@@ -146,44 +150,34 @@ public class DataForm extends AbstractContainer {
     public final List<String[]> getLines() {
         return lines;
     }
-
-    public final String getNSReference() {
-        return nsreference;
-    }
     
-    public static final DocumentModel importModel(DataForm df,
-            String name, Function function) {
+    public final DocumentModel importModel(String name, Function function) {
         DocumentModel model = new Documents(function).getModel(name);
-        return importModel(df, model);
+        return importModel(model);
     }
     
-    public static final DocumentModel importModel(DataForm df,
-            DocumentModel model) {
+    public final DocumentModel importModel(DocumentModel model) {
         DocumentModelItem namespace;
         InputComponent nsfield;
         
-        df.clear();
+        clear();
         namespace = model.getNamespace();
         if (namespace != null) {
-            append(df, namespace);
-            nsfield = df.get(namespace.getName());
-            df.setNSReference(nsfield.getHtmlName());
+            append(namespace);
+            nsfield = get(namespace.getName());
+            setNSReference(nsfield.getHtmlName());
             nsfield.setObligatory(true);
         }
         
         for (DocumentModelItem item : model.getItens())
-            append(df, item);
+            append(item);
         
         return model;
     }
     
-    /**
-     * 
-     */
-    private final void init() {
-        keyrequired = false;
-        lines = new ArrayList<>();
-        groups = new LinkedHashMap<>();
+    @Override
+    public final boolean isContainable() {
+        return true;
     }
     
     /**
@@ -196,9 +190,9 @@ public class DataForm extends AbstractContainer {
     
     public final boolean isNSReference(String name) {
         String test;
-        if (nsreference == null)
+        if (tooldata.nsdata == null)
             return false;
-        test = getView().getElement(nsreference).getName();
+        test = getView().getElement(tooldata.nsdata).getName();
         return name.equals(test);
     }
     
@@ -208,27 +202,5 @@ public class DataForm extends AbstractContainer {
      */
     public final void setKeyRequired(boolean keyrequired) {
         this.keyrequired = keyrequired;
-    }
-    
-    public final void setNS(Object value) {
-        DataItem input = getView().getElement(nsreference);
-        input.set(value);
-    }
-    
-    /**
-     * 
-     * @param nsreference
-     */
-    public final void setNSReference(String nsreference) {
-        DataItem item;
-        
-        this.nsreference = nsreference;
-        
-        for (Element element : getElements()) {
-            if (!element.isDataStorable())
-                continue;
-            item = (DataItem)element;
-            item.setNSReference(nsreference);
-        }
     }
 }

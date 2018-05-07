@@ -12,7 +12,6 @@ import org.iocaste.kernel.runtime.shell.ComponentEntry;
 import org.iocaste.kernel.runtime.shell.ViewContext;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
@@ -132,17 +131,16 @@ public class DataFormTool extends AbstractComponentTool {
         Map<String, List<String>> groups;
         String[] tokens;
         ToolData data = getComponentData();
-        Container container = getElement(data.parent);
         
-        df = new DataForm(container, data.name);
+        df = new DataForm(viewctx, data.name);
         setHtmlName(df.getHtmlName());
         if ((data.model != null) && (data.custommodel == null)) {
-            data.custommodel = DataForm.importModel(
-                    df, data.model, viewctx.function);
+            data.custommodel = df.importModel(data.model, viewctx.function);
         } else {
             if (data.custommodel == null)
-                throw new IocasteException("undefined model for %s.", data.name);
-            DataForm.importModel(df, data.custommodel);
+                throw new IocasteException(
+                        "undefined model for %s.", data.name);
+            df.importModel(data.custommodel);
             data.model = data.custommodel.getName();
         }
 

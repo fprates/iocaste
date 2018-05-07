@@ -37,8 +37,9 @@ public abstract class ToolDataElement implements Component, Container,
     private static final long serialVersionUID = 4217306786401069911L;
     protected ToolData tooldata;
     protected View view;
-    private DocumentModelItem modelitem;
+    protected String highname, lowname;
     private Map<String, String> elements;
+    private DocumentModelItem modelitem;
     private String htmlname, master, calendar;
     private boolean translatable, nohelper, stacking, range;
     private SearchHelp search;
@@ -60,7 +61,7 @@ public abstract class ToolDataElement implements Component, Container,
         if ((tooldata.parent == null) || tooldata.parent.equals("view"))
         	view.add(this);
         else
-        	((Container)getElement(tooldata.parent)).add(this);
+        	getContainer().add(this);
     }
     
 	public ToolDataElement(Context viewctx, Const type, String name) {
@@ -94,7 +95,7 @@ public abstract class ToolDataElement implements Component, Container,
     }
 
     private final void append(Element element) {
-        String name = element.getHtmlName();
+        String name = element.getName();
         tooldata.instance(name);
         elements.put(name, element.getHtmlName());
         getView().index(element);
@@ -239,17 +240,16 @@ public abstract class ToolDataElement implements Component, Container,
 
 	@Override
 	public <T extends Element> T getElement(String name) {
-		return view.getElement(name);
+		return view.getElement(elements.get(name));
 	}
 
     @Override
     @SuppressWarnings("unchecked")
 	public <T extends Element> Set<T> getElements() {
         Set<Element> children = new LinkedHashSet<>();
-        View view = getView();
         
-        for (String name : elements.values())
-            children.add(view.getElement(name));
+        for (String name : elements.keySet())
+            children.add(getElement(name));
         
         return (Set<T>)children;
 	}
@@ -285,7 +285,7 @@ public abstract class ToolDataElement implements Component, Container,
 
     @Override
     public String getHighHtmlName() {
-        return null;
+        return highname;
     }
     
     /*
@@ -355,7 +355,7 @@ public abstract class ToolDataElement implements Component, Container,
     
     @Override
     public String getLowHtmlName() {
-        return null;
+        return lowname;
     }
     
     @Override
@@ -449,6 +449,10 @@ public abstract class ToolDataElement implements Component, Container,
 		return tooldata.style;
 	}
     
+    public final String getStyleClass(String key) {
+        return tooldata.styles.get(key);
+    }
+    
     @Override
     public final String getTag() {
         return tooldata.tag;
@@ -539,16 +543,16 @@ public abstract class ToolDataElement implements Component, Container,
     public final int hashCode() {
         return tooldata.name.hashCode();
     }
-
-	@Override
-	public boolean hasMultipartSupport() {
-		return tooldata.multipart;
-	}
     
-	@Override
-	public final boolean isAbsolute() {
-	    return tooldata.absolute;
-	}
+    @Override
+    public boolean hasMultipartSupport() {
+        return false;
+    };
+    
+    @Override
+    public final boolean isAbsolute() {
+        return tooldata.absolute;
+    }
 	
     /*
      * (non-Javadoc)
@@ -728,8 +732,7 @@ public abstract class ToolDataElement implements Component, Container,
 
 	@Override
 	public void remove(Element element) {
-		// TODO Auto-generated method stub
-		
+	    
 	}
     
     /*
@@ -907,7 +910,7 @@ public abstract class ToolDataElement implements Component, Container,
      * 
      * @param ns
      */
-    protected final void setNS(Object ns) {
+    public final void setNS(Object ns) {
         tooldata.nsvalue = ns;
     }
     

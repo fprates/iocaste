@@ -46,7 +46,7 @@ public class SearchHelpRenderer implements PopupRenderer {
         criteria = new DataForm(container, "criteria");
         criteria.setStyleClass("shcriteria");
         criteria.addAttribute("style", "display:none");
-        DataForm.importModel(criteria, context.model);
+        criteria.importModel(context.model);
         
         for (Element element : criteria.getElements()) {
             if (!element.isDataStorable())

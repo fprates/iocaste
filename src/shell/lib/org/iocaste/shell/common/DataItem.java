@@ -1,7 +1,11 @@
 package org.iocaste.shell.common;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.iocaste.shell.common.tooldata.Context;
+import org.iocaste.shell.common.tooldata.ElementViewContext;
+import org.iocaste.shell.common.tooldata.ToolDataElement;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 /**
  * Item de formulário de dados.
@@ -9,21 +13,20 @@ import java.util.Map;
  * @author francisco.prates
  *
  */
-public class DataItem extends AbstractInputComponent
-        implements RangeInputComponent, MultipartElement {
+public class DataItem extends ToolDataElement {
     private static final long serialVersionUID = 3376883855229003535L;
-    private Map<String, Object> values;
-    private String highname, lowname;
     
     public DataItem(DataForm form, Const type, String name) {
-        super(form, Const.DATA_ITEM, type, name);
-        
-        values = new LinkedHashMap<>();
-        setLength(20);
-        setHtmlName(new StringBuilder(form.getName()).
+        this(new ElementViewContext(null, form, TYPES.DUMMY, name),
+                type, name);
+    }
+    
+    public DataItem(Context viewctx, Const type, String name) {
+        super(viewctx, type, name);
+        setHtmlName(new StringBuilder(getContainer().getName()).
                 append(".").
                 append(name).toString());
-        setStyleClass("form_cell");
+        tooldata.styles.put("cell", "form_cell");
     }
     
     /**
@@ -32,32 +35,14 @@ public class DataItem extends AbstractInputComponent
      * @param value
      */
     public final void add(String key, Object value) {
-        values.put(key, value);
+        tooldata.values.put(key, value);
     }
     
     /**
      * 
      */
     public final void clear() {
-        values.clear();
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.RangeInputComponent#getHighHtmlName()
-     */
-    @Override
-    public final String getHighHtmlName() {
-        return highname;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.RangeInputComponent#getLowHtmlName()
-     */
-    @Override
-    public final String getLowHtmlName() {
-        return lowname;
+        tooldata.clear();
     }
     
     /**
@@ -65,17 +50,18 @@ public class DataItem extends AbstractInputComponent
      * @return
      */
     public final Map<String, Object> getValues() {
-        return values;
+        return tooldata.values;
     }
     
     @Override
-    public boolean hasMultipartSupport() {
-        return (getComponentType() == Const.FILE_ENTRY);
-    };
+    public final boolean hasMultipartSupport() {
+        return (tooldata.componenttype == Const.FILE_ENTRY);
+    }
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractInputComponent#isBooleanComponent()
+     * @see org.iocaste.shell.common.tooldata.ToolDataElement#
+     *    isBooleanComponent()
      */
     @Override
     public final boolean isBooleanComponent() {
@@ -86,6 +72,11 @@ public class DataItem extends AbstractInputComponent
         default:
             return false;
         }
+    }
+    
+    @Override
+    public final boolean isDataStorable() {
+        return true;
     }
     
     /*
@@ -115,8 +106,9 @@ public class DataItem extends AbstractInputComponent
     @Override
     public final void setHtmlName(String name) {
         String htmlname;
+
         super.setHtmlName(name);
-        
+        getContainer().add(this);
         htmlname = getHtmlName();
         lowname = htmlname.concat(".low");
         highname = htmlname.concat(".high");

@@ -119,10 +119,10 @@ public class DataFormTool extends AbstractComponentTool {
         df = new DataForm(container, data.name);
         setHtmlName(df.getHtmlName());
         if (data.custommodel != null)
-            DataForm.importModel(df, data.custommodel);
+            df.importModel(data.custommodel);
         if (data.model != null)
-            data.custommodel = DataForm.importModel(
-                    df, data.model, data.context.function);
+            data.custommodel = df.importModel(
+                    data.model, data.context.function);
         else
             data.model = (data.custommodel != null)?
                     data.custommodel.getName() : null;

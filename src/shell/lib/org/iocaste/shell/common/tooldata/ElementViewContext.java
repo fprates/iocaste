@@ -19,6 +19,13 @@ public class ElementViewContext implements Context {
         }
     }
 
+    public ElementViewContext(
+            ToolData tooldata, Container container, TYPES type) {
+        this.tooldata = tooldata;
+        this.view = container.getView();
+        tooldata.parent = container.getHtmlName();
+    }
+    
     @Override
     public ToolData get(String name) {
         return tooldata;
