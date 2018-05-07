@@ -5,6 +5,7 @@ import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 public class ElementViewContext implements Context {
+    private static final long serialVersionUID = 2638397690151119264L;
     private View view;
     private ToolData tooldata;
     

@@ -19,6 +19,7 @@ import org.iocaste.kernel.runtime.shell.factories.SpecFactory;
 import org.iocaste.kernel.runtime.shell.renderer.internal.ActionEventHandler;
 
 public class ViewContext implements Context {
+    private static final long serialVersionUID = -8954676494760177932L;
     public View view;
     public ViewExport viewexport;
     public RuntimeEngine function;

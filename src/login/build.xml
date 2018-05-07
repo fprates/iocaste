@@ -9,11 +9,6 @@
     	
         <!-- dependências -->
         <path id="dependencies">
-            <fileset dir="${builddir}/core/lib"/>
-        	<fileset dir="${builddir}/documents/lib"/>
-            <fileset dir="${builddir}/shell/lib"/>
-        	<fileset dir="${builddir}/packagetool/lib"/>
-        	<fileset dir="${builddir}/appbuilder/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>
@@ -38,12 +33,7 @@
         <war destfile="${warfilename}"
             webxml="${builddir}/${ant.project.name}/web/web.xml">
             <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
-            <lib dir="${builddir}/core/lib" includes="*.jar"/>
-        	<lib dir="${builddir}/documents/lib" includes="*.jar"/>
-            <lib dir="${builddir}/shell/lib" includes="*.jar"/>
-        	<lib dir="${builddir}/packagetool/lib" includes="*.jar"/>
-        	<lib dir="${builddir}/appbuilder/lib" includes="*.jar"/>
-        	<lib dir="${builddir}/tasksel/lib" includes="*.jar"/>
+            <lib file="${basedir}/ext/iocaste.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
     	
