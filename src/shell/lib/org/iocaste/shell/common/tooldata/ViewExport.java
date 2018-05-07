@@ -18,4 +18,5 @@ public class ViewExport implements Serializable {
     public Object popupvalue;
     public Const msgtype;
     public ViewTitle title;
+    public String[][] files;
 }

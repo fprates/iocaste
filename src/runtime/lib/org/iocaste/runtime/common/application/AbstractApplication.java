@@ -281,33 +281,42 @@ public abstract class AbstractApplication<T extends Context>
     
     private final void move(ContextData<T> ctxdata, ViewExport inputview) {
         ToolData tooldata;
-        FileItem fileitem;
+        FileStatus filestatus;
         String filename;
         AbstractPage page = ctxdata.context.getPage();
         
         page.clearToolData();
-        for (Object object : inputview.items) {
+        for (Object object : inputview.items)
             page.add(tooldata = (ToolData)object);
-            if (!tooldata.multipart)
-                continue;
-            fileitem = ctxdata.files.get(tooldata.name);
-            if (fileitem == null)
-                continue;
-            filename = fileitem.getName();
-            if (filename.equals("")) {
-                tooldata.value = null;
-                tooldata.values.remove("content");
-                tooldata.values.remove("content-type");
-                tooldata.values.remove("error", MultipartElement.EMPTY_FILE_NAME);
-                continue;
+        
+        if (inputview.files != null)
+            for (String[] object : inputview.files) {
+                filestatus = ctxdata.files.get(object[0]);
+                if ((filestatus == null) || !filestatus.file)
+                    continue;
+                
+                tooldata = page.instance(object[1]);
+                if (object[2] != null)
+                    tooldata = tooldata.instance(object[2]);
+                
+                filename = filestatus.item.getName();
+                if (filename.equals("")) {
+                    tooldata.value = null;
+                    tooldata.values.remove("content");
+                    tooldata.values.remove("content-type");
+                    tooldata.values.remove("error",
+                            MultipartElement.EMPTY_FILE_NAME);
+                    continue;
+                }
+                if (tooldata.disabled)
+                    continue;
+                tooldata.value = filename;
+                tooldata.values.put("content", filestatus.item.get());
+                tooldata.values.put("content-type",
+                        filestatus.item.getContentType());
+                tooldata.values.put("error", 0);
             }
-            if (tooldata.disabled)
-                continue;
-            tooldata.value = filename;
-            tooldata.values.put("content", fileitem.get());
-            tooldata.values.put("content-type", fileitem.getContentType());
-            tooldata.values.put("error", 0);
-        }
+        
         page.outputview = inputview;
     }
     
@@ -359,18 +368,19 @@ public abstract class AbstractApplication<T extends Context>
             ContextData<T> ctxdata) throws Exception {
         String[] values;
         String value;
-        FileItem fileitem;
+        FileStatus filestatus;
         Map<String, String[]> parameters;
         
         parameters = new HashMap<>();
         for (String fkey : ctxdata.files.keySet()) {
-            fileitem = ctxdata.files.get(fkey);
-            if (!fileitem.isFormField()) {
-                parameters.put(fkey, new String[] {fileitem.getName()});
+            filestatus = ctxdata.files.get(fkey);
+            if (!filestatus.item.isFormField()) {
+                parameters.put(fkey, new String[] {filestatus.item.getName()});
+                filestatus.file = true;
                 continue;
             }
             
-            value = fileitem.getString("UTF-8");
+            value = filestatus.item.getString("UTF-8");
             values = parameters.get(fkey);
             if ((values == null) || (values != null && value.length() > 0))
                 parameters.put(fkey, new String[] {value});
@@ -389,7 +399,7 @@ public abstract class AbstractApplication<T extends Context>
         if (ServletFileUpload.isMultipartContent(ctxdata.req)) {
             fileupload = new ServletFileUpload(new DiskFileItemFactory());
             for (FileItem fileitem : (List<FileItem>)fileupload.parseRequest(ctxdata.req))
-                ctxdata.files.put(fileitem.getFieldName(), fileitem);
+                ctxdata.files.put(fileitem.getFieldName(), new FileStatus(fileitem));
             parameters = processMultipartContent(ctxdata);
         } else {
             parameters = ctxdata.req.getParameterMap();
@@ -534,9 +544,18 @@ class ContextData<T extends Context> {
     public RuntimeEngine runtime;
     public T context;
     public boolean resetctx;
-    public Map<String, FileItem> files;
+    public Map<String, FileStatus> files;
     
     public ContextData() {
         files = new HashMap<>();
+    }
+}
+
+class FileStatus {
+    public FileItem item;
+    public boolean file;
+    
+    public FileStatus(FileItem item) {
+        this.item = item;
     }
 }

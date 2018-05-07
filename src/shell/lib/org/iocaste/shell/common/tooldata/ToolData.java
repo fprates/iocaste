@@ -22,7 +22,7 @@ public class ToolData implements Serializable {
     public String text, tag, subpage, indexitem, pane, mask, image, nsdata;
     public boolean internallabel, action, submit, disabled, secret;
     public boolean invisible, required, focus, nolock, cancellable, absolute;
-    public boolean mark, noheader, multipart;
+    public boolean mark, noheader;
     public int length, vlength, topline, step;
     public String[] groups, ordering;
     public Object[] textargs;

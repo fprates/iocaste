@@ -1,7 +1,9 @@
 package org.iocaste.kernel.runtime.shell;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.shell.common.Const;
@@ -30,6 +32,7 @@ public class ViewContext implements Context {
     public Map<String, Map<String, Map<String, ActionEventHandler>>> actions;
     public Map<String, ViewExport> subpages;
     public boolean offline, noeventhandlers;
+	public List<String[]> files;
 	
     public ViewContext() {
         this(new View(null, null));
@@ -40,6 +43,7 @@ public class ViewContext implements Context {
         entries = new LinkedHashMap<>();
         actions = new HashMap<>();
         subpages = new HashMap<>();
+        files = new ArrayList<>();
     }
     
     public final void add(ToolData data) {

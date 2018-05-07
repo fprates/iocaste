@@ -20,6 +20,10 @@ public class FileEntry extends ToolDataElement {
     
     public FileEntry(Context context, String name) {
         super(context, Const.FILE_ENTRY, name);
-        tooldata.multipart = true;
+    }
+    
+    @Override
+    public final boolean hasMultipartSupport() {
+        return true;
     }
 }

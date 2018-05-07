@@ -21,7 +21,7 @@ public enum Const {
     DETAILED(null),
     DUMMY(null),
     EXPAND_BAR("eb_external"),
-    FILE_ENTRY("button"),
+    FILE_ENTRY(null),
     FORM("form_content"),
     FRAME("frame"),
     HTML_TAG(null),

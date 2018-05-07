@@ -165,11 +165,14 @@ public class ProcessOutput extends AbstractProcessHandler {
     }
     
     public final void run(ProcessOutputData outputdata) throws Exception {
+        Container container;
+        Element element;
         ComponentEntry entry;
         SpecFactory factory;
         Input input;
         ToolData data;
         Set<String> elements;
+        int i;
         
         outputdata.viewctx.function = getFunction();
         outputdata.viewctx.locale =
@@ -180,7 +183,7 @@ public class ProcessOutput extends AbstractProcessHandler {
         if (!outputdata.noinitmessages)
             moveMessages(outputdata.viewctx);
         if (outputdata.viewctx.viewexport.subpages != null)
-            for (int i = 0;
+            for (i = 0;
                     i < outputdata.viewctx.viewexport.subpages.length; i++)
                 outputdata.viewctx.subpages.put(
                     (String)outputdata.viewctx.viewexport.subpages[i][0],
@@ -218,6 +221,13 @@ public class ProcessOutput extends AbstractProcessHandler {
                 continue;
             entry.component.run();
             entry.component.refresh();
+            if (!(element = entry.component.getElement()).isContainable())
+                continue;
+            container = (Container)element;
+            for (Element child : container.getElements())
+                if (child.hasMultipartSupport())
+                    outputdata.viewctx.files.add(new String[] {
+                        child.getHtmlName(), container.getName(), child.getName()});
         }
         
         outputdata.viewctx.view.setLocale(
@@ -237,13 +247,19 @@ public class ProcessOutput extends AbstractProcessHandler {
         for (HeaderLink link : outputdata.viewctx.viewexport.links)
             outputdata.viewctx.view.add(link);
         
+        i = 0;
+        outputdata.viewctx.viewexport.files =
+                new String[outputdata.viewctx.files.size()][];
+        for (String[] file : outputdata.viewctx.files)
+            outputdata.viewctx.viewexport.files[i++] = file;
+        
         input = new Input(outputdata);
 //        input.pagectx.mpelements.clear();
         /*
          * deixa registerInputs() antes do commit(),
          * para que a conexão seja encerrada.
          */
-        for (Container container : outputdata.viewctx.view.getContainers())
-            input.register(container, false);
+        for (Container cnt : outputdata.viewctx.view.getContainers())
+            input.register(cnt, false);
     }
 }

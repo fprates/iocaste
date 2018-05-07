@@ -72,12 +72,25 @@ public abstract class AbstractActionHandler<C extends Context>
         return (int)gettool(tooldata).values.get("error");
     }
     
+    protected final int contenterrorget(String tooldata, String item) {
+        return (int)gettool(tooldata).items.get(item).values.get("error");
+    }
+    
     protected final byte[] contentget(String tooldata) {
         return (byte[])gettool(tooldata).values.get("content");
     }
     
+    protected final byte[] contentget(String tooldata, String item) {
+        return (byte[])gettool(tooldata).items.get(item).values.get("content");
+    }
+    
     protected final String contenttypeget(String tooldata) {
         return (String)gettool(tooldata).values.get("content-type");
+    }
+    
+    protected final String contenttypeget(String tooldata, String item) {
+        return (String)gettool(tooldata).items.get(item).values.
+                get("content-type");
     }
     
     protected final void delete(ExtendedObject object) {
