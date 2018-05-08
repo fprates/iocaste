@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 
 import org.iocaste.protocol.AbstractHandler;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
@@ -76,6 +77,8 @@ public class Update extends AbstractHandler {
             case "mysql":
                 i = e.getErrorCode();
                 switch (i) {
+                case 1062:
+                    return 1;
                 case 1205:
                     throw e;
                 }

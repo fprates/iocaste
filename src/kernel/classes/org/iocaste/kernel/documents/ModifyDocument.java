@@ -53,15 +53,15 @@ public class ModifyDocument extends AbstractDocumentsHandler {
         name = model.getName();
         documents = getFunction();
         query = documents.cache.queries.get(name).get("update");
-        if (query == null)
-            return 0;
-        
-        nrregs = update(connection, query, uargs.toArray());
-        if (nrregs == 0) {
-            query = documents.cache.queries.get(name).get("insert");
-            if (update(connection, query, iargs.toArray()) <= 0)
-                throw new IocasteException("Error on object insert");
+        if (query != null) {
+            nrregs = update(connection, query, uargs.toArray());
+            if (nrregs > 0)
+                return 1;
         }
+        
+        query = documents.cache.queries.get(name).get("insert");
+        if (update(connection, query, iargs.toArray()) <= 0)
+            throw new IocasteException("Error on object insert");
         
         return 1;
     }
