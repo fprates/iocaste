@@ -1,6 +1,7 @@
 package org.iocaste.runtime.common.application;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -307,6 +308,10 @@ public abstract class AbstractActionHandler<C extends Context>
     
     protected final int modify(ExtendedObject object) {
         return context.runtime().modify(object);
+    }
+    
+    protected final void modify(Collection<ExtendedObject> objects) {
+        context.runtime().modify(objects);
     }
     
 //    protected static final ExtendedObject readobjects(

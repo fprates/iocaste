@@ -7,7 +7,6 @@ import java.util.List;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class ModifyDocument extends AbstractDocumentsHandler {
@@ -60,10 +59,7 @@ public class ModifyDocument extends AbstractDocumentsHandler {
         }
         
         query = documents.cache.queries.get(name).get("insert");
-        if (update(connection, query, iargs.toArray()) <= 0)
-            throw new IocasteException("Error on object insert");
-        
-        return 1;
+        return update(connection, query, iargs.toArray());
     }
 
 }

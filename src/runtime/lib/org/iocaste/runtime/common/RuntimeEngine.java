@@ -1,5 +1,6 @@
 package org.iocaste.runtime.common;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -30,6 +31,8 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
     public static final int CREATE = 0;
     public static final int READ = 1;
     public static final int WRITE = 2;
+    public static final int ARRAY = 0;
+    public static final int COLLECTION = 1;
     public static final String SERVICE_URL = "/iocaste-kernel/service.html";
     public ServiceInterfaceData data;
     
@@ -515,6 +518,20 @@ public class RuntimeEngine extends AbstractRuntimeInterface {
         Message message = new Message("modify");
         message.add("object", object);
         return call(message);
+    }
+    
+    public final void modify(ExtendedObject[] objects) {
+        Message message = new Message("modify_all");
+        message.add("objects", objects);
+        message.add("type", ARRAY);
+        call(message);
+    }
+    
+    public final void modify(Collection<ExtendedObject> objects) {
+        Message message = new Message("modify_all");
+        message.add("objects", objects);
+        message.add("type", COLLECTION);
+        call(message);
     }
     
     /**

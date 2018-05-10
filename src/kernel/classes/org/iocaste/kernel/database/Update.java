@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 
 import org.iocaste.protocol.AbstractHandler;
-import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
@@ -52,7 +51,7 @@ public class Update extends AbstractHandler {
             case 547:
             case 3701: // drop table error
             case 2627: // constraint error code
-                return -1;
+                throw new SQLException(e.getMessage());
             }
             throw new SQLException(e.getMessage());
         } catch (MySQLSyntaxErrorException e) {
@@ -78,7 +77,7 @@ public class Update extends AbstractHandler {
                 i = e.getErrorCode();
                 switch (i) {
                 case 1062:
-                    return 1;
+                    return 0;
                 case 1205:
                     throw e;
                 }
