@@ -366,6 +366,10 @@ public class DefaultStyle {
         style.put("bottom", "0px");
         style.put("width", "100%");
 
+        style = stylesheet.newElement(".outer_table_area");
+        style.put("overflow-x", "auto");
+        style.put("width", "100%");
+        
         style = stylesheet.newElement(".radio_button");
         style.put("font-family", FONT_FAMILY);
         style.put("font-size", FONT_SIZE);
@@ -415,7 +419,6 @@ public class DefaultStyle {
         style.put("color", FONT_COLOR);
         style.put("padding", "0px");
         style.put("margin", "0px");
-        style.put("width", "100%");
         style.put("font-style", "normal");
         style.put("font-size", FONT_SIZE);
         style.put("border-style", "none");

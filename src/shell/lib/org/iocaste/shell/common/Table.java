@@ -181,7 +181,7 @@ public class Table extends AbstractContainer {
         styles.put(HEADER_CELL, "table_header");
         styles.put(TABLE_CELL, "table_cell");
         styles.put(TABLE_LINE, "table_line");
-        styles.put(BORDER, null);
+        styles.put(BORDER, "outer_table_area");
         seltype = MULTIPLE;
         group = new RadioGroup(this, getName().concat(".mark"));
         

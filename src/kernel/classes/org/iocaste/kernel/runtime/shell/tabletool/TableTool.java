@@ -441,6 +441,7 @@ public class TableTool extends AbstractComponentTool {
     }
     
     private final void render() throws Exception {
+        String borderstyle;
         Container container;
         Map<String, String> style;
         Table table;
@@ -458,8 +459,8 @@ public class TableTool extends AbstractComponentTool {
         
         table = new Table(container, context.htmlname);
         table.setHeader(!entry.data.noheader);
-        table.setStyleClass(
-                Table.BORDER, entry.data.styles.get("borderstyle"));
+        if ((borderstyle = entry.data.styles.get("borderstyle")) != null)
+            table.setStyleClass(Table.BORDER, borderstyle);
         table.setEnabled(!entry.data.disabled);
         context.last = 0;
         buildControls(table);
