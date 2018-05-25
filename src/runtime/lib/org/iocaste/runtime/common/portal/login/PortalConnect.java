@@ -58,8 +58,8 @@ public class PortalConnect extends AbstractActionHandler<Context> {
         portalctx.secret = null;
         if (context.getPage().getActionHandler("load") != null)
             execute("load");
-        else
-            back();
+        init("main");
+        redirect("main");
     }
     
 }
