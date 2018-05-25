@@ -8,7 +8,7 @@ public class PortalSignUpConfig extends AbstractViewConfig<Context> {
 
     @Override
     protected void execute(Context context) {
-        ToolData tool, item, nodes;
+        ToolData tool, nodes;
         
         nodes = getTool("viewport");
         nodes.style = "portal_viewport";
@@ -16,10 +16,7 @@ public class PortalSignUpConfig extends AbstractViewConfig<Context> {
         
         tool = getTool("user");
         tool.model = "PORTAL_USER_INPUT";
-        item = tool.instance("SECRET");
-        item.secret = true;
-        
-        getTool("record").style = "portal_button";
+        tool.instance("SECRET").secret = true;
     }
     
 }

@@ -10,7 +10,6 @@ public class PortalSignUpSpec extends AbstractViewSpec {
         nodelist(parent, "viewport");
         nodelistitem("viewport", "user_node");
         dataform("user_node", "user");
-        button("user_node", "record");
     }
 }
 

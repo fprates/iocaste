@@ -11,7 +11,7 @@ public class PortalSignUpPage extends AbstractPage {
         set(new PortalSignUpConfig());
         set(new PortalSignupStyle());
 //        set(new PortalSignUpInput());
-        put("record", new PortalSignUpSave());
+        action("record", new PortalSignUpSave());
         put("connect", new PortalConnect());
     }
 
