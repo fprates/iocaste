@@ -2,7 +2,6 @@ package org.iocaste.runtime.common.application;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -175,7 +174,6 @@ public abstract class AbstractContext implements Context {
     
     @Override
     public final void popPage(String name) {
-        Iterator<String> it;
         
         if (name == null) {
             if (pagestack.size() > 0) {
@@ -185,12 +183,8 @@ public abstract class AbstractContext implements Context {
             return;
         }
         
-        it = pagestack.iterator();
-        while (it.hasNext()) {
+        while (!pagestack.lastElement().equals(name))
             page = pagestack.pop();
-            if (it.next().equals(name))
-                return;
-        }
     }
 
     @Override
