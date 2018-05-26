@@ -66,6 +66,9 @@ public class ProcessInput extends AbstractProcessHandler {
         if (status.msgtype == Const.ERROR)
             return status;
         
+        if (!status.event)
+            viewexport.action = getString(config.values, "action");
+        
         for (String key : config.state.viewctx.entries.keySet()) {
             entry = config.state.viewctx.entries.get(key);
             if (entry.component != null) {
@@ -78,8 +81,6 @@ public class ProcessInput extends AbstractProcessHandler {
                 factory.update(config.state.viewctx, key);
         }
         
-        if (!status.event)
-            viewexport.action = getString(config.values, "action");
         return status;
     }
     

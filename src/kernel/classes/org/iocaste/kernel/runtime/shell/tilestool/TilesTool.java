@@ -74,6 +74,8 @@ public class TilesTool extends AbstractComponentTool {
             if (input == null)
                 continue;
             entry.data.value = input.get();
+            if (exportitem.actionname != null)
+                viewctx.viewexport.action = exportitem.actionname;
             return;
         }
     }
