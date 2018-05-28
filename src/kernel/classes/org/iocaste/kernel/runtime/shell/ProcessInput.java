@@ -689,11 +689,10 @@ public class ProcessInput extends AbstractProcessHandler {
      */
     public final InputStatus validate() throws Exception {
         Element element;
-        String controlname;
         InputStatus status = new InputStatus();
 
-        controlname = getString(config.values, "action");
-        if (controlname == null) {
+        config.state.viewctx.controlname = getString(config.values, "action");
+        if (config.state.viewctx.controlname == null) {
             status.fatal = "null control name.";
             return status;
         }
@@ -704,7 +703,7 @@ public class ProcessInput extends AbstractProcessHandler {
         }
         
         message(Const.NONE, null);
-        element = getControl(controlname);
+        element = getControl(config.state.viewctx.controlname);
         if (element != null)
             processInputsStage(element, status);
         else

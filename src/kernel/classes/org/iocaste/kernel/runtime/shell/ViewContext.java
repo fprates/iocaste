@@ -27,7 +27,7 @@ public class ViewContext implements Context {
     public Map<Const, TYPES> types;
     public MessageSource messagesrc;
     public Const messagetype;
-    public String messagetext, sessionid, locale;
+    public String messagetext, sessionid, locale, controlname;
     public Object[] messageargs;
     public Map<ViewSpecItem.TYPES, SpecFactory> factories;
     public Map<String, Map<String, Map<String, ActionEventHandler>>> actions;
