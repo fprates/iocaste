@@ -74,7 +74,8 @@ public class ViewContext implements Context {
 
     @Override
     public final ToolData get(String name) {
-        return entries.get(name).data;
+        ComponentEntry entry = entries.get(name);
+        return (entry == null)? null : entry.data;
     }
 
     @Override
