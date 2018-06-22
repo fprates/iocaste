@@ -231,6 +231,11 @@ public abstract class AbstractElement implements Element {
         return false;
     }
     
+    @Override
+    public final boolean isToolDataElement() {
+        return false;
+    }
+    
     protected final boolean isTranslatable() {
         return translatable;
     }

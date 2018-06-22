@@ -138,6 +138,8 @@ public interface Element extends Comparable<Element>, Serializable {
      */
     public abstract boolean isRemote();
     
+    public abstract boolean isToolDataElement();
+    
     /**
      * Retorna true se elemento é visível.
      * @return true, se visível.

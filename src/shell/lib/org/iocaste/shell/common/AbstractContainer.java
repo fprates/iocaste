@@ -26,6 +26,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.shell.common.tooldata.ToolData;
+
 /**
  * Implementação abstrata para containers.
  * 
@@ -55,6 +57,9 @@ public abstract class AbstractContainer
         container.add(this);
         this.container = container.getHtmlName();
     }
+    
+    @Override
+    public final void add(ToolData tooldata) { }
     
     /*
      * (non-Javadoc)

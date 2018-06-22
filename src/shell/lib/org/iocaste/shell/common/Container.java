@@ -23,6 +23,8 @@ package org.iocaste.shell.common;
 
 import java.util.Set;
 
+import org.iocaste.shell.common.tooldata.ToolData;
+
 /**
  * Interface fundamental para containeres.
  * 
@@ -39,6 +41,8 @@ public interface Container extends Element {
      * @param elemento.
      */
     public abstract void add(Element element);
+    
+    public abstract void add(ToolData child);
     
     /**
      * Remove elementos.

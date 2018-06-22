@@ -46,6 +46,8 @@ public abstract class ToolDataElement implements Component, Container,
     private Map<String, EventHandler> evhandlers;
     
     public ToolDataElement(Context viewctx, Const type, ToolData tooldata) {
+        Container container;
+        
 		this.tooldata = tooldata;
 		view = viewctx.getView();
 		htmlname = tooldata.name;
@@ -58,10 +60,15 @@ public abstract class ToolDataElement implements Component, Container,
 			tooldata.componenttype = type;
 		if (tooldata.style == null)
 			tooldata.style = type.style();
-        if ((tooldata.parent == null) || tooldata.parent.equals("view"))
+        if ((tooldata.parent == null) || tooldata.parent.equals("view")) {
         	view.add(this);
-        else
-        	getContainer().add(this);
+        	return;
+        }
+        
+        container = getContainer();
+        if (container.isToolDataElement())
+            container.add(tooldata);
+        container.add(this);
     }
     
 	public ToolDataElement(Context viewctx, Const type, String name) {
@@ -72,6 +79,11 @@ public abstract class ToolDataElement implements Component, Container,
 	public void add(Element element) {
 	    append(element);
 	}
+
+	@Override
+    public final void add(ToolData child) {
+        tooldata.items.put(child.name, child);
+    }
 	
     public final void add(Element element, Const childtype) {
         if ((tooldata.pane == null) && (element.getType() == childtype))
@@ -93,7 +105,7 @@ public abstract class ToolDataElement implements Component, Container,
     public boolean allowStacking() {
         return stacking;
     }
-
+    
     private final void append(Element element) {
         String name = element.getName();
         tooldata.instance(name);
@@ -693,6 +705,11 @@ public abstract class ToolDataElement implements Component, Container,
     @Override
     public boolean isStackable() {
         return false;
+    }
+    
+    @Override
+    public final boolean isToolDataElement() {
+        return true;
     }
     
     protected final boolean isTranslatable() {
