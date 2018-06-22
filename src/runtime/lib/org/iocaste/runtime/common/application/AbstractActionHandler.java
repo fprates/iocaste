@@ -286,6 +286,8 @@ public abstract class AbstractActionHandler<C extends Context>
         if (page == null)
             throw new IocasteException("page %s undefined.", view);
         page.setReady(false);
+        for (String key : page.getChildren())
+            page.getChild(key).setReady(false);
     }
     
     protected final ExtendedObject instance(String model) {
