@@ -1,7 +1,11 @@
 package org.iocaste.shell.common;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.iocaste.shell.common.tooldata.Context;
+import org.iocaste.shell.common.tooldata.ElementViewContext;
+import org.iocaste.shell.common.tooldata.ToolDataElement;
+import org.iocaste.shell.common.tooldata.ViewSpecItem.TYPES;
 
 /**
  * Implementa lista dropdown.
@@ -9,18 +13,21 @@ import java.util.Map;
  * @author francisco.prates
  *
  */
-public class ListBox extends AbstractInputComponent {
+public class ListBox extends ToolDataElement {
     private static final long serialVersionUID = -8869412092037011348L;
-    private Map<String, Object> values;
     
+    public ListBox(Context viewctx, String name) {
+        super(viewctx, Const.LIST_BOX, name);
+    }
+
     public ListBox(View view, String name) {
-        super(view, Const.LIST_BOX, Const.LIST_BOX, name);
-        init();
+        super(new ElementViewContext(view, null, TYPES.LISTBOX, name),
+                Const.LIST_BOX, name);
     }
     
     public ListBox(Container container, String name) {
-        super(container, Const.LIST_BOX, Const.LIST_BOX, name);
-        init();
+        super(new ElementViewContext(null, container, TYPES.LISTBOX, name),
+                Const.LIST_BOX, name);
     }
     
     /**
@@ -29,14 +36,7 @@ public class ListBox extends AbstractInputComponent {
      * @param value valor
      */
     public void add(String name, Object value) {
-        values.put(name, value);
-    }
-    
-    /**
-     * Limpa lista de opções.
-     */
-    public void clear() {
-        values.clear();
+        tooldata.values.put(name, value);
     }
     
     /**
@@ -45,7 +45,7 @@ public class ListBox extends AbstractInputComponent {
      * @return valor.
      */
     public Object get(String name) {
-        return values.get(name);
+        return tooldata.values.get(name);
     }
     
     /**
@@ -53,11 +53,7 @@ public class ListBox extends AbstractInputComponent {
      * @return opções
      */
     public String[] getEntriesNames() {
-        return values.keySet().toArray(new String[0]);
-    }
-    
-    private final void init() {
-        values = new LinkedHashMap<>();
+        return tooldata.values.keySet().toArray(new String[0]);
     }
     
     /**
@@ -65,6 +61,6 @@ public class ListBox extends AbstractInputComponent {
      * @return
      */
     public final Map<String, Object> properties() {
-        return values;
+        return tooldata.values;
     }
 }

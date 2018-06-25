@@ -14,7 +14,7 @@ public class ListBoxFactory extends AbstractSpecFactory {
     @Override
     protected void execute(ViewContext viewctx,
     		Container container, String parent, String name) {
-        new ListBox(container, name);
+        new ListBox(viewctx, name);
     }
 
 }

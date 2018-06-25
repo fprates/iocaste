@@ -115,8 +115,7 @@ public abstract class ToolDataElement implements Component, Container,
     
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+	    tooldata.values.clear();
 	}
     
     /*
