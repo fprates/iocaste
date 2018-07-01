@@ -323,12 +323,12 @@ public abstract class AbstractApplication<T extends Context>
     private final void prepareMessages(
             AbstractPage page, MessageSource messagesrc) {
         int i;
-        Properties messages = null;
+        Properties messages = new Properties();
         String locale = page.outputview.locale.toString();
         
         if (messagesrc != null) {
             messagesrc.entries();
-            messages = messagesrc.getMessages(locale);
+            messages.putAll(messagesrc.getMessages(locale));
         }
 
         for (String key : page.getChildren()) {
@@ -336,14 +336,9 @@ public abstract class AbstractApplication<T extends Context>
             if (messagesrc == null)
                 continue;
             messagesrc.entries();
-            if (messages == null)
-                messages = messagesrc.getMessages(locale);
-            else
-                messages.putAll(messagesrc.getMessages(locale));
+            messages.putAll(messagesrc.getMessages(locale));
         }
         
-        if (messages == null)
-            return;
         page.outputview.messages = new String[messages.size()][2];
         i = 0;
         for (Object key : messages.keySet()) {
@@ -398,8 +393,10 @@ public abstract class AbstractApplication<T extends Context>
         ctxdata.files.clear();
         if (ServletFileUpload.isMultipartContent(ctxdata.req)) {
             fileupload = new ServletFileUpload(new DiskFileItemFactory());
-            for (FileItem fileitem : (List<FileItem>)fileupload.parseRequest(ctxdata.req))
-                ctxdata.files.put(fileitem.getFieldName(), new FileStatus(fileitem));
+            for (FileItem fileitem :
+                (List<FileItem>)fileupload.parseRequest(ctxdata.req))
+                ctxdata.files.put(
+                        fileitem.getFieldName(), new FileStatus(fileitem));
             parameters = processMultipartContent(ctxdata);
         } else {
             parameters = ctxdata.req.getParameterMap();
