@@ -31,7 +31,7 @@
         <!-- compilação lib -->
         <javac srcdir="${basedir}/src/${ant.project.name}/lib" 
             destdir="${builddir}/${ant.project.name}/lib"
-        	debug="${debug.status}">
+        	debug="${debug.status}" encoding="UTF-8">
             <classpath refid="dependencies"/>
         </javac>
         
@@ -41,7 +41,7 @@
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}/classes"
             destdir="${builddir}/${ant.project.name}/classes"
-        	debug="${debug.status}">
+        	debug="${debug.status}" encoding="UTF-8">
         	
             <classpath refid="dependencies"/>
         </javac>

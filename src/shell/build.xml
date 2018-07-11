@@ -27,7 +27,7 @@
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}/internal"
             destdir="${builddir}/${ant.project.name}/internal"
-            debug="${debug.status}">
+            debug="${debug.status}" encoding="UTF-8">
             <classpath refid="dependencies"/>
         </javac>
         
@@ -36,7 +36,7 @@
     	
         <javac srcdir="${basedir}/src/${ant.project.name}/classes"
             destdir="${builddir}/${ant.project.name}/classes"
-        	debug="${debug.status}">
+        	debug="${debug.status}" encoding="UTF-8">
         	
             <classpath refid="dependencies"/>
             <classpath path="${builddir}/${ant.project.name}/internal"/>

@@ -26,7 +26,7 @@
         <!-- compilação lib -->
         <mkdir dir="${builddir}/tmp"/>
         <javac srcdir="${basedir}/src/lib" destdir="${builddir}/tmp"
-        	debug="${debug.status}">
+        	debug="${debug.status}" encoding="UTF-8">
             <classpath refid="dependencies"/>
         </javac>
         
@@ -36,7 +36,7 @@
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/classes" destdir="${builddir}/classes"
-        	debug="${debug.status}">
+        	debug="${debug.status}" encoding="UTF-8">
             <classpath refid="dependencies"/>
         </javac>
         

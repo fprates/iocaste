@@ -18,7 +18,7 @@
         
         <!-- compilação lib -->
         <javac srcdir="${basedir}/src/packagetool/lib" 
-            destdir="${builddir}/packagetool/lib" debug="${debug.status}">
+            destdir="${builddir}/packagetool/lib" debug="${debug.status}" encoding="UTF-8">
             <classpath refid="dependencies"/>
         </javac>
         

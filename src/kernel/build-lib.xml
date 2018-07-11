@@ -13,7 +13,7 @@
         <!-- compilação lib -->
         <javac srcdir="${basedir}/src/${ant.project.name}/lib" 
             destdir="${builddir}/${ant.project.name}/lib"
-            debug="${debug.status}">
+            debug="${debug.status}" encoding="UTF-8">
             <classpath refid="dependencies"/>
         </javac>
         
