@@ -11,7 +11,6 @@ import org.hsqldb.HsqlException;
 import org.iocaste.protocol.Message;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 public class CallProcedure extends AbstractDatabaseHandler {
     
@@ -49,8 +48,6 @@ public class CallProcedure extends AbstractDatabaseHandler {
         } catch (HsqlException e) {
             throw new SQLException(e.getMessage());
         } catch (SQLServerException e) {
-            throw new SQLException(e.getMessage());
-        } catch (MySQLSyntaxErrorException e) {
             throw new SQLException(e.getMessage());
         } catch (SQLDataException e) {
             throw new SQLDataException(e.getMessage());

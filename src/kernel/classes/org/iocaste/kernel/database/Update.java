@@ -10,9 +10,6 @@ import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
-import com.mysql.jdbc.MysqlDataTruncation;
-import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 public class Update extends AbstractHandler {
 
@@ -53,12 +50,6 @@ public class Update extends AbstractHandler {
             case 2627: // constraint error code
                 throw new SQLException(e.getMessage());
             }
-            throw new SQLException(e.getMessage());
-        } catch (MySQLSyntaxErrorException e) {
-            throw new SQLException(e.getMessage());
-        } catch (MySQLNonTransientConnectionException e) {
-            throw new SQLException(e.getMessage());
-        } catch (MysqlDataTruncation e) {
             throw new SQLException(e.getMessage());
         } catch (SQLDataException e) {
             throw new SQLDataException(e.getMessage());

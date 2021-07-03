@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="ROOT/classes/|appbuilder/classes/|appbuilder/lib/|autheditor/classes/|authority/classes/|authority/lib/|calendar/classes/|copy/classes/|core/lib/|core/lib/|core/web/|core/web/|datadict/classes/|datadict/web/|dataeditor/classes/|datamigr/classes/|dataview/classes/|dataview/web/|docmanager/classes/|docmanager/lib/|documents/classes/|documents/lib/|documents/lib/org/iocaste/documents/common/|documents/web/|examples/classes/|examples/classes/|exhandler/classes/|external/classes/|external/classes/|external/lib/|external/lib/|external/web/|firstrun/classes/|ftp/classes/|gateway/classes/|gconfigview/classes/|globalconfig/classes/|globalconfig/lib/|help/classes/|help/web/|infosis/|infosys/|infosys/classes/|install/classes/|kernel/classes/|kernel/lib/|kernel/lib/|log/classes/|log/lib/|login/classes/|login/classes/|login/web/|login/web/|mail/classes/|mail/lib/|masterdata/classes/|office/classes/|office/classes/|office/lib/|office/web/|packagetool/classes/|packagetool/lib/|packagetool/web/|project-template/|project-template/classes/|project-template/classes/|project-template/classes/|project-template/src/classes/|project-template/src/classes/|project-template/src/lib/|project-template/src/lib/|report/classes/|report/lib/|root/classes/|runtime/lib/|sap-connector/classes/|sap-connector/classes/|search-help/classes/|search-help/classes/|search-help/lib/|search-help/lib/|search-help/lib/|search-help/web/|search-help/web/|setup/classes/|shell/|shell/classes/|shell/classes/|shell/internal/|shell/internal/|shell/lib/|shell/lib/|shell/web/|shell/web/|svg/classes/|svg/lib/|sysconfig/classes/|tasksel/classes/|tasksel/lib/|tasksel/lib/|tasksel/lib/|tasksel/web/|template|template/classes/|template/classes/|template/classes/|template/classes/|template/classes/|template/web/|texteditor/classes/|texteditor/lib/|transport/classes/|transport/classes/|transport/lib/|transport/lib/|transport/robot/|transport/web/|upload/classes/|usereditor/classes/|workbench/classes/|workbench/lib/|infosys/classes/" kind="src" path="src"/>
+	<classpathentry excluding="ROOT/classes/|appbuilder/classes/|appbuilder/lib/|autheditor/classes/|authority/classes/|authority/lib/|calendar/classes/|copy/classes/|core/lib/|core/web/|datadict/classes/|datadict/web/|dataeditor/classes/|datamigr/classes/|dataview/classes/|dataview/web/|docmanager/classes/|docmanager/lib/|documents/classes/|documents/lib/|documents/lib/org/iocaste/documents/common/|documents/web/|examples/classes/|exhandler/classes/|external/classes/|external/lib/|external/web/|firstrun/classes/|ftp/classes/|gateway/classes/|gconfigview/classes/|globalconfig/classes/|globalconfig/lib/|help/classes/|help/web/|infosis/|infosys/|infosys/classes/|install/classes/|kernel/classes/|kernel/lib/|log/classes/|log/lib/|login/classes/|login/web/|mail/classes/|mail/lib/|masterdata/classes/|office/classes/|office/lib/|office/web/|packagetool/classes/|packagetool/lib/|packagetool/web/|project-template/|project-template/classes/|project-template/src/classes/|project-template/src/lib/|report/classes/|report/lib/|root/classes/|runtime/lib/|sap-connector/classes/|search-help/classes/|search-help/lib/|search-help/web/|setup/classes/|shell/|shell/classes/|shell/internal/|shell/lib/|shell/web/|svg/classes/|svg/lib/|sysconfig/classes/|tasksel/classes/|tasksel/lib/|tasksel/web/|template|template/classes/|template/web/|texteditor/classes/|texteditor/lib/|transport/classes/|transport/lib/|transport/robot/|transport/web/|upload/classes/|usereditor/classes/|workbench/classes/|workbench/lib/" kind="src" path="src"/>
 	<classpathentry kind="src" output="output/infosys/classes" path="src/infosys/classes"/>
 	<classpathentry kind="src" output="output/ROOT/classes" path="src/ROOT/classes"/>
 	<classpathentry kind="src" output="output/workbench/lib" path="src/workbench/lib"/>
@@ -52,14 +52,15 @@
 	<classpathentry kind="src" output="output/project-template/lib" path="src/project-template/src/lib"/>
 	<classpathentry kind="src" output="output/runtime/lib" path="src/runtime/lib"/>
 	<classpathentry kind="src" output="output/examples/classes" path="src/examples/classes"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>
-	<classpathentry kind="lib" path="ext/sapjco3.jar"/>
-	<classpathentry kind="lib" path="lib/hsqldb1-1.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java.jar"/>
-	<classpathentry kind="lib" path="lib/postgresql-jdbc.jar"/>
-	<classpathentry kind="lib" path="lib-shell/apache-commons-fileupload.jar"/>
-	<classpathentry kind="lib" path="lib-mail/javax.mail.jar"/>
-	<classpathentry kind="lib" path="ext/servlet-api.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

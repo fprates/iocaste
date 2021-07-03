@@ -12,8 +12,6 @@ import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.database.ConnectionInfo;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
-import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 public class Database extends AbstractFunction {
     private Map<String, Integer> connections;
@@ -113,10 +111,6 @@ public class Database extends AbstractFunction {
             connstate.assigned = true;
             return connstate;
         } catch (SQLServerException e) {
-            throw new SQLException(e.getMessage());
-        } catch (MySQLSyntaxErrorException e) {
-            throw new SQLException(e.getMessage());
-        } catch (MySQLNonTransientConnectionException e) {
             throw new SQLException(e.getMessage());
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
