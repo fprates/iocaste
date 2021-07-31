@@ -27,7 +27,7 @@ public class Package extends Module {
         Table docs001, docs002, docs003, docs004, docs005, docs006;
         
         language = tableInstance("LANG");
-        language.key("LOCAL", DataType.CHAR, 5);
+        language.key("LOCAL", DataType.CHAR, 7);
         
         package001 = tableInstance("PACKAGE001");
         package001.key("IDENT", DataType.CHAR, 60);
@@ -46,7 +46,7 @@ public class Package extends Module {
         docs006 = getTable("DOCS006");
 
         insertElement(docs003,
-                "LANGUAGES.LOCALE", 0, 5, 0, false);
+                "LANGUAGES.LOCALE", 0, 7, 0, false);
         insertElement(docs003,
                 "PACKAGE.NAME", 0, 60, 0, false);
         insertElement(docs003,
