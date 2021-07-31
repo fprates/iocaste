@@ -384,7 +384,6 @@ public abstract class AbstractApplication<T extends Context>
         return parameters;
     }
     
-    @SuppressWarnings("unchecked")
     private final void reloadContext(ContextData<T> ctxdata) throws Exception {
         ViewExport outputview;
         ServletFileUpload fileupload;
