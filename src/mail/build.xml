@@ -29,6 +29,8 @@
         <!-- compilação lib -->
         <javac srcdir="${basedir}/src/${ant.project.name}/lib" 
             destdir="${builddir}/${ant.project.name}/lib"
+        	source="${cversion}"
+        	target="${cversion}"
         	debug="${debug.status}" encoding="UTF-8">
             <classpath refid="dependencies"/>
         </javac>
@@ -38,6 +40,7 @@
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}/classes"
+        	source="${cversion}"
         	target="${cversion}"
             destdir="${builddir}/${ant.project.name}/classes"
         	debug="${debug.status}" encoding="UTF-8">

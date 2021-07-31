@@ -26,6 +26,7 @@
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}/internal"
+        	source="${cversion}"
         	target="${cversion}"
             destdir="${builddir}/${ant.project.name}/internal"
             debug="${debug.status}" encoding="UTF-8">

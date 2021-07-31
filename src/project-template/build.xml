@@ -26,6 +26,7 @@
         <!-- compilação lib -->
         <mkdir dir="${builddir}/tmp"/>
         <javac srcdir="${basedir}/src/lib"
+        	source="${cversion}"
         	target="${cversion}"
         	destdir="${builddir}/tmp"
         	debug="${debug.status}" encoding="UTF-8">

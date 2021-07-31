@@ -18,6 +18,7 @@
         
         <!-- compilação lib -->
         <javac srcdir="${basedir}/src/packagetool/lib"
+        	source="${cversion}"
         	target="${cversion}"
             destdir="${builddir}/packagetool/lib"
         	debug="${debug.status}"

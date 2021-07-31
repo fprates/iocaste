@@ -14,7 +14,9 @@
         </path>
         
         <!-- compilação lib -->
-        <javac srcdir="${basedir}/src/${ant.project.name}/lib" 
+        <javac srcdir="${basedir}/src/${ant.project.name}/lib"
+        	source="${cversion}"
+        	target="${cversion}"
             destdir="${builddir}/${ant.project.name}/lib"
         	debug="${debug.status}" encoding="UTF-8">
             <classpath refid="dependencies"/>
