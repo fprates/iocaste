@@ -17,8 +17,11 @@
         </path>
         
         <!-- compilação lib -->
-        <javac srcdir="${basedir}/src/packagetool/lib" 
-            destdir="${builddir}/packagetool/lib" debug="${debug.status}" encoding="UTF-8">
+        <javac srcdir="${basedir}/src/packagetool/lib"
+        	target="${cversion}"
+            destdir="${builddir}/packagetool/lib"
+        	debug="${debug.status}"
+        	encoding="UTF-8">
             <classpath refid="dependencies"/>
         </javac>
         

@@ -21,7 +21,8 @@
         </copy>
         
         <!-- compilação lib -->
-        <javac srcdir="${basedir}/src/${ant.project.name}/lib" 
+        <javac srcdir="${basedir}/src/${ant.project.name}/lib"
+        	target="${cversion}"
             destdir="${builddir}/${ant.project.name}/lib"
             debug="${debug.status}" encoding="UTF-8">
             <classpath refid="dependencies"/>
@@ -32,6 +33,7 @@
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}/classes"
+        	target="${cversion}"
             destdir="${builddir}/${ant.project.name}/classes"
         	debug="${debug.status}" encoding="UTF-8">
         	

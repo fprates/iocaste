@@ -26,6 +26,7 @@
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}/internal"
+        	target="${cversion}"
             destdir="${builddir}/${ant.project.name}/internal"
             debug="${debug.status}" encoding="UTF-8">
             <classpath refid="dependencies"/>
@@ -35,6 +36,7 @@
             destfile="${builddir}/${ant.project.name}/internal/iocaste-${ant.project.name}-internal.jar"/>
     	
         <javac srcdir="${basedir}/src/${ant.project.name}/classes"
+        	target="${cversion}"
             destdir="${builddir}/${ant.project.name}/classes"
         	debug="${debug.status}" encoding="UTF-8">
         	

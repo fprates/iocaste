@@ -23,6 +23,7 @@
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}/classes"
+        	target="${cversion}"
             destdir="${builddir}/${ant.project.name}/classes"
         	debug="${debug.status}" encoding="UTF-8">
         	

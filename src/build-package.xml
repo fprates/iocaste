@@ -21,6 +21,7 @@
           
 <project name="iocaste" default="compile">
     <property name="builddir" value="${basedir}/build"/>
+	
     <target name="compile">
         <delete dir="${builddir}"/>
         <mkdir dir="${builddir}/iocaste/apache-tomcat"/>

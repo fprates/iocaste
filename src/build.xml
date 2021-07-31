@@ -1,6 +1,7 @@
 <project name="iocaste" default="compile">
     <property name="builddir" value="${basedir}/build"/>
 	<property name="debug.status" value="on"/>
+	<property name="cversion" value="1.8"/>
 	
     <target name="compile.base">
         <!-- bibliotecas base do sistema -->
