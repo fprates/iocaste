@@ -11,7 +11,7 @@ public class PackagesGet extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String home = System.getProperty("catalina.home");
+        String home = System.getProperty("catalina.base");
         File dir = new File(new StringBuilder(home).
                 append(System.getProperty("file.separator")).
                 append("webapps").toString());
